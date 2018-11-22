@@ -1,0 +1,11 @@
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\TestPlugin.dll
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\TestPlugin.pdb
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\AOSharp.Common.dll
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\AOSharp.Core.dll
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\AOSharp.Common.pdb
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\AOSharp.Core.pdb
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\obj\Debug\TestPlugin.csprojAssemblyReference.cache
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\obj\Debug\TestPlugin.csproj.CoreCompileInputs.cache
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\obj\Debug\TestPlugin.csproj.CopyComplete
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\obj\Debug\TestPlugin.dll
+C:\Users\tagyo\Documents\AOSharp\TestPlugin\obj\Debug\TestPlugin.pdb

@@ -1,0 +1,13 @@
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\obj\Debug\AOSharp.Bootstrap.csprojAssemblyReference.cache
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\obj\Debug\AOSharp.Bootstrap.csproj.CoreCompileInputs.cache
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\AOSharp.Bootstrap.dll
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\AOSharp.Bootstrap.pdb
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\AOSharp.Common.dll
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\EasyHook.dll
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\AOSharp.Common.pdb
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\EasyHook.xml
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\obj\Debug\AOSharp.Bootstrap.csproj.CopyComplete
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\obj\Debug\AOSharp.Bootstrap.dll
+C:\Users\tagyo\Documents\AOSharp\AOSharp.Bootstrap\obj\Debug\AOSharp.Bootstrap.pdb
