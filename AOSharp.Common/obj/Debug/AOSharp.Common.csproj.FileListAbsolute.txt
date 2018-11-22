@@ -1,5 +1,0 @@
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Common\obj\Debug\AOSharp.Common.csproj.CoreCompileInputs.cache
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Common\bin\Debug\AOSharp.Common.dll
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Common\bin\Debug\AOSharp.Common.pdb
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Common\obj\Debug\AOSharp.Common.dll
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Common\obj\Debug\AOSharp.Common.pdb

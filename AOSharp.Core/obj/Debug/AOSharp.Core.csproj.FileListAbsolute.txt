@@ -1,9 +1,0 @@
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\bin\Debug\AOSharp.Core.dll
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\bin\Debug\AOSharp.Core.pdb
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\obj\Debug\AOSharp.Core.csproj.CoreCompileInputs.cache
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\obj\Debug\AOSharp.Core.dll
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\obj\Debug\AOSharp.Core.pdb
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\bin\Debug\AOSharp.Common.dll
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\bin\Debug\AOSharp.Common.pdb
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\obj\Debug\AOSharp.Core.csprojAssemblyReference.cache
-C:\Users\tagyo\Documents\AOSharp\AOSharp.Core\obj\Debug\AOSharp.Core.csproj.CopyComplete
