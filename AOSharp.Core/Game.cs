@@ -15,6 +15,10 @@ namespace AOSharp.Core
         public static void SetMovement(MovementAction action)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return;
+
             N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
         }
 

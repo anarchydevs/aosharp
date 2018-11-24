@@ -15,7 +15,7 @@ namespace TestLoader
     {
         static void Main(string[] args)
         {
-            IPCClient client = Attach("");
+            IPCClient client = Attach("Vector3");
 
             Console.ReadLine();
 

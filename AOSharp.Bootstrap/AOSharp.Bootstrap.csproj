@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Imports\ChatUnnamed.cs" />
     <Compile Include="Imports\Client_t.cs" />
     <Compile Include="Imports\Connection_t.cs" />
     <Compile Include="Imports\Debugger_t.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Imports\N3Engine_t.cs" />
     <Compile Include="Imports\N3Playfield_t.cs" />
     <Compile Include="Imports\N3Room_t.cs" />
+    <Compile Include="Imports\Native\Kernal32.cs" />
     <Compile Include="Imports\RoomSurface_t.cs" />
     <Compile Include="Imports\TilemapSurface_t.cs" />
     <Compile Include="Imports\VisualEnvFX_t.cs" />

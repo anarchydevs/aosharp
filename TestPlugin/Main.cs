@@ -14,6 +14,8 @@ namespace TestPlugin
         {
             Game.OnUpdate += OnUpdate;
             Playfield.DynelSpawned += DynelSpawned;
+
+            Chat.WriteLine("desu");
         }
 
         private void OnUpdate()

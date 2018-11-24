@@ -87,7 +87,7 @@ namespace AOSharp.Bootstrap
             //TODO: load assemblies sent by loader
             List<string> plugins = new List<string>()
             {
-                @"C:\Users\tagyo\Documents\AOSharp\TestPlugin\bin\Debug\TestPlugin.dll"
+                AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll"
             };
 
             try
@@ -127,11 +127,21 @@ namespace AOSharp.Bootstrap
             CreateHook("DisplaySystem.dll",
                         "?FrameProcess@VisualEnvFX_t@@QAEXMMIMAAVVector3_t@@AAVQuaternion_t@@@Z",
                         new VisualEnvFX_t.DFrameProcess(VisualEnvFX_FrameProcess_Hook));
+
+            unsafe
+            {
+                CreateHook(Kernal32.GetModuleHandle("GUI.dll") + 0x9B7CB, new ChatUnnamed.ChatAppendTextSimpleDelegate(sub_1009B7CB));
+            }
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
         {
-            LocalHook hook = LocalHook.Create(LocalHook.GetProcAddress(module, funcName), newFunc, this);
+            CreateHook(LocalHook.GetProcAddress(module, funcName), newFunc);
+        }
+
+        private void CreateHook(IntPtr origFunc, Delegate newFunc)
+        {
+            LocalHook hook = LocalHook.Create(origFunc, newFunc, this);
             hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
             _hooks.Add(hook);
         }
@@ -140,6 +150,12 @@ namespace AOSharp.Bootstrap
         {
             foreach (LocalHook hook in _hooks)
                 hook.Dispose();
+        }
+
+        public unsafe int sub_1009B7CB(IntPtr pThis, byte* message, int unk)
+        {
+            message[1] = Convert.ToByte('P');
+            return ChatUnnamed.ChatAppendTextSimple(pThis, message, unk);
         }
 
         public int VisualEnvFX_FrameProcess_Hook(IntPtr pThis, float unk1, float unk2, int unk3, float unk4, int unk5, int unk6)
