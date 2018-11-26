@@ -127,11 +127,6 @@ namespace AOSharp.Bootstrap
             CreateHook("DisplaySystem.dll",
                         "?FrameProcess@VisualEnvFX_t@@QAEXMMIMAAVVector3_t@@AAVQuaternion_t@@@Z",
                         new VisualEnvFX_t.DFrameProcess(VisualEnvFX_FrameProcess_Hook));
-
-            unsafe
-            {
-                CreateHook(Kernal32.GetModuleHandle("GUI.dll") + 0x9B7CB, new ChatUnnamed.ChatAppendTextSimpleDelegate(sub_1009B7CB));
-            }
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -150,12 +145,6 @@ namespace AOSharp.Bootstrap
         {
             foreach (LocalHook hook in _hooks)
                 hook.Dispose();
-        }
-
-        public unsafe int sub_1009B7CB(IntPtr pThis, byte* message, int unk)
-        {
-            message[1] = Convert.ToByte('P');
-            return ChatUnnamed.ChatAppendTextSimple(pThis, message, unk);
         }
 
         public int VisualEnvFX_FrameProcess_Hook(IntPtr pThis, float unk1, float unk2, int unk3, float unk4, int unk5, int unk6)
@@ -235,7 +224,7 @@ namespace AOSharp.Bootstrap
                 _coreDelegates = new CoreDelegates()
                 {
                     Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "UpdateInternal"),
-                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.Playfield", "DynelSpawnedInternal")
+                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "DynelSpawnedInternal")
                 };
             }
 

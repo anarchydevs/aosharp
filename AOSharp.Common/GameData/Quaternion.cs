@@ -3,7 +3,7 @@ using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
 namespace AOSharp.Common.GameData
 {
-    public class Quaternion
+    public struct Quaternion
     {
         #region Variables
 
@@ -22,10 +22,6 @@ namespace AOSharp.Common.GameData
         #endregion
 
         #region Constructor
-
-        public Quaternion()
-        {
-        }
 
         public Quaternion(double x, double y, double z, double w)
         {

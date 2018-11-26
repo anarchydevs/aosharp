@@ -43,12 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynelManager.cs" />
+    <Compile Include="Dynel\CharMovementStatus.cs" />
+    <Compile Include="Dynel\LocalPlayer.cs" />
+    <Compile Include="Dynel\Vehicle.cs" />
+    <Compile Include="Dynel\SimpleChar.cs" />
+    <Compile Include="GameData\StdVector.cs" />
+    <Compile Include="GameData\StdString.cs" />
     <Compile Include="Chat.cs" />
-    <Compile Include="Dynel.cs" />
+    <Compile Include="Dynel\Dynel.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IAOPluginEntry.cs" />
-    <Compile Include="Imports\ChatUnnamed.cs" />
+    <Compile Include="Imports\AVChatWindowNode_t.cs" />
     <Compile Include="Imports\Client_t.cs" />
     <Compile Include="Imports\Connection_t.cs" />
     <Compile Include="Imports\ChatGUIModule_t.cs" />
@@ -57,10 +64,12 @@
     <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
     <Compile Include="Imports\N3EngineClient_t .cs" />
     <Compile Include="Imports\N3Engine_t.cs" />
+    <Compile Include="Imports\N3PlayfieldAnarchy_t.cs" />
     <Compile Include="Imports\N3Playfield_t.cs" />
     <Compile Include="Imports\N3Room_t.cs" />
-    <Compile Include="Imports\Native\Kernal32.cs" />
+    <Compile Include="Imports\Native\Kernel32.cs" />
     <Compile Include="Imports\RoomSurface_t.cs" />
+    <Compile Include="Imports\String.cs" />
     <Compile Include="Imports\TilemapSurface_t.cs" />
     <Compile Include="Imports\VisualEnvFX_t.cs" />
     <Compile Include="Playfield.cs" />

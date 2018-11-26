@@ -10,23 +10,65 @@ namespace TestPlugin
 {
     public class Main : IAOPluginEntry
     {
+        public int i = 0;
+
         public void Run()
         {
-            Game.OnUpdate += OnUpdate;
-            Playfield.DynelSpawned += DynelSpawned;
+            try
+            {
+                Chat.WriteLine("Plugin loaded");
 
-            Chat.WriteLine("desu");
+                Chat.WriteLine($"LocalPlayer: {DynelManager.LocalPlayer.Identity}");
+                Chat.WriteLine($"   Name: {DynelManager.LocalPlayer.Name}");
+                Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
+                Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
+
+                Chat.WriteLine("Playfield");
+                Chat.WriteLine($"   AllowsVehicles: {Playfield.AllowsVehicles}");
+                Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
+
+                foreach(Dynel dynel in DynelManager.AllDynels)
+                {
+                    Chat.WriteLine($"Dynel {dynel.Identity}: ");
+                }
+
+                foreach (SimpleChar c in DynelManager.Characters)
+                {
+                    Chat.WriteLine($"SimpleChar {c.Identity}: {c.Name}");
+                }
+
+                foreach (SimpleChar c in DynelManager.Players)
+                {
+                    Chat.WriteLine($"Player {c.Identity}: {c.Name}");
+                }
+
+                Game.OnUpdate += OnUpdate;
+                DynelManager.DynelSpawned += DynelSpawned;
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine(e.Message);
+            }
         }
 
         private void OnUpdate()
         {
-            Debug.DrawSphere(new Vector3(160, 6, 173), 0.5f, DebuggingColor.LightBlue);
-            Debug.DrawLine(new Vector3(165, 6, 165), new Vector3(165, 6, 175), DebuggingColor.Red);
         }
 
         private void DynelSpawned(Dynel dynel)
         {
-            Game.SetMovement(MovementAction.TurnRightStart);
+            try
+            {
+                if (dynel.Identity.Type == IdentityType.SimpleChar)
+                {
+                    SimpleChar c = dynel.Cast<SimpleChar>();
+                    Chat.WriteLine($"SimpleChar Spawned: {c.Identity} -- {c.Name} -- {c.Position} -- {c.MovementState}");
+                    //Chat.WriteLine($"SimpleChar Spawned: {c.Identity}");
+                }
+            } catch (Exception e)
+            {
+                Chat.WriteLine(e.Message);
+            }
         }
     }
 }

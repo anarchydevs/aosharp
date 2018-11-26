@@ -6,6 +6,9 @@ namespace AOSharp.Core
 {
     public class N3EngineClientAnarchy_t
     {
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsMoving@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void IsMoving(IntPtr pThis);
+
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_MovementChanged@n3EngineClientAnarchy_t@@QAEXW4MovementAction_e@Movement_n@@MM_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void MovementChanged(IntPtr pThis, MovementAction action, float unk1, float unk2, bool unk3);
 

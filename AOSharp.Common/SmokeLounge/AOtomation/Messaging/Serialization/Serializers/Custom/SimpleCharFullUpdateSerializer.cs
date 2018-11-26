@@ -125,13 +125,13 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             streamWriter.WriteSingle(scfu.Coordinates.Y);
             streamWriter.WriteSingle(scfu.Coordinates.Z);
 
-            if (scfu.Heading != null)
+            if (scfu.Heading.HasValue)
             {
                 flags |= SimpleCharFullUpdateFlags.HasHeading;
-                streamWriter.WriteSingle(scfu.Heading.X);
-                streamWriter.WriteSingle(scfu.Heading.Y);
-                streamWriter.WriteSingle(scfu.Heading.Z);
-                streamWriter.WriteSingle(scfu.Heading.W);
+                streamWriter.WriteSingle(scfu.Heading.Value.X);
+                streamWriter.WriteSingle(scfu.Heading.Value.Y);
+                streamWriter.WriteSingle(scfu.Heading.Value.Z);
+                streamWriter.WriteSingle(scfu.Heading.Value.W);
             }
 
             streamWriter.WriteUInt32(scfu.Appearance.Value);

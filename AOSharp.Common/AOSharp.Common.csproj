@@ -53,6 +53,7 @@
     <Compile Include="GameData\Gender.cs" />
     <Compile Include="GameData\Identity.cs" />
     <Compile Include="GameData\IdentityType.cs" />
+    <Compile Include="GameData\IDynel.cs" />
     <Compile Include="GameData\Item.cs" />
     <Compile Include="GameData\Mesh3D.cs" />
     <Compile Include="GameData\Mission.cs" />

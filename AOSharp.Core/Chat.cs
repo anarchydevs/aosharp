@@ -1,32 +1,47 @@
 ﻿using System;
-using AOSharp.Common.GameData;
 
 namespace AOSharp.Core
 {
     public static class Chat
     {
-        public unsafe static void WriteLine(string message)
+        //Currently only supports Default Window
+        public unsafe static void WriteLine(string message, ChatColor color = ChatColor.Gold)
         {
-            IntPtr pChatGUIModule = ChatGUIModule_t.GetInstance();
+            IntPtr pWindowController = *(IntPtr*)AVChatWindowNode_t.ChatWindowController;
 
-            if (pChatGUIModule == null)
+            if (pWindowController == IntPtr.Zero)
                 return;
 
-            IntPtr pUnk1 = *(IntPtr*)(pChatGUIModule + 0xB8);
+            IntPtr pUnk1 = *(IntPtr*)(pWindowController + 0x18);
 
             if (pUnk1 == IntPtr.Zero)
                 return;
 
-            IntPtr ecx = *(IntPtr*)(pUnk1 + 0x38);
+            IntPtr pUnk2 = *(IntPtr*)(pUnk1 + 0x4);
 
-            if (ecx == IntPtr.Zero)
+            if (pUnk2 == IntPtr.Zero)
                 return;
 
-            /*byte[] desu = System.Text.Encoding.ASCII.GetBytes(message);
-            fixed (byte* pDesu = desu)
-            {
-                ChatUnnamed.ChatAppendTextSimple(ecx, pDesu, 82);
-            }*/ 
+            IntPtr pChatWindowNode = *(IntPtr*)(pUnk2 + 0x28);
+
+            if (pChatWindowNode == IntPtr.Zero)
+                return;
+
+            AVChatWindowNode_t.AppendText(pChatWindowNode, AOString.Create(message), color);
         }
+    }
+
+    public enum ChatColor
+    {
+        White = 0,
+        LightBlue = 4,
+        Yellow = 5,
+        Green = 8,
+        DarkPink = 9,
+        Black = 11,
+        Red = 12,
+        DarkBlue = 14,
+        Gold = 17,
+        Orange = 27
     }
 }

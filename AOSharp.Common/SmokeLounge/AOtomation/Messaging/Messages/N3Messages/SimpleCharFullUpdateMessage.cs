@@ -51,7 +51,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Vector3 Coordinates { get; set; }
 
         [AoMember(5)]
-        public Quaternion Heading { get; set; }
+        public Quaternion? Heading { get; set; }
 
         [AoMember(6)]
         public Appearance Appearance { get; set; }
