@@ -79,16 +79,8 @@ namespace AOSharp.Bootstrap
                 _pluginAppDomain = null;
             }
 
-            /*
-            if (m.Assemblies.Count == 0)
+            if (msg.Assemblies.Count == 0)
                 return;
-            */
-
-            //TODO: load assemblies sent by loader
-            List<string> plugins = new List<string>()
-            {
-                AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll"
-            };
 
             try
             {
@@ -104,14 +96,15 @@ namespace AOSharp.Bootstrap
 
                 _pluginProxy.LoadCore(_pluginAppDomain.BaseDirectory + "\\AOSharp.Core.dll");
 
-                foreach (string assembly in plugins)
+                foreach (string assembly in msg.Assemblies)
                 {
                     _pluginProxy.LoadPlugin(assembly);
                 }
             }
             catch (Exception e)
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"AOHookException.txt", true))
+                //TODO: Send IPC message back to loader on error
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"AOSharp.Bootstrap_Exception.txt", true))
                 {
                     file.WriteLine($"{DateTime.Now}: {e.Message}");
                 }
@@ -177,7 +170,6 @@ namespace AOSharp.Bootstrap
             public delegate void UpdateDelegate();
             public UpdateDelegate Update;
         }
-
 
         public class PluginProxy : MarshalByRefObject
         {

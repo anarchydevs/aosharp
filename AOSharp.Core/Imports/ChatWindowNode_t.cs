@@ -4,7 +4,7 @@ using AOSharp.Core.GameData;
 
 namespace AOSharp.Core
 {
-    internal class AVChatWindowNode_t
+    internal class ChatWindowNode_t
     {
         internal static IntPtr ChatWindowController = Kernal32.GetProcAddress(Kernal32.GetModuleHandle("GUI.dll"), "?s_pcInstance@ChatGUIModule_c@@0PAV1@A") + 0x1C;
 

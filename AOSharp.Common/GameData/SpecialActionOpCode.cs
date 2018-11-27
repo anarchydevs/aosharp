@@ -1,7 +1,17 @@
 ﻿namespace AOSharp.Common.GameData
 {
-    public enum SpecialAttack
+    public enum SpecialActionOpCode
     {
+        Pickup = 0x01,
+        Use = 0x03,
+        StartCombat = 0x0B,
+        Walk = 0x11,
+        Sneak = 0x13,
+        Crawl = 0x14,
+        Sit = 0x4C,
+        EndCombat = 0x4E,
+        Exit = 0x51,
+        Search = 0x86,
         AimedShot = 0x97,
         Backstab = 0x01E9,
         Brawl = 0x8E,

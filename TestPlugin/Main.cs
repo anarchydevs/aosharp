@@ -16,31 +16,19 @@ namespace TestPlugin
         {
             try
             {
-                Chat.WriteLine("Plugin loaded");
+                Chat.WriteLine("TestPlugin loaded");
 
                 Chat.WriteLine($"LocalPlayer: {DynelManager.LocalPlayer.Identity}");
                 Chat.WriteLine($"   Name: {DynelManager.LocalPlayer.Name}");
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
+                Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
 
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   AllowsVehicles: {Playfield.AllowsVehicles}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
 
-                foreach(Dynel dynel in DynelManager.AllDynels)
-                {
-                    Chat.WriteLine($"Dynel {dynel.Identity}: ");
-                }
-
-                foreach (SimpleChar c in DynelManager.Characters)
-                {
-                    Chat.WriteLine($"SimpleChar {c.Identity}: {c.Name}");
-                }
-
-                foreach (SimpleChar c in DynelManager.Players)
-                {
-                    Chat.WriteLine($"Player {c.Identity}: {c.Name}");
-                }
+                DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 0x46146), DynelManager.LocalPlayer.Identity);
 
                 Game.OnUpdate += OnUpdate;
                 DynelManager.DynelSpawned += DynelSpawned;
@@ -53,21 +41,24 @@ namespace TestPlugin
 
         private void OnUpdate()
         {
+            if (DynelManager.LocalPlayer.IsAttacking)
+                return;
+
+            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "34-I Helper" && x.IsAlive);
+
+            if (leet == null)
+                return;
+
+            DynelManager.LocalPlayer.Attack(leet);
         }
 
         private void DynelSpawned(Dynel dynel)
         {
-            try
+            if (dynel.Identity.Type == IdentityType.SimpleChar)
             {
-                if (dynel.Identity.Type == IdentityType.SimpleChar)
-                {
-                    SimpleChar c = dynel.Cast<SimpleChar>();
-                    Chat.WriteLine($"SimpleChar Spawned: {c.Identity} -- {c.Name} -- {c.Position} -- {c.MovementState}");
-                    //Chat.WriteLine($"SimpleChar Spawned: {c.Identity}");
-                }
-            } catch (Exception e)
-            {
-                Chat.WriteLine(e.Message);
+                SimpleChar c = dynel.Cast<SimpleChar>();
+
+                Chat.WriteLine($"SimpleChar Spawned(TestPlugin): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health}");
             }
         }
     }

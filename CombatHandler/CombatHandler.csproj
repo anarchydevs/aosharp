@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{77516561-FA9C-47CD-8C2D-FC8A8B67876B}</ProjectGuid>
+    <ProjectGuid>{336D540C-2C5E-4455-9B71-570DCB0784F3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AOSharp.Core</RootNamespace>
-    <AssemblyName>AOSharp.Core</AssemblyName>
+    <RootNamespace>CombatHandler</RootNamespace>
+    <AssemblyName>CombatHandler</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,8 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,45 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynelManager.cs" />
-    <Compile Include="Dynel\CharMovementStatus.cs" />
-    <Compile Include="Dynel\LocalPlayer.cs" />
-    <Compile Include="Dynel\WeaponHolder.cs" />
-    <Compile Include="Dynel\Vehicle.cs" />
-    <Compile Include="Dynel\SimpleChar.cs" />
-    <Compile Include="GameData\SpecialAction.cs" />
-    <Compile Include="GameData\StdObjList.cs" />
-    <Compile Include="GameData\StdObjVector.cs" />
-    <Compile Include="GameData\StdString.cs" />
-    <Compile Include="Chat.cs" />
-    <Compile Include="Dynel\Dynel.cs" />
-    <Compile Include="Debug.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="IAOPluginEntry.cs" />
-    <Compile Include="Imports\ChatWindowNode_t.cs" />
-    <Compile Include="Imports\Client_t.cs" />
-    <Compile Include="Imports\Connection_t.cs" />
-    <Compile Include="Imports\ChatGUIModule_t.cs" />
-    <Compile Include="Imports\Debugger_t.cs" />
-    <Compile Include="Imports\MessageProtocol.cs" />
-    <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
-    <Compile Include="Imports\N3EngineClient_t .cs" />
-    <Compile Include="Imports\N3Engine_t.cs" />
-    <Compile Include="Imports\N3PlayfieldAnarchy_t.cs" />
-    <Compile Include="Imports\N3Playfield_t.cs" />
-    <Compile Include="Imports\N3Room_t.cs" />
-    <Compile Include="Imports\Native\Kernel32.cs" />
-    <Compile Include="Imports\RoomSurface_t.cs" />
-    <Compile Include="Imports\String.cs" />
-    <Compile Include="Imports\TilemapSurface_t.cs" />
-    <Compile Include="Imports\VisualEnvFX_t.cs" />
-    <Compile Include="Playfield.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">
       <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
       <Name>AOSharp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AOSharp.Core\AOSharp.Core.csproj">
+      <Project>{77516561-fa9c-47cd-8c2d-fc8a8b67876b}</Project>
+      <Name>AOSharp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

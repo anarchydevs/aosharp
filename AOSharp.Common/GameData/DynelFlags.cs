@@ -3,7 +3,7 @@
 namespace AOSharp.Common.GameData
 {
     [Flags]
-    public enum CharacterFlags
+    public enum DynelFlags
     {
         None = 0x00,
         Tower = 0x184,

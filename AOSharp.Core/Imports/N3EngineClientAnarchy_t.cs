@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
+using AOSharp.Core.GameData;
 
 namespace AOSharp.Core
 {
     public class N3EngineClientAnarchy_t
     {
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DefaultAttack@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkill@n3EngineClientAnarchy_t@@QBEHABVIdentity_t@@W4Stat_e@GameData@@H0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsAttacking@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern byte IsAttacking(IntPtr pThis);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSpecialActionList@n3EngineClientAnarchy_t@@QAEPAV?$list@VSpecialAction_t@@V?$allocator@VSpecialAction_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern StdObjList* GetSpecialActionList(IntPtr pThis);
+
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsMoving@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern void IsMoving(IntPtr pThis);
 

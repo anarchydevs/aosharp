@@ -7,7 +7,7 @@ namespace AOSharp.Core
         //Currently only supports Default Window
         public unsafe static void WriteLine(string message, ChatColor color = ChatColor.Gold)
         {
-            IntPtr pWindowController = *(IntPtr*)AVChatWindowNode_t.ChatWindowController;
+            IntPtr pWindowController = *(IntPtr*)ChatWindowNode_t.ChatWindowController;
 
             if (pWindowController == IntPtr.Zero)
                 return;
@@ -27,7 +27,7 @@ namespace AOSharp.Core
             if (pChatWindowNode == IntPtr.Zero)
                 return;
 
-            AVChatWindowNode_t.AppendText(pChatWindowNode, AOString.Create(message), color);
+            ChatWindowNode_t.AppendText(pChatWindowNode, AOString.Create(message), color);
         }
     }
 

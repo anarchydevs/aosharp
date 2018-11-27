@@ -55,7 +55,6 @@
     <Compile Include="Imports\MessageProtocol.cs" />
     <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
     <Compile Include="Imports\N3Playfield_t.cs" />
-    <Compile Include="Imports\Native\Kernal32.cs" />
     <Compile Include="Imports\VisualEnvFX_t.cs" />
     <Compile Include="IPC\HookOpCode.cs" />
     <Compile Include="IPC\IPCAsyncResult.cs" />

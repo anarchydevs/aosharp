@@ -1,4 +1,6 @@
-﻿using System;
+﻿//This should really be some kind of UI that allows you to load and reload plugins
+
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -17,9 +19,14 @@ namespace TestLoader
         {
             IPCClient client = Attach("");
 
-            Console.ReadLine();
-
-            client.Send(new LoadAssemblyMessage());
+            client.Send(new LoadAssemblyMessage()
+            {
+                Assemblies = new List<string>()
+                {
+                    Directory.GetCurrentDirectory() + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll",
+                    Directory.GetCurrentDirectory() + @"\..\..\..\CombatHandler\bin\Debug\CombatHandler.dll"
+                }
+            });
 
             Console.ReadLine();
         }

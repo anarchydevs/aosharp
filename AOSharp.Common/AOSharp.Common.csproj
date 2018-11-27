@@ -46,7 +46,7 @@
     <Compile Include="GameData\CharacterStatus.cs" />
     <Compile Include="GameData\ChatMessageType.cs" />
     <Compile Include="GameData\DoorState.cs" />
-    <Compile Include="GameData\DynelFlag.cs" />
+    <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\Faction.cs" />
     <Compile Include="GameData\Fatness.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="GameData\MoveState.cs" />
     <Compile Include="GameData\Profession.cs" />
     <Compile Include="GameData\Quaternion.cs" />
-    <Compile Include="GameData\SpecialAttack.cs" />
+    <Compile Include="GameData\SpecialActionOpCode.cs" />
     <Compile Include="GameData\SpecialAttackFlags.cs" />
     <Compile Include="GameData\Stat.cs" />
     <Compile Include="GameData\TradeAction.cs" />

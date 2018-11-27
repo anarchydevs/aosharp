@@ -60,7 +60,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public string Name { get; set; }
 
         [AoMember(8)]
-        public CharacterFlags CharacterFlags { get; set; }
+        public DynelFlags CharacterFlags { get; set; }
 
         [AoMember(9)]
         public short AccountFlags { get; set; }

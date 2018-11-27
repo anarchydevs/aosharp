@@ -10,6 +10,8 @@ namespace AOSharp.Core
 
         public unsafe Identity Identity => (*(Dynel_MemStruct*)Pointer).Identity;
 
+        public DynelFlags Flags => (DynelFlags)GetStat(Stat.Flags);
+
         public unsafe Vector3 Position
         {
             get { return (*(Dynel_MemStruct*)Pointer).Vehicle->Position; }
@@ -39,6 +41,21 @@ namespace AOSharp.Core
         public Dynel(IntPtr pointer)
         {
             Pointer = pointer;
+        }
+
+        public unsafe int GetStat(Stat stat)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return 0;
+
+            //Copy identity
+            Identity identity = Identity;
+            Identity unk = new Identity();
+
+            // 2 = buffed skill
+            return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, 2, &unk);
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

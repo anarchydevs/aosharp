@@ -182,7 +182,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 streamWriter.WriteInt16(spc.SenseBase);
                 streamWriter.WriteInt16(spc.PsychicBase);
 
-                if (scfu.CharacterFlags.HasFlag(CharacterFlags.HasVisibleName))
+                if (scfu.CharacterFlags.HasFlag(DynelFlags.HasVisibleName))
                 {
                     streamWriter.WriteInt16((short)spc.FirstName.Length);
                     streamWriter.WriteString(spc.FirstName);
