@@ -43,14 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Time.cs" />
     <Compile Include="DynelManager.cs" />
     <Compile Include="Dynel\CharMovementStatus.cs" />
     <Compile Include="Dynel\LocalPlayer.cs" />
+    <Compile Include="Dynel\SimpleItem.cs" />
+    <Compile Include="Dynel\WeaponItem.cs" />
     <Compile Include="Dynel\WeaponHolder.cs" />
     <Compile Include="Dynel\Vehicle.cs" />
     <Compile Include="Dynel\SimpleChar.cs" />
+    <Compile Include="GameData\SpecialAttack.cs" />
+    <Compile Include="GameData\Cooldown.cs" />
     <Compile Include="GameData\SpecialAction.cs" />
     <Compile Include="GameData\StdObjList.cs" />
+    <Compile Include="GameData\StdStructVector.cs" />
     <Compile Include="GameData\StdObjVector.cs" />
     <Compile Include="GameData\StdString.cs" />
     <Compile Include="Chat.cs" />
@@ -66,6 +72,7 @@
     <Compile Include="Imports\MessageProtocol.cs" />
     <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
     <Compile Include="Imports\N3EngineClient_t .cs" />
+    <Compile Include="Imports\GameTime_t.cs" />
     <Compile Include="Imports\N3Engine_t.cs" />
     <Compile Include="Imports\N3PlayfieldAnarchy_t.cs" />
     <Compile Include="Imports\N3Playfield_t.cs" />

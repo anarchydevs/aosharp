@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 
@@ -8,7 +9,7 @@ namespace AOSharp.Core
 {
     public unsafe class LocalPlayer : SimpleChar
     {
-        public List<GameData.SpecialAction> SpecialActions => GetSpecialActionList();
+        public Dictionary<Stat, Cooldown> Cooldowns => GetCooldowns();
 
         public LocalPlayer(IntPtr pointer) : base(pointer)
         {
@@ -33,6 +34,16 @@ namespace AOSharp.Core
             N3EngineClientAnarchy_t.DefaultAttack(pEngine, &target, true);
         }
 
+        public void StopAttack()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return;
+
+            N3EngineClientAnarchy_t.StopAttack(pEngine);
+        }
+
         public void CastNano(Identity nano, Dynel target)
         {
             CastNano(nano, target.Identity);
@@ -48,14 +59,43 @@ namespace AOSharp.Core
             N3EngineClientAnarchy_t.CastNanoSpell(pEngine, &nano, &target);
         }
 
-        internal List<GameData.SpecialAction> GetSpecialActionList()
+        private Dictionary<Stat, Cooldown> GetCooldowns()
+        {
+            Dictionary<Stat, Cooldown> cooldowns = new Dictionary<Stat, Cooldown>();
+
+            IntPtr pUnk = *(*(LocalPlayer_MemStruct*)Pointer).CooldownUnk;
+
+            if (pUnk == IntPtr.Zero)
+                return cooldowns;
+
+            StdStructVector cooldownVector = *(StdStructVector*)pUnk;
+
+            foreach(IntPtr pCooldown in cooldownVector.ToList(sizeof(Cooldown)))
+            {
+                Cooldown cooldown = *(Cooldown*)pCooldown;
+                cooldowns.Add(cooldown.Stat, cooldown);
+            }
+
+            return cooldowns;
+        }
+
+        /* Probably will never be used but it's already implemented so..
+        internal List<SpecialAction> GetSpecialActionList()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
             if (pEngine == IntPtr.Zero)
-                return new List<GameData.SpecialAction>();
+                return new List<SpecialAction>();
 
             return N3EngineClientAnarchy_t.GetSpecialActionList(pEngine)->ToList().Select(x => *(SpecialAction*)x).ToList();
+        }
+        */
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        private unsafe struct LocalPlayer_MemStruct
+        {
+            [FieldOffset(0x1BC)]
+            public IntPtr* CooldownUnk;
         }
     }
 }

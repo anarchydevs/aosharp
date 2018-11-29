@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 
 namespace AOSharp.Core.GameData
@@ -17,7 +13,7 @@ namespace AOSharp.Core.GameData
         public Identity Owner;
 
         [FieldOffset(0x18)]
-        public SpecialActionOpCode OpCode;
+        public SpecialAttack OpCode;
         
         //There's technically more to this struct but I've yet to find a use in the rest..
     }

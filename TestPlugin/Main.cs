@@ -22,7 +22,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   Name: {DynelManager.LocalPlayer.Name}");
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
-                Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
+                Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
 
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   AllowsVehicles: {Playfield.AllowsVehicles}");
@@ -44,12 +44,12 @@ namespace TestPlugin
             if (DynelManager.LocalPlayer.IsAttacking)
                 return;
 
-            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "34-I Helper" && x.IsAlive);
+            //SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "34-I Helper" && x.IsAlive);
 
-            if (leet == null)
-                return;
+            //if (leet == null)
+            //    return;
 
-            DynelManager.LocalPlayer.Attack(leet);
+            //DynelManager.LocalPlayer.Attack(leet);
         }
 
         private void DynelSpawned(Dynel dynel)

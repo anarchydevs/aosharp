@@ -9,24 +9,33 @@ namespace CombatHandler
 {
     public class Main : IAOPluginEntry
     {
-        public int i = 0;
-
         public void Run()
         {
             try
             {
                 Chat.WriteLine("CombatHandler loaded");
 
-                List<AOSharp.Core.GameData.SpecialAction> actions = DynelManager.LocalPlayer.SpecialActions;
+                HashSet<SpecialAttack> actions = DynelManager.LocalPlayer.SpecialAttacks;
 
-                Chat.WriteLine($"Specials: {DynelManager.LocalPlayer.SpecialActions.Count}");
-                foreach(AOSharp.Core.GameData.SpecialAction action in actions)
+                Chat.WriteLine($"Specials: {DynelManager.LocalPlayer.SpecialAttacks.Count}");
+                foreach(SpecialAttack action in actions)
                 {
-                    Chat.WriteLine($"   {action.Identity} - {action.Owner} - {action.OpCode}");
+                    Chat.WriteLine($"   {action}");
                 }
 
+                Dictionary<Stat, Cooldown> cooldowns = DynelManager.LocalPlayer.Cooldowns;
+
+                Chat.WriteLine($"Cooldowns: {cooldowns.Count}");
+                foreach (Cooldown cooldown in cooldowns.Values)
+                {
+                    Chat.WriteLine($"   {cooldown.Stat} - {cooldown.Remaining} / {cooldown.Total}");
+                };
+
+                Chat.WriteLine($"Weapons: {DynelManager.LocalPlayer.GetWeapons().Count}");
+
+                Chat.WriteLine($"FA: {SpecialAttack.FastAttack.IsAvailable()}");
+
                 Game.OnUpdate += OnUpdate;
-                DynelManager.DynelSpawned += DynelSpawned;
             }
             catch (Exception e)
             {
@@ -36,19 +45,23 @@ namespace CombatHandler
 
         private void OnUpdate()
         {
-            if (DynelManager.LocalPlayer.IsAttacking)
+            if (!DynelManager.LocalPlayer.IsAttacking)
                 return;
 
-            
+            SpecialAttacks();
         }
 
-        private void DynelSpawned(Dynel dynel)
+        private void SpecialAttacks()
         {
-            if (dynel.Identity.Type == IdentityType.SimpleChar)
-            {
-                SimpleChar c = dynel.Cast<SimpleChar>();
+            SimpleChar fightingTarget = DynelManager.LocalPlayer.FightingTarget;
 
-                Chat.WriteLine($"SimpleChar Spawned (CombatHandler): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health}");
+            if (fightingTarget == null)
+                return;
+
+            foreach(SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
+            {
+                if (special.IsAvailable())
+                    special.UseOn(fightingTarget);
             }
         }
     }
