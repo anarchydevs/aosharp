@@ -9,6 +9,9 @@ namespace AOSharp.Core
         [FieldOffset(0x38)]
         public float Runspeed;
 
+        [FieldOffset(0x4C)]
+        public float Radius;
+
         [FieldOffset(0x58)]
         public Vector3 Position;
 

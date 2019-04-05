@@ -38,12 +38,14 @@ namespace AOSharp.Core
 
         public unsafe virtual bool IsMoving => (*(Dynel_MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
+        public unsafe float Radius => (*(Dynel_MemStruct*)Pointer).Vehicle->Radius;
+
         public Dynel(IntPtr pointer)
         {
             Pointer = pointer;
         }
 
-        public unsafe int GetStat(Stat stat)
+        public unsafe int GetStat(Stat stat, int detail = 2)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -55,7 +57,7 @@ namespace AOSharp.Core
             Identity unk = new Identity();
 
             // 2 = buffed skill
-            return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, 2, &unk);
+            return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, detail, &unk);
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

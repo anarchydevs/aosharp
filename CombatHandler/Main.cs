@@ -15,14 +15,6 @@ namespace CombatHandler
             {
                 Chat.WriteLine("CombatHandler loaded");
 
-                HashSet<SpecialAttack> actions = DynelManager.LocalPlayer.SpecialAttacks;
-
-                Chat.WriteLine($"Specials: {DynelManager.LocalPlayer.SpecialAttacks.Count}");
-                foreach(SpecialAttack action in actions)
-                {
-                    Chat.WriteLine($"   {action}");
-                }
-
                 Dictionary<Stat, Cooldown> cooldowns = DynelManager.LocalPlayer.Cooldowns;
 
                 Chat.WriteLine($"Cooldowns: {cooldowns.Count}");
@@ -31,7 +23,24 @@ namespace CombatHandler
                     Chat.WriteLine($"   {cooldown.Stat} - {cooldown.Remaining} / {cooldown.Total}");
                 };
 
-                Chat.WriteLine($"Weapons: {DynelManager.LocalPlayer.GetWeapons().Count}");
+
+                Chat.WriteLine($"Weapons: {DynelManager.LocalPlayer.Weapons.Count}");
+
+                foreach (WeaponItem weapon in DynelManager.LocalPlayer.Weapons.Values)
+                {
+                    Chat.WriteLine($"   Pointer: {weapon.Pointer.ToString("X4")}");
+                    Chat.WriteLine($"       Specials: {weapon.SpecialAttacks.Count}");
+                    foreach (SpecialAttack special in weapon.SpecialAttacks)
+                    {
+                        Chat.WriteLine($"          {special.ToString()}");
+                    }
+                }
+
+                Chat.WriteLine($"Specials: {DynelManager.LocalPlayer.SpecialAttacks.Count}");
+                foreach (SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
+                {
+                    Chat.WriteLine($"          {special.ToString()}");
+                }
 
                 Chat.WriteLine($"FA: {SpecialAttack.FastAttack.IsAvailable()}");
 
@@ -39,7 +48,7 @@ namespace CombatHandler
             }
             catch (Exception e)
             {
-                Chat.WriteLine(e.Message);
+                Chat.WriteLine(e.ToString());
             }
         }
 
@@ -47,6 +56,14 @@ namespace CombatHandler
         {
             if (!DynelManager.LocalPlayer.IsAttacking)
                 return;
+
+            SimpleChar fightingTarget = DynelManager.LocalPlayer.FightingTarget;
+
+            if (fightingTarget != null)
+            {
+                Debug.DrawSphere(fightingTarget.Position, 1, DebuggingColor.LightBlue);
+                Debug.DrawLine(DynelManager.LocalPlayer.Position, fightingTarget.Position, DebuggingColor.LightBlue);
+            }
 
             SpecialAttacks();
         }
@@ -60,8 +77,13 @@ namespace CombatHandler
 
             foreach(SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
             {
-                if (special.IsAvailable())
-                    special.UseOn(fightingTarget);
+                if (!special.IsAvailable())
+                    continue;
+
+                if (!special.IsInRange(fightingTarget))
+                    continue;
+
+                special.UseOn(fightingTarget);
             }
         }
     }

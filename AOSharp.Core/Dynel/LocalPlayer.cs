@@ -11,6 +11,8 @@ namespace AOSharp.Core
     {
         public Dictionary<Stat, Cooldown> Cooldowns => GetCooldowns();
 
+        public float AttackRange => GetAttackRange();
+
         public LocalPlayer(IntPtr pointer) : base(pointer)
         {
         }
@@ -42,6 +44,16 @@ namespace AOSharp.Core
                 return;
 
             N3EngineClientAnarchy_t.StopAttack(pEngine);
+        }
+
+        public float GetAttackRange()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return 0f;
+
+            return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
         }
 
         public void CastNano(Identity nano, Dynel target)

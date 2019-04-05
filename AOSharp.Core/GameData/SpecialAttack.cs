@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AOSharp.Common.GameData;
 
 namespace AOSharp.Core.GameData
@@ -39,6 +41,34 @@ namespace AOSharp.Core.GameData
             return N3EngineClientAnarchy_t.IsSecondarySpecialAttackAvailable(pEngine, _stat) == 0;
         }
 
+        public bool IsInRange(Dynel target)
+        {
+            const int MainHand = 0x06;
+            const int OffHand = 0x08;
+
+            Dictionary<int, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
+
+            if (weapons.Count > 0)
+            {
+                if (weapons.ContainsKey(MainHand) && weapons[MainHand].SpecialAttacks.Contains(this))
+                    return weapons[MainHand].IsDynelInRange(target);
+                else if (weapons.ContainsKey(OffHand) && weapons[OffHand].SpecialAttacks.Contains(this))
+                    return weapons[OffHand].IsDynelInRange(target);
+                else
+                    return false;
+            }
+            else
+            {
+                IntPtr pWeaponHolder = DynelManager.LocalPlayer.pWeaponHolder;
+                IntPtr dummyWeapon = WeaponHolder_t.GetDummyWeapon(pWeaponHolder, this._stat);
+
+                if (dummyWeapon == null)
+                    return false;
+
+                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, dummyWeapon, target.Pointer) == 0x01;
+            }
+        }
+
         public bool UseOn(Dynel target)
         {
             return UseOn(target.Identity);
@@ -57,6 +87,11 @@ namespace AOSharp.Core.GameData
                 _nextAttack = Time.NormalTime + ATTACK_DELAY_BUFFER;
 
             return successful;
+        }
+
+        public override string ToString()
+        {
+            return _stat.ToString();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace AOSharp.Core
 {
     public class N3EngineClientAnarchy_t
     {
-        //DefaultAttack
+        //SecondarySpecialAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SecondarySpecialAttack@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@W4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern bool SecondarySpecialAttack(IntPtr pThis, Identity* target, Stat stat);
 
@@ -26,6 +26,10 @@ namespace AOSharp.Core
         //IsSecondarySpecialAttackAvailable
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsSecondarySpecialAttackAvailable@n3EngineClientAnarchy_t@@QBE_NW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern byte IsSecondarySpecialAttackAvailable(IntPtr pThis, Stat stat);
+
+        //GetAttackRange
+        [DllImport("Gamecode.dll", EntryPoint = "?GetAttackRange@n3EngineClientAnarchy_t@@QBEMXZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern float GetAttackRange(IntPtr pThis);
 
         //CastNanoSpell
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]

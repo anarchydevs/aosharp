@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Imports\WeaponHolder_t.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="DynelManager.cs" />
     <Compile Include="Dynel\CharMovementStatus.cs" />

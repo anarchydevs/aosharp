@@ -17,7 +17,7 @@ namespace TestLoader
     {
         static void Main(string[] args)
         {
-            IPCClient client = Attach("");
+            IPCClient client = Attach("Aoba");
 
             client.Send(new LoadAssemblyMessage()
             {

@@ -65,6 +65,11 @@ namespace AOSharp.Common.GameData
             }
         }
 
+        public static float Distance(Vector3 from, Vector3 to)
+        {
+            return (float)Math.Sqrt(Math.Pow(Math.Abs(from.X - to.X), 2) + Math.Pow(Math.Abs(from.Y - to.Y), 2) + Math.Pow(Math.Abs(from.Z - to.Z), 2));
+        }
+
         public float DistanceFrom(Vector3 pos)
         {
             return (float)Math.Sqrt(Math.Pow(Math.Abs(X - pos.X), 2) + Math.Pow(Math.Abs(Y - pos.Y), 2) + Math.Pow(Math.Abs(Z - pos.Z), 2));

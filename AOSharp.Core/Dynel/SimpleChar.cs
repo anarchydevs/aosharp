@@ -26,7 +26,11 @@ namespace AOSharp.Core
 
         public SimpleChar FightingTarget => GetFightingTarget();
 
+        public Dictionary<int, WeaponItem> Weapons => GetWeapons();
+
         public HashSet<SpecialAttack> SpecialAttacks => GetSpecialAttacks();
+
+        internal IntPtr pWeaponHolder => (IntPtr)(*(SimpleChar_MemStruct*)Pointer).WeaponHolder;
 
         public SimpleChar(IntPtr pointer) : base(pointer)
         {
@@ -46,85 +50,53 @@ namespace AOSharp.Core
             return new SimpleChar(pFightingTarget);
         }
 
-        private HashSet<SpecialAttack> GetSpecialAttacks()
+        private unsafe Dictionary<int, WeaponItem> GetWeapons()
         {
-            HashSet<SpecialAttack> specials = new HashSet<SpecialAttack>();
-            List<WeaponItem> weapons = GetWeapons();
+            //Offset used to convert WeaponItem_t to Dynel_t
+            const int Dynel_t__Offset = 0xB0;
 
-            if (weapons.Count == 0)
-            {
-                specials.Add(SpecialAttack.Brawl);
-                specials.Add(SpecialAttack.Dimach);
-                return specials;
-            }
-
-            foreach (WeaponItem weapon in weapons)
-            {
-                SpecialAttackFlags canFlags = (SpecialAttackFlags)weapon.GetStat(Stat.Can);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.AimedShot))
-                    specials.Add(SpecialAttack.AimedShot);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.Brawl))
-                    specials.Add(SpecialAttack.Brawl);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.Burst))
-                    specials.Add(SpecialAttack.Burst);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.Dimach))
-                    specials.Add(SpecialAttack.Dimach);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.FastAttack))
-                    specials.Add(SpecialAttack.FastAttack);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.FlingShot))
-                    specials.Add(SpecialAttack.FlingShot);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.FullAuto))
-                    specials.Add(SpecialAttack.FullAuto);
-
-                if (canFlags.HasFlag(SpecialAttackFlags.SneakAttack))
-                    specials.Add(SpecialAttack.SneakAttack);
-            }
-
-            return specials;
-        }
-
-        public unsafe List<WeaponItem> GetWeapons()
-        {
-            List<WeaponItem> weapons = new List<WeaponItem>();
+            Dictionary<int, WeaponItem> weapons = new Dictionary<int, WeaponItem>();
 
             IntPtr pWeaponHolder = (IntPtr)(*(SimpleChar_MemStruct*)Pointer).WeaponHolder;
 
             if (pWeaponHolder == IntPtr.Zero)
                 return weapons;
 
-            IntPtr pUnk1 = *(IntPtr*)(pWeaponHolder + 0x20);
+            IntPtr right = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x6, 0);
 
-            if (pUnk1 == IntPtr.Zero)
-                return weapons;
+            if (right != IntPtr.Zero)
+                weapons.Add(0x6, new WeaponItem(*(IntPtr*)(right + 0x14) + Dynel_t__Offset, pWeaponHolder, right));
 
-            IntPtr pUnk2 = *(IntPtr*)(pUnk1 + 0x04);
+            IntPtr left = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x8, 0);
 
-            if (pUnk2 == IntPtr.Zero)
-                return weapons;
-
-            IntPtr pRightHandWeapon = *(IntPtr*)(pUnk2 + 0x10);
-
-            if (pRightHandWeapon != IntPtr.Zero)
-                weapons.Add(new WeaponItem(*(IntPtr*)(pRightHandWeapon + 0x14) + 0xB0));
-
-            IntPtr pUnk3 = *(IntPtr*)(pUnk2 + 0x08);
-
-            if (pUnk3 == IntPtr.Zero)
-                return weapons;
-
-            IntPtr pLeftHandWeapon = *(IntPtr*)(pUnk3 + 0x10);
-
-            if (pLeftHandWeapon != IntPtr.Zero)
-                weapons.Add(new WeaponItem(*(IntPtr*)(pLeftHandWeapon + 0x14) + 0xB0));
+            if (left != IntPtr.Zero)
+                weapons.Add(0x8, new WeaponItem(*(IntPtr*)(left + 0x14) + Dynel_t__Offset, pWeaponHolder, left));
 
             return weapons;
+        }
+
+        private HashSet<SpecialAttack> GetSpecialAttacks()
+        {
+            HashSet<SpecialAttack> specials = new HashSet<SpecialAttack>();
+            Dictionary<int, WeaponItem> weapons = Weapons;
+
+            if(weapons.Count > 0)
+            {
+                foreach (WeaponItem weapon in weapons.Values)
+                {
+                    foreach (SpecialAttack special in weapon.SpecialAttacks)
+                    {
+                        specials.Add(special);
+                    }
+                }
+            }
+            else
+            {
+                specials.Add(SpecialAttack.Brawl);
+                specials.Add(SpecialAttack.Dimach);
+            }
+
+            return specials;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

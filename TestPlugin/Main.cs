@@ -39,17 +39,40 @@ namespace TestPlugin
             }
         }
 
+        bool once = true;
+
         private void OnUpdate()
         {
             if (DynelManager.LocalPlayer.IsAttacking)
+               return;
+
+            if (once)
+            {
+                SimpleChar target = DynelManager.Characters.FirstOrDefault(x => x.Name == "Eleanor Kiamarli");
+
+                if (target != null)
+                {
+                    foreach (WeaponItem weapon in DynelManager.LocalPlayer.Weapons.Values)
+                    {
+                        Chat.WriteLine($"InRange: {weapon.IsDynelInRange(target)}");
+                    }
+
+                    Chat.WriteLine("Donezo m8");
+                }
+                else
+                {
+                    Chat.WriteLine("No target found :/");
+                }
+
+                once = false;
+            }
+
+            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive);
+
+            if (leet == null)
                 return;
 
-            //SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "34-I Helper" && x.IsAlive);
-
-            //if (leet == null)
-            //    return;
-
-            //DynelManager.LocalPlayer.Attack(leet);
+            DynelManager.LocalPlayer.Attack(leet);
         }
 
         private void DynelSpawned(Dynel dynel)
