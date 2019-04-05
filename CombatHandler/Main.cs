@@ -52,7 +52,7 @@ namespace CombatHandler
             }
         }
 
-        private void OnUpdate()
+        private void OnUpdate(float deltaTime)
         {
             if (!DynelManager.LocalPlayer.IsAttacking)
                 return;

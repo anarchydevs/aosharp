@@ -39,35 +39,18 @@ namespace TestPlugin
             }
         }
 
-        bool once = true;
-
-        private void OnUpdate()
+        private void OnUpdate(float deltaTime)
         {
             if (DynelManager.LocalPlayer.IsAttacking)
                return;
 
-            if (once)
+            foreach(Dynel dynel in DynelManager.Characters)
             {
-                SimpleChar target = DynelManager.Characters.FirstOrDefault(x => x.Name == "Eleanor Kiamarli");
-
-                if (target != null)
-                {
-                    foreach (WeaponItem weapon in DynelManager.LocalPlayer.Weapons.Values)
-                    {
-                        Chat.WriteLine($"InRange: {weapon.IsDynelInRange(target)}");
-                    }
-
-                    Chat.WriteLine("Donezo m8");
-                }
-                else
-                {
-                    Chat.WriteLine("No target found :/");
-                }
-
-                once = false;
+                Debug.DrawSphere(dynel.Position, 1, DebuggingColor.LightBlue);
+                Debug.DrawLine(DynelManager.LocalPlayer.Position, dynel.Position, DebuggingColor.LightBlue);
             }
 
-            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsDynelInRange(x));
+            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsInAttackRange(x));
 
             if (leet == null)
                 return;

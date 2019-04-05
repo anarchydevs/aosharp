@@ -50,7 +50,7 @@ namespace AOSharp.Core
             return new SimpleChar(pFightingTarget);
         }
 
-        public unsafe bool IsDynelInRange(Dynel target)
+        public unsafe bool IsInAttackRange(Dynel target, bool requireAllWeapons = false)
         {
             Dictionary<int, WeaponItem> weapons = Weapons;
 
@@ -61,7 +61,12 @@ namespace AOSharp.Core
                 foreach(WeaponItem weapon in weapons.Values)
                 {
                     if (!weapon.IsDynelInRange(target))
+                    {
+                        if (requireAllWeapons)
+                            return false;
+
                         inRange = false;
+                    }
                 }
 
                 return inRange;

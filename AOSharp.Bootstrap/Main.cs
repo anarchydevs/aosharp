@@ -120,6 +120,10 @@ namespace AOSharp.Bootstrap
             CreateHook("DisplaySystem.dll",
                         "?FrameProcess@VisualEnvFX_t@@QAEXMMIMAAVVector3_t@@AAVQuaternion_t@@@Z",
                         new VisualEnvFX_t.DFrameProcess(VisualEnvFX_FrameProcess_Hook));
+
+            CreateHook("Gamecode.dll",
+                        "?RunEngine@n3EngineClientAnarchy_t@@UAEXM@Z",
+                        new N3EngineClientAnarchy_t.DRunEngine(N3EngineClientAnarchy_RunEngine_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -140,11 +144,22 @@ namespace AOSharp.Bootstrap
                 hook.Dispose();
         }
 
+        public void N3EngineClientAnarchy_RunEngine_Hook(IntPtr pThis, float deltaTime)
+        {
+            try
+            {
+                _pluginProxy.Update(deltaTime);
+            }
+            catch (Exception) { }
+
+            N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+        }
+
         public int VisualEnvFX_FrameProcess_Hook(IntPtr pThis, float unk1, float unk2, int unk3, float unk4, int unk5, int unk6)
         {
             try
             {
-                _pluginProxy.Update();
+                //_pluginProxy.Update();
             }
             catch (Exception) { }
 
@@ -167,7 +182,7 @@ namespace AOSharp.Bootstrap
         {
             public delegate void DynelSpawnedDelegate(IntPtr pDynel);
             public DynelSpawnedDelegate DynelSpawned;
-            public delegate void UpdateDelegate();
+            public delegate void UpdateDelegate(float deltaTime);
             public UpdateDelegate Update;
         }
 
@@ -181,10 +196,10 @@ namespace AOSharp.Bootstrap
                     _coreDelegates.DynelSpawned(pDynel);
             }
 
-            public void Update()
+            public void Update(float deltaTime)
             {
                 if (_coreDelegates.Update != null)
-                    _coreDelegates.Update();
+                    _coreDelegates.Update(deltaTime);
             }
 
             private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T: class

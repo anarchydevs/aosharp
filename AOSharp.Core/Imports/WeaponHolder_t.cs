@@ -17,6 +17,11 @@ namespace AOSharp.Core
         internal unsafe delegate byte IsDynelInWeaponRangeDelegate(IntPtr pThis, IntPtr pWeapon, IntPtr pDynel);
         internal static IsDynelInWeaponRangeDelegate IsDynelInWeaponRange = Marshal.GetDelegateForFunctionPointer<IsDynelInWeaponRangeDelegate>(Kernal32.GetModuleHandle("Gamecode.dll") + 0x6797E);
 
+        //55 8B EC 83 EC 18 33 C0 56 8B F1 39 45 08 75 07  
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+        internal unsafe delegate byte IsInRangeDelegate(IntPtr pThis);
+        internal static IsInRangeDelegate IsInRange = Marshal.GetDelegateForFunctionPointer<IsInRangeDelegate>(Kernal32.GetModuleHandle("Gamecode.dll") + 0x68926);
+
         //55 8B EC 51 56 8D 45 08 50 8B F1 8D 45 FC 50 8D 4E 0C E8 ? ? ? ? 8B 45 FC 3B 46 10 5E 74 05   
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         internal unsafe delegate IntPtr GetDummyWeaponDelegate(IntPtr pThis, Stat stat);
