@@ -50,11 +50,38 @@ namespace AOSharp.Core
             return new SimpleChar(pFightingTarget);
         }
 
+        public unsafe bool IsDynelInRange(Dynel target)
+        {
+            Dictionary<int, WeaponItem> weapons = Weapons;
+
+            if(weapons.Count > 0)
+            {
+                bool inRange = true;
+
+                foreach(WeaponItem weapon in weapons.Values)
+                {
+                    if (!weapon.IsDynelInRange(target))
+                        inRange = false;
+                }
+
+                return inRange;
+            }
+            else
+            {
+                IntPtr pWeaponHolder = DynelManager.LocalPlayer.pWeaponHolder;
+                IntPtr dummyWeapon = WeaponHolder_t.GetDummyWeapon(pWeaponHolder, Stat.MartialArts);
+
+                if (dummyWeapon == null)
+                    return false;
+
+                IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
+
+                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, target.Pointer) == 0x01;
+            }
+        }
+
         private unsafe Dictionary<int, WeaponItem> GetWeapons()
         {
-            //Offset used to convert WeaponItem_t to Dynel_t
-            const int Dynel_t__Offset = 0xB0;
-
             Dictionary<int, WeaponItem> weapons = new Dictionary<int, WeaponItem>();
 
             IntPtr pWeaponHolder = (IntPtr)(*(SimpleChar_MemStruct*)Pointer).WeaponHolder;
@@ -65,12 +92,12 @@ namespace AOSharp.Core
             IntPtr right = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x6, 0);
 
             if (right != IntPtr.Zero)
-                weapons.Add(0x6, new WeaponItem(*(IntPtr*)(right + 0x14) + Dynel_t__Offset, pWeaponHolder, right));
+                weapons.Add(0x6, new WeaponItem(*(IntPtr*)(right + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, right));
 
             IntPtr left = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x8, 0);
 
             if (left != IntPtr.Zero)
-                weapons.Add(0x8, new WeaponItem(*(IntPtr*)(left + 0x14) + Dynel_t__Offset, pWeaponHolder, left));
+                weapons.Add(0x8, new WeaponItem(*(IntPtr*)(left + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, left));
 
             return weapons;
         }

@@ -67,7 +67,7 @@ namespace TestPlugin
                 once = false;
             }
 
-            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive);
+            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsDynelInRange(x));
 
             if (leet == null)
                 return;
