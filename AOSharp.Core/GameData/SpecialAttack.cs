@@ -41,7 +41,7 @@ namespace AOSharp.Core.GameData
             return N3EngineClientAnarchy_t.IsSecondarySpecialAttackAvailable(pEngine, _stat) == 0;
         }
 
-        public bool IsInRange(Dynel target)
+        public unsafe bool IsInRange(Dynel target)
         {
             const int MainHand = 0x06;
             const int OffHand = 0x08;
@@ -65,7 +65,9 @@ namespace AOSharp.Core.GameData
                 if (dummyWeapon == null)
                     return false;
 
-                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, dummyWeapon, target.Pointer) == 0x01;
+                IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
+
+                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, target.Pointer) == 0x01;
             }
         }
 
