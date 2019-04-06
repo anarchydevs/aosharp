@@ -13,5 +13,17 @@ namespace AOSharp.Core
         public static extern void AddChildDynel(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DAddChildDynel(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot);
+
+        [DllImport("N3.dll", EntryPoint = "?IsDungeon@n3Playfield_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern bool IsDungeon(IntPtr pThis);
+
+        [DllImport("N3.dll", EntryPoint = "?IsBattleStation@n3Playfield_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern bool IsBattleStation(IntPtr pThis);
+
+        [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetName@n3Playfield_t@@UBEPBDXZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern IntPtr GetName(IntPtr pThis);
+
+        [DllImport("N3.dll", EntryPoint = "?GetIdentity@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern Identity* GetIdentity(IntPtr pThis);
     }
 }

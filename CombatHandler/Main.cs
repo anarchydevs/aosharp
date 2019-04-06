@@ -42,8 +42,6 @@ namespace CombatHandler
                     Chat.WriteLine($"          {special.ToString()}");
                 }
 
-                Chat.WriteLine($"FA: {SpecialAttack.FastAttack.IsAvailable()}");
-
                 Game.OnUpdate += OnUpdate;
             }
             catch (Exception e)

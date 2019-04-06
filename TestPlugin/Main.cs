@@ -12,7 +12,7 @@ namespace TestPlugin
     {
         public int i = 0;
 
-        public void Run()
+        public unsafe void Run()
         {
             try
             {
@@ -25,7 +25,11 @@ namespace TestPlugin
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
 
                 Chat.WriteLine("Playfield");
+                Chat.WriteLine($"   Identity: {Playfield.Identity}");
+                Chat.WriteLine($"   Name: {Playfield.Name}");
                 Chat.WriteLine($"   AllowsVehicles: {Playfield.AllowsVehicles}");
+                Chat.WriteLine($"   IsDungeon: {Playfield.IsDungeon}");
+                Chat.WriteLine($"   IsShadowlands: {Playfield.IsShadowlands}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
 
                 DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 0x46146), DynelManager.LocalPlayer.Identity);

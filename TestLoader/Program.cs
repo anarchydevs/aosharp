@@ -17,7 +17,10 @@ namespace TestLoader
     {
         static void Main(string[] args)
         {
-            IPCClient client = Attach("Aoba");
+            IPCClient client = PromptForClient();
+
+            Console.Clear();
+            Console.WriteLine("AOSharp Injected!");
 
             client.Send(new LoadAssemblyMessage()
             {
@@ -28,7 +31,45 @@ namespace TestLoader
                 }
             });
 
+            Console.WriteLine("Plugins loaded.");
+
             Console.ReadLine();
+        }
+
+        public static IPCClient PromptForClient()
+        {
+            Process[] aoClients = Process.GetProcessesByName("AnarchyOnline");
+
+            if (aoClients.Length == 0)
+                Console.WriteLine("Error: There are no Anarchy Online clients open.");
+
+            Console.WriteLine("Select a character.\n");
+
+            int clientIndex = 0;
+            foreach (Process aoClient in aoClients)
+            {
+                try
+                {
+                    Console.WriteLine("[{0}] {1}", clientIndex, aoClient.MainWindowTitle.Split('-', ' ')[4]);
+                    clientIndex++;
+                }
+                catch
+                {
+                    Console.WriteLine("[{0}] No Character Selected", clientIndex);
+                    clientIndex++;
+                }
+            }
+
+            int selected;
+            string line = Console.ReadLine();
+            while (!int.TryParse(line, out selected) && selected > aoClients.Length && selected < 0)
+            {
+                Console.WriteLine("Invalid selection");
+                Console.WriteLine("Select a character.");
+                line = Console.ReadLine();
+            }
+
+            return Inject(aoClients[selected]);
         }
 
         public static IPCClient Attach(string name)
