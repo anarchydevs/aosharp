@@ -59,10 +59,19 @@ namespace AOSharp.Core
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TradeskillCombine@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr TradeskillCombine(IntPtr pThis, IntPtr source, IntPtr destination);
 
+        //GetClientDynelId
+        [DllImport("Gamecode.dll", EntryPoint = "?GetClientDynelId@n3EngineClientAnarchy_t@@UBE?AVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern Identity* GetClientDynelId(IntPtr pThis);
+
         //TextCommand
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TextCommand@n3EngineClientAnarchy_t@@QAE_NHPBDABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr TextCommand(IntPtr pThis, IntPtr unk, IntPtr text, IntPtr identity);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate IntPtr DTextCommand(IntPtr pThis, IntPtr unk, IntPtr text, IntPtr identity);
+
+        //B8 ? ? ? ? E8 ? ? ? ? 51 56 8B F1 83 BE ? ? ? ? ? 75 25 6A 18 E8 ? ? ? ? 59 8B C8 89 4D F0 83 65 FC 00 85 C9 74 08 56 E8 ? ? ? ? EB 02 
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+        internal unsafe delegate StdObjList* GetMissionListDelegate(IntPtr pThis, IntPtr unk);
+        internal static GetMissionListDelegate GetMissionList = Marshal.GetDelegateForFunctionPointer<GetMissionListDelegate>(Kernel32.GetModuleHandle("Gamecode.dll") + 0x58778);
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Text;
+using System.Runtime.InteropServices;
 using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
 namespace AOSharp.Common.GameData
@@ -31,7 +33,10 @@ namespace AOSharp.Common.GameData
 
         public override string ToString()
         {
-            return string.Format("({0}:{1})", Type, Instance);
+            if (Type == IdentityType.MobHash)
+                return string.Format("({0}:{1})", Type, Encoding.ASCII.GetString(BitConverter.GetBytes(Instance)));
+
+            return string.Format("({0}:{1})", Type, Instance.ToString("X4"));
         }
         public static bool operator == (Identity identity1, IdentityType Type)
         {

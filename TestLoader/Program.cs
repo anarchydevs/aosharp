@@ -27,7 +27,8 @@ namespace TestLoader
                 Assemblies = new List<string>()
                 {
                     Directory.GetCurrentDirectory() + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll",
-                    Directory.GetCurrentDirectory() + @"\..\..\..\CombatHandler\bin\Debug\CombatHandler.dll"
+                    Directory.GetCurrentDirectory() + @"\..\..\..\CombatHandler\bin\Debug\CombatHandler.dll",
+                    Directory.GetCurrentDirectory() + @"\..\..\..\MissionHelper\bin\Debug\MissionHelper.dll"
                 }
             });
 

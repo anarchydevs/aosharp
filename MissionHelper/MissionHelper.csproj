@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{56164CDC-83A1-4D13-91CF-3B1AA3F289B1}</ProjectGuid>
+    <ProjectGuid>{DEB6DF7B-72B6-4240-B748-086329AFFC87}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AOSharp.Bootstrap</RootNamespace>
-    <AssemblyName>AOSharp.Bootstrap</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <RootNamespace>MissionHelper</RootNamespace>
+    <AssemblyName>MissionHelper</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
@@ -21,8 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,15 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyHook, Version=2.7.6789.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyHook.2.7.6789\lib\net40\EasyHook.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,33 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Imports\Client_t.cs" />
-    <Compile Include="Imports\Connection_t.cs" />
-    <Compile Include="Imports\FlowControlModule_t.cs" />
-    <Compile Include="Imports\MessageProtocol.cs" />
-    <Compile Include="Imports\TeleportTrier_t.cs" />
-    <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
-    <Compile Include="Imports\N3Playfield_t.cs" />
-    <Compile Include="Imports\Native\Kernel32.cs" />
-    <Compile Include="Imports\VisualEnvFX_t.cs" />
-    <Compile Include="IPC\HookOpCode.cs" />
-    <Compile Include="IPC\IPCAsyncResult.cs" />
-    <Compile Include="IPC\IPCClient.cs" />
-    <Compile Include="IPC\IPCMessage.cs" />
-    <Compile Include="IPC\IPCRequestMessage.cs" />
-    <Compile Include="IPC\IPCResponseMessage.cs" />
-    <Compile Include="IPC\IPCServer.cs" />
-    <Compile Include="IPC\Messages\LoadAssemblyMessage.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">
       <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
       <Name>AOSharp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AOSharp.Core\AOSharp.Core.csproj">
+      <Project>{77516561-fa9c-47cd-8c2d-fc8a8b67876b}</Project>
+      <Name>AOSharp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

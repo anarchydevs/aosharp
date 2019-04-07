@@ -25,5 +25,8 @@ namespace AOSharp.Core
 
         [DllImport("N3.dll", EntryPoint = "?GetIdentity@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern Identity* GetIdentity(IntPtr pThis);
+
+        [DllImport("N3.dll", EntryPoint = "?GetModelID@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern Identity* GetModelID(IntPtr pThis);
     }
 }

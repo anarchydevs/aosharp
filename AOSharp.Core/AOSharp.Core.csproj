@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mission.cs" />
     <Compile Include="Imports\N3InfoItemRemote_t.cs" />
     <Compile Include="Imports\WeaponHolder_t.cs" />
     <Compile Include="Offsets.cs" />
+    <Compile Include="PacketFactory.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="DynelManager.cs" />
     <Compile Include="Dynel\CharMovementStatus.cs" />

@@ -53,10 +53,9 @@
     <Compile Include="GameData\Gender.cs" />
     <Compile Include="GameData\Identity.cs" />
     <Compile Include="GameData\IdentityType.cs" />
-    <Compile Include="GameData\IDynel.cs" />
     <Compile Include="GameData\Item.cs" />
     <Compile Include="GameData\Mesh3D.cs" />
-    <Compile Include="GameData\Mission.cs" />
+    <Compile Include="GameData\MissionActionType.cs" />
     <Compile Include="GameData\MissionDirection.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />

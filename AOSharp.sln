@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27924.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOSharp.Bootstrap", "AOSharp.Bootstrap\AOSharp.Bootstrap.csproj", "{56164CDC-83A1-4D13-91CF-3B1AA3F289B1}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{BCA27479-9D4D-4BA9-A0F8-94995F3E4B39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatHandler", "CombatHandler\CombatHandler.csproj", "{336D540C-2C5E-4455-9B71-570DCB0784F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissionHelper", "MissionHelper\MissionHelper.csproj", "{DEB6DF7B-72B6-4240-B748-086329AFFC87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{336D540C-2C5E-4455-9B71-570DCB0784F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{336D540C-2C5E-4455-9B71-570DCB0784F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{336D540C-2C5E-4455-9B71-570DCB0784F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEB6DF7B-72B6-4240-B748-086329AFFC87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEB6DF7B-72B6-4240-B748-086329AFFC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEB6DF7B-72B6-4240-B748-086329AFFC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEB6DF7B-72B6-4240-B748-086329AFFC87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

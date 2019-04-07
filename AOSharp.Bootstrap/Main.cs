@@ -117,13 +117,21 @@ namespace AOSharp.Bootstrap
                         "?AddChildDynel@n3Playfield_t@@QAEXPAVn3Dynel_t@@ABVVector3_t@@ABVQuaternion_t@@@Z",
                         new N3Playfield_t.DAddChildDynel(N3Playfield_t__AddChildDynel_Hook));
 
-            CreateHook("DisplaySystem.dll",
-                        "?FrameProcess@VisualEnvFX_t@@QAEXMMIMAAVVector3_t@@AAVQuaternion_t@@@Z",
-                        new VisualEnvFX_t.DFrameProcess(VisualEnvFX_FrameProcess_Hook));
-
             CreateHook("Gamecode.dll",
                         "?RunEngine@n3EngineClientAnarchy_t@@UAEXM@Z",
                         new N3EngineClientAnarchy_t.DRunEngine(N3EngineClientAnarchy_RunEngine_Hook));
+
+            CreateHook("Gamecode.dll",
+                        "?N3Msg_SendInPlayMessage@n3EngineClientAnarchy_t@@QBE_NXZ",
+                        new N3EngineClientAnarchy_t.DSendInPlayMessage(N3EngineClientAnarchy_SendInPlayMessage_Hook));
+
+            CreateHook("GUI.dll",
+                        "?TeleportStartedMessage@FlowControlModule_t@@CAXXZ",
+                        new FlowControlModule_t.DTeleportStartedMessage(FlowControlModule_t_TeleportStarted_Hook));
+
+            CreateHook("Gamecode.dll",
+                        "?TeleportFailed@TeleportTrier_t@@QAEXXZ",
+                        new TeleportTrier_t.DTeleportFailed(TeleportTrier_t_TeleportFailed_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -144,6 +152,40 @@ namespace AOSharp.Bootstrap
                 hook.Dispose();
         }
 
+        public unsafe void FlowControlModule_t_TeleportStarted_Hook()
+        {
+            try
+            {
+                if(!*FlowControlModule_t.pIsTeleporting)
+                    _pluginProxy.TeleportStarted();
+            }
+            catch (Exception) { }
+
+            FlowControlModule_t.TeleportStartedMessage();
+        }
+
+        public void TeleportTrier_t_TeleportFailed_Hook(IntPtr pThis)
+        {
+            try
+            {
+                _pluginProxy.TeleportFailed();
+            }
+            catch (Exception) { }
+
+            TeleportTrier_t.TeleportFailed(pThis);
+        }
+
+        public bool N3EngineClientAnarchy_SendInPlayMessage_Hook(IntPtr pThis)
+        {
+            try
+            {
+                _pluginProxy.TeleportEnded();
+            }
+            catch (Exception) { }
+
+            return N3EngineClientAnarchy_t.SendInPlayMessage(pThis);
+        }
+
         public void N3EngineClientAnarchy_RunEngine_Hook(IntPtr pThis, float deltaTime)
         {
             try
@@ -153,17 +195,6 @@ namespace AOSharp.Bootstrap
             catch (Exception) { }
 
             N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
-        }
-
-        public int VisualEnvFX_FrameProcess_Hook(IntPtr pThis, float unk1, float unk2, int unk3, float unk4, int unk5, int unk6)
-        {
-            try
-            {
-                //_pluginProxy.Update();
-            }
-            catch (Exception) { }
-
-            return VisualEnvFX_t.FrameProcess(pThis, unk1, unk2, unk3, unk4, unk5, unk6);
         }
 
         public void N3Playfield_t__AddChildDynel_Hook(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot)
@@ -184,6 +215,12 @@ namespace AOSharp.Bootstrap
             public DynelSpawnedDelegate DynelSpawned;
             public delegate void UpdateDelegate(float deltaTime);
             public UpdateDelegate Update;
+            public delegate void TeleportStartedDelegate();
+            public TeleportStartedDelegate TeleportStarted;
+            public delegate void TeleportEndedDelegate();
+            public TeleportEndedDelegate TeleportEnded;
+            public delegate void TeleportFailedDelegate();
+            public TeleportFailedDelegate TeleportFailed;
         }
 
         public class PluginProxy : MarshalByRefObject
@@ -200,6 +237,24 @@ namespace AOSharp.Bootstrap
             {
                 if (_coreDelegates.Update != null)
                     _coreDelegates.Update(deltaTime);
+            }
+
+            public void TeleportStarted()
+            {
+                if (_coreDelegates.TeleportStarted != null)
+                    _coreDelegates.TeleportStarted();
+            }
+
+            public void TeleportEnded()
+            {
+                if (_coreDelegates.TeleportEnded != null)
+                    _coreDelegates.TeleportEnded();
+            }
+
+            public void TeleportFailed()
+            {
+                if (_coreDelegates.TeleportFailed != null)
+                    _coreDelegates.TeleportFailed();
             }
 
             private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T: class
@@ -230,8 +285,11 @@ namespace AOSharp.Bootstrap
 
                 _coreDelegates = new CoreDelegates()
                 {
-                    Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "UpdateInternal"),
-                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "DynelSpawnedInternal")
+                    Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
+                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "DynelSpawnedInternal"),
+                    TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStartedInternal"),
+                    TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEndedInternal"),
+                    TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailedInternal")
                 };
             }
 

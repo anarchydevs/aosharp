@@ -15,6 +15,11 @@ namespace AOSharp.Core
         public static Identity Identity => GetIdentity();
 
         ///<summary>
+        ///Playfield's model identity
+        ///</summary>
+        public static Identity ModelIdentity => GetModelIdentity();
+
+        ///<summary>
         ///Are mechs allowed on the playfield
         ///</summary>
         public static bool AllowsVehicles => AreVehiclesAllowed();
@@ -59,6 +64,17 @@ namespace AOSharp.Core
                 return Identity.None;
 
             return *N3Playfield_t.GetIdentity(pPlayfield);
+        }
+
+        private unsafe static Identity GetModelIdentity()
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+
+            //TODO: throw playfield not initialized exception?
+            if (pPlayfield == IntPtr.Zero)
+                return Identity.None;
+
+            return *N3Playfield_t.GetModelID(pPlayfield);
         }
 
         private unsafe static string GetName()

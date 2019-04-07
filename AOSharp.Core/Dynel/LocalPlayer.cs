@@ -11,6 +11,8 @@ namespace AOSharp.Core
     {
         public Dictionary<Stat, Cooldown> Cooldowns => GetCooldowns();
 
+        internal List<Mission> MissionList => GetMissionList();
+
         public float AttackRange => GetAttackRange();
 
         public LocalPlayer(IntPtr pointer) : base(pointer)
@@ -91,6 +93,27 @@ namespace AOSharp.Core
             return cooldowns;
         }
 
+        internal List<Mission> GetMissionList()
+        {
+            List<Mission> missions = new List<Mission>();
+
+            IntPtr pUnk = (*(LocalPlayer_MemStruct*)Pointer).MissionUnk;
+
+            if (pUnk == IntPtr.Zero)
+                return missions;
+
+            StdObjVector missionVector = *(StdObjVector*)(pUnk + 0x04);
+
+
+            foreach (IntPtr pMission in missionVector.ToList())
+            {
+                Mission mission = *(Mission*)pMission;
+                missions.Add(mission);
+            }
+
+            return missions;
+        }
+
         /* Probably will never be used but it's already implemented so..
         internal List<SpecialAction> GetSpecialActionList()
         {
@@ -108,6 +131,9 @@ namespace AOSharp.Core
         {
             [FieldOffset(0x1BC)]
             public IntPtr* CooldownUnk;
+
+            [FieldOffset(0x1C4)]
+            public IntPtr MissionUnk;
         }
     }
 }

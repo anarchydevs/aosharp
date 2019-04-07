@@ -34,11 +34,13 @@
         Playfield = 0xC79D,
         NanoProgram = 0xCF1B,
         GfxEffect = 0xCF26,
+        MissionTerminal = 0xDAC1,
+        Mission = 0xDAC3,
         ACGEntrance = 0xDAC6,
-        MissionTerminal = 0xDCA1,
         TeamWindow = 0xDEA9,
         Organization = 0xDEAA,
         IncomingTradeWindow = 0xDEAD,
+        MobHash = 0x111D3,
         Playfield3 = 0x186A1,
     }
 }
