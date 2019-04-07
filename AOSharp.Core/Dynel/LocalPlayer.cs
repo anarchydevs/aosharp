@@ -114,18 +114,6 @@ namespace AOSharp.Core
             return missions;
         }
 
-        /* Probably will never be used but it's already implemented so..
-        internal List<SpecialAction> GetSpecialActionList()
-        {
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            if (pEngine == IntPtr.Zero)
-                return new List<SpecialAction>();
-
-            return N3EngineClientAnarchy_t.GetSpecialActionList(pEngine)->ToList().Select(x => *(SpecialAction*)x).ToList();
-        }
-        */
-
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private unsafe struct LocalPlayer_MemStruct
         {

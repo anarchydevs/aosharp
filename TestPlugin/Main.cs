@@ -11,8 +11,6 @@ namespace TestPlugin
 {
     public class Main : IAOPluginEntry
     {
-        public int i = 0;
-
         public unsafe void Run()
         {
             try
@@ -58,15 +56,6 @@ namespace TestPlugin
                             break;
                     }
                 }
-
-                var lookAtMsg = new SmokeLounge.AOtomation.Messaging.Messages.N3Messages.LookAtMessage()
-                {
-                    Identity = DynelManager.LocalPlayer.Identity
-                };
-
-                byte[] packet = PacketFactory.Create(lookAtMsg);
-
-                Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;

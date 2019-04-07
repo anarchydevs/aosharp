@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tageting.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Imports\TargetingModule_t.cs" />
     <Compile Include="Mission.cs" />
     <Compile Include="Imports\N3InfoItemRemote_t.cs" />
     <Compile Include="Imports\WeaponHolder_t.cs" />

@@ -44,6 +44,11 @@ namespace AOSharp.Core
         {
             Pointer = pointer;
         }
+        
+        public void Target()
+        {
+            Tageting.SetTarget(Identity);
+        }
 
         public unsafe int GetStat(Stat stat, int detail = 2)
         {

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using SmokeLounge.AOtomation.Messaging.Serialization;
 using SmokeLounge.AOtomation.Messaging.Messages;
@@ -14,7 +10,7 @@ namespace AOSharp.Core
     {
         private static MessageSerializer _serializer = new MessageSerializer();
 
-        public unsafe static byte[] Create(MessageBody messageBody)
+        public unsafe static byte[] Create(N3Message messageBody)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -22,6 +18,8 @@ namespace AOSharp.Core
                 return null;
 
             int localDynelInstance = N3EngineClient_t.GetClientInst(pEngine);
+
+            messageBody.Identity = new Identity(IdentityType.SimpleChar, localDynelInstance);
 
             var message = new Message
             {
