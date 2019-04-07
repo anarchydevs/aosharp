@@ -47,7 +47,7 @@ namespace AOSharp.Core
         
         public void Target()
         {
-            Tageting.SetTarget(Identity);
+            Targeting.SetTarget(Identity);
         }
 
         public unsafe int GetStat(Stat stat, int detail = 2)

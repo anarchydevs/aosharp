@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tageting.cs" />
+    <Compile Include="Targeting.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Imports\TargetingModule_t.cs" />
     <Compile Include="Mission.cs" />

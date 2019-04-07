@@ -60,6 +60,7 @@ namespace AOSharp.Core
 
         public void CastNano(Identity nano, Dynel target)
         {
+            Targeting.SetTarget(target.Identity);
             CastNano(nano, target.Identity);
         }
 

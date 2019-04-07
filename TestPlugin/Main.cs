@@ -57,6 +57,8 @@ namespace TestPlugin
                     }
                 }
 
+                DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;
                 Game.OnTeleportEnded += Game_OnTeleportEnded;
