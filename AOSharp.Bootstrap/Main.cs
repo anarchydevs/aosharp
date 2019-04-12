@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -70,20 +71,20 @@ namespace AOSharp.Bootstrap
 
         private void OnAssembliesChanged(object pipe, IPCMessage message)
         {
-            LoadAssemblyMessage msg = message as LoadAssemblyMessage;
-
-            if (_pluginAppDomain != null)
-            {
-                //Release existing AppDomain
-                AppDomain.Unload(_pluginAppDomain);
-                _pluginAppDomain = null;
-            }
-
-            if (msg.Assemblies.Count == 0)
-                return;
-
             try
             {
+                LoadAssemblyMessage msg = message as LoadAssemblyMessage;
+
+                if (_pluginAppDomain != null)
+                {
+                    //Release existing AppDomain
+                    AppDomain.Unload(_pluginAppDomain);
+                    _pluginAppDomain = null;
+                }
+
+                if (!msg.Assemblies.Any())
+                    return;
+
                 AppDomainSetup setup = new AppDomainSetup()
                 {
                     ApplicationBase = AppDomain.CurrentDomain.BaseDirectory

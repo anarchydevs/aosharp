@@ -6,7 +6,7 @@ namespace AOSharp.Bootstrap.IPC
 {
     public class LoadAssemblyMessage : IPCMessage
     {
-        public List<string> Assemblies;
+        public IEnumerable<string> Assemblies;
 
         public LoadAssemblyMessage() : base((byte)HookOpCode.LoadAssembly) { }
 

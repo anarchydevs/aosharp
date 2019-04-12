@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using AOSharp.Bootstrap.IPC;
 using EasyHook;
 using Newtonsoft.Json;
@@ -17,27 +17,39 @@ namespace TestLoader
     {
         static void Main(string[] args)
         {
-            IPCClient client = PromptForClient();
+            Process proc = PromptForClient();
 
-            Console.Clear();
-            Console.WriteLine("AOSharp Injected!");
-
-            client.Send(new LoadAssemblyMessage()
+            for (int i = 0; i < 25; i++)
             {
-                Assemblies = new List<string>()
-                {
-                    Directory.GetCurrentDirectory() + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll",
-                    Directory.GetCurrentDirectory() + @"\..\..\..\CombatHandler\bin\Debug\CombatHandler.dll",
-                    Directory.GetCurrentDirectory() + @"\..\..\..\MissionHelper\bin\Debug\MissionHelper.dll"
-                }
-            });
+                IPCClient client = Inject(proc);
 
-            Console.WriteLine("Plugins loaded.");
+                Console.WriteLine($"AOSharp Injected! {i}");
+
+                client.Send(new LoadAssemblyMessage()
+                {
+                    Assemblies = new List<string>()
+                    {
+                        Directory.GetCurrentDirectory() + @"\..\..\..\TestPlugin\bin\Debug\TestPlugin.dll",
+                        //Directory.GetCurrentDirectory() + @"\..\..\..\CombatHandler\bin\Debug\CombatHandler.dll",
+                        //Directory.GetCurrentDirectory() + @"\..\..\..\MissionHelper\bin\Debug\MissionHelper.dll"
+                    }
+                });
+
+                Console.WriteLine($"Plugins loaded. {i}");
+
+                Thread.Sleep(500);
+
+                client.Disconnect();
+
+                Thread.Sleep(500);
+            }
+
+            Console.WriteLine("Injection tests done.");
 
             Console.ReadLine();
         }
 
-        public static IPCClient PromptForClient()
+        public static Process PromptForClient()
         {
             Process[] aoClients = Process.GetProcessesByName("AnarchyOnline");
 
@@ -70,7 +82,9 @@ namespace TestLoader
                 line = Console.ReadLine();
             }
 
-            return Inject(aoClients[selected]);
+            Console.Clear();
+
+            return aoClients[selected];
         }
 
         public static IPCClient Attach(string name)

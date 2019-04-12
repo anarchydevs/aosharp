@@ -45,6 +45,12 @@ namespace AOSharp.Bootstrap.IPC
             BeginRead();
         }
 
+        public void Disconnect()
+        {
+            _client.Close();
+            _client.Dispose();
+        }
+
         private void BeginRead()
         {
             try

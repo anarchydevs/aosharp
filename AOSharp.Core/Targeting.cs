@@ -8,9 +8,11 @@ namespace AOSharp.Core
     {
         public unsafe static void SetTarget(Identity target, bool packetOnly = false)
         {
+            throw new Exception("Temporarily removed: TargetingModule_t methods seem to cause the game to crash on occasion..");
+
             if (!packetOnly)
             {
-                TargetingModule_t.SetTarget(&target, true);
+                TargetingModule_t.SetTarget(&target, false);
 
                 IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -30,6 +32,8 @@ namespace AOSharp.Core
 
         public unsafe static void SelectSelf(bool packetOnly = false)
         {
+            throw new Exception("Temporarily removed: TargetingModule_t methods seem to cause the game to crash on occasion..");
+
             Identity self = DynelManager.LocalPlayer.Identity;
 
             if (!packetOnly)

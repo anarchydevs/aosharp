@@ -91,6 +91,12 @@ namespace TestPlugin
             if (DynelManager.LocalPlayer.IsAttacking)
                return;
 
+            foreach(Dynel player in DynelManager.Players)
+            {
+                Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
+                Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
+            }
+
             SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsInAttackRange(x));
 
             if (leet == null)
