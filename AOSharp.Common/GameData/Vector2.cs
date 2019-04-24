@@ -2,7 +2,7 @@
 
 namespace AOSharp.Common.GameData
 {
-    public class Vector2
+    public struct Vector2
     {
         public float X;
         public float Y;

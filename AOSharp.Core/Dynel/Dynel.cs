@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
+using AOSharp.Core.Imports;
 
 namespace AOSharp.Core
 {

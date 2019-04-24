@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Runtime.InteropServices;
+using AOSharp.Core.Imports;
 
 namespace AOSharp.Core.GameData
 {
@@ -26,6 +28,18 @@ namespace AOSharp.Core.GameData
             {
                 return Encoding.ASCII.GetString(_pLongBuffer, Length);
             }
+        }
+
+        public static IntPtr Create(string str)
+        {
+            IntPtr pNew = MSVCR100.New(0x14);
+            byte[] bytes = Encoding.ASCII.GetBytes(str);
+            return String_c.Constructor(pNew, bytes, bytes.Length);
+        }
+
+        public static int Dispose(IntPtr pString)
+        {
+            return String_c.Deconstructor(pString);
         }
     }
 }

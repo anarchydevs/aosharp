@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AOSharp.Bootstrap
+namespace AOSharp.Bootstrap.Imports
 {
     public class MessageProtocol
     {

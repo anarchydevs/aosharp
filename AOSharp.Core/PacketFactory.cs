@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AOSharp.Common.GameData;
+using AOSharp.Core.Imports;
 using SmokeLounge.AOtomation.Messaging.Serialization;
 using SmokeLounge.AOtomation.Messaging.Messages;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOSharp.Core.GameData;
+using AOSharp.Core.Imports;
 using AOSharp.Common.GameData;
 
 namespace AOSharp.Core

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
+using AOSharp.Core.Imports;
 
 namespace AOSharp.Core
 {

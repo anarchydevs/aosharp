@@ -5,12 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Core;
+using AOSharp.Core.UI;
 using AOSharp.Common.GameData;
+using AOSharp.Core.GameData;
+using AOSharp.Core.UI.Options;
 
 namespace TestPlugin
 {
     public class Main : IAOPluginEntry
     {
+        private Menu _menu;
+
         public unsafe void Run()
         {
             try
@@ -39,7 +44,7 @@ namespace TestPlugin
                     Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
                     Chat.WriteLine($"       Action: {mission.Actions[0].Type}");
 
-                    switch(mission.Actions[0].Type)
+                    switch (mission.Actions[0].Type)
                     {
                         case MissionActionType.FindItem:
                             Chat.WriteLine($"           Target: {((FindItemAction)mission.Actions[0]).Target}");
@@ -58,6 +63,16 @@ namespace TestPlugin
                 }
 
                 DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+
+                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", true));
+
+                _menu = new Menu("TestPlugin", "TestPlugin");
+                for (int i = 2; i < 30; i++)
+                {
+                    _menu.AddItem(new MenuBool("Test" + i, "Test " + i, false));
+                }
+
+                OptionsPanel.AddMenu(_menu);
 
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;
@@ -86,15 +101,27 @@ namespace TestPlugin
             Chat.WriteLine("Teleport Started!");
         }
 
+        double lastTrigger = Time.NormalTime;
+
         private void OnUpdate(float deltaTime)
         {
             if (DynelManager.LocalPlayer.IsAttacking)
                return;
 
-            foreach(Dynel player in DynelManager.Players)
+            if (_menu.GetBool("DrawingTest"))
             {
-                Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
-                Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
+                foreach (Dynel player in DynelManager.Players)
+                {
+                    Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
+                    Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
+                }
+            }
+
+            if(Time.NormalTime > lastTrigger + 3)
+            {
+                //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
+                //IntPtr tooltip = AOSharp.Core.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
+                lastTrigger = Time.NormalTime;
             }
 
             SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsInAttackRange(x));

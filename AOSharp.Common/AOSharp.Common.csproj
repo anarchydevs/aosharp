@@ -61,6 +61,7 @@
     <Compile Include="GameData\MoveState.cs" />
     <Compile Include="GameData\Profession.cs" />
     <Compile Include="GameData\Quaternion.cs" />
+    <Compile Include="GameData\Rect.cs" />
     <Compile Include="GameData\SpecialAttackFlags.cs" />
     <Compile Include="GameData\Stat.cs" />
     <Compile Include="GameData\TradeAction.cs" />

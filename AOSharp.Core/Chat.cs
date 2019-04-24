@@ -1,4 +1,6 @@
 ﻿using System;
+using AOSharp.Core.Imports;
+using AOSharp.Core.GameData;
 
 namespace AOSharp.Core
 {
@@ -27,7 +29,11 @@ namespace AOSharp.Core
             if (pChatWindowNode == IntPtr.Zero)
                 return;
 
-            ChatWindowNode_t.AppendText(pChatWindowNode, AOString.Create(message), color);
+            IntPtr pString = StdString.Create(message);
+
+            ChatWindowNode_t.AppendText(pChatWindowNode, pString, color);
+
+            StdString.Dispose(pString);
         }
     }
 

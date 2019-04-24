@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using AOSharp.Common.GameData;
 
-namespace AOSharp.Bootstrap
+namespace AOSharp.Bootstrap.Imports
 {
     public class TeleportTrier_t
     {

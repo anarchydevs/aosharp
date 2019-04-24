@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using AOSharp.Bootstrap.IPC;
 using EasyHook;
-using AOSharp.Bootstrap.IPC;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using AOSharp.Bootstrap.Imports;
 
 namespace AOSharp.Bootstrap
 {
@@ -133,6 +130,14 @@ namespace AOSharp.Bootstrap
             CreateHook("Gamecode.dll",
                         "?TeleportFailed@TeleportTrier_t@@QAEXXZ",
                         new TeleportTrier_t.DTeleportFailed(TeleportTrier_t_TeleportFailed_Hook));
+
+            CreateHook("GUI.dll",
+                        "?ModuleActivated@OptionPanelModule_c@@UAEX_N@Z",
+                        new OptionPanelModule_c.DModuleActivated(OptionPanelModule_ModuleActivated_Hook));
+
+            CreateHook("GUI.dll",
+                        "?ViewDeleted@WindowController_c@@QAEXPAVView@@@Z",
+                        new WindowController_c.DViewDeleted(WindowController_ViewDeleted_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -151,6 +156,30 @@ namespace AOSharp.Bootstrap
         {
             foreach (LocalHook hook in _hooks)
                 hook.Dispose();
+        }
+
+        private void WindowController_ViewDeleted_Hook(IntPtr pThis, IntPtr pView)
+        {
+            try
+            {
+                _pluginProxy.ViewDeleted(pView);
+            }
+            catch (Exception) { }
+
+            WindowController_c.ViewDeleted(pThis, pView);
+        }
+
+
+        public void OptionPanelModule_ModuleActivated_Hook(IntPtr pThis, bool unk)
+        {
+            OptionPanelModule_c.ModuleActivated(pThis, unk);
+
+            try
+            {
+                if (unk)
+                    _pluginProxy.OptionPanelActivated(pThis, unk);
+            }
+            catch (Exception) { }
         }
 
         public unsafe void FlowControlModule_t_TeleportStarted_Hook()
@@ -212,6 +241,8 @@ namespace AOSharp.Bootstrap
 
         public class CoreDelegates
         {
+            public delegate void CoreLoadedDelegate();
+            public CoreLoadedDelegate CoreLoaded;
             public delegate void DynelSpawnedDelegate(IntPtr pDynel);
             public DynelSpawnedDelegate DynelSpawned;
             public delegate void UpdateDelegate(float deltaTime);
@@ -222,6 +253,10 @@ namespace AOSharp.Bootstrap
             public TeleportEndedDelegate TeleportEnded;
             public delegate void TeleportFailedDelegate();
             public TeleportFailedDelegate TeleportFailed;
+            public delegate void OptionPanelActivatedDelegate(IntPtr pOptionPanelModule, bool unk);
+            public OptionPanelActivatedDelegate OptionPanelActivated;
+            public delegate void ViewDeletedDelegate(IntPtr pView);
+            public ViewDeletedDelegate ViewDeleted;
         }
 
         public class PluginProxy : MarshalByRefObject
@@ -258,6 +293,18 @@ namespace AOSharp.Bootstrap
                     _coreDelegates.TeleportFailed();
             }
 
+            public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
+            {
+                if (_coreDelegates.OptionPanelActivated != null)
+                    _coreDelegates.OptionPanelActivated(pOptionPanelModule, unk);
+            }
+
+            public void ViewDeleted(IntPtr pView)
+            {
+                if (_coreDelegates.ViewDeleted != null)
+                    _coreDelegates.ViewDeleted(pView);
+            }
+
             private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T: class
             {
                 Type t = assembly.GetType(className);
@@ -290,7 +337,9 @@ namespace AOSharp.Bootstrap
                     DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "DynelSpawnedInternal"),
                     TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStartedInternal"),
                     TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEndedInternal"),
-                    TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailedInternal")
+                    TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailedInternal"),
+                    OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionsPanel", "OnOptionPanelActivatedInternal"),
+                    ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted")
                 };
             }
 

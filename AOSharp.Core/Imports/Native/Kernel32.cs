@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AOSharp.Core
+namespace AOSharp.Core.Imports
 {
     internal class Kernel32
     {

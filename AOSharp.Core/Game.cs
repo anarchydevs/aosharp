@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Common.GameData;
+using AOSharp.Core.Imports;
+using AOSharp.Core.UI;
+using AOSharp.Core.GameData;
 
 namespace AOSharp.Core
 {
@@ -31,25 +34,27 @@ namespace AOSharp.Core
             N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
         }
 
-        private unsafe static void OnUpdateInternal(float deltaTime)
+        private static void OnUpdateInternal(float deltaTime)
         {
+            UIController.UpdateViews();
+
             if (OnUpdate != null)
                 OnUpdate(deltaTime);
         }
 
-        private unsafe static void OnTeleportStartedInternal()
+        private static void OnTeleportStartedInternal()
         {
             if (OnTeleportStarted != null)
                 OnTeleportStarted();
         }
 
-        private unsafe static void OnTeleportEndedInternal()
+        private static void OnTeleportEndedInternal()
         {
             if (OnTeleportEnded != null)
                 OnTeleportEnded();
         }
 
-        private unsafe static void OnTeleportFailedInternal()
+        private static void OnTeleportFailedInternal()
         {
             if (OnTeleportFailed != null)
                 OnTeleportFailed();

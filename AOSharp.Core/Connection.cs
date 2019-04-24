@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using AOSharp.Core.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages;
 
 namespace AOSharp.Core
