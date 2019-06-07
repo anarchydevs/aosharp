@@ -64,15 +64,14 @@ namespace TestPlugin
 
                 DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
 
-                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", true));
-
                 _menu = new Menu("TestPlugin", "TestPlugin");
-                for (int i = 2; i < 30; i++)
-                {
-                    _menu.AddItem(new MenuBool("Test" + i, "Test " + i, false));
-                }
-
+                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", true));
                 OptionsPanel.AddMenu(_menu);
+
+                //Chat.WriteLine($"Self Identity: {DynelManager.LocalPlayer.Health}");
+                Inventory.Test(new Identity((IdentityType)0xDEAD, DynelManager.LocalPlayer.Identity.Instance));
+                Inventory.Test(DynelManager.LocalPlayer.Identity);
+                Inventory.Test(new Identity((IdentityType)0xC749, 0x001A618D));
 
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;

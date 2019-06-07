@@ -53,7 +53,11 @@ namespace AOSharp.Core.Imports
 
         //GetContainerInventoryList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetContainerInventoryList@n3EngineClientAnarchy_t@@QBEPBV?$list@VInventoryEntry_t@@V?$allocator@VInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern IntPtr GetContainerInventoryList(IntPtr pThis, IntPtr identity);
+        public unsafe static extern IntPtr GetContainerInventoryList(IntPtr pThis, Identity* identity);
+
+        //GetInventoryVec
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetInventoryVec@n3EngineClientAnarchy_t@@QAEPBV?$vector@PAVNewInventoryEntry_t@@V?$allocator@PAVNewInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
 
         //TradeskillCombine
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TradeskillCombine@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]

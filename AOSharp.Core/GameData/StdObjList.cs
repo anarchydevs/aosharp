@@ -8,7 +8,7 @@ namespace AOSharp.Core.GameData
     public unsafe struct StdObjList
     {
         private IntPtr pFirst;
-        private int Count;
+        public int Count;
 
         public List<IntPtr> ToList()
         {
