@@ -23,7 +23,7 @@
         Unknown0x13 = 0x13,
         Unknown0x14 = 0x14,
         FullStop = 0x15,
-        Unknown0x16 = 0x16,
+        Update = 0x16,
         SwitchToFrozen = 0x17,
         SwitchToWalk = 0x18,
         SwitchToRun = 0x19,

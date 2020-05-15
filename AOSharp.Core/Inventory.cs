@@ -22,7 +22,6 @@ namespace AOSharp.Core
 
             Chat.WriteLine($"Inv: {pItems.ToString("X4")}");
 
-
             if (pItems == IntPtr.Zero)
                 return;
 

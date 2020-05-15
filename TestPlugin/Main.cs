@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Core;
 using AOSharp.Core.UI;
+using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Core.UI.Options;
@@ -27,7 +28,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
-
+                /*
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   Identity: {Playfield.Identity}");
                 Chat.WriteLine($"   Name: {Playfield.Name}");
@@ -35,7 +36,19 @@ namespace TestPlugin
                 Chat.WriteLine($"   IsDungeon: {Playfield.IsDungeon}");
                 Chat.WriteLine($"   IsShadowlands: {Playfield.IsShadowlands}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
+                */
 
+                MovementController movementController = new MovementController(true);
+
+                List<Vector3> testPath = new List<Vector3> {
+                    new Vector3(438.6, 8.0f, 524.4f),
+                    new Vector3(446.8f, 8.0f, 503.7f),
+                    new Vector3(460.8, 15.1f, 414.0f) 
+                };
+
+                movementController.RunPath(testPath);
+
+                /*
                 Chat.WriteLine("Missions");
                 foreach (Mission mission in Mission.List)
                 {
@@ -61,17 +74,18 @@ namespace TestPlugin
                             break;
                     }
                 }
+                */
 
-                DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+                //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
 
                 _menu = new Menu("TestPlugin", "TestPlugin");
-                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", true));
+                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 OptionsPanel.AddMenu(_menu);
 
                 //Chat.WriteLine($"Self Identity: {DynelManager.LocalPlayer.Health}");
-                Inventory.Test(new Identity((IdentityType)0xDEAD, DynelManager.LocalPlayer.Identity.Instance));
-                Inventory.Test(DynelManager.LocalPlayer.Identity);
-                Inventory.Test(new Identity((IdentityType)0xC749, 0x001A618D));
+                //Inventory.Test(new Identity((IdentityType)0xDEAD, DynelManager.LocalPlayer.Identity.Instance));
+                //Inventory.Test(DynelManager.LocalPlayer.Identity);
+                //Inventory.Test(new Identity((IdentityType)0xC749, 0x001A618D));
 
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;

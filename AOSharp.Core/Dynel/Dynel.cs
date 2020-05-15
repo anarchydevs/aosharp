@@ -22,7 +22,7 @@ namespace AOSharp.Core
         public unsafe Quaternion Rotation
         {
             get { return (*(Dynel_MemStruct*)Pointer).Vehicle->Rotation; }
-            set { (*(Dynel_MemStruct*)Pointer).Vehicle->Rotation = value; }
+            set { N3Dynel_t.SetRelRot(Pointer, &value); }
         }
 
         public unsafe MovementState MovementState
@@ -67,7 +67,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct Dynel_MemStruct
+        protected unsafe struct Dynel_MemStruct
         {
             [FieldOffset(0x14)]
             public Identity Identity;

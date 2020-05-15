@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
 namespace AOSharp.Common.GameData
@@ -20,6 +21,8 @@ namespace AOSharp.Common.GameData
         public float W { get; set; }
 
         #endregion
+
+        public static Quaternion Identity => new Quaternion(0, 0, 0, 0);
 
         #region Constructor
 
@@ -112,6 +115,69 @@ namespace AOSharp.Common.GameData
             return Conjugate(this);
         }
 
+        public static Quaternion LookRotation( Vector3 forward, Vector3 up)
+        {
+
+            forward = Vector3.Normalize(forward);
+            Vector3 right = Vector3.Normalize(Vector3.Cross(up, forward));
+            up = Vector3.Cross(forward, right);
+            var m00 = right.X;
+            var m01 = right.Y;
+            var m02 = right.Z;
+            var m10 = up.X;
+            var m11 = up.Y;
+            var m12 = up.Z;
+            var m20 = forward.X;
+            var m21 = forward.Y;
+            var m22 = forward.Z;
+
+
+            float num8 = (m00 + m11) + m22;
+            var quaternion = new Quaternion();
+            if (num8 > 0f)
+            {
+                var num = (float)System.Math.Sqrt(num8 + 1f);
+                quaternion.W = num * 0.5f;
+                num = 0.5f / num;
+                quaternion.X = (m12 - m21) * num;
+                quaternion.Y = (m20 - m02) * num;
+                quaternion.Z = (m01 - m10) * num;
+                return quaternion;
+            }
+            if ((m00 >= m11) && (m00 >= m22))
+            {
+                var num7 = (float)System.Math.Sqrt(((1f + m00) - m11) - m22);
+                var num4 = 0.5f / num7;
+                quaternion.X = 0.5f * num7;
+                quaternion.Y = (m01 + m10) * num4;
+                quaternion.Z = (m02 + m20) * num4;
+                quaternion.W = (m12 - m21) * num4;
+                return quaternion;
+            }
+            if (m11 > m22)
+            {
+                var num6 = (float)System.Math.Sqrt(((1f + m11) - m00) - m22);
+                var num3 = 0.5f / num6;
+                quaternion.X = (m10 + m01) * num3;
+                quaternion.Y = 0.5f * num6;
+                quaternion.Z = (m21 + m12) * num3;
+                quaternion.W = (m20 - m02) * num3;
+                return quaternion;
+            }
+            var num5 = (float)System.Math.Sqrt(((1f + m22) - m00) - m11);
+            var num2 = 0.5f / num5;
+            quaternion.X = (m20 + m02) * num2;
+            quaternion.Y = (m21 + m12) * num2;
+            quaternion.Z = 0.5f * num5;
+            quaternion.W = (m01 - m10) * num2;
+            return quaternion;
+        }
+
+        public static Quaternion FromTo(Vector3 u, Vector3 v)
+        {
+            return LookRotation(v - u, Vector3.Up);
+        }
+
         public static Quaternion Hamilton(Quaternion vLeft, Quaternion vRight)
         {
             double w = (vLeft.W * vRight.W) - (vLeft.X * vRight.X) - (vLeft.Y * vRight.Y) - (vLeft.Z * vRight.Z);
@@ -139,20 +205,44 @@ namespace AOSharp.Common.GameData
             Z = (float)(c1 * s2 * c3 - s1 * c2 * s3);
         }
 
+
+        public static Quaternion CreateFromAxisAngle(Vector3 axis, double a)
+        {
+            return CreateFromAxisAngle(axis.X, axis.Y, axis.Z, a);
+        }
+
         public static Quaternion CreateFromAxisAngle(double xx, double yy, double zz, double a)
         {
             // Here we calculate the sin( theta / 2) once for optimization
             double result = Math.Sin(a / 2.0);
 
             // Calculate the x, y and z of the quaternion
-            double y = xx * result;
-            double x = yy * result;
+            double x = xx * result;
+            double y = yy * result;
             double z = zz * result;
 
             // Calculate the w value by cos( theta / 2 )
             double w = Math.Cos(a / 2.0);
 
             return new Quaternion(x, y, z, w).Normalize();
+        }
+
+        private static Quaternion AngleAxis(float degress, Vector3 axis)
+        {
+            if (axis.Magnitude == 0.0f)
+                return Identity;
+
+            Quaternion result = Identity;
+            var radians = degress * ((float)(Math.PI / 180.0));
+            radians *= 0.5f;
+            axis.Normalize();
+            axis = axis * (float)System.Math.Sin(radians);
+            result.X = axis.X;
+            result.Y = axis.Y;
+            result.Z = axis.Z;
+            result.W = (float)System.Math.Cos(radians);
+
+            return Normalize(result);
         }
 
         public Quaternion Hamilton(Quaternion vRight)
@@ -193,6 +283,11 @@ namespace AOSharp.Common.GameData
         public Vector3 VectorRepresentation()
         {
             return VectorRepresentation(this);
+        }
+
+        public override string ToString()
+        {
+            return $"X: {X} | Y: {Y} | Z: {Z} | W: {W}";
         }
 
         #endregion
