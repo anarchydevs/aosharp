@@ -8,8 +8,7 @@ namespace AOSharp.Core
 {
     public static class DynelManager
     {
-        public delegate void DynelSpawnedEventHandler(Dynel dynel);
-        public static event DynelSpawnedEventHandler DynelSpawned;
+        public static EventHandler<Dynel> DynelSpawned;
 
         public static LocalPlayer LocalPlayer => GetLocalPlayer();
 
@@ -47,8 +46,7 @@ namespace AOSharp.Core
 
         private unsafe static void DynelSpawnedInternal(IntPtr pDynel)
         {
-            if (DynelSpawned != null)
-                DynelSpawned(new Dynel(pDynel));
+            DynelSpawned?.Invoke(null, new Dynel(pDynel));
         }
     }
 }

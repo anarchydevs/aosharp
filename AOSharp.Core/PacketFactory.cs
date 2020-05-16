@@ -11,7 +11,7 @@ namespace AOSharp.Core
     {
         private static MessageSerializer _serializer = new MessageSerializer();
 
-        public unsafe static byte[] Create(N3Message messageBody)
+        public static byte[] Create(N3Message messageBody)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -40,6 +40,11 @@ namespace AOSharp.Core
                 _serializer.Serialize(stream, message);
                 return stream.ToArray();
             }
+        }
+
+        public static Message Disassemble(byte[] packet)
+        {
+            return _serializer.Deserialize(packet);
         }
     }
 }

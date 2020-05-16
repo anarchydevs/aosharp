@@ -22,7 +22,7 @@ namespace AOSharp.Core.Movement
             _drawPath = drawPath;
         }
 
-        protected virtual void Update(float deltaTime)
+        protected virtual void Update(object s, float deltaTime)
         {
             if (_path.Count == 0)
                 return;

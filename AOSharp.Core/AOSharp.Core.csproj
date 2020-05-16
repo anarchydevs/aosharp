@@ -71,6 +71,7 @@
     <Compile Include="Imports\Utils\Variant_c.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Movement\MovementController.cs" />
+    <Compile Include="NpcDialog.cs" />
     <Compile Include="Targeting.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Imports\GUI\TargetingModule_t.cs" />

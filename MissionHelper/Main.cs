@@ -10,13 +10,13 @@ namespace MissionHelper
 {
     public class Main : IAOPluginEntry
     {
-        public void Run()
+        public void Run(string pluginDir)
         {
             Chat.WriteLine("MissionHelper loaded");
             Game.OnUpdate += Game_OnUpdate;
         }
 
-        private void Game_OnUpdate(float deltaTime)
+        private void Game_OnUpdate(object s, float deltaTime)
         {
             LocalPlayer localPlayer = DynelManager.LocalPlayer;
 

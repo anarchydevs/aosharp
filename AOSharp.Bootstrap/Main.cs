@@ -1,11 +1,14 @@
 ﻿using AOSharp.Bootstrap.IPC;
 using EasyHook;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using AOSharp.Bootstrap.Imports;
+using System.Runtime.InteropServices;
+using AOSharp.Common.GameData;
 
 namespace AOSharp.Bootstrap
 {
@@ -138,6 +141,14 @@ namespace AOSharp.Bootstrap
             CreateHook("GUI.dll",
                         "?ViewDeleted@WindowController_c@@QAEXPAVView@@@Z",
                         new WindowController_c.DViewDeleted(WindowController_ViewDeleted_Hook));
+
+            CreateHook("MessageProtocol.dll",
+                        "?DataBlockToMessage@@YAPAVMessage_t@@IPAX@Z",
+                        new MessageProtocol.DDataBlockToMessage(DataBlockToMessage_Hook));
+
+            CreateHook("Gamecode.dll",
+                        "?PlayfieldInit@n3EngineClientAnarchy_t@@UAEXI@Z",
+                        new N3EngineClientAnarchy_t.DPlayfieldInit(N3EngineClientAnarchy_PlayfieldInit_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -156,6 +167,22 @@ namespace AOSharp.Bootstrap
         {
             foreach (LocalHook hook in _hooks)
                 hook.Dispose();
+        }
+
+        public int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)
+        {
+            //Let the client process the packet before we inspect it.
+            int ret = MessageProtocol.DataBlockToMessage(size, pDataBlock);
+
+            try
+            {
+                byte[] buffer = new byte[size];
+                Marshal.Copy(pDataBlock, buffer, 0, size);
+                _pluginProxy.DataBlockToMessage(buffer);
+            }
+            catch (Exception) { }
+
+            return ret;
         }
 
         private void WindowController_ViewDeleted_Hook(IntPtr pThis, IntPtr pView)
@@ -216,6 +243,17 @@ namespace AOSharp.Bootstrap
             return N3EngineClientAnarchy_t.SendInPlayMessage(pThis);
         }
 
+        public void N3EngineClientAnarchy_PlayfieldInit_Hook(IntPtr pThis, uint id)
+        {
+            N3EngineClientAnarchy_t.PlayfieldInit(pThis, id);
+
+            try
+            {
+                _pluginProxy.PlayfieldInit(id);
+            }
+            catch (Exception) { }
+        }
+
         public void N3EngineClientAnarchy_RunEngine_Hook(IntPtr pThis, float deltaTime)
         {
             try
@@ -245,6 +283,8 @@ namespace AOSharp.Bootstrap
             public CoreLoadedDelegate CoreLoaded;
             public delegate void DynelSpawnedDelegate(IntPtr pDynel);
             public DynelSpawnedDelegate DynelSpawned;
+            public delegate void DataBlockToMessageDelegate(byte[] datablock);
+            public DataBlockToMessageDelegate DataBlockToMessage;
             public delegate void UpdateDelegate(float deltaTime);
             public UpdateDelegate Update;
             public delegate void TeleportStartedDelegate();
@@ -253,6 +293,8 @@ namespace AOSharp.Bootstrap
             public TeleportEndedDelegate TeleportEnded;
             public delegate void TeleportFailedDelegate();
             public TeleportFailedDelegate TeleportFailed;
+            public delegate void PlayfieldInitDelegate(uint id);
+            public PlayfieldInitDelegate PlayfieldInit;
             public delegate void OptionPanelActivatedDelegate(IntPtr pOptionPanelModule, bool unk);
             public OptionPanelActivatedDelegate OptionPanelActivated;
             public delegate void ViewDeletedDelegate(IntPtr pView);
@@ -262,6 +304,12 @@ namespace AOSharp.Bootstrap
         public class PluginProxy : MarshalByRefObject
         {
             private static CoreDelegates _coreDelegates;
+
+            public void DataBlockToMessage(byte[] datablock)
+            {
+                if (_coreDelegates.DataBlockToMessage != null)
+                    _coreDelegates.DataBlockToMessage(datablock);
+            }
 
             public void DynelSpawned(IntPtr pDynel)
             {
@@ -281,7 +329,7 @@ namespace AOSharp.Bootstrap
                     _coreDelegates.TeleportStarted();
             }
 
-            public void TeleportEnded()
+            public unsafe void TeleportEnded()
             {
                 if (_coreDelegates.TeleportEnded != null)
                     _coreDelegates.TeleportEnded();
@@ -291,6 +339,12 @@ namespace AOSharp.Bootstrap
             {
                 if (_coreDelegates.TeleportFailed != null)
                     _coreDelegates.TeleportFailed();
+            }
+
+            public void PlayfieldInit(uint id)
+            {
+                if (_coreDelegates.PlayfieldInit != null)
+                    _coreDelegates.PlayfieldInit(id);
             }
 
             public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
@@ -338,8 +392,10 @@ namespace AOSharp.Bootstrap
                     TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStartedInternal"),
                     TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEndedInternal"),
                     TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailedInternal"),
+                    PlayfieldInit = CreateDelegate<CoreDelegates.PlayfieldInitDelegate>(assembly, "AOSharp.Core.Game", "OnPlayfieldInit"),
                     OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionsPanel", "OnOptionPanelActivatedInternal"),
-                    ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted")
+                    ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
+                    DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Game", "OnMessageInternal")
                 };
             }
 
@@ -348,7 +404,7 @@ namespace AOSharp.Bootstrap
                 try
                 {
                     //Load main assembly
-                    Assembly assembly = Assembly.LoadFile(assemblyPath);
+                    Assembly assembly = Assembly.LoadFrom(assemblyPath);
 
                     //Load references
                     foreach (AssemblyName reference in assembly.GetReferencedAssemblies())
@@ -357,7 +413,14 @@ namespace AOSharp.Bootstrap
                             reference.Name == "AOSharp.Core")
                             continue;
 
-                        Assembly.Load(reference);
+                        try
+                        {
+                            Assembly.Load(reference);
+                        } 
+                        catch (FileNotFoundException)
+                        {
+                            Assembly.LoadFrom($"{Path.GetDirectoryName(assemblyPath)}\\{reference.Name}.dll");
+                        }
                     }
 
                     // Find the first AOSharp.Core.IAOPluginEntry
@@ -372,17 +435,17 @@ namespace AOSharp.Bootstrap
                         if (method == null) //Notify of plugin error somewhere?
                             continue;
 
-                        ConstructorInfo contructor = type.GetConstructor(Type.EmptyTypes);
+                        ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
 
-                        if (contructor == null)
+                        if (constructor == null)
                             continue;
 
-                        object instance = contructor.Invoke(null);
+                        object instance = constructor.Invoke(null);
 
                         if (instance == null) //Is this even possible?
                             continue;
 
-                        method.Invoke(instance, null);
+                        method.Invoke(instance, new object[] { Path.GetDirectoryName(assemblyPath) });
                     }
                 }
                 catch (Exception ex)

@@ -17,7 +17,7 @@ namespace TestPlugin
     {
         private Menu _menu;
 
-        public unsafe void Run()
+        public unsafe void Run(string pluginDir)
         {
             try
             {
@@ -38,6 +38,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
                 */
 
+                /*
                 MovementController movementController = new MovementController(true);
 
                 List<Vector3> testPath = new List<Vector3> {
@@ -47,6 +48,7 @@ namespace TestPlugin
                 };
 
                 movementController.RunPath(testPath);
+                */
 
                 /*
                 Chat.WriteLine("Missions");
@@ -91,6 +93,9 @@ namespace TestPlugin
                 Game.OnTeleportStarted += Game_OnTeleportStarted;
                 Game.OnTeleportEnded += Game_OnTeleportEnded;
                 Game.OnTeleportFailed += Game_OnTeleportFailed;
+                Game.PlayfieldInit += Game_PlayfieldInit;
+                Game.N3MessageReceived += Game_N3MessageReceived;
+                NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 DynelManager.DynelSpawned += DynelSpawned;
             }
             catch (Exception e)
@@ -99,24 +104,47 @@ namespace TestPlugin
             }
         }
 
-        private void Game_OnTeleportFailed()
+        private void Game_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+        {
+            //Chat.WriteLine($"{n3Msg.N3MessageType}");
+        }
+
+        private void NpcDialog_AnswerListChanged(object s, Dictionary<int, string> options)
+        {
+            Identity target = (Identity)s;
+
+            foreach(KeyValuePair<int, string> option in options)
+            {
+                if (option.Value == "Is there anything I can help you with?" ||
+                    option.Value == "I will defend against the creatures of the brink!" ||
+                    option.Value == "I will deal with only the weakest aversaries")
+                    NpcDialog.SelectAnswer(target, option.Key);
+            }
+        }
+
+        private void Game_PlayfieldInit(object s, uint id)
+        {
+            Chat.WriteLine($"PlayfieldInit: {id}");
+        }
+
+        private void Game_OnTeleportFailed(object s, EventArgs e)
         {
             Chat.WriteLine("Teleport Failed!");
         }
 
-        private void Game_OnTeleportEnded()
+        private void Game_OnTeleportEnded(object s, EventArgs e)
         {
-            Chat.WriteLine("Teleport Ended!");
+            Chat.WriteLine($"Teleport Ended!");
         }
 
-        private void Game_OnTeleportStarted()
+        private void Game_OnTeleportStarted(object s, EventArgs e)
         {
             Chat.WriteLine("Teleport Started!");
         }
 
         double lastTrigger = Time.NormalTime;
 
-        private void OnUpdate(float deltaTime)
+        private void OnUpdate(object s, float deltaTime)
         {
             if (DynelManager.LocalPlayer.IsAttacking)
                return;
@@ -145,7 +173,7 @@ namespace TestPlugin
             DynelManager.LocalPlayer.Attack(leet);
         }
 
-        private void DynelSpawned(Dynel dynel)
+        private void DynelSpawned(object s, Dynel dynel)
         {
             /*
             if (dynel.Identity.Type == IdentityType.SimpleChar)

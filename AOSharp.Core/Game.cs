@@ -7,22 +7,23 @@ using AOSharp.Common.GameData;
 using AOSharp.Core.Imports;
 using AOSharp.Core.UI;
 using AOSharp.Core.GameData;
+using SmokeLounge.AOtomation.Messaging.Messages;
 
 namespace AOSharp.Core
 {
     public static class Game
     {
-        public delegate void OnUpdateEventHandler(float deltaTime);
-        public static event OnUpdateEventHandler OnUpdate;
+        public static EventHandler<float> OnUpdate;
+        public static EventHandler<N3Message> N3MessageReceived;
+        public static EventHandler OnTeleportStarted;
+        public static EventHandler OnTeleportEnded;
+        public static EventHandler OnTeleportFailed; 
+        public static EventHandler<uint> PlayfieldInit;
 
-        public delegate void OnTeleportStartedEventHandler();
-        public static event OnTeleportStartedEventHandler OnTeleportStarted;
-
-        public delegate void OnTeleportEndedEventHandler();
-        public static event OnTeleportEndedEventHandler OnTeleportEnded;
-
-        public delegate void OnTeleportFailedEventHandler();
-        public static event OnTeleportFailedEventHandler OnTeleportFailed;
+        private static Dictionary<N3MessageType, Action<N3Message>> n3MsgCallbacks = new Dictionary<N3MessageType, Action<N3Message>>
+        {
+            { N3MessageType.KnubotAnswerList, NpcDialog.OnKnubotAnswerList }
+        };
 
         public static void SetMovement(MovementAction action)
         {
@@ -38,26 +39,43 @@ namespace AOSharp.Core
         {
             UIController.UpdateViews();
 
-            if (OnUpdate != null)
-                OnUpdate(deltaTime);
+            OnUpdate?.Invoke(null, deltaTime);
+        }
+
+        private static void OnMessageInternal(byte[] datablock)
+        {
+            Message msg = PacketFactory.Disassemble(datablock);
+
+            if (msg.Header.PacketType == PacketType.N3Message)
+                OnN3MessageInternal((N3Message)msg.Body);
+        }
+
+        private static void OnN3MessageInternal(N3Message n3Msg)
+        {
+            if (n3MsgCallbacks.ContainsKey(n3Msg.N3MessageType))
+                n3MsgCallbacks[n3Msg.N3MessageType].Invoke(n3Msg);
+
+            N3MessageReceived?.Invoke(null, n3Msg);
         }
 
         private static void OnTeleportStartedInternal()
         {
-            if (OnTeleportStarted != null)
-                OnTeleportStarted();
+            OnTeleportStarted?.Invoke(null, EventArgs.Empty);
         }
 
         private static void OnTeleportEndedInternal()
         {
-            if (OnTeleportEnded != null)
-                OnTeleportEnded();
+            OnTeleportEnded?.Invoke(null, EventArgs.Empty);
         }
 
         private static void OnTeleportFailedInternal()
         {
-            if (OnTeleportFailed != null)
-                OnTeleportFailed();
+            OnTeleportFailed?.Invoke(null, EventArgs.Empty);
+        }
+
+        private static void OnPlayfieldInit(uint id)
+        {
+            PlayfieldInit?.Invoke(null, id);
         }
     }
 }

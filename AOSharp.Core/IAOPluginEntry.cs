@@ -2,6 +2,6 @@
 {
     public interface IAOPluginEntry
     {
-        void Run();
+        void Run(string pluginDir);
     }
 }

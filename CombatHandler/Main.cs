@@ -9,7 +9,7 @@ namespace CombatHandler
 {
     public class Main : IAOPluginEntry
     {
-        public void Run()
+        public void Run(string pluginDir)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace CombatHandler
             }
         }
 
-        private void OnUpdate(float deltaTime)
+        private void OnUpdate(object s, float deltaTime)
         {
             if (!DynelManager.LocalPlayer.IsAttacking)
                 return;
