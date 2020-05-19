@@ -8,7 +8,7 @@
 //   http://www.wtfpl.net/ for more details.
 // </copyright>
 // <summary>
-//   Defines the ContainerAddItemMessage type.
+//   Defines the ClientMoveItemToInventory type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,17 +16,16 @@ using AOSharp.Common.GameData;
 
 namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 {
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
-    [AoContract((int)N3MessageType.ContainerAddItem)]
-    public class ContainerAddItemMessage : N3Message
+    [AoContract((int)N3MessageType.ClientMoveItemToInventory)]
+    public class ClientMoveItemToInventory : N3Message
     {
         #region Constructors and Destructors
 
-        public ContainerAddItemMessage()
+        public ClientMoveItemToInventory()
         {
-            this.N3MessageType = N3MessageType.ContainerAddItem;
+            this.N3MessageType = N3MessageType.ClientMoveItemToInventory;
         }
 
         #endregion
@@ -37,10 +36,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Identity SourceContainer { get; set; }
 
         [AoMember(1)]
-        public Identity Target { get; set; }
-
-        [AoMember(2)]
-        public int TargetPlacement { get; set; }
+        public int Slot { get; set; }
 
         #endregion
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Core;
 using AOSharp.Core.UI;
+using AOSharp.Core.Inventory;
 using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
@@ -57,27 +58,9 @@ namespace TestPlugin
                     Chat.WriteLine($"   {mission.Identity.ToString()}");
                     Chat.WriteLine($"       Source: {mission.Source.ToString()}");
                     Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
-                    Chat.WriteLine($"       Action: {mission.Actions[0].Type}");
-
-                    switch (mission.Actions[0].Type)
-                    {
-                        case MissionActionType.FindItem:
-                            Chat.WriteLine($"           Target: {((FindItemAction)mission.Actions[0]).Target}");
-                            break;
-                        case MissionActionType.FindPerson:
-                            Chat.WriteLine($"           Target: {((FindPersonAction)mission.Actions[0]).Target}");
-                            break;
-                        case MissionActionType.KillPerson:
-                            Chat.WriteLine($"           Target: {((KillPersonAction)mission.Actions[0]).Target}");
-                            break;
-                        case MissionActionType.UseItemOnItem:
-                            Chat.WriteLine($"           Source: {((UseItemOnItemAction)mission.Actions[0]).Source}");
-                            Chat.WriteLine($"           Destination: {((UseItemOnItemAction)mission.Actions[0]).Destination}");
-                            break;
-                    }
+                    Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
                 */
-
                 //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
 
                 _menu = new Menu("TestPlugin", "TestPlugin");
@@ -86,8 +69,32 @@ namespace TestPlugin
 
                 //Chat.WriteLine($"Self Identity: {DynelManager.LocalPlayer.Health}");
                 //Inventory.Test(new Identity((IdentityType)0xDEAD, DynelManager.LocalPlayer.Identity.Instance));
-                //Inventory.Test(DynelManager.LocalPlayer.Identity);
-                //Inventory.Test(new Identity((IdentityType)0xC749, 0x001A618D));
+                List<Item> characterItems = Inventory.Items;
+
+                foreach(Item item in characterItems)
+                {
+                    Chat.WriteLine($"{item.Slot} - {item.Unk1} - {item.Unk2} - {item.LowId} - {item.QualityLevel} - {item.ContainerIdentity}");
+                }
+
+                Chat.WriteLine("Backpacks:");
+
+                List<Container> backpacks = Inventory.Backpacks;
+                foreach(Container backpack in backpacks)
+                {
+                    Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
+                }
+
+                Item noviRing;
+                if (Inventory.Find(226307, out noviRing))
+                {
+                    //noviRing.Equip(EquipSlot.Cloth_RightFinger);
+
+                    Container openBag = Inventory.Backpacks.FirstOrDefault(x => x.IsOpen);
+                    if(openBag != null)
+                    {
+                        noviRing.MoveToContainer(openBag);
+                    }
+                }
 
                 Game.OnUpdate += OnUpdate;
                 Game.OnTeleportStarted += Game_OnTeleportStarted;
@@ -111,6 +118,7 @@ namespace TestPlugin
 
         private void NpcDialog_AnswerListChanged(object s, Dictionary<int, string> options)
         {
+            /*
             Identity target = (Identity)s;
 
             foreach(KeyValuePair<int, string> option in options)
@@ -120,6 +128,7 @@ namespace TestPlugin
                     option.Value == "I will deal with only the weakest aversaries")
                     NpcDialog.SelectAnswer(target, option.Key);
             }
+            */
         }
 
         private void Game_PlayfieldInit(object s, uint id)
@@ -135,6 +144,8 @@ namespace TestPlugin
         private void Game_OnTeleportEnded(object s, EventArgs e)
         {
             Chat.WriteLine($"Teleport Ended!");
+
+            InfBuddy.InfBuddy.NavMeshMovementController.MoveTo(new Vector3(2807, 25.4f, 3390.7));
         }
 
         private void Game_OnTeleportStarted(object s, EventArgs e)

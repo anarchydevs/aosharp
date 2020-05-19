@@ -109,7 +109,7 @@ namespace AOSharp.Core
 
             foreach (IntPtr pMission in missionVector.ToList())
             {
-                Mission mission = *(Mission*)pMission;
+                Mission mission = new Mission(pMission);
                 missions.Add(mission);
             }
 

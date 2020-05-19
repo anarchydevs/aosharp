@@ -14,19 +14,26 @@ namespace AOSharp.Pathfinding
         public NavMeshMovementController(string navMeshFolderPath, bool drawPath = false) : base(drawPath)
         {
             _navMeshFolderPath = navMeshFolderPath;
-            LoadPather((uint)Playfield.Identity.Instance);
+            LoadPather((uint)Playfield.ModelIdentity.Instance);
 
             Game.PlayfieldInit += OnPlayfieldInit;
         }
 
-        public override void MoveTo(Vector3 pos)
+        public void MoveTo(Vector3 pos, bool useNavmesh = true)
         {
-            if (_pathfinder == null)
-                return;
+            if (useNavmesh)
+            {
+                if (_pathfinder == null)
+                    return;
 
-            List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, pos);
+                List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, pos);
 
-            RunPath(path);
+                RunPath(path);
+            }
+            else
+            {
+                base.MoveTo(pos);
+            }
         }
 
         private void OnPlayfieldInit(object s, uint id)
@@ -36,7 +43,7 @@ namespace AOSharp.Pathfinding
 
         private void LoadPather(uint id)
         {
-            string navFile = $"{_navMeshFolderPath}\\{id}.navmesh";
+            string navFile = $"{_navMeshFolderPath}\\{Playfield.ModelIdentity.Instance}.navmesh";
             if (!File.Exists(navFile))
                 throw new FileNotFoundException($"Unable to find navmesh file: {navFile}");
 

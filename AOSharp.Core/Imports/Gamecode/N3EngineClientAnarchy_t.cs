@@ -59,6 +59,10 @@ namespace AOSharp.Core.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetInventoryVec@n3EngineClientAnarchy_t@@QAEPBV?$vector@PAVNewInventoryEntry_t@@V?$allocator@PAVNewInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
 
+        //IsInTeam
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsInTeam@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern bool IsInTeam(IntPtr pThis, Identity* identity);
+
         //TradeskillCombine
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TradeskillCombine@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr TradeskillCombine(IntPtr pThis, IntPtr source, IntPtr destination);

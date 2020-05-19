@@ -69,7 +69,10 @@
     <Compile Include="Imports\GUI\Window_c.cs" />
     <Compile Include="Imports\Utils\Rect_c.cs" />
     <Compile Include="Imports\Utils\Variant_c.cs" />
-    <Compile Include="Inventory.cs" />
+    <Compile Include="Inventory\Inventory.cs" />
+    <Compile Include="Inventory\Container.cs" />
+    <Compile Include="Inventory\Item.cs" />
+    <Compile Include="Movement\DestinationReachedEventArgs.cs" />
     <Compile Include="Movement\MovementController.cs" />
     <Compile Include="NpcDialog.cs" />
     <Compile Include="Targeting.cs" />

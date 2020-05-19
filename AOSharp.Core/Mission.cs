@@ -6,24 +6,31 @@ using AOSharp.Common.GameData;
 
 namespace AOSharp.Core
 {
-    [StructLayout(LayoutKind.Explicit, Pack = 0)]
-    public unsafe struct Mission
+    public unsafe class Mission
     {
-        [FieldOffset(0x00)]
-        public Identity Identity;
+        public Identity Identity => (*(MissionMemStruct*)Pointer).Identity;
 
-        [FieldOffset(0x28)]
-        private StdObjList ActionList;
+        public string DisplayName => GetDisplayName();
 
-        [FieldOffset(0x38)]
-        public Identity Source;
+        public Identity Source => (*(MissionMemStruct*)Pointer).Source;
 
-        [FieldOffset(0xB4)]
-        public Identity Playfield;
+        public Identity Playfield => (*(MissionMemStruct*)Pointer).Playfield;
 
         public List<MissionAction> Actions => GetActions();
 
         public static List<Mission> List => GetMissions();
+
+        protected readonly IntPtr Pointer;
+
+        internal Mission(IntPtr pointer)
+        {
+            Pointer = pointer;
+        }
+
+        public static bool Exists(string displayName)
+        {
+            return GetMissions().Exists(x => x.DisplayName == displayName);
+        }
 
         private static List<Mission> GetMissions()
         {
@@ -35,11 +42,16 @@ namespace AOSharp.Core
             return localPlayer.GetMissionList();
         }
 
+        private string GetDisplayName()
+        {
+            return Utils.UnsafePointerToString(Pointer + 0x08);
+        }
+
         private List<MissionAction> GetActions()
         {
             List<MissionAction> actions = new List<MissionAction>();
 
-            foreach(IntPtr pAction in ActionList.ToList())
+            foreach(IntPtr pAction in (*(MissionMemStruct*)Pointer).ActionList.ToList())
             {
                 IntPtr pObjective = *(IntPtr*)(pAction + 0x8);
 
@@ -67,6 +79,26 @@ namespace AOSharp.Core
 
             return actions;
         }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0, Size = 0x100)]
+        private struct MissionMemStruct
+        {
+            [FieldOffset(0x00)]
+            public Identity Identity;
+
+            //0x08 - Size 36
+            //DisplayName
+
+            [FieldOffset(0x28)]
+            public StdObjList ActionList;
+
+            [FieldOffset(0x38)]
+            public Identity Source;
+
+            [FieldOffset(0xB4)]
+            public Identity Playfield;
+        }
+
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct _MissionAction

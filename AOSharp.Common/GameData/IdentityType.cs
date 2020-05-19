@@ -7,7 +7,7 @@
         ArmorPage = 0x66,
         ImplantPage = 0x67,
         Inventory = 0x68,
-        Bank = 0x69,
+        BankByRef = 0x69,
         Reclaim = 0x6A,
         Backpack = 0x6B,
         KnuBotTradeWindow = 0x6C,
@@ -39,7 +39,7 @@
         ACGEntrance = 0xDAC6,
         TeamWindow = 0xDEA9,
         Organization = 0xDEAA,
-        IncomingTradeWindow = 0xDEAD,
+        Bank = 0xDEAD,
         MobHash = 0x111D3,
         Playfield3 = 0x186A1,
     }

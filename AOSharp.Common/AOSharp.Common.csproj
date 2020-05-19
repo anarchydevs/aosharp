@@ -54,7 +54,6 @@
     <Compile Include="GameData\Gender.cs" />
     <Compile Include="GameData\Identity.cs" />
     <Compile Include="GameData\IdentityType.cs" />
-    <Compile Include="GameData\Item.cs" />
     <Compile Include="GameData\Mesh3D.cs" />
     <Compile Include="GameData\MissionActionType.cs" />
     <Compile Include="GameData\MissionDirection.cs" />
@@ -110,7 +109,8 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharInPlayMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ChatCmdMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ChatTextMessage.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ContainerAddItemMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ClientMoveItemToInventory.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ClientContainerAddItem.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\DespawnMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\FeedbackMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\FollowTargetMessage.cs" />

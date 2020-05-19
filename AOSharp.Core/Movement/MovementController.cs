@@ -1,13 +1,16 @@
 ﻿using AOSharp.Common.GameData;
+using System;
 using System.Collections.Generic;
 
 namespace AOSharp.Core.Movement
 {
     public class MovementController
     {
-        private const float UPDATE_INTERVAL = 0.5f;
+        private const float UPDATE_INTERVAL = 0.2f;
         private const float UNSTUCK_INTERVAL = 5f;
-        private const float UNSTUCK_THRESHOLD = 1f;
+        private const float UNSTUCK_THRESHOLD = 2f;
+
+        public bool IsNavigating => !(_path.Count == 0);
 
         private float _timeSinceLastUpdate = 0f;
         private float _timeSinceLastUnstuckCheck = 0f;
@@ -15,6 +18,8 @@ namespace AOSharp.Core.Movement
         private float _lastDist = 0f;
         private bool _drawPath;
         private Queue<Vector3> _path = new Queue<Vector3>();
+
+        public EventHandler<DestinationReachedEventArgs> DestinationReached;
 
         public MovementController(bool drawPath = false)
         {
@@ -35,7 +40,13 @@ namespace AOSharp.Core.Movement
                 _path.Dequeue();
 
                 if (_path.Count == 0)
-                    Game.SetMovement(MovementAction.ForwardStop);
+                {
+                    DestinationReachedEventArgs e = new DestinationReachedEventArgs();
+                    DestinationReached?.Invoke(this, e);
+
+                    if(e.Halt)
+                        Game.SetMovement(MovementAction.ForwardStop);
+                }
             }
 
             if (_timeSinceLastUnstuckCheck > UNSTUCK_INTERVAL)
@@ -73,6 +84,14 @@ namespace AOSharp.Core.Movement
             _timeSinceLastUnstuckCheck += deltaTime;
         }
 
+        public void Halt()
+        {
+            _path.Clear();
+
+            if(DynelManager.LocalPlayer.IsMoving)
+                Game.SetMovement(MovementAction.ForwardStop);
+        }
+
         public virtual void MoveTo(Vector3 pos)
         {
             RunPath(new List<Vector3> { pos });
@@ -93,7 +112,7 @@ namespace AOSharp.Core.Movement
 
         protected virtual void OnStuck()
         {
-            Chat.WriteLine("Stuck!?");
+            //Chat.WriteLine("Stuck!?");
         }
     }
 }

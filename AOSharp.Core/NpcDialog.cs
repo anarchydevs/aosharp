@@ -14,18 +14,20 @@ namespace AOSharp.Core
     {
         public static EventHandler<Dictionary<int, string>> AnswerListChanged;
 
-        internal static void OnKnubotAnswerList(N3Message n3Msg)
+        public static void Open(Dynel target)
         {
-            KnuBotAnswerListMessage knubotMsg = (KnuBotAnswerListMessage)n3Msg;
-            Dictionary<int, string> options = new Dictionary<int, string>();
-
-            for(int i = 0; i < knubotMsg.DialogOptions.Length; i++)
-            {
-                options.Add(i, knubotMsg.DialogOptions[i].Text);
-            }
-
-            AnswerListChanged?.Invoke(knubotMsg.Target, options);
+            Open(target.Identity);
         }
+
+        public static void Open(Identity target)
+        {
+            Connection.Send(new KnuBotOpenChatWindowMessage()
+            {
+                Unknown1 = 2,
+                Target = target
+            });
+        }
+
 
         public static void SelectAnswer(Identity target, int answer)
         {
@@ -35,6 +37,19 @@ namespace AOSharp.Core
                 Target = target,
                 Answer = answer
             });
+        }
+
+        internal static void OnKnubotAnswerList(N3Message n3Msg)
+        {
+            KnuBotAnswerListMessage knubotMsg = (KnuBotAnswerListMessage)n3Msg;
+            Dictionary<int, string> options = new Dictionary<int, string>();
+
+            for (int i = 0; i < knubotMsg.DialogOptions.Length; i++)
+            {
+                options.Add(i, knubotMsg.DialogOptions[i].Text);
+            }
+
+            AnswerListChanged?.Invoke(knubotMsg.Target, options);
         }
     }
 }

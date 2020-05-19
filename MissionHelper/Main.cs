@@ -26,12 +26,9 @@ namespace MissionHelper
             if (!Playfield.IsDungeon)
                 return;
 
-            Mission? mission = Mission.List.Cast<Mission?>().FirstOrDefault(x => x.Value.Playfield == Playfield.ModelIdentity);
+            Mission mission = Mission.List.FirstOrDefault(x => x.Playfield == Playfield.ModelIdentity);
 
-            if (!mission.HasValue)
-                return;
-
-            foreach(MissionAction action in mission.Value.Actions)
+            foreach(MissionAction action in mission.Actions)
             {
                 switch (action.Type)
                 {

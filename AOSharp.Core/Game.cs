@@ -46,6 +46,9 @@ namespace AOSharp.Core
         {
             Message msg = PacketFactory.Disassemble(datablock);
 
+            if (msg == null)
+                return;
+
             if (msg.Header.PacketType == PacketType.N3Message)
                 OnN3MessageInternal((N3Message)msg.Body);
         }

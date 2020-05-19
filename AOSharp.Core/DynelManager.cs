@@ -18,6 +18,21 @@ namespace AOSharp.Core
 
         public static IEnumerable<SimpleChar> Players => Characters.Where(x => x.IsPlayer);
 
+        public static Dynel GetDynel(Identity identity)
+        {
+            return AllDynels.FirstOrDefault(x => x.Identity == identity);
+        }
+
+        public static bool Exists(string name, bool includePets = false)
+        {
+            return Characters.Any(x => x.Name == name && (x.IsPet && includePets));
+        }
+
+        public static bool Exists(Identity identity)
+        {
+            return AllDynels.Any(x => x.Identity == identity);
+        }
+
         private static LocalPlayer GetLocalPlayer()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();

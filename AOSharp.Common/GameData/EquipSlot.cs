@@ -44,6 +44,21 @@
         Imp_RightHand = 0x2A,
         Imp_Legs = 0x2B,
         Imp_LeftHand = 0x2C,
-        Imp_Feet = 0x2D
+        Imp_Feet = 0x2D,
+        Social_Neck = 0x31,
+        Social_Head = 0x32,
+        Social_Back = 0x33,
+        Social_RightShoulder = 0x34,
+        Social_Chest = 0x35,
+        Social_LeftShoulder = 0x36,
+        Social_RightArm = 0x37,
+        Social_Hands = 0x38,
+        Social_LeftArm = 0x39,
+        Social_RightWrist = 0x3A,
+        Social_Legs = 0x3B,
+        Social_LeftWrist = 0x3C,
+        Social_RightWeap = 0x3D,
+        Social_Feet = 0x3E,
+        Social_LeftWeap = 0x3F
     }
 }

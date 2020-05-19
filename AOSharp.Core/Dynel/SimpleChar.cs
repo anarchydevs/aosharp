@@ -132,6 +132,17 @@ namespace AOSharp.Core
             return specials;
         }
 
+        public unsafe bool IsInTeam()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return false;
+
+            Identity identity = Identity;
+            return N3EngineClientAnarchy_t.IsInTeam(pEngine, &identity);
+        }
+
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private unsafe struct SimpleChar_MemStruct
         {
