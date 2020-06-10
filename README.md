@@ -1,0 +1,1 @@
+As this project is reaching a slightly usable state I will put any non-test plugins under https://gitlab.com/never-knows-best/aosharp-automation
