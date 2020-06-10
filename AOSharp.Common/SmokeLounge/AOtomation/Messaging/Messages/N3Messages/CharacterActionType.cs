@@ -16,17 +16,21 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 {
     public enum CharacterActionType
     {
-        TeamRequest = 0x0000001A,
-
         CastNano = 0x00000013,
 
-        TeamRequestReply = 0x00000015,
+        TeamKick = 0x00000016,
+
+        TeamRequest = 0x0000001A,
+
+        TeamRequestReply = 0x0000001C,
 
         LeaveTeam = 0x00000020,
 
-        AcceptTeamRequest = 0x00000023,
+        TeamRequestResponse = 0x00000023,
 
         RemoveFriendlyNano = 0x00000041,
+
+        QueuePerk = 0x00000050,
 
         UseItemOnItem = 0x00000051,
 
@@ -57,6 +61,8 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         ChangeVisualFlag = 0x000000A6,
 
         ChangeAnimationAndStance = 0x000000A7,
+
+        UsePerk = 0x000000B3,
 
         UploadNano = 0x000000CC,
 

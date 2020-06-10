@@ -35,13 +35,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InfBuddy">
-      <HintPath>..\..\InfBuddy\InfBuddy\bin\Debug\InfBuddy.dll</HintPath>
-    </Reference>
-    <Reference Include="NavmeshMovementController, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\NavmeshMovementController\bin\Debug\NavmeshMovementController.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

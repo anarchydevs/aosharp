@@ -9,37 +9,37 @@ namespace AOSharp.Core
     {
         public readonly IntPtr Pointer;
 
-        public unsafe Identity Identity => (*(Dynel_MemStruct*)Pointer).Identity;
+        public unsafe Identity Identity => (*(MemStruct*)Pointer).Identity;
 
         public DynelFlags Flags => (DynelFlags)GetStat(Stat.Flags);
 
         public unsafe Vector3 Position
         {
-            get { return (*(Dynel_MemStruct*)Pointer).Vehicle->Position; }
-            set { (*(Dynel_MemStruct*)Pointer).Vehicle->Position = value; }
+            get { return (*(MemStruct*)Pointer).Vehicle->Position; }
+            set { (*(MemStruct*)Pointer).Vehicle->Position = value; }
         }
 
         public unsafe Quaternion Rotation
         {
-            get { return (*(Dynel_MemStruct*)Pointer).Vehicle->Rotation; }
+            get { return (*(MemStruct*)Pointer).Vehicle->Rotation; }
             set { N3Dynel_t.SetRelRot(Pointer, &value); }
         }
 
         public unsafe MovementState MovementState
         {
-            get { return (*(Dynel_MemStruct*)Pointer).Vehicle->CharMovementStatus->State; }
-            set { (*(Dynel_MemStruct*)Pointer).Vehicle->CharMovementStatus->State = value; }
+            get { return (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State; }
+            set { (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State = value; }
         }
 
         public unsafe float Runspeed
         {
-            get { return (*(Dynel_MemStruct*)Pointer).Vehicle->Runspeed; }
-            set { (*(Dynel_MemStruct*)Pointer).Vehicle->Runspeed = value; }
+            get { return (*(MemStruct*)Pointer).Vehicle->Runspeed; }
+            set { (*(MemStruct*)Pointer).Vehicle->Runspeed = value; }
         }
 
-        public unsafe virtual bool IsMoving => (*(Dynel_MemStruct*)Pointer).Vehicle->Velocity > 0f;
+        public unsafe virtual bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
-        public unsafe float Radius => (*(Dynel_MemStruct*)Pointer).Vehicle->Radius;
+        public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
 
         public Dynel(IntPtr pointer)
         {
@@ -67,7 +67,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        protected unsafe struct Dynel_MemStruct
+        protected unsafe struct MemStruct
         {
             [FieldOffset(0x14)]
             public Identity Identity;

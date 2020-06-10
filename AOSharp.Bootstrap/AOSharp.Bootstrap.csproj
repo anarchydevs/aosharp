@@ -61,6 +61,7 @@
     <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />
     <Compile Include="Imports\N3Playfield_t.cs" />
     <Compile Include="Imports\Native\Kernel32.cs" />
+    <Compile Include="Imports\TeamViewModule_c.cs" />
     <Compile Include="Imports\WindowController_c.cs" />
     <Compile Include="Imports\VisualEnvFX_t.cs" />
     <Compile Include="IPC\HookOpCode.cs" />

@@ -8,14 +8,14 @@ namespace AOSharp.Core.GameData
     public unsafe struct StdObjList
     {
         private IntPtr pFirst;
-        public int Count;
+        public int count;
 
         public List<IntPtr> ToList()
         {
             List<IntPtr> pointers = new List<IntPtr>();
             IntPtr pCurrent = pFirst;
 
-            for(int i = 0; i < Count; i++)
+            for(int i = 0; i < count; i++)
             {
                 pCurrent = *(IntPtr*)pCurrent;
                 pointers.Add(pCurrent);

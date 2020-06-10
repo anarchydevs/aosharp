@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using AOSharp.Common.GameData;
 using org.critterai.nav;
 using oVector3 = org.critterai.Vector3;
+using AOSharp.Core;
 
 namespace AOSharp.Pathfinding
 {
@@ -47,7 +48,7 @@ namespace AOSharp.Pathfinding
             if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out destination)) || destination.point == new oVector3())
                 return finalPath;
 
-            uint[] path = new uint[500];
+            uint[] path = new uint[100000];
             int pathCount;
 
             if (origin.polyRef == destination.polyRef)
@@ -61,11 +62,13 @@ namespace AOSharp.Pathfinding
 
                 if (NavUtil.Failed(status) || pathCount == 0)
                 {
+                    Chat.WriteLine("FindPath failed?");
                     throw new Exception("FindPath failed: " + status);
                 }
                 else if (destination.polyRef != path[pathCount - 1])
                 {
-                    throw new Exception("Unable to generate full path: " + status);
+                    //Chat.WriteLine("Unable to generate full path? " + status);
+                    //throw new Exception("Unable to generate full path: " + status);
                 }
             }
 

@@ -14,7 +14,7 @@ namespace AOSharp.Core.Movement
 
         private float _timeSinceLastUpdate = 0f;
         private float _timeSinceLastUnstuckCheck = 0f;
-        private float _desiredStopDist = 1f;
+        private float _stopDist = 1f;
         private float _lastDist = 0f;
         private bool _drawPath;
         private Queue<Vector3> _path = new Queue<Vector3>();
@@ -35,7 +35,7 @@ namespace AOSharp.Core.Movement
             if (!DynelManager.LocalPlayer.IsMoving)
                 Game.SetMovement(MovementAction.ForwardStart);
 
-            if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= _desiredStopDist)
+            if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= _stopDist)
             {
                 _path.Dequeue();
 
@@ -101,8 +101,11 @@ namespace AOSharp.Core.Movement
         {
             _path.Clear();
 
-            foreach(Vector3 wp in path)
+            foreach (Vector3 wp in path)
+            {
+                if(DynelManager.LocalPlayer.Position.DistanceFrom(wp) <= _stopDist)
                 _path.Enqueue(wp);
+            }
         }
 
         public void LookAt(Vector3 pos)
@@ -113,6 +116,16 @@ namespace AOSharp.Core.Movement
         protected virtual void OnStuck()
         {
             //Chat.WriteLine("Stuck!?");
+        }
+    }
+
+    public class DestinationReachedEventArgs : EventArgs
+    {
+        public bool Halt { get; set; }
+
+        public DestinationReachedEventArgs(bool halt = true)
+        {
+            Halt = halt;
         }
     }
 }

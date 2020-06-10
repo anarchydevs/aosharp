@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
+using AOSharp.Core.GameData;
 
 namespace AOSharp.Core.Imports
 {
@@ -28,5 +29,14 @@ namespace AOSharp.Core.Imports
 
         [DllImport("N3.dll", EntryPoint = "?GetModelID@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern Identity* GetModelID(IntPtr pThis);
+
+        [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetSurface@n3Playfield_t@@QBEPBVSurface_i@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern IntPtr GetSurface(IntPtr pThis);
+
+        [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetZone@n3Playfield_t@@QAEPAVn3Zone_t@@H@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern IntPtr GetZone(IntPtr pThis, int id);
+
+        [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetZones@n3Playfield_t@@QBEABV?$vector@PAVn3Zone_t@@V?$allocator@PAVn3Zone_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern StdObjVector* GetZones(IntPtr pThis);
     }
 }

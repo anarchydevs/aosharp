@@ -58,7 +58,7 @@ namespace AOSharp.Core
                 if (pObjective == IntPtr.Zero)
                     continue;
 
-                _MissionAction action = *(_MissionAction*)pObjective;
+                MissionActionMemStruct action = *(MissionActionMemStruct*)pObjective;
 
                 switch(action.Type)
                 {
@@ -101,7 +101,7 @@ namespace AOSharp.Core
 
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private struct _MissionAction
+        private struct MissionActionMemStruct
         {
             [FieldOffset(0x00)]
             public MissionActionType Type;

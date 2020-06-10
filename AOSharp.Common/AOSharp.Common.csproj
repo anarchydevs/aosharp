@@ -50,6 +50,9 @@
     <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\Faction.cs" />
+    <Compile Include="GameData\ACGItem.cs" />
+    <Compile Include="GameData\ItemCriteriaOperator.cs" />
+    <Compile Include="GameData\ItemAction.cs" />
     <Compile Include="GameData\Fatness.cs" />
     <Compile Include="GameData\Gender.cs" />
     <Compile Include="GameData\Identity.cs" />
@@ -103,6 +106,8 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\BankMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CastNanoSpellMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\RaidCmdType.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\RaidCmdMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharacterActionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharacterActionType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharDCMoveMessage.cs" />
@@ -182,6 +187,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessageRange.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamRequestResponseAction.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\ArraySizeType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\DebuggingSerializerResolverBuilder.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\DiagnosticInfo.cs" />

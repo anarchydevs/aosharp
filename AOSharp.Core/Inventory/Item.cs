@@ -1,34 +1,62 @@
 ﻿using AOSharp.Common.GameData;
+using AOSharp.Core.Combat;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AOSharp.Core.Inventory
 {
-    public unsafe class Item
+    public unsafe class Item : DummyItem, ICombatAction
     {
-        public int Unk1 => (*(ItemMemStruct*)Pointer).Unk1;
-        public int Unk2 => (*(ItemMemStruct*)Pointer).Unk2;
-        public int LowId => (*(ItemMemStruct*)Pointer).LowId;
-        public int HighId => (*(ItemMemStruct*)Pointer).HighId;
-        public int QualityLevel => (*(ItemMemStruct*)Pointer).QualityLevel;
-        public Identity ContainerIdentity => (*(ItemMemStruct*)Pointer).ContainerIdentity;
+        public readonly int LowId;
+        public readonly int HighId;
+        public readonly int QualityLevel;
+        public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
-        public readonly IntPtr Pointer;
+        public readonly float AttackTime = 1f; //TODO: Actually load this.
 
-        internal Item(IntPtr pItem, Identity slot)
+        public static EventHandler<ItemUsedEventArgs> ItemUsed;
+
+        internal Item(int lowId, int highId, int ql) : base(lowId, highId, ql)
         {
-            Pointer = pItem;
+            LowId = lowId;
+            HighId = highId;
+            QualityLevel = ql;
+            UniqueIdentity = Identity.None;
+            Slot = Identity.None;
+        }
+
+        internal Item(int lowId, int highId, int ql, Identity uniqueIdentity, Identity slot) : base(slot)
+        {
+            LowId = lowId;
+            HighId = highId;
+            QualityLevel = ql;
+            UniqueIdentity = uniqueIdentity;
             Slot = slot;
         }
 
         public void Equip(EquipSlot equipSlot)
         {
             MoveToInventory((int)equipSlot);
+        }
+
+        public void Use()
+        {
+            Use(DynelManager.LocalPlayer);
+        }
+
+        public void Use(SimpleChar target)
+        {
+            Connection.Send(new GenericCmdMessage()
+            {
+                Action = GenericCmdAction.Use,
+                User = DynelManager.LocalPlayer.Identity,
+                Target = target.Identity
+            });
         }
 
         public void MoveToInventory(int targetSlot = 0x6F)
@@ -44,6 +72,16 @@ namespace AOSharp.Core.Inventory
         public void MoveToContainer(Identity target)
         {
             ContainerAddItem(Slot, target);
+        }
+
+        internal static void OnItemUsed(int lowId, int highId, int ql, Identity owner)
+        {
+            ItemUsed?.Invoke(null, new ItemUsedEventArgs
+            {
+                OwnerIdentity = owner,
+                Owner = DynelManager.GetDynel(owner)?.Cast<SimpleChar>(),
+                Item = new Item(lowId, highId, ql, Identity.None, Identity.None)
+            });
         }
 
         //Direct access to the MoveItemToInventory packet for those who need it.
@@ -65,28 +103,12 @@ namespace AOSharp.Core.Inventory
                 Target = target
             });
         }
+    }
 
-
-        [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private struct ItemMemStruct
-        {
-            [FieldOffset(0x0)]
-            public int Unk1; //Flags?
-
-            [FieldOffset(0x04)]
-            public Identity ContainerIdentity;
-
-            [FieldOffset(0x0C)]
-            public int LowId;
-
-            [FieldOffset(0x10)]
-            public int HighId;
-
-            [FieldOffset(0x14)]
-            public int QualityLevel;
-
-            [FieldOffset(0x24)]
-            public int Unk2; //Some other flags?
-        }
+    public class ItemUsedEventArgs : EventArgs
+    {
+        public SimpleChar Owner { get; set; }
+        public Identity OwnerIdentity { get; set; }
+        public Item Item { get; set; }
     }
 }

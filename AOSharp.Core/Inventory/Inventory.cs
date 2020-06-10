@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Core.Imports;
 using AOSharp.Core.GameData;
@@ -11,7 +12,7 @@ namespace AOSharp.Core.Inventory
     {
         public static List<Item> Items => GetItems(DynelManager.LocalPlayer.Identity);
 
-        public static List<Container> Backpacks => Items.Where(x => x.ContainerIdentity.Type == IdentityType.Container).Select(x => new Container(x.Pointer, x.ContainerIdentity, x.Slot)).ToList();
+        public static List<Container> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Container(x.UniqueIdentity, x.Slot)).ToList();
 
         public static bool Find(int id, out Item item)
         {
@@ -78,12 +79,80 @@ namespace AOSharp.Core.Inventory
                 IntPtr pActualItem = *(IntPtr*)pItem;
 
                 if (pActualItem != IntPtr.Zero)
-                    items.Add(new Item(pActualItem, new Identity(slotType, i)));
+                {
+                    int lowId = (*(ItemMemStruct*)pActualItem).LowId;
+                    int highId = (*(ItemMemStruct*)pActualItem).HighId;
+                    int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
+                    Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
+                    items.Add(new Item(lowId, highId, ql, unqiueIdentity, new Identity(slotType, i)));
+                }
 
                 i++;
             }
 
             return items;
+        }
+
+        internal unsafe static List<Item> GetContainerItems(Identity identity)
+        {
+            List<Item> items = new List<Item>();
+
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return items;
+
+            IntPtr pInvList = N3EngineClientAnarchy_t.GetContainerInventoryList(pEngine, &identity);
+
+            if (pInvList == IntPtr.Zero)
+                return items;
+
+            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, &identity);
+
+            if (pItems == IntPtr.Zero)
+                return items;
+
+            List<IntPtr> containerInvList = (*(StdObjList*)pInvList).ToList();
+
+            int i = 0;
+            foreach (IntPtr pItem in (*(StdStructVector*)pItems).ToList(sizeof(IntPtr)))
+            {
+                IntPtr pActualItem = *(IntPtr*)pItem;
+
+                if (pActualItem != IntPtr.Zero)
+                {
+                    int lowId = (*(ItemMemStruct*)pActualItem).LowId;
+                    int highId = (*(ItemMemStruct*)pActualItem).HighId;
+                    int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
+                    Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
+                    Identity slot = *((Identity*)(containerInvList[i] + 0x8));
+                    items.Add(new Item(lowId, highId, ql, unqiueIdentity, slot));
+                    i++;
+                }
+            }
+            return items;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        private struct ItemMemStruct
+        {
+            [FieldOffset(0x0)]
+            public int Unk1; //Flags?
+
+            [FieldOffset(0x04)]
+            public Identity UniqueIdentity;
+
+            [FieldOffset(0x0C)]
+            public int LowId;
+
+            [FieldOffset(0x10)]
+            public int HighId;
+
+            [FieldOffset(0x14)]
+            public int QualityLevel;
+
+            [FieldOffset(0x24)]
+            public int Unk2; //Some other flags?
         }
     }
 }

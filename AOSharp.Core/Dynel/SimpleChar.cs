@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOSharp.Core.GameData;
@@ -9,29 +10,31 @@ namespace AOSharp.Core
 {
     public unsafe class SimpleChar : Dynel
     {
-        public string Name => (*(SimpleChar_MemStruct*)Pointer).Name.ToString();
+        public string Name => (*(MemStruct*)Pointer).Name.ToString();
 
         public int Health => GetStat(Stat.Health);
 
         public int MaxHealth => GetStat(Stat.MaxHealth);
 
-        public bool IsPlayer => !(*(SimpleChar_MemStruct*)Pointer).IsNPC;
+        public bool IsPlayer => !(*(MemStruct*)Pointer).IsNPC;
 
-        public bool IsNPC => (*(SimpleChar_MemStruct*)Pointer).IsNPC && !IsPet;
+        public bool IsNPC => (*(MemStruct*)Pointer).IsNPC && !IsPet;
 
         public bool IsPet => Flags.HasFlag(DynelFlags.Pet);
 
-        public bool IsAttacking => (*(SimpleChar_MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
+        public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
 
         public bool IsAlive => Health > 0;
 
         public SimpleChar FightingTarget => GetFightingTarget();
 
-        public Dictionary<int, WeaponItem> Weapons => GetWeapons();
+        public List<Buff> Buffs => GetBuffs();
+
+        public Dictionary<EquipSlot, WeaponItem> Weapons => GetWeapons();
 
         public HashSet<SpecialAttack> SpecialAttacks => GetSpecialAttacks();
 
-        internal IntPtr pWeaponHolder => (IntPtr)(*(SimpleChar_MemStruct*)Pointer).WeaponHolder;
+        internal IntPtr pWeaponHolder => (IntPtr)(*(MemStruct*)Pointer).WeaponHolder;
 
         public SimpleChar(IntPtr pointer) : base(pointer)
         {
@@ -43,7 +46,7 @@ namespace AOSharp.Core
 
         private SimpleChar GetFightingTarget()
         {
-            IntPtr pFightingTarget = (*(SimpleChar_MemStruct*)Pointer).pFightingTarget;
+            IntPtr pFightingTarget = (*(MemStruct*)Pointer).pFightingTarget;
 
             if (pFightingTarget == IntPtr.Zero)
                 return null;
@@ -51,26 +54,21 @@ namespace AOSharp.Core
             return new SimpleChar(pFightingTarget);
         }
 
-        public unsafe bool IsInAttackRange(Dynel target, bool requireAllWeapons = false)
+        public unsafe bool IsInRange(Dynel target)
         {
-            Dictionary<int, WeaponItem> weapons = Weapons;
+            const EquipSlot MainHand = EquipSlot.Weap_RightHand;
+            const EquipSlot OffHand = EquipSlot.Weap_LeftHand;
 
-            if(weapons.Count > 0)
+            Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
+
+            if (weapons.Count > 0)
             {
-                bool inRange = true;
-
-                foreach(WeaponItem weapon in weapons.Values)
-                {
-                    if (!weapon.IsDynelInRange(target))
-                    {
-                        if (requireAllWeapons)
-                            return false;
-
-                        inRange = false;
-                    }
-                }
-
-                return inRange;
+                if (weapons.ContainsKey(MainHand))
+                    return weapons[MainHand].IsDynelInRange(target);
+                else if (weapons.ContainsKey(OffHand))
+                    return weapons[OffHand].IsDynelInRange(target);
+                else
+                    return false;
             }
             else
             {
@@ -86,24 +84,49 @@ namespace AOSharp.Core
             }
         }
 
-        private unsafe Dictionary<int, WeaponItem> GetWeapons()
+        public unsafe bool IsInAttackRange(bool requireAllWeapons = false)
         {
-            Dictionary<int, WeaponItem> weapons = new Dictionary<int, WeaponItem>();
+            Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
 
-            IntPtr pWeaponHolder = (IntPtr)(*(SimpleChar_MemStruct*)Pointer).WeaponHolder;
+            if (weapons.Count > 0)
+            {
+                if(!requireAllWeapons)
+                    return weapons.Values.Any(x => x.IsDynelInRange(this));
+                else
+                    return weapons.Values.Count(x => x.IsDynelInRange(this)) == weapons.Count;
+            }
+            else
+            {
+                IntPtr pWeaponHolder = DynelManager.LocalPlayer.pWeaponHolder;
+                IntPtr dummyWeapon = WeaponHolder_t.GetDummyWeapon(pWeaponHolder, Stat.MartialArts);
+
+                if (dummyWeapon == null)
+                    return false;
+
+                IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
+
+                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, Pointer) == 0x01;
+            }
+        }
+
+        private unsafe Dictionary<EquipSlot, WeaponItem> GetWeapons()
+        {
+            Dictionary<EquipSlot, WeaponItem> weapons = new Dictionary<EquipSlot, WeaponItem>();
+
+            IntPtr pWeaponHolder = (IntPtr)(*(MemStruct*)Pointer).WeaponHolder;
 
             if (pWeaponHolder == IntPtr.Zero)
                 return weapons;
 
-            IntPtr right = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x6, 0);
+            IntPtr right = WeaponHolder_t.GetWeapon(pWeaponHolder, EquipSlot.Weap_RightHand, 0);
 
             if (right != IntPtr.Zero)
-                weapons.Add(0x6, new WeaponItem(*(IntPtr*)(right + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, right));
+                weapons.Add(EquipSlot.Weap_RightHand, new WeaponItem(*(IntPtr*)(right + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, right));
 
-            IntPtr left = WeaponHolder_t.GetWeapon(pWeaponHolder, 0x8, 0);
+            IntPtr left = WeaponHolder_t.GetWeapon(pWeaponHolder, EquipSlot.Weap_LeftHand, 0);
 
             if (left != IntPtr.Zero)
-                weapons.Add(0x8, new WeaponItem(*(IntPtr*)(left + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, left));
+                weapons.Add(EquipSlot.Weap_LeftHand, new WeaponItem(*(IntPtr*)(left + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, left));
 
             return weapons;
         }
@@ -111,7 +134,7 @@ namespace AOSharp.Core
         private HashSet<SpecialAttack> GetSpecialAttacks()
         {
             HashSet<SpecialAttack> specials = new HashSet<SpecialAttack>();
-            Dictionary<int, WeaponItem> weapons = Weapons;
+            Dictionary<EquipSlot, WeaponItem> weapons = Weapons;
 
             if(weapons.Count > 0)
             {
@@ -132,6 +155,22 @@ namespace AOSharp.Core
             return specials;
         }
 
+        private List<Buff> GetBuffs()
+        {
+            List<Buff> buffs = new List<Buff>();
+            IntPtr pBuffUnk = (*(MemStruct*)Pointer).pBuffUnk;
+
+            if (pBuffUnk == IntPtr.Zero)
+                return buffs;
+
+            foreach(IntPtr pBuff in (*(StdObjVector*)(pBuffUnk + 0x30)).ToList())
+            {
+                buffs.Add(new Buff(*(Identity*)pBuff));
+            }
+
+            return buffs;
+        }
+
         public unsafe bool IsInTeam()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
@@ -144,10 +183,13 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct SimpleChar_MemStruct
+        private unsafe struct MemStruct
         {
             [FieldOffset(0x154)]
             public StdString Name;
+
+            [FieldOffset(0x1C0)]
+            public IntPtr pBuffUnk;
 
             [FieldOffset(0x1D4)]
             public WeaponHolder* WeaponHolder;

@@ -9,7 +9,7 @@ namespace AOSharp.Core.Imports
     {
         //55 8B EC 8B 45 08 56 8B F1 85 C0 78 05 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate IntPtr GetWeaponDelegate(IntPtr pThis, int slot, int unk);
+        internal unsafe delegate IntPtr GetWeaponDelegate(IntPtr pThis, EquipSlot slot, int unk);
         internal static GetWeaponDelegate GetWeapon = Marshal.GetDelegateForFunctionPointer<GetWeaponDelegate>(Kernel32.GetModuleHandle("Gamecode.dll") + FuncOffsets.GetWeapon);
 
         //55 8B EC 83 EC 18 33 C0 56 8B F1 39 45 08 75 07  

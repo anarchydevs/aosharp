@@ -28,5 +28,13 @@ namespace AOSharp.Bootstrap.Imports
         public static extern void PlayfieldInit(IntPtr pThis, uint id);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DPlayfieldInit(IntPtr pThis, uint id);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool PerformSpecialAction(IntPtr pThis, IntPtr identity);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        public delegate bool DPerformSpecialAction(IntPtr pThis, IntPtr identity);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsPerk@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool IsPerk(IntPtr pThis, uint id);
     }
 }

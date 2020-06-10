@@ -19,5 +19,15 @@ namespace AOSharp.Core.GameData
 
             return pointers;
         }
+
+        public List<T> ToList<T>() where T : unmanaged
+        {
+            List<T> list = new List<T>();
+
+            for (IntPtr pCurrent = pFirst; pCurrent.ToInt32() < pLast.ToInt32(); pCurrent += sizeof(T))
+                list.Add(*(T*)pCurrent);
+
+            return list;
+        }
     }
 }

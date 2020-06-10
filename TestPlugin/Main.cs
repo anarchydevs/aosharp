@@ -11,6 +11,8 @@ using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Core.UI.Options;
+using AOSharp.Core.Imports;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace TestPlugin
 {
@@ -38,6 +40,49 @@ namespace TestPlugin
                 Chat.WriteLine($"   IsShadowlands: {Playfield.IsShadowlands}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
                 */
+
+                Chat.WriteLine("Team:");
+                Chat.WriteLine($"\tIsInTeam: {Team.IsInTeam}");
+                Chat.WriteLine($"\tIsLeader: {Team.IsLeader}");
+                Chat.WriteLine($"\tIsRaid: {Team.IsRaid}");
+
+                foreach(TeamMember teamMember in Team.Members)
+                {
+                    Chat.WriteLine($"\t{teamMember.Name} - {teamMember.Identity} - {teamMember.Level} - {teamMember.Profession} - IsLeader:{teamMember.IsLeader} @ Team {teamMember.TeamIndex + 1}");
+                }
+
+                Chat.WriteLine("Tests:");
+
+                /*
+                foreach(Spell spell in Spell.List)
+                {
+                    Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
+                }
+                */
+
+                /*
+                foreach(Perk perk in Perk.List)
+                {
+                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}");
+                }
+                */
+
+                Chat.WriteLine("Buffs:");
+                foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
+                {
+                    Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
+                }
+
+                /*
+                Item item;
+                if(Inventory.Find(244216, out item))
+                {
+                    DummyItem dummyItem = DummyItem.GetFromTemplate(item.Slot);
+                    dummyItem.MeetsUseReqs();
+                }
+                */
+
+                //DevExtras.Test();
 
                 /*
                 MovementController movementController = new MovementController(true);
@@ -67,13 +112,12 @@ namespace TestPlugin
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 OptionsPanel.AddMenu(_menu);
 
-                //Chat.WriteLine($"Self Identity: {DynelManager.LocalPlayer.Health}");
-                //Inventory.Test(new Identity((IdentityType)0xDEAD, DynelManager.LocalPlayer.Identity.Instance));
+                /*
                 List<Item> characterItems = Inventory.Items;
-
+            
                 foreach(Item item in characterItems)
                 {
-                    Chat.WriteLine($"{item.Slot} - {item.Unk1} - {item.Unk2} - {item.LowId} - {item.QualityLevel} - {item.ContainerIdentity}");
+                    Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
                 }
 
                 Chat.WriteLine("Backpacks:");
@@ -82,8 +126,10 @@ namespace TestPlugin
                 foreach(Container backpack in backpacks)
                 {
                     Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
-                }
+                }        
+                */
 
+                /*
                 Item noviRing;
                 if (Inventory.Find(226307, out noviRing))
                 {
@@ -95,13 +141,18 @@ namespace TestPlugin
                         noviRing.MoveToContainer(openBag);
                     }
                 }
+                */
 
                 Game.OnUpdate += OnUpdate;
-                Game.OnTeleportStarted += Game_OnTeleportStarted;
-                Game.OnTeleportEnded += Game_OnTeleportEnded;
-                Game.OnTeleportFailed += Game_OnTeleportFailed;
+                Game.TeleportStarted += Game_OnTeleportStarted;
+                Game.TeleportEnded += Game_OnTeleportEnded;
+                Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 Game.N3MessageReceived += Game_N3MessageReceived;
+                Team.TeamRequest += Team_TeamRequest;
+                Team.MemberLeft += Team_MemberLeft;
+                Perk.PerkExecuted += Perk_PerkExecuted;
+                Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 DynelManager.DynelSpawned += DynelSpawned;
             }
@@ -114,6 +165,28 @@ namespace TestPlugin
         private void Game_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
+
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
+            {
+                TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
+                Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
+            }
+
+            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
+            {
+                FeedbackMessage ayy = (FeedbackMessage)n3Msg;
+                Chat.WriteLine($"Feedback: {ayy.MessageId.ToString()}\t{ayy.CategoryId.ToString()}\t{ayy.Unknown1.ToString()}");
+            }
+        }
+
+        private void Team_TeamRequest(object s, TeamRequestEventArgs e)
+        {
+            e.Accept();
+        }
+
+        private void Team_MemberLeft(object s, Identity leaver)
+        {
+            Chat.WriteLine($"Player {leaver} left the team.");
         }
 
         private void NpcDialog_AnswerListChanged(object s, Dictionary<int, string> options)
@@ -131,6 +204,11 @@ namespace TestPlugin
             */
         }
 
+        private void Game_OnTeleportStarted(object s, EventArgs e)
+        {
+            Chat.WriteLine("Teleport Started!");
+        }
+
         private void Game_PlayfieldInit(object s, uint id)
         {
             Chat.WriteLine($"PlayfieldInit: {id}");
@@ -144,22 +222,22 @@ namespace TestPlugin
         private void Game_OnTeleportEnded(object s, EventArgs e)
         {
             Chat.WriteLine($"Teleport Ended!");
-
-            InfBuddy.InfBuddy.NavMeshMovementController.MoveTo(new Vector3(2807, 25.4f, 3390.7));
         }
 
-        private void Game_OnTeleportStarted(object s, EventArgs e)
+        private void Perk_PerkExecuted(object s, PerkExecutedEventArgs e)
         {
-            Chat.WriteLine("Teleport Started!");
+            Chat.WriteLine($"Perk {e.Perk.Name} executed by {e.OwnerIdentity}");
+        }
+
+        private void Item_ItemUsed(object s, ItemUsedEventArgs e)
+        {
+            Chat.WriteLine($"Item {e.Item.Name} used by {e.OwnerIdentity}");
         }
 
         double lastTrigger = Time.NormalTime;
 
         private void OnUpdate(object s, float deltaTime)
         {
-            if (DynelManager.LocalPlayer.IsAttacking)
-               return;
-
             if (_menu.GetBool("DrawingTest"))
             {
                 foreach (Dynel player in DynelManager.Players)
@@ -169,19 +247,31 @@ namespace TestPlugin
                 }
             }
 
-            if(Time.NormalTime > lastTrigger + 3)
+            if (Time.NormalTime > lastTrigger + 0.1)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Core.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
+
+                /*
+                Spell testSpell;
+                if(Spell.Find("Matrix of Ka", out testSpell))
+                {
+                    if (testSpell.IsReady && testSpell.MeetsUseReqs())
+                        testSpell.Cast();
+                }
+                */
+
+                /*
+                Perk testPerk;
+                if(Perk.Find("Dance of Fools", out testPerk))
+                {
+                    if (testPerk.IsAvailable)
+                        testPerk.Use();
+                }
+                */
+
                 lastTrigger = Time.NormalTime;
             }
-
-            SimpleChar leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet" && x.IsAlive && DynelManager.LocalPlayer.IsInAttackRange(x));
-
-            if (leet == null)
-                return;
-
-            DynelManager.LocalPlayer.Attack(leet);
         }
 
         private void DynelSpawned(object s, Dynel dynel)

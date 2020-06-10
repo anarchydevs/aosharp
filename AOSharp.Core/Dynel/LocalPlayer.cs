@@ -16,6 +16,8 @@ namespace AOSharp.Core
 
         public float AttackRange => GetAttackRange();
 
+        internal IntPtr NanoControllerPointer => (*(MemStruct*)Pointer).NanoController;
+
         public LocalPlayer(IntPtr pointer) : base(pointer)
         {
         }
@@ -59,6 +61,7 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
         }
 
+        /*
         public void CastNano(Identity nano, Dynel target)
         {
             //Targeting.SetTarget(target.Identity);
@@ -74,12 +77,13 @@ namespace AOSharp.Core
 
             N3EngineClientAnarchy_t.CastNanoSpell(pEngine, &nano, &target);
         }
+        */
 
         private Dictionary<Stat, Cooldown> GetCooldowns()
         {
             Dictionary<Stat, Cooldown> cooldowns = new Dictionary<Stat, Cooldown>();
 
-            IntPtr pUnk = *(*(LocalPlayer_MemStruct*)Pointer).CooldownUnk;
+            IntPtr pUnk = *(*(MemStruct*)Pointer).CooldownUnk;
 
             if (pUnk == IntPtr.Zero)
                 return cooldowns;
@@ -99,15 +103,15 @@ namespace AOSharp.Core
         {
             List<Mission> missions = new List<Mission>();
 
-            IntPtr pUnk = (*(LocalPlayer_MemStruct*)Pointer).MissionUnk;
+            IntPtr pUnk = (*(MemStruct*)Pointer).MissionUnk;
 
             if (pUnk == IntPtr.Zero)
                 return missions;
 
-            StdObjVector missionVector = *(StdObjVector*)(pUnk + 0x04);
+            StdObjVector* missionVector = (StdObjVector*)(pUnk + 0x04);
 
 
-            foreach (IntPtr pMission in missionVector.ToList())
+            foreach (IntPtr pMission in missionVector->ToList())
             {
                 Mission mission = new Mission(pMission);
                 missions.Add(mission);
@@ -117,10 +121,13 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct LocalPlayer_MemStruct
+        private unsafe struct MemStruct
         {
             [FieldOffset(0x1BC)]
             public IntPtr* CooldownUnk;
+
+            [FieldOffset(0x1C0)]
+            public IntPtr NanoController;
 
             [FieldOffset(0x1C4)]
             public IntPtr MissionUnk;

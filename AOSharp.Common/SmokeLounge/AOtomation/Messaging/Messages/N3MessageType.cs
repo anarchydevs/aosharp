@@ -97,6 +97,7 @@
         TeamInvite = 0x4D2A313B,
         InfoPacket = 0x4D38242E,
         SpellList = 0x4D450114,
+        RaidCmd = 0x4E525E58,
         InventoryUpdate = 0x4E536976,
         CorpseFullUpdate = 0x4F474E05,
         Feedback = 0x50544D19,

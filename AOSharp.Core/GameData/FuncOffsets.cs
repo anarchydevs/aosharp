@@ -4,6 +4,7 @@ namespace AOSharp.Core.GameData
 {
     public static class FuncOffsets
     {
+        public static int GetItemActionInfo = 0x812AF; // Gamecode.dll - 55 8B EC 8B 49 6C 8D 45 08 50 E8 ? ? ? ? 8B 00 5D C2 04 00
         public static int GetMissionList = 0x588D9; // Gamecode.dll - B8 ? ? ? ? E8 ? ? ? ? 51 56 8B F1 83 BE ? ? ? ? ? 75 25 6A 18 E8 ? ? ? ? 59 8B C8 89 4D F0 83 65 FC 00 85 C9 74 08 56 E8 ? ? ? ? EB 02 
         public static int GetWeapon = 0x681D2; // Gamecode.dll - 55 8B EC 8B 45 08 56 8B F1 85 C0 78 05
         public static int IsDynelInWeaponRange = 0x67B21; // Gamecode.dll - 55 8B EC 83 EC 18 33 C0 56 8B F1 39 45 08 75 07 

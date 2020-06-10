@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combat\ICombatAction.cs" />
+    <Compile Include="Combat\CombatHandler.cs" />
     <Compile Include="GameData\FuncOffsets.cs" />
     <Compile Include="GameData\Variant.cs" />
     <Compile Include="GameData\WindowFlags.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="Imports\GUI\StringListViewItem_c.cs" />
     <Compile Include="Imports\GUI\ListViewBase_c.cs" />
     <Compile Include="Imports\GUI\HLayoutSpacer.cs" />
+    <Compile Include="Imports\GUI\TeamViewModule_c.cs" />
     <Compile Include="Imports\GUI\ViewSelector_c.cs" />
     <Compile Include="Imports\GUI\ScrollView_c.cs" />
     <Compile Include="Imports\GUI\HLayoutNode_c.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Imports\GUI\TabView.cs" />
     <Compile Include="Imports\GUI\CheckBox_c.cs" />
     <Compile Include="Imports\N3\N3Dynel_t.cs" />
+    <Compile Include="Imports\N3\N3Zone_t.cs" />
     <Compile Include="Imports\Native\MSVCR100.cs" />
     <Compile Include="Imports\GUI\ToolTip_c.cs" />
     <Compile Include="Imports\GUI\WindowController_c.cs" />
@@ -72,9 +76,16 @@
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\Container.cs" />
     <Compile Include="Inventory\Item.cs" />
-    <Compile Include="Movement\DestinationReachedEventArgs.cs" />
     <Compile Include="Movement\MovementController.cs" />
     <Compile Include="NpcDialog.cs" />
+    <Compile Include="DummyItem.cs" />
+    <Compile Include="Buff.cs" />
+    <Compile Include="TeamMember.cs" />
+    <Compile Include="Spell.cs" />
+    <Compile Include="Playfield\Zone.cs" />
+    <Compile Include="Perk.cs" />
+    <Compile Include="DevExtras.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="Targeting.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Imports\GUI\TargetingModule_t.cs" />
@@ -84,7 +95,7 @@
     <Compile Include="Offsets.cs" />
     <Compile Include="PacketFactory.cs" />
     <Compile Include="Time.cs" />
-    <Compile Include="DynelManager.cs" />
+    <Compile Include="Dynel\DynelManager.cs" />
     <Compile Include="Dynel\CharMovementStatus.cs" />
     <Compile Include="Dynel\LocalPlayer.cs" />
     <Compile Include="Dynel\SimpleItem.cs" />
@@ -92,7 +103,7 @@
     <Compile Include="Dynel\WeaponHolder.cs" />
     <Compile Include="Dynel\Vehicle.cs" />
     <Compile Include="Dynel\SimpleChar.cs" />
-    <Compile Include="GameData\SpecialAttack.cs" />
+    <Compile Include="SpecialAttack.cs" />
     <Compile Include="GameData\Cooldown.cs" />
     <Compile Include="GameData\SpecialAction.cs" />
     <Compile Include="GameData\StdObjList.cs" />
@@ -121,7 +132,7 @@
     <Compile Include="Imports\N3\RoomSurface_t.cs" />
     <Compile Include="Imports\Utils\String_c.cs" />
     <Compile Include="Imports\N3\TilemapSurface_t.cs" />
-    <Compile Include="Playfield.cs" />
+    <Compile Include="Playfield\Playfield.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Checkbox.cs" />
     <Compile Include="UI\BorderView.cs" />

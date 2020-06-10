@@ -17,7 +17,7 @@ namespace AOSharp.Core.UI.Options
             return menu;
         }
 
-        private unsafe static void OnOptionPanelActivatedInternal(IntPtr pOptionPanelModule, bool unk)
+        private unsafe static void OnOptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
         {
             IntPtr pOptionWindow = OptionPanelModule_c.GetOptionWindow(pOptionPanelModule + 0xB8);
 

@@ -30,6 +30,8 @@
         MissionKey = 0xC76D,
         MissionKeyDuplicator = 0xC76E,
         MailTerminal = 0xC773,
+        DummyItem = 0xC788,
+        PerkHash = 0xC78E,
         Playfield1 = 0xC79C,
         Playfield = 0xC79D,
         NanoProgram = 0xCF1B,
@@ -40,6 +42,7 @@
         TeamWindow = 0xDEA9,
         Organization = 0xDEAA,
         Bank = 0xDEAD,
+        SpecialAction = 0xDEB0,
         MobHash = 0x111D3,
         Playfield3 = 0x186A1,
     }

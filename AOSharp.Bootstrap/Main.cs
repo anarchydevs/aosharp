@@ -112,7 +112,7 @@ namespace AOSharp.Bootstrap
             }
         }
 
-        private void SetupHooks()
+        private unsafe void SetupHooks()
         {
             CreateHook("N3.dll",
                         "?AddChildDynel@n3Playfield_t@@QAEXPAVn3Dynel_t@@ABVVector3_t@@ABVQuaternion_t@@@Z",
@@ -149,6 +149,14 @@ namespace AOSharp.Bootstrap
             CreateHook("Gamecode.dll",
                         "?PlayfieldInit@n3EngineClientAnarchy_t@@UAEXI@Z",
                         new N3EngineClientAnarchy_t.DPlayfieldInit(N3EngineClientAnarchy_PlayfieldInit_Hook));
+
+            CreateHook("GUI.dll",
+                        "?SlotJoinTeamRequest@TeamViewModule_c@@AAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+                        new TeamViewModule_c.DSlotJoinTeamRequest(TeamViewModule_SlotJoinTeamRequest_Hook));
+
+            CreateHook("Gamecode.dll",
+                        "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
+                        new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -196,6 +204,28 @@ namespace AOSharp.Bootstrap
             WindowController_c.ViewDeleted(pThis, pView);
         }
 
+        private unsafe void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, IntPtr identity, IntPtr pName)
+        {
+            try
+            {
+                _pluginProxy.JoinTeamRequest(identity, pName);
+            }
+            catch (Exception) { }
+        }
+
+        private unsafe bool N3EngineClientAnarchy_PerformSpecialAction_Hook(IntPtr pThis, IntPtr identity)
+        {
+            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, identity);
+
+            try
+            {
+                if(specialActionResult && N3EngineClientAnarchy_t.IsPerk(pThis, (*(uint*)identity)))
+                    _pluginProxy.ClientPerformedPerk(identity);
+            }
+            catch (Exception) { }
+
+            return specialActionResult;
+        }
 
         public void OptionPanelModule_ModuleActivated_Hook(IntPtr pThis, bool unk)
         {
@@ -259,10 +289,12 @@ namespace AOSharp.Bootstrap
             try
             {
                 _pluginProxy.Update(deltaTime);
+
+                N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+
+                _pluginProxy.LateUpdate(deltaTime);
             }
             catch (Exception) { }
-
-            N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
         }
 
         public void N3Playfield_t__AddChildDynel_Hook(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot)
@@ -287,12 +319,18 @@ namespace AOSharp.Bootstrap
             public DataBlockToMessageDelegate DataBlockToMessage;
             public delegate void UpdateDelegate(float deltaTime);
             public UpdateDelegate Update;
+            public delegate void LateUpdateDelegate(float deltaTime);
+            public LateUpdateDelegate LateUpdate;
             public delegate void TeleportStartedDelegate();
             public TeleportStartedDelegate TeleportStarted;
             public delegate void TeleportEndedDelegate();
             public TeleportEndedDelegate TeleportEnded;
             public delegate void TeleportFailedDelegate();
             public TeleportFailedDelegate TeleportFailed;
+            public delegate void JoinTeamRequestDelegate(Identity pIdentity, IntPtr pName);
+            public JoinTeamRequestDelegate JoinTeamRequest;
+            public delegate void ClientPerformedPerkDelegate(Identity pIdentity);
+            public ClientPerformedPerkDelegate ClientPerformedPerk;
             public delegate void PlayfieldInitDelegate(uint id);
             public PlayfieldInitDelegate PlayfieldInit;
             public delegate void OptionPanelActivatedDelegate(IntPtr pOptionPanelModule, bool unk);
@@ -311,6 +349,18 @@ namespace AOSharp.Bootstrap
                     _coreDelegates.DataBlockToMessage(datablock);
             }
 
+            public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName)
+            {
+                if (_coreDelegates.JoinTeamRequest != null)
+                    _coreDelegates.JoinTeamRequest(*(Identity*)identity, pName);
+            }
+
+            public unsafe void ClientPerformedPerk(IntPtr identity)
+            {
+                if (_coreDelegates.ClientPerformedPerk != null)
+                    _coreDelegates.ClientPerformedPerk(*(Identity*)identity);
+            }
+
             public void DynelSpawned(IntPtr pDynel)
             {
                 if(_coreDelegates.DynelSpawned != null)
@@ -321,6 +371,12 @@ namespace AOSharp.Bootstrap
             {
                 if (_coreDelegates.Update != null)
                     _coreDelegates.Update(deltaTime);
+            }
+
+            public void LateUpdate(float deltaTime)
+            {
+                if (_coreDelegates.LateUpdate != null)
+                    _coreDelegates.LateUpdate(deltaTime);
             }
 
             public void TeleportStarted()
@@ -388,14 +444,17 @@ namespace AOSharp.Bootstrap
                 _coreDelegates = new CoreDelegates()
                 {
                     Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
-                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "DynelSpawnedInternal"),
-                    TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStartedInternal"),
-                    TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEndedInternal"),
-                    TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailedInternal"),
+                    LateUpdate = CreateDelegate<CoreDelegates.LateUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnLateUpdateInternal"),
+                    DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "OnDynelSpawned"),
+                    TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStarted"),
+                    TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEnded"),
+                    TeleportFailed = CreateDelegate<CoreDelegates.TeleportFailedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportFailed"),
                     PlayfieldInit = CreateDelegate<CoreDelegates.PlayfieldInitDelegate>(assembly, "AOSharp.Core.Game", "OnPlayfieldInit"),
-                    OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionsPanel", "OnOptionPanelActivatedInternal"),
+                    OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionsPanel", "OnOptionPanelActivated"),
                     ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
-                    DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Game", "OnMessageInternal")
+                    DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Game", "OnMessage"),
+                    JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
+                    ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk")
                 };
             }
 
