@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using AOSharp.Core.Imports;
 using AOSharp.Core.GameData;
+using System.Collections;
 
 namespace AOSharp.Core
 {
     public static class Chat
     {
         //Currently only supports Default Window
+        //Switched to system messages due to a crash with this. TBD whether or not I fix this.
+        /*
         public unsafe static void WriteLine(string message, ChatColor color = ChatColor.Gold)
         {
             IntPtr pWindowController = *(IntPtr*)ChatWindowNode_t.ChatWindowController;
@@ -35,19 +39,36 @@ namespace AOSharp.Core
 
             StdString.Dispose(pString);
         }
-    }
+        */
 
-    public enum ChatColor
-    {
-        White = 0,
-        LightBlue = 4,
-        Yellow = 5,
-        Green = 8,
-        DarkPink = 9,
-        Black = 11,
-        Red = 12,
-        DarkBlue = 14,
-        Gold = 17,
-        Orange = 27
+        private static Queue<(string, ChatColor)> _messageQueue = new Queue<(string, ChatColor)>();
+
+        internal static void Update()
+        {
+            while (_messageQueue.Count > 0)
+            {
+                (string text, ChatColor color) msg = _messageQueue.Dequeue();
+                GamecodeUnk.AppendSystemText(0, msg.text, msg.color);
+            }
+        }
+
+        public unsafe static void WriteLine(string text, ChatColor color = ChatColor.Gold)
+        {
+            _messageQueue.Enqueue((text, color));
+        }
     }
+}
+
+public enum ChatColor
+{
+    White = 0,
+    LightBlue = 4,
+    Yellow = 5,
+    Green = 8,
+    DarkPink = 9,
+    Black = 11,
+    Red = 12,
+    DarkBlue = 14,
+    Gold = 17,
+    Orange = 27
 }

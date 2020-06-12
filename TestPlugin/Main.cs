@@ -19,7 +19,7 @@ namespace TestPlugin
     public class Main : IAOPluginEntry
     {
         private Menu _menu;
-
+        private int i = 0;
         public unsafe void Run(string pluginDir)
         {
             try
@@ -63,15 +63,17 @@ namespace TestPlugin
                 /*
                 foreach(Perk perk in Perk.List)
                 {
-                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}");
+                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.GetStat(Stat.AttackDelay)}");
                 }
                 */
 
+                /*
                 Chat.WriteLine("Buffs:");
                 foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
                 {
                     Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
                 }
+                */
 
                 /*
                 Item item;
@@ -148,7 +150,7 @@ namespace TestPlugin
                 Game.TeleportEnded += Game_OnTeleportEnded;
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
-                Game.N3MessageReceived += Game_N3MessageReceived;
+                Network.N3MessageReceived += Network_N3MessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
                 Perk.PerkExecuted += Perk_PerkExecuted;
@@ -162,7 +164,7 @@ namespace TestPlugin
             }
         }
 
-        private void Game_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+        private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
 
@@ -247,7 +249,7 @@ namespace TestPlugin
                 }
             }
 
-            if (Time.NormalTime > lastTrigger + 0.1)
+            if (Time.NormalTime > lastTrigger + 0.05)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Core.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -269,6 +271,8 @@ namespace TestPlugin
                         testPerk.Use();
                 }
                 */
+                //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+                //Targeting.SetTarget(randomTarget);
 
                 lastTrigger = Time.NormalTime;
             }

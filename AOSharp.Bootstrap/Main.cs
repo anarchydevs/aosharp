@@ -288,11 +288,11 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.Update(deltaTime);
+                _pluginProxy.EarlyUpdate(deltaTime);
 
                 N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
 
-                _pluginProxy.LateUpdate(deltaTime);
+                _pluginProxy.Update(deltaTime);
             }
             catch (Exception) { }
         }
@@ -319,8 +319,8 @@ namespace AOSharp.Bootstrap
             public DataBlockToMessageDelegate DataBlockToMessage;
             public delegate void UpdateDelegate(float deltaTime);
             public UpdateDelegate Update;
-            public delegate void LateUpdateDelegate(float deltaTime);
-            public LateUpdateDelegate LateUpdate;
+            public delegate void EarlyUpdateDelegate(float deltaTime);
+            public EarlyUpdateDelegate EarlyUpdate;
             public delegate void TeleportStartedDelegate();
             public TeleportStartedDelegate TeleportStarted;
             public delegate void TeleportEndedDelegate();
@@ -373,10 +373,10 @@ namespace AOSharp.Bootstrap
                     _coreDelegates.Update(deltaTime);
             }
 
-            public void LateUpdate(float deltaTime)
+            public void EarlyUpdate(float deltaTime)
             {
-                if (_coreDelegates.LateUpdate != null)
-                    _coreDelegates.LateUpdate(deltaTime);
+                if (_coreDelegates.EarlyUpdate != null)
+                    _coreDelegates.EarlyUpdate(deltaTime);
             }
 
             public void TeleportStarted()
@@ -444,7 +444,7 @@ namespace AOSharp.Bootstrap
                 _coreDelegates = new CoreDelegates()
                 {
                     Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
-                    LateUpdate = CreateDelegate<CoreDelegates.LateUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnLateUpdateInternal"),
+                    EarlyUpdate = CreateDelegate<CoreDelegates.EarlyUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnEarlyUpdateInternal"),
                     DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "OnDynelSpawned"),
                     TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStarted"),
                     TeleportEnded = CreateDelegate<CoreDelegates.TeleportEndedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportEnded"),
@@ -452,7 +452,7 @@ namespace AOSharp.Bootstrap
                     PlayfieldInit = CreateDelegate<CoreDelegates.PlayfieldInitDelegate>(assembly, "AOSharp.Core.Game", "OnPlayfieldInit"),
                     OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionsPanel", "OnOptionPanelActivated"),
                     ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
-                    DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Game", "OnMessage"),
+                    DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnMessage"),
                     JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
                     ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk")
                 };

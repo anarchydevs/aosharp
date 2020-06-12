@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using AOSharp.Common.GameData;
 using AOSharp.Core.Combat;
@@ -10,20 +11,22 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core
 {
-    public class Perk : DummyItem, ICombatAction
+    public class Perk : DummyItem, ICombatAction, IEquatable<Perk>
     {
-        private const float PERK_QUEUE_TIMEOUT = 1;
+        private const float PERK_TIMEOUT = 1;
 
         public readonly string Hash;
-        public readonly float AttackTime = 1f; //TODO: Actually load this.
+        public readonly float AttackTime;
         public unsafe bool IsAvailable => !(*(SpecialActionMemStruct*)_pointer).IsOnCooldown;
-        public bool IsQueued => _perkQueue.FirstOrDefault(x => x.Identity == Identity) != null;
+        public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
+        public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public readonly Identity Identity;
         private readonly int _hashInt;
         private IntPtr _pointer;
 
         public static List<Perk> List => GetPerks();
-        private static Queue<QueueItem> _perkQueue = new Queue<QueueItem>();
+        private static Queue<QueueItem> _pendingQueue = new Queue<QueueItem>();
+        private static Queue<QueueItem> _executingQueue = new Queue<QueueItem>();
 
         public static EventHandler<PerkExecutedEventArgs> PerkExecuted;
 
@@ -32,6 +35,7 @@ namespace AOSharp.Core
             Identity = identity;
             _pointer = pointer;
             _hashInt = hashInt;
+            AttackTime = GetStat(Stat.AttackDelay) / 100;
             Hash = Encoding.ASCII.GetString(BitConverter.GetBytes(hashInt).Reverse().ToArray());
         }
 
@@ -42,9 +46,11 @@ namespace AOSharp.Core
 
         public unsafe bool Use(SimpleChar target, bool packetOnly = false)
         {
+            Targeting.SetTarget(target);
+
             if (packetOnly)
             {
-                Connection.Send(new CharacterActionMessage()
+                Network.Send(new CharacterActionMessage()
                 {
                     Action = CharacterActionType.UsePerk,
                     Target = target.Identity,
@@ -52,10 +58,7 @@ namespace AOSharp.Core
                     Parameter2 = _hashInt
                 });
 
-                _perkQueue.Enqueue(new QueueItem {
-                    Identity = Identity,
-                    Timeout = Time.NormalTime + PERK_QUEUE_TIMEOUT
-                });
+                EnqueuePendingPerk(this);
 
                 return true;
             } else
@@ -80,12 +83,13 @@ namespace AOSharp.Core
             return (perk = List.FirstOrDefault(x => x.Name == name)) != null;
         }
 
-        private static void EnqueuePerk(Identity identity)
+        private static void EnqueuePendingPerk(Perk perk)
         {
-            _perkQueue.Enqueue(new QueueItem
+            _pendingQueue.Enqueue(new QueueItem
             {
-                Identity = identity,
-                Timeout = Time.NormalTime + PERK_QUEUE_TIMEOUT
+                Identity = perk.Identity,
+                AttackTime = perk.AttackTime,
+                Timeout = Time.NormalTime + PERK_TIMEOUT
             });
         }
 
@@ -110,10 +114,13 @@ namespace AOSharp.Core
             return perks;
         }
 
-        internal static void OnUpdate(float deltaTime)
+        internal static void Update(float deltaTime)
         {
-            while(_perkQueue.Count > 0 && _perkQueue.Peek().Timeout <= Time.NormalTime)
-                _perkQueue.Dequeue();
+            while(_pendingQueue.Count > 0 && _pendingQueue.Peek().Timeout <= Time.NormalTime)
+                _pendingQueue.Dequeue();
+
+            while (_executingQueue.Count > 0 && _executingQueue.Peek().Timeout <= Time.NormalTime)
+                _executingQueue.Dequeue();
         }
 
         internal static void OnPerkFinished(int lowId, int highId, Identity owner)
@@ -132,9 +139,10 @@ namespace AOSharp.Core
             if (owner != DynelManager.LocalPlayer.Identity)
                 return;
 
-            Identity dequeudPerk = _perkQueue.Dequeue().Identity;
+            Identity dequeudPerk = _executingQueue.Dequeue().Identity;
             if (dequeudPerk.Instance != lowId && dequeudPerk.Instance != highId)
-                Chat.WriteLine($"Perk queue desync {perk.Identity} != {dequeudPerk}");
+                return;
+                //Chat.WriteLine($"Perk queue desync {perk.Identity} != {dequeudPerk}");
 
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.OnPerkExecuted(perk);
@@ -143,16 +151,50 @@ namespace AOSharp.Core
         internal static void OnPerkQueued()
         {
             Perk perk;
-            if (_perkQueue.Count == 0 || !Find(_perkQueue.Peek().Identity.Instance, out perk))
+            if (_pendingQueue.Count == 0 || !Find(_pendingQueue.Dequeue().Identity.Instance, out perk))
                 return;
 
-            _perkQueue.Peek().Timeout = Time.NormalTime + perk.AttackTime + PERK_QUEUE_TIMEOUT;
+            //Calc time offset of perks before this one in queue.
+            float queueOffset = _executingQueue.Sum(x => x.AttackTime);
+            double nextTimeout = Time.NormalTime + perk.AttackTime + PERK_TIMEOUT + queueOffset;
+
+            _executingQueue.Enqueue(new QueueItem
+            {
+                Identity = perk.Identity,
+                AttackTime = perk.AttackTime,
+                Timeout = nextTimeout
+            });
+
+            if (CombatHandler.Instance != null)
+                CombatHandler.Instance.OnPerkLanded(perk, nextTimeout);
         }
 
         private static void OnClientPerformedPerk(Identity identity)
         {
-            EnqueuePerk(identity);
+            Perk perk;
+            if (!Find(identity.Instance, out perk))
+                return;
+
+            EnqueuePendingPerk(perk);
         }
+
+        public bool Equals(Perk other)
+        {
+            if (object.ReferenceEquals(other, null))
+                return false;
+
+            return Identity == other.Identity;
+        }
+
+        public static bool operator ==(Perk a, Perk b)
+        {
+            if (object.ReferenceEquals(a, null))
+                return object.ReferenceEquals(b, null);
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Perk a, Perk b) => !(a == b);
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct SpecialActionMemStruct
@@ -170,6 +212,7 @@ namespace AOSharp.Core
         private class QueueItem
         {
             public Identity Identity;
+            public float AttackTime;
             public double Timeout;
         }
     }

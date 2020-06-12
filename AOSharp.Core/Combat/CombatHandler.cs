@@ -12,7 +12,7 @@ namespace AOSharp.Core.Combat
 {
     public class CombatHandler
     {
-        private float ACTION_TIMEOUT = 2f;
+        private float ACTION_TIMEOUT = 1f;
         private int MAX_CONCURRENT_PERKS = 2;
         private Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
         protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
@@ -21,7 +21,7 @@ namespace AOSharp.Core.Combat
 
         protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
         protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
-        protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
+        protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, out SimpleChar target);
 
         public static CombatHandler Instance { get; private set; }
 
@@ -37,41 +37,56 @@ namespace AOSharp.Core.Combat
 
         protected virtual void OnUpdate(float deltaTime)
         {
-            SimpleChar target = DynelManager.LocalPlayer.FightingTarget;
+            SimpleChar fightingTarget = DynelManager.LocalPlayer.FightingTarget;
 
-            if (target != null)
-                SpecialAttacks(target);
+            if (fightingTarget != null)
+                SpecialAttacks(fightingTarget);
 
             foreach(Item item in Inventory.Inventory.Items)
             {
-                //if()
             }
 
             //Only queue perks if we have no items awaiting usage and aren't over max concurrent perks
-            if(!_actionQueue.Any(x => x.CombatAction is Item) && _actionQueue.Count(x => x.CombatAction is Perk) < MAX_CONCURRENT_PERKS)
+            if(!_actionQueue.Any(x => x.CombatAction is Item))
             {
                 foreach(var perkRule in _perkRules)
                 {
+                    if (_actionQueue.Count(x => x.CombatAction is Perk) >= MAX_CONCURRENT_PERKS)
+                        break;
+
                     Perk perk;
                     if (!Perk.Find(perkRule.Key, out perk))
                         continue;
 
-                    if (perk.IsQueued || !perk.IsAvailable)
+                    if (perk.IsPending || perk.IsExecuting || !perk.IsAvailable)
                         continue;
 
-                    if (_actionQueue.Any(x => x.CombatAction == perk))
+                    if (_actionQueue.Any(x => x.CombatAction is Perk && (Perk)x.CombatAction == perk))
                         continue;
 
                     (CombatActionType type, SimpleChar target) actionUsageInfo;
-                    if (perkRule.Value != null && perkRule.Value.Invoke(perk, target, out actionUsageInfo))
-                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, actionUsageInfo.type, target));
+                    if (perkRule.Value != null && perkRule.Value.Invoke(perk, fightingTarget, out actionUsageInfo))
+                    {
+                        //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count(x => x.CombatAction is Perk)}");
+                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, actionUsageInfo.type, fightingTarget));
+                    }
                 }
             }
 
-
-            foreach (Spell spell in Spell.List)
+            foreach (var spellRule in _spellRules)
             {
-                //if()
+                Spell spell;
+                if (!Spell.Find(spellRule.Key, out spell))
+                    continue;
+
+                if (!spell.IsReady)
+                    continue;
+
+                SimpleChar target = null;
+                if (spellRule.Value != null && spellRule.Value.Invoke(spell, fightingTarget, out target))
+                {
+                    spell.Cast(target);
+                }
             }
 
             if (_actionQueue.Count > 0)
@@ -94,7 +109,7 @@ namespace AOSharp.Core.Combat
                         //I have no real way of checking if a use action is valid so we'll just send it off and pray
                         item.Use(actionItem.Target);
                         actionItem.Used = true;
-                        actionItem.Timeout = Time.NormalTime + item.AttackTime + ACTION_TIMEOUT;
+                        actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;
                     }
                     else if (actionItem.CombatAction is Perk)
                     {
@@ -107,7 +122,7 @@ namespace AOSharp.Core.Combat
                         }
                         
                         actionItem.Used = true;
-                        actionItem.Timeout = Time.NormalTime + perk.AttackTime + ACTION_TIMEOUT;          
+                        actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;          
                     }
                 }
 
@@ -136,6 +151,22 @@ namespace AOSharp.Core.Combat
             _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => x.CombatAction != perk));
         }
 
+        internal void OnPerkLanded(Perk perk, double timeout)
+        {
+            //Update the queued perk's timeout to match the internal perk queue's
+            foreach(CombatActionQueueItem queueItem in _actionQueue)
+            {
+                if (!(queueItem.CombatAction is Perk))
+                    return;
+
+                if ((Perk)queueItem.CombatAction == perk)
+                {
+                    //Chat.WriteLine($"Perk {perk.Name} landed. Time: {Time.NormalTime}\tOldTimeout: {queueItem.Timeout}\tNewTimeout: {timeout}");
+                    queueItem.Timeout = timeout;
+                }
+            }
+        }
+
         protected class CombatActionQueueItem : IEquatable<CombatActionQueueItem>
         {
             public ICombatAction CombatAction;
@@ -154,12 +185,12 @@ namespace AOSharp.Core.Combat
 
             public bool Equals(CombatActionQueueItem other)
             {
-                if (CombatAction.GetType() != other.GetType())
+                if (CombatAction.GetType() != other.CombatAction.GetType())
                     return false;
 
                 if (CombatAction is Perk)
                 {
-                    return ((Perk)CombatAction).Identity == ((Perk)other.CombatAction).Identity;
+                    return ((Perk)CombatAction) == ((Perk)other.CombatAction);
                 } 
                 else if (CombatAction is Item)
                 {
@@ -167,7 +198,7 @@ namespace AOSharp.Core.Combat
                 }
                 else if(CombatAction is Spell)
                 {
-                    return ((Spell)CombatAction).Identity == ((Spell)other.CombatAction).Identity;
+                    return ((Spell)CombatAction) == ((Spell)other.CombatAction);
                 }
 
                 return false;

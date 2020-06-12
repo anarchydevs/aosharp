@@ -39,7 +39,9 @@ namespace AOSharp.Core
 
         public void Cast(SimpleChar target)
         {
-            Connection.Send(new CharacterActionMessage()
+            Targeting.SetTarget(target);
+
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.CastNano,
                 Target = target.Identity,
@@ -68,6 +70,24 @@ namespace AOSharp.Core
 
             return N3EngineClientAnarchy_t.GetNanoSpellList(pEngine)->ToList().Select(x => new Spell(new Identity(IdentityType.NanoProgram, (*(MemStruct*)x).Id)));
         }
+
+        public bool Equals(Spell other)
+        {
+            if (object.ReferenceEquals(other, null))
+                return false;
+
+            return Identity == other.Identity;
+        }
+
+        public static bool operator ==(Spell a, Spell b)
+        {
+            if (object.ReferenceEquals(a, null))
+                return object.ReferenceEquals(b, null);
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Spell a, Spell b) => !(a == b);
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct MemStruct

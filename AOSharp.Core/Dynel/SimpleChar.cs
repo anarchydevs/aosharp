@@ -16,6 +16,10 @@ namespace AOSharp.Core
 
         public int MaxHealth => GetStat(Stat.MaxHealth);
 
+        public float HealthPercent => (float)Health / MaxHealth * 100;
+
+        public int MissingHealth => MaxHealth - Health;
+
         public bool IsPlayer => !(*(MemStruct*)Pointer).IsNPC;
 
         public bool IsNPC => (*(MemStruct*)Pointer).IsNPC && !IsPet;

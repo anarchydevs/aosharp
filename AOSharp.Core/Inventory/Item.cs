@@ -17,7 +17,7 @@ namespace AOSharp.Core.Inventory
         public readonly int QualityLevel;
         public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
-        public readonly float AttackTime = 1f; //TODO: Actually load this.
+        public readonly float AttackTime = 3f; //TODO: Actually load this.
 
         public static EventHandler<ItemUsedEventArgs> ItemUsed;
 
@@ -51,7 +51,7 @@ namespace AOSharp.Core.Inventory
 
         public void Use(SimpleChar target)
         {
-            Connection.Send(new GenericCmdMessage()
+            Network.Send(new GenericCmdMessage()
             {
                 Action = GenericCmdAction.Use,
                 User = DynelManager.LocalPlayer.Identity,
@@ -87,7 +87,7 @@ namespace AOSharp.Core.Inventory
         //Direct access to the MoveItemToInventory packet for those who need it.
         public static void MoveItemToInventory(Identity source, int slot)
         {
-            Connection.Send(new ClientMoveItemToInventory()
+            Network.Send(new ClientMoveItemToInventory()
             {
                 SourceContainer = source,
                 Slot = slot
@@ -97,7 +97,7 @@ namespace AOSharp.Core.Inventory
         //Direct access to the ContainerAddItem packet for those who need it.
         public static void ContainerAddItem(Identity source, Identity target)
         {
-            Connection.Send(new ClientContainerAddItem()
+            Network.Send(new ClientContainerAddItem()
             {
                 Source = source,
                 Target = target

@@ -173,6 +173,11 @@ namespace AOSharp.Core
             return unk[0];
         }
 
+        public unsafe int GetStat(Stat stat, int detail = 2)
+        {
+            return DummyItem_t.GetStat(Pointer, stat, detail);
+        }
+
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct MemStruct
         {

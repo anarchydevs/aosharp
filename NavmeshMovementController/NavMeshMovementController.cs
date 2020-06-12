@@ -46,7 +46,6 @@ namespace AOSharp.Pathfinding
                     return;
 
                 List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, pos);
-
                 _goalPos = pos;
                 _usingNavmesh = useNavmesh;
                 RunPath(path);

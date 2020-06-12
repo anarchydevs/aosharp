@@ -7,13 +7,20 @@ namespace AOSharp.Core
 {
     public static class Targeting
     {
+        public static void SelectSelf(bool packetOnly = false)
+        {
+            SetTarget(DynelManager.LocalPlayer);
+        }
+
+        public unsafe static void SetTarget(SimpleChar target, bool packetOnly = false)
+        {
+            SetTarget(target.Identity, packetOnly);
+        }
+
         public unsafe static void SetTarget(Identity target, bool packetOnly = false)
         {
-
             if (!packetOnly)
             {
-                throw new Exception("Temporarily removed: TargetingModule_t methods seem to cause the game to crash on occasion..");
-
                 TargetingModule_t.SetTarget(&target, false);
 
                 IntPtr pEngine = N3Engine_t.GetInstance();
@@ -25,40 +32,9 @@ namespace AOSharp.Core
             }
             else
             {
-                Connection.Send(new LookAtMessage()
+                Network.Send(new LookAtMessage()
                 {
                     Target = target
-                });
-            }
-        }
-
-        public unsafe static void SelectSelf(bool packetOnly = false)
-        {
-            Identity self = DynelManager.LocalPlayer.Identity;
-
-            if (!packetOnly)
-            {
-                throw new Exception("Temporarily removed: TargetingModule_t methods seem to cause the game to crash on occasion..");
-
-                IntPtr pTargetingModule = TargetingModule_t.GetInstanceIfAny();
-
-                if (pTargetingModule == IntPtr.Zero)
-                    return;
-
-                TargetingModule_t.SelectSelf(pTargetingModule);
-
-                IntPtr pEngine = N3Engine_t.GetInstance();
-
-                if (pEngine == IntPtr.Zero)
-                    return;
-
-                N3EngineClientAnarchy_t.SelectedTarget(pEngine, &self);
-            }
-            else
-            {
-                Connection.Send(new LookAtMessage()
-                {
-                    Target = self
                 });
             }
         }

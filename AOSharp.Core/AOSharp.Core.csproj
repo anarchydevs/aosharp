@@ -51,6 +51,8 @@
     <Compile Include="GameData\Variant.cs" />
     <Compile Include="GameData\WindowFlags.cs" />
     <Compile Include="GameData\WindowStyle.cs" />
+    <Compile Include="Imports\Gamecode\GamecodeUnk.cs" />
+    <Compile Include="Imports\Gamecode\DummyItem_t.cs" />
     <Compile Include="Imports\GUI\BorderView_c.cs" />
     <Compile Include="Imports\GUI\OptionPanelModule_c.cs" />
     <Compile Include="Imports\GUI\ListViewBaseItem_c.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\Container.cs" />
     <Compile Include="Inventory\Item.cs" />
+    <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Movement\MovementController.cs" />
     <Compile Include="NpcDialog.cs" />
     <Compile Include="DummyItem.cs" />
@@ -87,7 +90,7 @@
     <Compile Include="DevExtras.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Targeting.cs" />
-    <Compile Include="Connection.cs" />
+    <Compile Include="Network.cs" />
     <Compile Include="Imports\GUI\TargetingModule_t.cs" />
     <Compile Include="Mission.cs" />
     <Compile Include="Imports\N3\N3InfoItemRemote_t.cs" />
@@ -153,7 +156,7 @@
     <Compile Include="UI\ScrollView.cs" />
     <Compile Include="UI\View.cs" />
     <Compile Include="UI\Window.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Misc\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">

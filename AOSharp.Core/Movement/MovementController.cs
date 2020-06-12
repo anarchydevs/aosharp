@@ -103,8 +103,8 @@ namespace AOSharp.Core.Movement
 
             foreach (Vector3 wp in path)
             {
-                if(DynelManager.LocalPlayer.Position.DistanceFrom(wp) <= _stopDist)
-                _path.Enqueue(wp);
+                if (DynelManager.LocalPlayer.Position.DistanceFrom(wp) > _stopDist)
+                    _path.Enqueue(wp);
             }
         }
 

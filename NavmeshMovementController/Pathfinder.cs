@@ -48,7 +48,7 @@ namespace AOSharp.Pathfinding
             if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out destination)) || destination.point == new oVector3())
                 return finalPath;
 
-            uint[] path = new uint[100000];
+            uint[] path = new uint[500];
             int pathCount;
 
             if (origin.polyRef == destination.polyRef)

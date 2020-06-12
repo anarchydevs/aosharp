@@ -20,7 +20,7 @@ namespace AOSharp.Core
 
         public static void Invite(Identity target)
         {
-            Connection.Send(new CharacterActionMessage()
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequest,
                 Target = target
@@ -29,7 +29,7 @@ namespace AOSharp.Core
 
         public static void Kick(Identity target)
         {
-            Connection.Send(new CharacterActionMessage()
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamKick,
                 Target = target
@@ -39,7 +39,7 @@ namespace AOSharp.Core
         public static void Accept(Identity target)
         {
             //TODO: Actually call the game function to accept so that the client doesn't bug out.
-            Connection.Send(new CharacterActionMessage()
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequestReply,
                 Target = target,
@@ -49,7 +49,7 @@ namespace AOSharp.Core
 
         public static void Decline(Identity target)
         {
-            Connection.Send(new CharacterActionMessage()
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequestResponse,
                 Target = target,
@@ -59,7 +59,7 @@ namespace AOSharp.Core
 
         public static void Leave()
         {
-            Connection.Send(new CharacterActionMessage()
+            Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.LeaveTeam
             });
@@ -67,7 +67,7 @@ namespace AOSharp.Core
 
         public static void ConvertToRaid()
         {
-            Connection.Send(new RaidCmdMessage()
+            Network.Send(new RaidCmdMessage()
             {
                 CommandType = RaidCmdType.CreateRaid
             });

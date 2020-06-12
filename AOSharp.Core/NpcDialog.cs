@@ -21,7 +21,7 @@ namespace AOSharp.Core
 
         public static void Open(Identity target)
         {
-            Connection.Send(new KnuBotOpenChatWindowMessage()
+            Network.Send(new KnuBotOpenChatWindowMessage()
             {
                 Unknown1 = 2,
                 Target = target
@@ -31,7 +31,7 @@ namespace AOSharp.Core
 
         public static void SelectAnswer(Identity target, int answer)
         {
-            Connection.Send(new KnuBotAnswerMessage()
+            Network.Send(new KnuBotAnswerMessage()
             {
                 Unknown1 = 2,
                 Target = target,
