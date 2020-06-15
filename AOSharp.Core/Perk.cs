@@ -15,13 +15,12 @@ namespace AOSharp.Core
     {
         private const float PERK_TIMEOUT = 1;
 
-        public readonly string Hash;
         public readonly float AttackTime;
         public unsafe bool IsAvailable => !(*(SpecialActionMemStruct*)_pointer).IsOnCooldown;
         public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public readonly Identity Identity;
-        private readonly int _hashInt;
+        public readonly PerkHash Hash;
         private IntPtr _pointer;
 
         public static List<Perk> List => GetPerks();
@@ -34,9 +33,8 @@ namespace AOSharp.Core
         {
             Identity = identity;
             _pointer = pointer;
-            _hashInt = hashInt;
+            Hash = (PerkHash)hashInt;
             AttackTime = GetStat(Stat.AttackDelay) / 100;
-            Hash = Encoding.ASCII.GetString(BitConverter.GetBytes(hashInt).Reverse().ToArray());
         }
 
         public bool Use(bool packetOnly = false)
@@ -55,7 +53,7 @@ namespace AOSharp.Core
                     Action = CharacterActionType.UsePerk,
                     Target = target.Identity,
                     Parameter1 = Identity.Instance,
-                    Parameter2 = _hashInt
+                    Parameter2 = (int)Hash
                 });
 
                 EnqueuePendingPerk(this);
@@ -81,6 +79,11 @@ namespace AOSharp.Core
         public static bool Find(string name, out Perk perk)
         {
             return (perk = List.FirstOrDefault(x => x.Name == name)) != null;
+        }
+
+        public static bool Find(PerkHash hash, out Perk perk)
+        {
+            return (perk = List.FirstOrDefault(x => x.Hash == hash)) != null;
         }
 
         private static void EnqueuePendingPerk(Perk perk)

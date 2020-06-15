@@ -13,6 +13,8 @@ namespace AOSharp.Core
     public class Spell : DummyItem, ICombatAction
     {
         public readonly Identity Identity;
+        public readonly Nanoline Nanoline;
+        public readonly int StackingOrder;
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
@@ -20,6 +22,7 @@ namespace AOSharp.Core
         internal unsafe Spell(Identity identity) : base(identity)
         {
             Identity = identity;
+            Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
         }
 
         public static bool Find(int id, out Spell spell)
@@ -61,14 +64,19 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.IsFormulaReady(pEngine, &identity) == 1;
         }
 
-        private unsafe static IEnumerable<Spell> GetSpellList()
+        public static Spell[] GetSpellsForNanoline(Nanoline nanoline)
+        {
+            return List.Where(x => x.Nanoline == nanoline).ToArray();
+        }
+
+        private unsafe static Spell[] GetSpellList()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
             if (pEngine == IntPtr.Zero)
-                return new List<Spell>();
+                return new Spell[0];
 
-            return N3EngineClientAnarchy_t.GetNanoSpellList(pEngine)->ToList().Select(x => new Spell(new Identity(IdentityType.NanoProgram, (*(MemStruct*)x).Id)));
+            return N3EngineClientAnarchy_t.GetNanoSpellList(pEngine)->ToList().Select(x => new Spell(new Identity(IdentityType.NanoProgram, (*(MemStruct*)x).Id))).ToArray();
         }
 
         public bool Equals(Spell other)
@@ -86,6 +94,7 @@ namespace AOSharp.Core
 
             return a.Equals(b);
         }
+
 
         public static bool operator !=(Spell a, Spell b) => !(a == b);
 

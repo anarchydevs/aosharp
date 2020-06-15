@@ -74,7 +74,7 @@
         ItemType = 0x48,
         RepairDifficulty = 0x49,
         Value = 0x4A,
-        StrainOmniTokens = 0x4B,
+        NanoStrain = 0x4B,
         EquipmentPage = 0x4C,
         RepairSkill = 0x4D,
         CurrentMass = 0x4E,

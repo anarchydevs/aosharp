@@ -67,6 +67,7 @@
     <Compile Include="Imports\GUI\View_c.cs" />
     <Compile Include="Imports\GUI\TabView.cs" />
     <Compile Include="Imports\GUI\CheckBox_c.cs" />
+    <Compile Include="Imports\LDB\LDBFace.cs" />
     <Compile Include="Imports\N3\N3Dynel_t.cs" />
     <Compile Include="Imports\N3\N3Zone_t.cs" />
     <Compile Include="Imports\Native\MSVCR100.cs" />

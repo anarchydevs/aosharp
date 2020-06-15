@@ -53,6 +53,8 @@ namespace TestPlugin
 
                 Chat.WriteLine("Tests:");
 
+
+
                 /*
                 foreach(Spell spell in Spell.List)
                 {
@@ -60,12 +62,13 @@ namespace TestPlugin
                 }
                 */
 
-                /*
+                
                 foreach(Perk perk in Perk.List)
                 {
-                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.GetStat(Stat.AttackDelay)}");
+                    //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.GetStat(Stat.AttackDelay)}");
+                    //Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
-                */
+                
 
                 /*
                 Chat.WriteLine("Buffs:");

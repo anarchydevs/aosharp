@@ -3,49 +3,25 @@ using AOSharp.Core.Imports;
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using AOSharp.Core.GameData;
+using System.IO;
 
 namespace AOSharp.Core
 {
     public static class DevExtras
     {
         //Packed with random tests. Don't invoke unless you want weird stuff to execute.
-        public unsafe static void ItemTemplateTest()
+        public unsafe static void Test()
         {
-            Identity none = Identity.None;
-            IntPtr pEngine = N3Engine_t.GetInstance();
-            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, new Identity(IdentityType.ArmorPage, 0x13), &none);
-            Chat.WriteLine(pItem.ToString("X4"));
-
-            if (pItem == IntPtr.Zero)
-                return;
-
-            IntPtr pCriteria = N3EngineClientAnarchy_t.GetItemActionInfo(pItem, ItemActionInfo.UseCriteria);
-
-            Chat.WriteLine(pCriteria.ToString("X4"));
-        }
-
-        public unsafe static void PerkTest()
-        {
-            Identity none = Identity.None;
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            List<IntPtr> actions = N3EngineClientAnarchy_t.GetSpecialActionList(pEngine)->ToList();
-
-            Chat.WriteLine($"NumActions {actions.Count}");
-            foreach (IntPtr pAction in actions)
+            using (StreamWriter fileWriter = File.AppendText("Nanolines.txt"))
             {
-                Chat.WriteLine($"\t {pAction.ToString("X4")}");
+                for (int i = 0; i < 100000; i++)
+                {
+                    StdString result = LDBFace.GetText(2009, i);
+                    if (!result.ToString().Contains("no LDBintern"))
+                        fileWriter.WriteLine($"{result.ToString()} = {i},");
+                }
             }
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 0, Size = 0x1C)]
-        private struct Perk
-        {
-            [FieldOffset(0x0)]
-            public int Id;
-
-            [FieldOffset(0x4)]
-            public int Id2;
         }
 
         //Loads all surfaces (Collision) for the current playfield. Used by me to generate navmeshes.

@@ -51,6 +51,7 @@
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\Faction.cs" />
     <Compile Include="GameData\ACGItem.cs" />
+    <Compile Include="GameData\PerkHash.cs" />
     <Compile Include="GameData\ItemCriteriaOperator.cs" />
     <Compile Include="GameData\ItemAction.cs" />
     <Compile Include="GameData\Fatness.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="GameData\MissionDirection.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />
+    <Compile Include="GameData\Nanoline.cs" />
     <Compile Include="GameData\Profession.cs" />
     <Compile Include="GameData\Quaternion.cs" />
     <Compile Include="GameData\Rect.cs" />

@@ -65,6 +65,12 @@ namespace AOSharp.Core
             }
         }
 
+        //TODO: Make this ignore target checks
+        public bool MeetsSelfUseReqs()
+        {
+            return MeetsUseReqs(DynelManager.LocalPlayer);
+        }
+
         public bool MeetsUseReqs()
         {
             return MeetsUseReqs(DynelManager.LocalPlayer);

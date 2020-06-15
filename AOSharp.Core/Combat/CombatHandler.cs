@@ -15,9 +15,9 @@ namespace AOSharp.Core.Combat
         private float ACTION_TIMEOUT = 1f;
         private int MAX_CONCURRENT_PERKS = 2;
         private Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
-        protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
-        protected Dictionary<int, PerkConditionProcessor> _perkRules = new Dictionary<int, PerkConditionProcessor>();
-        protected Dictionary<int, SpellConditionProcessor> _spellRules = new Dictionary<int, SpellConditionProcessor>();
+        //protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
+        private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
+        private List<(int[] SpellGroup, SpellConditionProcessor ConditionProcessor)> _spellRules = new List<(int[], SpellConditionProcessor)>();
 
         protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
         protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
@@ -55,7 +55,7 @@ namespace AOSharp.Core.Combat
                         break;
 
                     Perk perk;
-                    if (!Perk.Find(perkRule.Key, out perk))
+                    if (!Perk.Find(perkRule.PerkHash, out perk))
                         continue;
 
                     if (perk.IsPending || perk.IsExecuting || !perk.IsAvailable)
@@ -65,7 +65,7 @@ namespace AOSharp.Core.Combat
                         continue;
 
                     (CombatActionType type, SimpleChar target) actionUsageInfo;
-                    if (perkRule.Value != null && perkRule.Value.Invoke(perk, fightingTarget, out actionUsageInfo))
+                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out actionUsageInfo))
                     {
                         //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count(x => x.CombatAction is Perk)}");
                         _actionQueue.Enqueue(new CombatActionQueueItem(perk, actionUsageInfo.type, fightingTarget));
@@ -75,17 +75,34 @@ namespace AOSharp.Core.Combat
 
             foreach (var spellRule in _spellRules)
             {
-                Spell spell;
-                if (!Spell.Find(spellRule.Key, out spell))
+                Spell spell = null;
+
+                foreach (int spellId in spellRule.SpellGroup)
+                {
+                    Spell curSpell;
+                    if (!Spell.Find(spellId, out curSpell))
+                        continue;
+
+                    if (!curSpell.MeetsSelfUseReqs())
+                        continue;
+
+                    spell = curSpell;
+                }
+
+                if (spell == null)
                     continue;
 
                 if (!spell.IsReady)
                     continue;
 
                 SimpleChar target = null;
-                if (spellRule.Value != null && spellRule.Value.Invoke(spell, fightingTarget, out target))
+                if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out target))
                 {
+                    if (!spell.MeetsUseReqs(target))
+                        continue;
+
                     spell.Cast(target);
+                    break;
                 }
             }
 
@@ -145,10 +162,38 @@ namespace AOSharp.Core.Combat
             }
         }
 
+        protected void RegisterPerkProcessor(PerkHash perkHash, PerkConditionProcessor conditionProcessor)
+        {
+            _perkRules.Add((perkHash, conditionProcessor));
+        }
+
+        protected void RegisterSpellProcessor(Spell spell, SpellConditionProcessor conditionProcessor)
+        {
+            RegisterSpellProcessor(new int[1] { spell.Identity.Instance }, conditionProcessor);
+        }
+
+        protected void RegisterSpellProcessor(IEnumerable<Spell> spellGroup, SpellConditionProcessor conditionProcessor)
+        {
+            RegisterSpellProcessor(spellGroup.GetIds(), conditionProcessor);
+        }
+
+        protected void RegisterSpellProcessor(int spellId, SpellConditionProcessor conditionProcessor)
+        {
+            RegisterSpellProcessor(new int[1] { spellId }, conditionProcessor);
+        }
+
+        protected void RegisterSpellProcessor(int[] spellGroup, SpellConditionProcessor conditionProcessor)
+        {
+            if (spellGroup.Length == 0)
+                return;
+
+            _spellRules.Add((spellGroup, conditionProcessor));
+        }
+
         internal void OnPerkExecuted(Perk perk)
         {
             //Drop the queued action
-            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => x.CombatAction != perk));
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => (Perk)x.CombatAction != perk));
         }
 
         internal void OnPerkLanded(Perk perk, double timeout)
