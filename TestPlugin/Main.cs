@@ -62,13 +62,13 @@ namespace TestPlugin
                 }
                 */
 
-                
+                /*
                 foreach(Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.GetStat(Stat.AttackDelay)}");
-                    //Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
+                    Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
-                
+                */
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -77,6 +77,27 @@ namespace TestPlugin
                     Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
                 }
                 */
+
+                
+                Perk perk;
+                if(Perk.Find(PerkHash.Gore, out perk))
+                {
+                    if(DynelManager.LocalPlayer.FightingTarget != null)
+                        Chat.WriteLine($"Can use perk? {perk.MeetsUseReqs(DynelManager.LocalPlayer.FightingTarget)}");
+                }
+
+
+                Chat.WriteLine("Pet Identities:");
+                foreach(Identity identity in DynelManager.LocalPlayer.Pets)
+                {
+                    Chat.WriteLine($"\t{identity}");
+                }
+
+                Chat.WriteLine("Pet Dynels:");
+                foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
+                {
+                    Chat.WriteLine($"\t{pet.Name}");
+                }           
 
                 /*
                 Item item;

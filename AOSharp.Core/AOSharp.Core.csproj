@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
+    <Compile Include="Dynel\NpcHolder.cs" />
     <Compile Include="GameData\FuncOffsets.cs" />
     <Compile Include="GameData\Variant.cs" />
     <Compile Include="GameData\WindowFlags.cs" />

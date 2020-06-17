@@ -47,6 +47,10 @@ namespace AOSharp.Core.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsFormulaReady@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern byte IsFormulaReady(IntPtr pThis, Identity* identity);
 
+        //HasPerk
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_HasPerk@n3EngineClientAnarchy_t@@QAE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern byte HasPerk(IntPtr pThis, int perkId);
+
         //IsAttacking
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsAttacking@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern byte IsAttacking(IntPtr pThis);
@@ -58,6 +62,10 @@ namespace AOSharp.Core.Imports
         //GetNanoSpellList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetNanoSpellList@n3EngineClientAnarchy_t@@QAEPBV?$list@HV?$allocator@H@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern StdObjList* GetNanoSpellList(IntPtr pThis);
+
+        //GetNanoTemplateInfoList
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetNanoTemplateInfoList@n3EngineClientAnarchy_t@@QBEPAV?$list@VNanoTemplateInfo_c@@V?$allocator@VNanoTemplateInfo_c@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern StdObjList* GetNanoTemplateInfoList(IntPtr pThis, Identity* identity);
 
         //IsMoving
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsMoving@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]

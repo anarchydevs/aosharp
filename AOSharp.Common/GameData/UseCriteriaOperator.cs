@@ -1,6 +1,6 @@
 ﻿namespace AOSharp.Common.GameData
 {
-    public enum ItemCriteriaOperator
+    public enum UseCriteriaOperator
     {
         EqualTo = 0,
         LessThan = 1,

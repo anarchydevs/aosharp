@@ -15,6 +15,8 @@ namespace AOSharp.Core
         private readonly Identity Identity;
         private readonly IntPtr Pointer;
 
+        public float AttackDelay => GetStat(Stat.AttackDelay) / 100;
+
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
@@ -78,6 +80,10 @@ namespace AOSharp.Core
 
         public unsafe bool MeetsUseReqs(SimpleChar target)
         {
+            IntPtr pEngine;
+            if ((pEngine = N3Engine_t.GetInstance()) == null)
+                return false;
+
             IntPtr pCriteria = N3EngineClientAnarchy_t.GetItemActionInfo(Pointer, ItemActionInfo.UseCriteria);
 
             //Should I return true or false here? hmm.
@@ -102,9 +108,9 @@ namespace AOSharp.Core
 
                 if (param1 == 0)
                 {
-                    switch((ItemCriteriaOperator)op)
+                    switch((UseCriteriaOperator)op)
                     {
-                        case ItemCriteriaOperator.And:
+                        case UseCriteriaOperator.And:
                             if (prevReqsMet < 2)
                                 return false;
 
@@ -117,7 +123,7 @@ namespace AOSharp.Core
 
                             metReq = true;
                             break;
-                        case ItemCriteriaOperator.Or:
+                        case UseCriteriaOperator.Or:
                             if (prevReqsMet < 2)
                                 return false;
 
@@ -126,21 +132,33 @@ namespace AOSharp.Core
 
                             metReq = result || lastResult;
                             break;
-                        case ItemCriteriaOperator.Not:
+                        case UseCriteriaOperator.Not:
                             if (prevReqsMet < 1)
                                 return false;
 
                             metReq = unk[(prevReqsMet--) - 1];
                             break;
-                        case ItemCriteriaOperator.OnTarget:
+                        case UseCriteriaOperator.OnTarget:
+                            if (target == null)
+                                break;
+
                             skillCheckChar = target;
                             continue;
-                        case ItemCriteriaOperator.HasWornItem:
+                        case UseCriteriaOperator.HasWornItem:
                             metReq = false;
                             break;
-                        case ItemCriteriaOperator.IsNpc:
+                        case UseCriteriaOperator.IsNpc:
                             if(param2 == 3)
                                 metReq = target.IsNPC;
+                            break;
+                        case UseCriteriaOperator.HasRunningNano:
+                            metReq = skillCheckChar.Buffs.Any(x => x.Identity.Instance == param2);
+                            break;
+                        case UseCriteriaOperator.HasPerk:
+                            metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2) == 1;
+                            break;
+                        case UseCriteriaOperator.IsPerkUnlocked:
+                            metReq = true;
                             break;
                         default:
                             //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
@@ -151,18 +169,18 @@ namespace AOSharp.Core
                 {
                     int stat = skillCheckChar.GetStat((Stat)param1);
 
-                    switch((ItemCriteriaOperator)op)
+                    switch((UseCriteriaOperator)op)
                     {
-                        case ItemCriteriaOperator.EqualTo:
+                        case UseCriteriaOperator.EqualTo:
                             metReq = (stat == param2);
                             break;
-                        case ItemCriteriaOperator.LessThan:
+                        case UseCriteriaOperator.LessThan:
                             metReq = (stat < param2);
                             break;
-                        case ItemCriteriaOperator.GreaterThan:
+                        case UseCriteriaOperator.GreaterThan:
                             metReq = (stat > param2);
                             break;
-                        case ItemCriteriaOperator.BitAnd:
+                        case UseCriteriaOperator.BitAnd:
                             metReq = (stat & param2) == param2;
                             break;
                         default:

@@ -16,6 +16,8 @@ namespace AOSharp.Core
 
         public float AttackRange => GetAttackRange();
 
+        public Identity[] Pets => ((MemStruct*)Pointer)->NpcHolder->GetPets();
+
         internal IntPtr NanoControllerPointer => (*(MemStruct*)Pointer).NanoController;
 
         public LocalPlayer(IntPtr pointer) : base(pointer)
@@ -79,6 +81,20 @@ namespace AOSharp.Core
         }
         */
 
+        public SimpleChar[] GetPetDynels()
+        {
+            List<SimpleChar> petChars = new List<SimpleChar>();
+
+            foreach (Identity identity in Pets)
+            {
+                SimpleChar petChar;
+                if (DynelManager.Find(identity, out petChar))
+                    petChars.Add(petChar);
+            }
+
+            return petChars.ToArray();
+        }
+
         private Dictionary<Stat, Cooldown> GetCooldowns()
         {
             Dictionary<Stat, Cooldown> cooldowns = new Dictionary<Stat, Cooldown>();
@@ -131,6 +147,9 @@ namespace AOSharp.Core
 
             [FieldOffset(0x1C4)]
             public IntPtr MissionUnk;
+
+            [FieldOffset(0x1D8)]
+            public NpcHolder* NpcHolder;
         }
     }
 }

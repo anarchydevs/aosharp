@@ -12,12 +12,14 @@ namespace AOSharp.Core
 {
     public class Buff : DummyItem
     {
+        public readonly Identity Owner;
         public readonly Identity Identity;
         public float RemainingTime => GetCurrentTime();
         public float TotalTime => GetTotalTime();
 
-        internal unsafe Buff(Identity identity) : base(identity)
+        internal unsafe Buff(Identity owner, Identity identity) : base(identity)
         {
+            Owner = owner;
             Identity = identity;
         }
 
@@ -28,10 +30,9 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            Identity none = Identity.None;
             fixed (Identity* pIdentity = &Identity)
-            {
-                return N3EngineClientAnarchy_t.GetBuffCurrentTime(pEngine, pIdentity, &none) / 100f;
+                fixed (Identity* pOwner = &Owner) {
+                return N3EngineClientAnarchy_t.GetBuffCurrentTime(pEngine, pIdentity, pOwner) / 100;
             }
         }
 
@@ -42,10 +43,9 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            Identity none = Identity.None;
             fixed (Identity* pIdentity = &Identity)
-            {
-                return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, pIdentity, &none) / 100f;
+                fixed (Identity* pOwner = &Owner) {
+                return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, pIdentity, pOwner) / 100f;
             }
         }
     }

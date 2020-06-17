@@ -62,7 +62,6 @@ namespace AOSharp.Core
             Identity identity = Identity;
             Identity unk = new Identity();
 
-            // 2 = buffed skill
             return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, detail, &unk);
         }
 

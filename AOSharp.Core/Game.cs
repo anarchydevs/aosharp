@@ -44,7 +44,8 @@ namespace AOSharp.Core
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.Update(deltaTime);
 
-            Perk.Update(deltaTime);
+            Perk.Update();
+            Spell.Update();
 
             OnUpdate?.Invoke(null, deltaTime);
 

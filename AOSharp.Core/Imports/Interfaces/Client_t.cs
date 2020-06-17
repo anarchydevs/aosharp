@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AOSharp.Common.GameData;
+using System;
 using System.Runtime.InteropServices;
 
 namespace AOSharp.Core.Imports
@@ -7,5 +8,8 @@ namespace AOSharp.Core.Imports
     {
         [DllImport("Interfaces.dll", EntryPoint = "?GetInstanceIfAny@Client_t@@SAPAV1@XZ", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetInstanceIfAny();
+
+        [DllImport("Interfaces.dll", EntryPoint = "?SendVicinityMessage@Client_t@@QAEXPADIABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static unsafe extern void SendVicinityMessage(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string message, int length, Identity* unk);
     }
 }

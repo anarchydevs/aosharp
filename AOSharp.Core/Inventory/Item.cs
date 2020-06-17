@@ -17,7 +17,6 @@ namespace AOSharp.Core.Inventory
         public readonly int QualityLevel;
         public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
-        public readonly float AttackTime = 3f; //TODO: Actually load this.
 
         public static EventHandler<ItemUsedEventArgs> ItemUsed;
 

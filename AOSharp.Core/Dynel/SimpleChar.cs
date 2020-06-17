@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using AOSharp.Core.GameData;
 using AOSharp.Core.Imports;
 using AOSharp.Common.GameData;
+using System.Net.NetworkInformation;
+using System.Net;
 
 namespace AOSharp.Core
 {
@@ -32,7 +34,7 @@ namespace AOSharp.Core
 
         public SimpleChar FightingTarget => GetFightingTarget();
 
-        public List<Buff> Buffs => GetBuffs();
+        public Buff[] Buffs => GetBuffs();
 
         public Dictionary<EquipSlot, WeaponItem> Weapons => GetWeapons();
 
@@ -159,20 +161,21 @@ namespace AOSharp.Core
             return specials;
         }
 
-        private List<Buff> GetBuffs()
+        private unsafe Buff[] GetBuffs()
         {
-            List<Buff> buffs = new List<Buff>();
-            IntPtr pBuffUnk = (*(MemStruct*)Pointer).pBuffUnk;
+            IntPtr pEngine = N3Engine_t.GetInstance();
 
-            if (pBuffUnk == IntPtr.Zero)
-                return buffs;
+            if (pEngine == IntPtr.Zero)
+                return new Buff[0];
 
-            foreach(IntPtr pBuff in (*(StdObjVector*)(pBuffUnk + 0x30)).ToList())
-            {
-                buffs.Add(new Buff(*(Identity*)pBuff));
-            }
+            Identity identity = Identity;
+            return N3EngineClientAnarchy_t.GetNanoTemplateInfoList(pEngine, &identity)->ToList().Select(x => new Buff(Identity, (*(NanoTemplateInfoMemStruct*)x).Identity)).ToArray();
+        }
 
-            return buffs;
+        private void GetPetDynels()
+        {
+
+  
         }
 
         public unsafe bool IsInTeam()
@@ -192,9 +195,6 @@ namespace AOSharp.Core
             [FieldOffset(0x154)]
             public StdString Name;
 
-            [FieldOffset(0x1C0)]
-            public IntPtr pBuffUnk;
-
             [FieldOffset(0x1D4)]
             public WeaponHolder* WeaponHolder;
 
@@ -203,6 +203,19 @@ namespace AOSharp.Core
 
             [FieldOffset(0x250)]
             public IntPtr pFightingTarget;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        private unsafe struct NanoTemplateInfoMemStruct
+        {
+            [FieldOffset(0x08)]
+            public Identity Identity;
+
+            //[FieldOffset(0x10)]
+            //public int StartTime;
+
+            //[FieldOffset(0x14)]
+            //public int TotalDuration;
         }
     }
 }

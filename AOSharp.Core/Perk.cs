@@ -15,7 +15,6 @@ namespace AOSharp.Core
     {
         private const float PERK_TIMEOUT = 1;
 
-        public readonly float AttackTime;
         public unsafe bool IsAvailable => !(*(SpecialActionMemStruct*)_pointer).IsOnCooldown;
         public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
@@ -34,7 +33,6 @@ namespace AOSharp.Core
             Identity = identity;
             _pointer = pointer;
             Hash = (PerkHash)hashInt;
-            AttackTime = GetStat(Stat.AttackDelay) / 100;
         }
 
         public bool Use(bool packetOnly = false)
@@ -91,7 +89,7 @@ namespace AOSharp.Core
             _pendingQueue.Enqueue(new QueueItem
             {
                 Identity = perk.Identity,
-                AttackTime = perk.AttackTime,
+                AttackTime = perk.AttackDelay,
                 Timeout = Time.NormalTime + PERK_TIMEOUT
             });
         }
@@ -117,7 +115,7 @@ namespace AOSharp.Core
             return perks;
         }
 
-        internal static void Update(float deltaTime)
+        internal static void Update()
         {
             while(_pendingQueue.Count > 0 && _pendingQueue.Peek().Timeout <= Time.NormalTime)
                 _pendingQueue.Dequeue();
@@ -159,12 +157,12 @@ namespace AOSharp.Core
 
             //Calc time offset of perks before this one in queue.
             float queueOffset = _executingQueue.Sum(x => x.AttackTime);
-            double nextTimeout = Time.NormalTime + perk.AttackTime + PERK_TIMEOUT + queueOffset;
+            double nextTimeout = Time.NormalTime + perk.AttackDelay + PERK_TIMEOUT + queueOffset;
 
             _executingQueue.Enqueue(new QueueItem
             {
                 Identity = perk.Identity,
-                AttackTime = perk.AttackTime,
+                AttackTime = perk.AttackDelay,
                 Timeout = nextTimeout
             });
 

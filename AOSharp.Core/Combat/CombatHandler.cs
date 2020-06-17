@@ -13,14 +13,14 @@ namespace AOSharp.Core.Combat
     public class CombatHandler
     {
         private float ACTION_TIMEOUT = 1f;
-        private int MAX_CONCURRENT_PERKS = 2;
+        private int MAX_CONCURRENT_PERKS = 4;
         private Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
         //protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
         private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
         private List<(int[] SpellGroup, SpellConditionProcessor ConditionProcessor)> _spellRules = new List<(int[], SpellConditionProcessor)>();
 
-        protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
-        protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out (CombatActionType actionType, SimpleChar target) actionUsageInfo);
+        protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out SimpleChar target);
+        protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out SimpleChar target);
         protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, out SimpleChar target);
 
         public static CombatHandler Instance { get; private set; }
@@ -64,45 +64,51 @@ namespace AOSharp.Core.Combat
                     if (_actionQueue.Any(x => x.CombatAction is Perk && (Perk)x.CombatAction == perk))
                         continue;
 
-                    (CombatActionType type, SimpleChar target) actionUsageInfo;
-                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out actionUsageInfo))
+                    SimpleChar target;
+                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out target))
                     {
+                        if (!perk.MeetsUseReqs(target))
+                            continue;
+
                         //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count(x => x.CombatAction is Perk)}");
-                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, actionUsageInfo.type, fightingTarget));
+                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, target));
                     }
                 }
             }
 
-            foreach (var spellRule in _spellRules)
+            if (!Spell.HasPendingCast)
             {
-                Spell spell = null;
-
-                foreach (int spellId in spellRule.SpellGroup)
+                foreach (var spellRule in _spellRules)
                 {
-                    Spell curSpell;
-                    if (!Spell.Find(spellId, out curSpell))
+                    Spell spell = null;
+
+                    foreach (int spellId in spellRule.SpellGroup)
+                    {
+                        Spell curSpell;
+                        if (!Spell.Find(spellId, out curSpell))
+                            continue;
+
+                        if (!curSpell.MeetsSelfUseReqs())
+                            continue;
+
+                        spell = curSpell;
+                    }
+
+                    if (spell == null)
                         continue;
 
-                    if (!curSpell.MeetsSelfUseReqs())
+                    if (!spell.IsReady)
                         continue;
 
-                    spell = curSpell;
-                }
+                    SimpleChar target = null;
+                    if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out target))
+                    {
+                        if (!spell.MeetsUseReqs(target))
+                            continue;
 
-                if (spell == null)
-                    continue;
-
-                if (!spell.IsReady)
-                    continue;
-
-                SimpleChar target = null;
-                if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out target))
-                {
-                    if (!spell.MeetsUseReqs(target))
-                        continue;
-
-                    spell.Cast(target);
-                    break;
+                        spell.Cast(target);
+                        break;
+                    }
                 }
             }
 
@@ -152,6 +158,11 @@ namespace AOSharp.Core.Combat
         {
             foreach (SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
             {
+                if (special == SpecialAttack.AimedShot ||
+                    special == SpecialAttack.SneakAttack ||
+                    special == SpecialAttack.Backstab)
+                    continue;
+
                 if (!special.IsAvailable())
                     continue;
 
@@ -215,17 +226,15 @@ namespace AOSharp.Core.Combat
         protected class CombatActionQueueItem : IEquatable<CombatActionQueueItem>
         {
             public ICombatAction CombatAction;
-            public CombatActionType Type;
             public SimpleChar Target;
             public bool Used = false;
             public double Timeout = 0;
 
-            public CombatActionQueueItem(ICombatAction action, CombatActionType type, SimpleChar target = null)
+            public CombatActionQueueItem(ICombatAction action, SimpleChar target = null)
             {
                 CombatAction = action;
-                Type = type;
                 Target = target ?? DynelManager.LocalPlayer;
-                Timeout = Time.NormalTime + 10;
+                Timeout = Time.NormalTime + 1;
             }
 
             public bool Equals(CombatActionQueueItem other)

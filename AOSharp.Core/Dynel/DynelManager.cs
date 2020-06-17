@@ -25,6 +25,16 @@ namespace AOSharp.Core
             return AllDynels.FirstOrDefault(x => x.Identity == identity);
         }
 
+        public static bool Find(Identity identity, out Dynel dynel)
+        {
+            return (dynel = AllDynels.FirstOrDefault(x => x.Identity == identity)) != null;
+        }
+
+        public static bool Find(Identity identity, out SimpleChar simpleChar)
+        {
+            return (simpleChar = Characters.FirstOrDefault(x => x.Identity == identity)) != null;
+        }
+
         public static bool Exists(string name, bool includePets = false)
         {
             if(includePets)

@@ -12,12 +12,16 @@ namespace AOSharp.Core
 {
     public class Spell : DummyItem, ICombatAction
     {
+        private const float CAST_TIMEOUT = 0.5f;
+
         public readonly Identity Identity;
         public readonly Nanoline Nanoline;
         public readonly int StackingOrder;
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
+        public static bool HasPendingCast => _pendingCast.Spell != null;
+        private static (Spell Spell, double Timeout) _pendingCast;
 
         internal unsafe Spell(Identity identity) : base(identity)
         {
@@ -51,6 +55,8 @@ namespace AOSharp.Core
                 Parameter1 = (int)Identity.Type,
                 Parameter2 = Identity.Instance
             });
+
+            _pendingCast = (this, Time.NormalTime + CAST_TIMEOUT);
         }
 
         private unsafe bool GetIsReady()
@@ -62,6 +68,12 @@ namespace AOSharp.Core
 
             Identity identity = Identity;
             return N3EngineClientAnarchy_t.IsFormulaReady(pEngine, &identity) == 1;
+        }
+
+        internal static void Update()
+        {
+            if (_pendingCast.Spell != null && _pendingCast.Timeout <= Time.NormalTime)
+                _pendingCast.Spell = null;
         }
 
         public static Spell[] GetSpellsForNanoline(Nanoline nanoline)

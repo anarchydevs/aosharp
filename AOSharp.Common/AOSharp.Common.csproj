@@ -52,7 +52,7 @@
     <Compile Include="GameData\Faction.cs" />
     <Compile Include="GameData\ACGItem.cs" />
     <Compile Include="GameData\PerkHash.cs" />
-    <Compile Include="GameData\ItemCriteriaOperator.cs" />
+    <Compile Include="GameData\UseCriteriaOperator.cs" />
     <Compile Include="GameData\ItemAction.cs" />
     <Compile Include="GameData\Fatness.cs" />
     <Compile Include="GameData\Gender.cs" />
