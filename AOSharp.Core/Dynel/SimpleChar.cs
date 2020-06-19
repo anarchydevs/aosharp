@@ -22,6 +22,14 @@ namespace AOSharp.Core
 
         public int MissingHealth => MaxHealth - Health;
 
+        public int Nano => GetStat(Stat.CurrentNano);
+
+        public int MaxNano => GetStat(Stat.MaxNanoEnergy);
+
+        public float NanoPercent => (float)Nano / MaxNano * 100;
+
+        public int MissingNano => MaxNano - Nano;
+
         public bool IsPlayer => !(*(MemStruct*)Pointer).IsNPC;
 
         public bool IsNPC => (*(MemStruct*)Pointer).IsNPC && !IsPet;

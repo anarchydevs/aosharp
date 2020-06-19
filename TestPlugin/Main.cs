@@ -62,13 +62,11 @@ namespace TestPlugin
                 }
                 */
 
-                /*
                 foreach(Perk perk in Perk.List)
                 {
-                    //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.GetStat(Stat.AttackDelay)}");
-                    Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
+                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
+                    //Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
-                */
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -78,14 +76,14 @@ namespace TestPlugin
                 }
                 */
 
-                
+                /*
                 Perk perk;
                 if(Perk.Find(PerkHash.Gore, out perk))
                 {
                     if(DynelManager.LocalPlayer.FightingTarget != null)
                         Chat.WriteLine($"Can use perk? {perk.MeetsUseReqs(DynelManager.LocalPlayer.FightingTarget)}");
                 }
-
+                */
 
                 Chat.WriteLine("Pet Identities:");
                 foreach(Identity identity in DynelManager.LocalPlayer.Pets)
@@ -97,7 +95,7 @@ namespace TestPlugin
                 foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
                 {
                     Chat.WriteLine($"\t{pet.Name}");
-                }           
+                }
 
                 /*
                 Item item;
@@ -121,8 +119,7 @@ namespace TestPlugin
 
                 movementController.RunPath(testPath);
                 */
-
-                /*
+           
                 Chat.WriteLine("Missions");
                 foreach (Mission mission in Mission.List)
                 {
@@ -131,12 +128,12 @@ namespace TestPlugin
                     Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
-                */
+
                 //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
 
                 _menu = new Menu("TestPlugin", "TestPlugin");
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
-                OptionsPanel.AddMenu(_menu);
+                OptionPanel.AddMenu(_menu);
 
                 /*
                 List<Item> characterItems = Inventory.Items;

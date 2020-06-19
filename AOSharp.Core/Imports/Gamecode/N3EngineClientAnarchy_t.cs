@@ -137,14 +137,12 @@ namespace AOSharp.Core.Imports
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate IntPtr DTextCommand(IntPtr pThis, IntPtr unk, IntPtr text, IntPtr identity);
 
-        //B8 ? ? ? ? E8 ? ? ? ? 51 56 8B F1 83 BE ? ? ? ? ? 75 25 6A 18 E8 ? ? ? ? 59 8B C8 89 4D F0 83 65 FC 00 85 C9 74 08 56 E8 ? ? ? ? EB 02 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         internal unsafe delegate StdObjList* GetMissionListDelegate(IntPtr pThis, IntPtr unk);
-        internal static GetMissionListDelegate GetMissionList = Marshal.GetDelegateForFunctionPointer<GetMissionListDelegate>(Kernel32.GetModuleHandle("Gamecode.dll") + FuncOffsets.GetMissionList);
+        internal static GetMissionListDelegate GetMissionList;
 
-        //55 8B EC 8B 49 6C 8D 45 08 50 E8 ? ? ? ? 8B 00 5D C2 04 00
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         internal unsafe delegate IntPtr GetItemActionInfoDelegate(IntPtr pThis, ItemActionInfo action);
-        internal static GetItemActionInfoDelegate GetItemActionInfo = Marshal.GetDelegateForFunctionPointer<GetItemActionInfoDelegate>(Kernel32.GetModuleHandle("Gamecode.dll") + FuncOffsets.GetItemActionInfo);
+        internal static GetItemActionInfoDelegate GetItemActionInfo;
     }
 }

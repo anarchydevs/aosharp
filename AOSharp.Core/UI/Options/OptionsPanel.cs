@@ -7,7 +7,7 @@ using AOSharp.Core.Imports;
 
 namespace AOSharp.Core.UI.Options
 {
-    public static class OptionsPanel
+    public static class OptionPanel
     {
         private static List<Menu> _menus = new List<Menu>();
 

@@ -48,7 +48,6 @@
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
     <Compile Include="Dynel\NpcHolder.cs" />
-    <Compile Include="GameData\FuncOffsets.cs" />
     <Compile Include="GameData\Variant.cs" />
     <Compile Include="GameData\WindowFlags.cs" />
     <Compile Include="GameData\WindowStyle.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="Imports\LDB\LDBFace.cs" />
     <Compile Include="Imports\N3\N3Dynel_t.cs" />
     <Compile Include="Imports\N3\N3Zone_t.cs" />
+    <Compile Include="Imports\Native\Psapi.cs" />
     <Compile Include="Imports\Native\MSVCR100.cs" />
     <Compile Include="Imports\GUI\ToolTip_c.cs" />
     <Compile Include="Imports\GUI\WindowController_c.cs" />

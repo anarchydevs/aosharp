@@ -10,5 +10,8 @@ namespace AOSharp.Core.Imports
 
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern IntPtr GetCurrentProcess();
     }
 }
