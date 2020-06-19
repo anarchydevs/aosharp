@@ -156,6 +156,19 @@ namespace AOSharp.Core
                 {
                     foreach (SpecialAttack special in weapon.SpecialAttacks)
                     {
+                        if (special == SpecialAttack.SneakAttack)
+                        {
+                            Profession playerProfession =
+                                (Profession) DynelManager.LocalPlayer.GetStat(Stat.Profession);
+
+                            if (playerProfession == Profession.Adventurer || playerProfession == Profession.Shade)
+                            {
+                                if (DynelManager.LocalPlayer.GetStat(Stat.SneakAttack) >= 100)
+                                {
+                                    specials.Add(SpecialAttack.Backstab);
+                                }
+                            }
+                        }
                         specials.Add(special);
                     }
                 }

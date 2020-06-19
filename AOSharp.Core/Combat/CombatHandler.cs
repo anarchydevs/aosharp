@@ -159,8 +159,7 @@ namespace AOSharp.Core.Combat
             foreach (SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
             {
                 if (special == SpecialAttack.AimedShot ||
-                    special == SpecialAttack.SneakAttack ||
-                    special == SpecialAttack.Backstab)
+                    special == SpecialAttack.SneakAttack)
                     continue;
 
                 if (!special.IsAvailable())
@@ -169,6 +168,8 @@ namespace AOSharp.Core.Combat
                 if (!special.IsInRange(target))
                     continue;
 
+                if (special == SpecialAttack.Backstab && (target.FightingTarget == DynelManager.LocalPlayer || DynelManager.LocalPlayer.GetStat(Stat.TargetFacing) != 1))
+                    continue;
                 special.UseOn(target);
             }
         }

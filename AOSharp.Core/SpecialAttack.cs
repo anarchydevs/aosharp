@@ -48,11 +48,13 @@ namespace AOSharp.Core
 
             Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
 
+            SpecialAttack specialAttack = this == Backstab ? SpecialAttack.SneakAttack : this;
+
             if (weapons.Count > 0)
             {
-                if (weapons.ContainsKey(MainHand) && weapons[MainHand].SpecialAttacks.Contains(this))
+                if (weapons.ContainsKey(MainHand) && weapons[MainHand].SpecialAttacks.Contains(specialAttack))
                     return weapons[MainHand].IsDynelInRange(target);
-                else if (weapons.ContainsKey(OffHand) && weapons[OffHand].SpecialAttacks.Contains(this))
+                else if (weapons.ContainsKey(OffHand) && weapons[OffHand].SpecialAttacks.Contains(specialAttack))
                     return weapons[OffHand].IsDynelInRange(target);
                 else
                     return false;
