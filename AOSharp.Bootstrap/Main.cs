@@ -157,6 +157,10 @@ namespace AOSharp.Bootstrap
             CreateHook("Gamecode.dll",
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
+
+            //CreateHook("Gamecode.dll",
+            //           "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z",
+            //            new N3EngineClientAnarchy_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -203,6 +207,21 @@ namespace AOSharp.Bootstrap
 
             WindowController_c.ViewDeleted(pThis, pView);
         }
+
+        private unsafe void N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity)
+        {
+            /*
+            try
+            {
+                if (_pluginProxy.AttemptingSpellCast(nanoIdentity, targetIdentity))
+                    return;
+            }
+            catch (Exception) { }
+            */
+
+            N3EngineClientAnarchy_t.CastNanoSpell(pThis, nanoIdentity, targetIdentity);
+        }
+
 
         private unsafe void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, IntPtr identity, IntPtr pName)
         {
@@ -337,6 +356,8 @@ namespace AOSharp.Bootstrap
             public OptionPanelActivatedDelegate OptionPanelActivated;
             public delegate void ViewDeletedDelegate(IntPtr pView);
             public ViewDeletedDelegate ViewDeleted;
+            public delegate void AttemptingSpellCastDelegate(AttemptingSpellCastEventArgs args);
+            public AttemptingSpellCastDelegate AttemptingSpellCast;
         }
 
         public class PluginProxy : MarshalByRefObject
@@ -345,74 +366,69 @@ namespace AOSharp.Bootstrap
 
             public void DataBlockToMessage(byte[] datablock)
             {
-                if (_coreDelegates.DataBlockToMessage != null)
-                    _coreDelegates.DataBlockToMessage(datablock);
+                _coreDelegates.DataBlockToMessage?.Invoke(datablock);
             }
 
             public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName)
             {
-                if (_coreDelegates.JoinTeamRequest != null)
-                    _coreDelegates.JoinTeamRequest(*(Identity*)identity, pName);
+                _coreDelegates.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
+            }
+
+            public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
+            {
+                AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*) nanoIdentity, *(Identity*) targetIdentity);
+                _coreDelegates.AttemptingSpellCast?.Invoke(eventArgs);
+                return eventArgs.Blocked;
             }
 
             public unsafe void ClientPerformedPerk(IntPtr identity)
             {
-                if (_coreDelegates.ClientPerformedPerk != null)
-                    _coreDelegates.ClientPerformedPerk(*(Identity*)identity);
+                _coreDelegates.ClientPerformedPerk?.Invoke(*(Identity*)identity);
             }
 
             public void DynelSpawned(IntPtr pDynel)
             {
-                if(_coreDelegates.DynelSpawned != null)
-                    _coreDelegates.DynelSpawned(pDynel);
+                _coreDelegates.DynelSpawned?.Invoke(pDynel);
             }
 
             public void Update(float deltaTime)
             {
-                if (_coreDelegates.Update != null)
-                    _coreDelegates.Update(deltaTime);
+                _coreDelegates.Update?.Invoke(deltaTime);
             }
 
             public void EarlyUpdate(float deltaTime)
             {
-                if (_coreDelegates.EarlyUpdate != null)
-                    _coreDelegates.EarlyUpdate(deltaTime);
+                _coreDelegates.EarlyUpdate?.Invoke(deltaTime);
             }
 
             public void TeleportStarted()
             {
-                if (_coreDelegates.TeleportStarted != null)
-                    _coreDelegates.TeleportStarted();
+                _coreDelegates.TeleportStarted?.Invoke();
             }
 
             public unsafe void TeleportEnded()
             {
-                if (_coreDelegates.TeleportEnded != null)
-                    _coreDelegates.TeleportEnded();
+                _coreDelegates.TeleportEnded?.Invoke();
             }
 
             public void TeleportFailed()
             {
-                if (_coreDelegates.TeleportFailed != null)
-                    _coreDelegates.TeleportFailed();
+                _coreDelegates.TeleportFailed?.Invoke();
             }
 
             public void PlayfieldInit(uint id)
             {
-                if (_coreDelegates.PlayfieldInit != null)
-                    _coreDelegates.PlayfieldInit(id);
+                _coreDelegates.PlayfieldInit?.Invoke(id);
             }
 
             public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
             {
-                if (_coreDelegates.OptionPanelActivated != null)
-                    _coreDelegates.OptionPanelActivated(pOptionPanelModule, unk);
+                _coreDelegates.OptionPanelActivated?.Invoke(pOptionPanelModule, unk);
             }
 
             public void ViewDeleted(IntPtr pView)
             {
-                if (_coreDelegates.ViewDeleted != null)
-                    _coreDelegates.ViewDeleted(pView);
+                _coreDelegates.ViewDeleted?.Invoke(pView);
             }
 
             private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T: class
@@ -456,7 +472,8 @@ namespace AOSharp.Bootstrap
                     ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
                     DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnMessage"),
                     JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
-                    ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk")
+                    ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk"),
+                    AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast")
                 };
             }
 
@@ -471,6 +488,7 @@ namespace AOSharp.Bootstrap
                     foreach (AssemblyName reference in assembly.GetReferencedAssemblies())
                     {
                         if (reference.Name == "AOSharp.Common" ||
+                            reference.Name == "AOSharp.Bootstrap" ||
                             reference.Name == "AOSharp.Core")
                             continue;
 

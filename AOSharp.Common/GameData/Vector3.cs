@@ -19,7 +19,7 @@ namespace AOSharp.Common.GameData
         public float Z { get; set; }
 
         public static readonly Vector3 Zero = new Vector3(0, 0, 0);
-        public static readonly Vector3 Forward = new Vector3(1, 0, 0);
+        public static readonly Vector3 Forward = new Vector3(0, 0, 1);
         public static readonly Vector3 Up = new Vector3(0, 1, 0);
 
         public Vector3(float x, float y, float z)
@@ -67,6 +67,11 @@ namespace AOSharp.Common.GameData
             }
         }
 
+        public static float Angle(Vector3 from, Vector3 to)
+        {
+            return (float)Math.Acos(Vector3.Dot(from.Normalize(), to.Normalize())) * 57.29578f;
+        }
+
         public static float Distance(Vector3 from, Vector3 to)
         {
             return (float)Math.Sqrt(Math.Pow(Math.Abs(from.X - to.X), 2) + Math.Pow(Math.Abs(from.Y - to.Y), 2) + Math.Pow(Math.Abs(from.Z - to.Z), 2));
@@ -80,38 +85,6 @@ namespace AOSharp.Common.GameData
         public float Distance2DFrom(Vector3 pos)
         {
             return (float)Math.Sqrt(Math.Pow(Math.Abs(X - pos.X), 2) + Math.Pow(Math.Abs(Z - pos.Z), 2));
-        }
-
-        public float AngleTo(Vector3 pos)
-        {
-            float headingX = X - pos.X;
-            float headingY = Z - pos.Z;
-            float deg = (float)(Math.Atan(headingY / headingX) * 180 / Math.PI);
-            float desiredHeading = 0;
-
-            if (headingX < 0 && headingY < 0)
-            {
-                desiredHeading = 90 - deg;
-            }
-            else if (headingX < 0 && headingY > 0)
-            {
-                desiredHeading = 90 - deg;
-            }
-            else if (headingX > 0 && headingY > 0)
-            {
-                desiredHeading = 270 - deg;
-            }
-            else if (headingX > 0 && headingY < 0)
-            {
-                desiredHeading = 270 - deg;
-            }
-
-            return desiredHeading;
-        }
-
-        public float AngleDiff(Vector3 pos, float degree)
-        {
-            return AngleTo(pos) - degree;
         }
 
         public Vector3 Translate(Vector2 vec)
