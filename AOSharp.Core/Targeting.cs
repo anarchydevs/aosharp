@@ -12,12 +12,12 @@ namespace AOSharp.Core
             SetTarget(DynelManager.LocalPlayer);
         }
 
-        public unsafe static void SetTarget(SimpleChar target, bool packetOnly = false)
+        public static void SetTarget(SimpleChar target, bool packetOnly = false)
         {
             SetTarget(target.Identity, packetOnly);
         }
 
-        public unsafe static void SetTarget(Identity target, bool packetOnly = false)
+        public static unsafe void SetTarget(Identity target, bool packetOnly = false)
         {
             if (!packetOnly)
             {

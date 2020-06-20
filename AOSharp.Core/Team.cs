@@ -103,7 +103,7 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.IsInRaidTeam(pEngine) == 1;
         }
 
-        private unsafe static List<TeamMember> GetMemberList()
+        private static unsafe List<TeamMember> GetMemberList()
         {
             List<TeamMember> teamMembers = new List<TeamMember>();
             IntPtr pEngine = N3Engine_t.GetInstance();
@@ -126,7 +126,7 @@ namespace AOSharp.Core
             return teamMembers;
         }
 
-        private unsafe static void OnJoinTeamRequest(Identity identity, IntPtr pName)
+        private static unsafe void OnJoinTeamRequest(Identity identity, IntPtr pName)
         {
             TeamRequestEventArgs args = new TeamRequestEventArgs(identity);
             TeamRequest?.Invoke(null, args);

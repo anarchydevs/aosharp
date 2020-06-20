@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Core.Inventory
 {
-    public unsafe class Item : DummyItem, ICombatAction
+    public class Item : DummyItem, ICombatAction
     {
         public readonly int LowId;
         public readonly int HighId;

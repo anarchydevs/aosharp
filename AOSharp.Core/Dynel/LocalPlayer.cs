@@ -87,8 +87,7 @@ namespace AOSharp.Core
 
             foreach (Identity identity in Pets)
             {
-                SimpleChar petChar;
-                if (DynelManager.Find(identity, out petChar))
+                if (DynelManager.Find(identity, out SimpleChar petChar))
                     petChars.Add(petChar);
             }
 
@@ -137,7 +136,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct MemStruct
+        private new struct MemStruct
         {
             [FieldOffset(0x1BC)]
             public IntPtr* CooldownUnk;

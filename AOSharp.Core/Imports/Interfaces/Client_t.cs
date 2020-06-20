@@ -10,6 +10,6 @@ namespace AOSharp.Core.Imports
         public static extern IntPtr GetInstanceIfAny();
 
         [DllImport("Interfaces.dll", EntryPoint = "?SendVicinityMessage@Client_t@@QAEXPADIABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static unsafe extern void SendVicinityMessage(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string message, int length, Identity* unk);
+        public static extern unsafe void SendVicinityMessage(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string message, int length, Identity* unk);
     }
 }

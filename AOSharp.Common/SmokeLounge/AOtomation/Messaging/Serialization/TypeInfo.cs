@@ -55,13 +55,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         public KnownType KnownType { get; set; }
 
-        public Type Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public Type Type => this.type;
 
         #endregion
 

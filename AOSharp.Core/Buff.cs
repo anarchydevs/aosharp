@@ -17,7 +17,7 @@ namespace AOSharp.Core
         public float RemainingTime => GetCurrentTime();
         public float TotalTime => GetTotalTime();
 
-        internal unsafe Buff(Identity owner, Identity identity) : base(identity)
+        internal Buff(Identity owner, Identity identity) : base(identity)
         {
             Owner = owner;
             Identity = identity;

@@ -17,7 +17,7 @@ namespace AOSharp.Core.UI.Options
             return menu;
         }
 
-        private unsafe static void OnOptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
+        private static unsafe void OnOptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
         {
             IntPtr pOptionWindow = OptionPanelModule_c.GetOptionWindow(pOptionPanelModule + 0xB8);
 
@@ -37,7 +37,7 @@ namespace AOSharp.Core.UI.Options
             }
         }
 
-        private unsafe static View CreateMenu(Menu menu, ViewSelector viewSelector)
+        private static View CreateMenu(Menu menu, ViewSelector viewSelector)
         {
             View view = menu.CreateView();
 

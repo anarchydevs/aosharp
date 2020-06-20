@@ -11,7 +11,7 @@ namespace AOSharp.Core
     public static class DevExtras
     {
         //Packed with random tests. Don't invoke unless you want weird stuff to execute.
-        public unsafe static void Test()
+        public static void Test()
         {
             Chat.WriteLine(Utils.FindPattern("Gamecode.dll", "55 8B EC 83 C1 34 8B 01 5D FF 60 04").ToString("X4"));
             Chat.WriteLine(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 49 6C 8D 45 08 50 E8 ? ? ? ? 8B 00 5D C2 04 00").ToString("X4"));
@@ -32,7 +32,7 @@ namespace AOSharp.Core
         }
 
         //Maps message keys to string. Not very reliable as it seems most aren't mapped by the func.
-        public unsafe static string KeyToString(int key)
+        public static unsafe string KeyToString(int key)
         {
             return (*N3InfoItemRemote_t.KeyToString(key)).ToString();
         }

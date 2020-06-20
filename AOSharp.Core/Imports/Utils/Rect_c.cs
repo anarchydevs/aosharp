@@ -11,7 +11,7 @@ namespace AOSharp.Core.Imports
         [DllImport("Utils.dll", EntryPoint = "??1Rect@@QAE@XZ", CallingConvention = CallingConvention.ThisCall)]
         internal static extern int Deconstructor(IntPtr pThis);
 
-        public unsafe static IntPtr Create()
+        public static IntPtr Create()
         {
             return Constructor(MSVCR100.New(0x10));
         }

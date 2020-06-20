@@ -7,7 +7,7 @@ namespace AOSharp.Core
 {
     public static class Utils
     {
-        public unsafe static string UnsafePointerToString(IntPtr pointer)
+        public static unsafe string UnsafePointerToString(IntPtr pointer)
         {
             byte* pStr = (byte*)pointer.ToPointer();
 
@@ -25,7 +25,7 @@ namespace AOSharp.Core
             return new string(buffer);
         }
 
-        internal unsafe static bool Compare(byte* pData, byte[] pattern, bool[] mask)
+        internal static unsafe bool Compare(byte* pData, byte[] pattern, bool[] mask)
         {
             for (int i = 0; i < pattern.Length; pData++, i++)
                 if (mask[i] && *pData != pattern[i])
@@ -34,7 +34,7 @@ namespace AOSharp.Core
             return true;
         }
 
-        internal unsafe static IntPtr FindPattern(string module, string pattern)
+        internal static unsafe IntPtr FindPattern(string module, string pattern)
         {
             IntPtr moduleHandle = Kernel32.GetModuleHandle(module);
 
@@ -46,7 +46,7 @@ namespace AOSharp.Core
                 return IntPtr.Zero;
 
             uint moduleStart = (uint)moduleInfo.lpBaseOfDll;
-            uint moduleLen = (uint)moduleInfo.SizeOfImage;
+            uint moduleLen = moduleInfo.SizeOfImage;
 
             string[] patternStrParts = pattern.Split(' ');
             bool[] mask = patternStrParts.Select(x => x != "?").ToArray();

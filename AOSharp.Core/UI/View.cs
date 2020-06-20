@@ -76,7 +76,7 @@ namespace AOSharp.Core.UI
             View_c.LimitMaxSize(_pointer, &maxSize);
         }
 
-        public unsafe void SetLayoutNode(LayoutNode layoutNode)
+        public void SetLayoutNode(LayoutNode layoutNode)
         {
             View_c.SetLayoutNode(_pointer, layoutNode.Pointer);
         }

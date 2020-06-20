@@ -23,7 +23,7 @@ namespace AOSharp
         [JsonIgnore]
         public bool IsActive
         {
-            get { return _isActive; }
+            get => _isActive;
             set
             {
                 _isActive = value;
@@ -37,7 +37,7 @@ namespace AOSharp
         [JsonIgnore]
         public bool IsInjected
         {
-            get { return _isInjected; }
+            get => _isInjected;
             set
             {
                 _isInjected = value;

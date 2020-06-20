@@ -40,12 +40,10 @@ namespace AOSharp.Pathfinding
         {
             List<Vector3> finalPath = new List<Vector3>();
 
-            NavmeshPoint origin;
-            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out origin)) || origin.point == new oVector3())
+            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
                 return finalPath;
 
-            NavmeshPoint destination;
-            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out destination)) || destination.point == new oVector3())
+            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint destination)) || destination.point == new oVector3())
                 return finalPath;
 
             uint[] path = new uint[500];
@@ -81,12 +79,10 @@ namespace AOSharp.Pathfinding
 
         public PathCorridor GeneratePathCorridor(Vector3 start, Vector3 end)
         {
-            NavmeshPoint origin;
-            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out origin)) || origin.point == new oVector3())
+            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
                 return null;
 
-            NavmeshPoint destination;
-            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out destination)) || destination.point == new oVector3())
+            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint destination)) || destination.point == new oVector3())
                 return null;
 
             uint[] path = new uint[1000];
@@ -158,8 +154,7 @@ namespace AOSharp.Pathfinding
             try
             {
                 stream = new FileStream(filePath, FileMode.Open);
-                Navmesh navMesh;
-                NavStatus status = Navmesh.Create((byte[])formatter.Deserialize(stream), out navMesh);
+                NavStatus status = Navmesh.Create((byte[])formatter.Deserialize(stream), out Navmesh navMesh);
                 if (status == NavStatus.Sucess)
                     return new Pathfinder(navMesh);
             }
