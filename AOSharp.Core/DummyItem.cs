@@ -20,10 +20,9 @@ namespace AOSharp.Core
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
-            Identity dummyItemId;
             IntPtr pEngine = N3Engine_t.GetInstance();
 
-            if (!CreateDummyItemID(lowId, highId, ql, out dummyItemId))
+            if (!CreateDummyItemID(lowId, highId, ql, out Identity dummyItemId))
                 throw new Exception($"Failed to create dummy item. LowId: {lowId}\tLowId: {highId}\tLowId: {ql}");
 
             IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, dummyItemId, &none);
@@ -149,7 +148,7 @@ namespace AOSharp.Core
                             break;
                         case UseCriteriaOperator.IsNpc:
                             if(param2 == 3)
-                                metReq = target.IsNPC;
+                                metReq = target.IsNpc;
                             break;
                         case UseCriteriaOperator.HasRunningNano:
                             metReq = skillCheckChar.Buffs.Any(x => x.Identity.Instance == param2);
@@ -197,7 +196,7 @@ namespace AOSharp.Core
             return unk[0];
         }
 
-        public unsafe int GetStat(Stat stat, int detail = 2)
+        public int GetStat(Stat stat, int detail = 2)
         {
             return DummyItem_t.GetStat(Pointer, stat, detail);
         }

@@ -12,6 +12,6 @@ namespace AOSharp.Bootstrap.Imports
         public delegate void DAddChildDynel(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot);
 
         [DllImport("N3.dll", EntryPoint = "?GetModelID@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetModelID(IntPtr pThis);
+        public static extern IntPtr GetModelID(IntPtr pThis);
     }
 }

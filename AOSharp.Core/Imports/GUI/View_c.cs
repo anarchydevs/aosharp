@@ -9,7 +9,7 @@ namespace AOSharp.Core.Imports
     public class View_c
     {
         [DllImport("GUI.dll", EntryPoint = "??0View@@QAE@ABVRect@@ABVString@@II@Z", CallingConvention = CallingConvention.ThisCall)]
-        internal unsafe static extern IntPtr Constructor(IntPtr pThis, Rect* rect, IntPtr pName, int unk1, int unk2);
+        internal static extern unsafe IntPtr Constructor(IntPtr pThis, Rect* rect, IntPtr pName, int unk1, int unk2);
 
         [DllImport("GUI.dll", EntryPoint = "??1View@@UAE@XZ", CallingConvention = CallingConvention.ThisCall)]
         internal static extern int Deconstructor(IntPtr pThis);
@@ -21,10 +21,10 @@ namespace AOSharp.Core.Imports
         internal static extern void SetBorders(IntPtr pThis, float minX, float minY, float maxX, float maxY);
 
         [DllImport("GUI.dll", EntryPoint = "?LimitMaxSize@View@@QAEXABVPoint@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        internal unsafe static extern void LimitMaxSize(IntPtr pThis, Vector2* maxSize);
+        internal static extern unsafe void LimitMaxSize(IntPtr pThis, Vector2* maxSize);
 
         [DllImport("GUI.dll", EntryPoint = "?SetFrame@View@@UAEXABVRect@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        internal unsafe static extern void SetFrame(IntPtr pThis, Rect* rect, bool unk);
+        internal static extern unsafe void SetFrame(IntPtr pThis, Rect* rect, bool unk);
 
         [DllImport("GUI.dll", EntryPoint = "?Show@View@@QAEX_N0@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern void Show(IntPtr pThis, bool visible, bool unk);
@@ -33,7 +33,7 @@ namespace AOSharp.Core.Imports
         internal static extern void SetLayoutNode(IntPtr pThis, IntPtr pLayoutNode);
 
 
-        public unsafe static IntPtr Create(Rect rect, string name, int unk1, int unk2)
+        public static unsafe IntPtr Create(Rect rect, string name, int unk1, int unk2)
         {
             IntPtr pNew = MSVCR100.New(0x128);
             IntPtr pName = StdString.Create(name);

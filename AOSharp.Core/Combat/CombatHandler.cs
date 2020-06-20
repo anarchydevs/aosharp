@@ -42,10 +42,6 @@ namespace AOSharp.Core.Combat
             if (fightingTarget != null)
                 SpecialAttacks(fightingTarget);
 
-            foreach(Item item in Inventory.Inventory.Items)
-            {
-            }
-
             //Only queue perks if we have no items awaiting usage and aren't over max concurrent perks
             if(!_actionQueue.Any(x => x.CombatAction is Item))
             {
@@ -54,18 +50,16 @@ namespace AOSharp.Core.Combat
                     if (_actionQueue.Count(x => x.CombatAction is Perk) >= MAX_CONCURRENT_PERKS)
                         break;
 
-                    Perk perk;
-                    if (!Perk.Find(perkRule.PerkHash, out perk))
+                    if (!Perk.Find(perkRule.PerkHash, out Perk perk))
                         continue;
 
                     if (perk.IsPending || perk.IsExecuting || !perk.IsAvailable)
                         continue;
 
-                    if (_actionQueue.Any(x => x.CombatAction is Perk && (Perk)x.CombatAction == perk))
+                    if (_actionQueue.Any(x => x.CombatAction is Perk action && action == perk))
                         continue;
 
-                    SimpleChar target;
-                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out target))
+                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out SimpleChar target))
                     {
                         if (!perk.MeetsUseReqs(target))
                             continue;
@@ -84,8 +78,7 @@ namespace AOSharp.Core.Combat
 
                     foreach (int spellId in spellRule.SpellGroup)
                     {
-                        Spell curSpell;
-                        if (!Spell.Find(spellId, out curSpell))
+                        if (!Spell.Find(spellId, out Spell curSpell))
                             continue;
 
                         if (!curSpell.MeetsSelfUseReqs())
@@ -100,8 +93,7 @@ namespace AOSharp.Core.Combat
                     if (!spell.IsReady)
                         continue;
 
-                    SimpleChar target = null;
-                    if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out target))
+                    if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out SimpleChar target))
                     {
                         if (!spell.MeetsUseReqs(target))
                             continue;
@@ -125,19 +117,15 @@ namespace AOSharp.Core.Combat
                     if (actionItem.Used)
                         continue;
 
-                    if (actionItem.CombatAction is Item)
+                    if (actionItem.CombatAction is Item item)
                     {
-                        Item item = actionItem.CombatAction as Item;
-
                         //I have no real way of checking if a use action is valid so we'll just send it off and pray
                         item.Use(actionItem.Target);
                         actionItem.Used = true;
                         actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;
                     }
-                    else if (actionItem.CombatAction is Perk)
+                    else if (actionItem.CombatAction is Perk perk)
                     {
-                        Perk perk = actionItem.CombatAction as Perk;
-
                         if (!perk.Use(actionItem.Target))
                         {
                             dequeueList.Add(actionItem);
@@ -170,6 +158,7 @@ namespace AOSharp.Core.Combat
 
                 if (special == SpecialAttack.Backstab && (target.FightingTarget == DynelManager.LocalPlayer || DynelManager.LocalPlayer.GetStat(Stat.TargetFacing) != 1))
                     continue;
+
                 special.UseOn(target);
             }
         }
@@ -181,7 +170,7 @@ namespace AOSharp.Core.Combat
 
         protected void RegisterSpellProcessor(Spell spell, SpellConditionProcessor conditionProcessor)
         {
-            RegisterSpellProcessor(new int[1] { spell.Identity.Instance }, conditionProcessor);
+            RegisterSpellProcessor(new[] { spell.Identity.Instance }, conditionProcessor);
         }
 
         protected void RegisterSpellProcessor(IEnumerable<Spell> spellGroup, SpellConditionProcessor conditionProcessor)
@@ -191,7 +180,7 @@ namespace AOSharp.Core.Combat
 
         protected void RegisterSpellProcessor(int spellId, SpellConditionProcessor conditionProcessor)
         {
-            RegisterSpellProcessor(new int[1] { spellId }, conditionProcessor);
+            RegisterSpellProcessor(new[] { spellId }, conditionProcessor);
         }
 
         protected void RegisterSpellProcessor(int[] spellGroup, SpellConditionProcessor conditionProcessor)
@@ -240,23 +229,23 @@ namespace AOSharp.Core.Combat
 
             public bool Equals(CombatActionQueueItem other)
             {
+                if (other == null)
+                    return false;
+
                 if (CombatAction.GetType() != other.CombatAction.GetType())
                     return false;
 
-                if (CombatAction is Perk)
+                switch (CombatAction)
                 {
-                    return ((Perk)CombatAction) == ((Perk)other.CombatAction);
-                } 
-                else if (CombatAction is Item)
-                {
-                    return ((Item)CombatAction).LowId == ((Item)other.CombatAction).LowId || ((Item)CombatAction).HighId == ((Item)other.CombatAction).HighId;
+                    case Perk perk:
+                        return perk == ((Perk)other.CombatAction);
+                    case Item item:
+                        return item.LowId == ((Item)other.CombatAction).LowId || item.HighId == ((Item)other.CombatAction).HighId;
+                    case Spell spell:
+                        return spell == ((Spell)other.CombatAction);
+                    default:
+                        return false;
                 }
-                else if(CombatAction is Spell)
-                {
-                    return ((Spell)CombatAction) == ((Spell)other.CombatAction);
-                }
-
-                return false;
             }
         }
 

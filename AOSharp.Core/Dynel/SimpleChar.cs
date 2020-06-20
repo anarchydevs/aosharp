@@ -32,7 +32,7 @@ namespace AOSharp.Core
 
         public bool IsPlayer => !(*(MemStruct*)Pointer).IsNPC;
 
-        public bool IsNPC => (*(MemStruct*)Pointer).IsNPC && !IsPet;
+        public bool IsNpc => (*(MemStruct*)Pointer).IsNPC && !IsPet;
 
         public bool IsPet => Flags.HasFlag(DynelFlags.Pet);
 
@@ -68,28 +68,29 @@ namespace AOSharp.Core
             return new SimpleChar(pFightingTarget);
         }
 
-        public unsafe bool IsInRange(Dynel target)
+        public bool IsInRange(Dynel target)
         {
-            const EquipSlot MainHand = EquipSlot.Weap_RightHand;
-            const EquipSlot OffHand = EquipSlot.Weap_LeftHand;
+            const EquipSlot mainHand = EquipSlot.Weap_RightHand;
+            const EquipSlot offHand = EquipSlot.Weap_LeftHand;
 
             Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
 
             if (weapons.Count > 0)
             {
-                if (weapons.ContainsKey(MainHand))
-                    return weapons[MainHand].IsDynelInRange(target);
-                else if (weapons.ContainsKey(OffHand))
-                    return weapons[OffHand].IsDynelInRange(target);
-                else
-                    return false;
+                if (weapons.ContainsKey(mainHand))
+                    return weapons[mainHand].IsDynelInRange(target);
+
+                if (weapons.ContainsKey(offHand))
+                    return weapons[offHand].IsDynelInRange(target);
+
+                return false;
             }
             else
             {
                 IntPtr pWeaponHolder = DynelManager.LocalPlayer.pWeaponHolder;
                 IntPtr dummyWeapon = WeaponHolder_t.GetDummyWeapon(pWeaponHolder, Stat.MartialArts);
 
-                if (dummyWeapon == null)
+                if (dummyWeapon == IntPtr.Zero)
                     return false;
 
                 IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
@@ -98,32 +99,7 @@ namespace AOSharp.Core
             }
         }
 
-        public unsafe bool IsInAttackRange(bool requireAllWeapons = false)
-        {
-            Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
-
-            if (weapons.Count > 0)
-            {
-                if(!requireAllWeapons)
-                    return weapons.Values.Any(x => x.IsDynelInRange(this));
-                else
-                    return weapons.Values.Count(x => x.IsDynelInRange(this)) == weapons.Count;
-            }
-            else
-            {
-                IntPtr pWeaponHolder = DynelManager.LocalPlayer.pWeaponHolder;
-                IntPtr dummyWeapon = WeaponHolder_t.GetDummyWeapon(pWeaponHolder, Stat.MartialArts);
-
-                if (dummyWeapon == null)
-                    return false;
-
-                IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
-
-                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, Pointer) == 0x01;
-            }
-        }
-
-        private unsafe Dictionary<EquipSlot, WeaponItem> GetWeapons()
+        private Dictionary<EquipSlot, WeaponItem> GetWeapons()
         {
             Dictionary<EquipSlot, WeaponItem> weapons = new Dictionary<EquipSlot, WeaponItem>();
 
@@ -182,7 +158,7 @@ namespace AOSharp.Core
             return specials;
         }
 
-        private unsafe Buff[] GetBuffs()
+        private Buff[] GetBuffs()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -193,13 +169,7 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.GetNanoTemplateInfoList(pEngine, &identity)->ToList().Select(x => new Buff(Identity, (*(NanoTemplateInfoMemStruct*)x).Identity)).ToArray();
         }
 
-        private void GetPetDynels()
-        {
-
-  
-        }
-
-        public unsafe bool IsInTeam()
+        public bool IsInTeam()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -211,7 +181,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct MemStruct
+        private new struct MemStruct
         {
             [FieldOffset(0x154)]
             public StdString Name;
@@ -227,7 +197,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct NanoTemplateInfoMemStruct
+        private struct NanoTemplateInfoMemStruct
         {
             [FieldOffset(0x08)]
             public Identity Identity;

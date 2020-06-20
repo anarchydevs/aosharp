@@ -94,7 +94,7 @@ namespace AOSharp.Core
             });
         }
 
-        private unsafe static List<Perk> GetPerks()
+        private static unsafe List<Perk> GetPerks()
         {
             List<Perk> perks = new List<Perk>();
             IntPtr pEngine = N3Engine_t.GetInstance();

@@ -51,7 +51,7 @@ namespace AOSharp.Core
         public static List<Zone> Zones => GetZones();
 
         //TODO: Convert to use n3Playfield_t::GetPlayfieldDynels() to remove dependencies on hard-coded offsets
-        internal unsafe static List<IntPtr> GetPlayfieldDynels()
+        internal static unsafe List<IntPtr> GetPlayfieldDynels()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
 
@@ -61,7 +61,7 @@ namespace AOSharp.Core
             return (*(Playfield_MemStruct*)pPlayfield).Dynels.ToList();
         }
 
-        private unsafe static Identity GetIdentity()
+        private static unsafe Identity GetIdentity()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
 
@@ -71,7 +71,7 @@ namespace AOSharp.Core
             return *N3Playfield_t.GetIdentity(pPlayfield);
         }
 
-        private unsafe static Identity GetModelIdentity()
+        private static unsafe Identity GetModelIdentity()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
 
@@ -81,7 +81,7 @@ namespace AOSharp.Core
             return *N3Playfield_t.GetModelID(pPlayfield);
         }
 
-        private unsafe static string GetName()
+        private static string GetName()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
 
@@ -91,7 +91,7 @@ namespace AOSharp.Core
             return Marshal.PtrToStringAnsi(N3Playfield_t.GetName(pPlayfield));
         }
 
-        private unsafe static List<Zone> GetZones()
+        private static unsafe List<Zone> GetZones()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
 
@@ -152,7 +152,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct Playfield_MemStruct
+        private struct Playfield_MemStruct
         {
             [FieldOffset(0x30)]
             public StdObjVector Dynels;

@@ -6,11 +6,11 @@ namespace AOSharp.Core.Movement
 {
     public class MovementController
     {
-        private const float UPDATE_INTERVAL = 0.2f;
-        private const float UNSTUCK_INTERVAL = 5f;
-        private const float UNSTUCK_THRESHOLD = 2f;
+        private const float UpdateInterval = 0.2f;
+        private const float UnstuckInterval = 5f;
+        private const float UnstuckThreshold = 2f;
 
-        public bool IsNavigating => !(_path.Count == 0);
+        public bool IsNavigating => _path.Count != 0;
 
         private float _timeSinceLastUpdate = 0f;
         private float _timeSinceLastUnstuckCheck = 0f;
@@ -49,11 +49,11 @@ namespace AOSharp.Core.Movement
                 }
             }
 
-            if (_timeSinceLastUnstuckCheck > UNSTUCK_INTERVAL)
+            if (_timeSinceLastUnstuckCheck > UnstuckInterval)
             {
                 float currentDist = DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek());
 
-                if (_lastDist - currentDist <= UNSTUCK_THRESHOLD)
+                if (_lastDist - currentDist <= UnstuckThreshold)
                 {
                     OnStuck();
                 }
@@ -64,7 +64,7 @@ namespace AOSharp.Core.Movement
 
             LookAt(_path.Peek());
 
-            if (_timeSinceLastUpdate > UPDATE_INTERVAL)
+            if (_timeSinceLastUpdate > UpdateInterval)
             {
                 Game.SetMovement(MovementAction.Update);
                 _timeSinceLastUpdate = 0f;

@@ -20,7 +20,7 @@ namespace TestPlugin
     {
         private Menu _menu;
         private int i = 0;
-        public unsafe void Run(string pluginDir)
+        public void Run(string pluginDir)
         {
             try
             {

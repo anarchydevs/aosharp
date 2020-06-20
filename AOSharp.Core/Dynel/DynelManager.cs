@@ -16,7 +16,7 @@ namespace AOSharp.Core
 
         public static IEnumerable<SimpleChar> Characters => GetDynels().Where(x => x.Identity.Type == IdentityType.SimpleChar).Select(x => new SimpleChar(x));
 
-        public static IEnumerable<SimpleChar> NPCs => Characters.Where(x => x.IsNPC && !x.IsPet);
+        public static IEnumerable<SimpleChar> NPCs => Characters.Where(x => x.IsNpc && !x.IsPet);
 
         public static IEnumerable<SimpleChar> Players => Characters.Where(x => x.IsPlayer);
 
@@ -63,23 +63,15 @@ namespace AOSharp.Core
             IntPtr pLocalPlayer = N3EngineClient_t.GetClientControlDynel(pEngine);
 
 
-            if (pLocalPlayer == IntPtr.Zero)
-                return null;
-
-            return new LocalPlayer(pLocalPlayer);
+            return pLocalPlayer == IntPtr.Zero ? null : new LocalPlayer(pLocalPlayer);
         }
 
-        private unsafe static List<Dynel> GetDynels()
+        private static List<Dynel> GetDynels()
         {
-            List<Dynel> dynels = new List<Dynel>();
-
-            foreach (IntPtr pDynel in Playfield.GetPlayfieldDynels())
-                dynels.Add(new Dynel(pDynel));
-
-            return dynels;
+            return Playfield.GetPlayfieldDynels().Select(pDynel => new Dynel(pDynel)).ToList();
         }
 
-        private unsafe static void OnDynelSpawned(IntPtr pDynel)
+        private static void OnDynelSpawned(IntPtr pDynel)
         {
             DynelSpawned?.Invoke(null, new Dynel(pDynel));
         }

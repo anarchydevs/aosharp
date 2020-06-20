@@ -66,7 +66,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct WeaponItem_MemStruct
+        private new struct MemStruct
         {
 
         }

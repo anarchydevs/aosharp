@@ -16,6 +16,6 @@ namespace AOSharp.Core.Imports
         public static extern byte IsInTeam(IntPtr pThis);
 
         [DllImport("GUI.dll", EntryPoint = "?SlotJoinTeamRequest@TeamViewModule_c@@AAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        internal unsafe static extern void SlotJoinTeamRequest(IntPtr pThis, Identity* identity, IntPtr pName);
+        internal static extern unsafe void SlotJoinTeamRequest(IntPtr pThis, Identity* identity, IntPtr pName);
     }
 }

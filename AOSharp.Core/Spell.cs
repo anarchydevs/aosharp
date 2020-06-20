@@ -23,7 +23,7 @@ namespace AOSharp.Core
         public static bool HasPendingCast => _pendingCast.Spell != null;
         private static (Spell Spell, double Timeout) _pendingCast;
 
-        internal unsafe Spell(Identity identity) : base(identity)
+        internal Spell(Identity identity) : base(identity)
         {
             Identity = identity;
             Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
@@ -81,7 +81,7 @@ namespace AOSharp.Core
             return List.Where(x => x.Nanoline == nanoline).ToArray();
         }
 
-        private unsafe static Spell[] GetSpellList()
+        private static unsafe Spell[] GetSpellList()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
