@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AOSharp.Bootstrap;
 using AOSharp.Core;
 using AOSharp.Core.UI;
 using AOSharp.Core.Inventory;
@@ -97,6 +98,16 @@ namespace TestPlugin
                     Chat.WriteLine($"\t{pet.Name}");
                 }
 
+                IntPtr pEngine = N3Engine_t.GetInstance();
+
+                if (pEngine == IntPtr.Zero)
+                    return;
+
+                Identity self = DynelManager.LocalPlayer.Identity;
+                Identity nano = new Identity(IdentityType.NanoProgram, 223380);
+                N3EngineClientAnarchy_t.CastNanoSpell(pEngine, &nano, &self);
+
+
                 /*
                 Item item;
                 if(Inventory.Find(244216, out item))
@@ -119,7 +130,7 @@ namespace TestPlugin
 
                 movementController.RunPath(testPath);
                 */
-           
+
                 Chat.WriteLine("Missions");
                 foreach (Mission mission in Mission.List)
                 {
@@ -171,6 +182,7 @@ namespace TestPlugin
                 Game.TeleportEnded += Game_OnTeleportEnded;
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
+                MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
                 Network.N3MessageReceived += Network_N3MessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
@@ -183,6 +195,11 @@ namespace TestPlugin
             {
                 Chat.WriteLine(e.Message);
             }
+        }
+
+        private void AttemptingSpellCast(object sender, AttemptingSpellCastEventArgs e)
+        {
+            Chat.WriteLine($"{e.Nano}, {e.Target}");
         }
 
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)

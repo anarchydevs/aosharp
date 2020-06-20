@@ -7,6 +7,7 @@ using AOSharp.Core.Imports;
 using AOSharp.Common.GameData;
 using System.Net.NetworkInformation;
 using System.Net;
+using System.Configuration.Assemblies;
 
 namespace AOSharp.Core
 {
@@ -66,6 +67,11 @@ namespace AOSharp.Core
                 return null;
 
             return new SimpleChar(pFightingTarget);
+        }
+
+        public bool IsFacing(SimpleChar target)
+        {
+            return Vector3.Angle(Rotation.Forward, target.Position - Position) <= 90f;
         }
 
         public unsafe bool IsInRange(Dynel target)

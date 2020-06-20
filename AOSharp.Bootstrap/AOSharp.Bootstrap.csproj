@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventArgs\AttemptingSpellCastEventArgs.cs" />
     <Compile Include="Imports\Client_t.cs" />
     <Compile Include="Imports\Connection_t.cs" />
     <Compile Include="Imports\FlowControlModule_t.cs" />
@@ -84,5 +85,6 @@
       <Name>AOSharp.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

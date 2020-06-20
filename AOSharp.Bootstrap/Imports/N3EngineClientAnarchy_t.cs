@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using AOSharp.Common.GameData;
 
 namespace AOSharp.Bootstrap.Imports
 {
@@ -18,7 +19,6 @@ namespace AOSharp.Bootstrap.Imports
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DRunEngine(IntPtr pThis, float unk);
 
-
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SendInPlayMessage@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool SendInPlayMessage(IntPtr pThis);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
@@ -33,6 +33,11 @@ namespace AOSharp.Bootstrap.Imports
         public static extern bool PerformSpecialAction(IntPtr pThis, IntPtr identity);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate bool DPerformSpecialAction(IntPtr pThis, IntPtr identity);
+
+        //CastNanoSpell
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity);
+        public unsafe delegate void DCastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity);
 
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsPerk@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsPerk(IntPtr pThis, uint id);
