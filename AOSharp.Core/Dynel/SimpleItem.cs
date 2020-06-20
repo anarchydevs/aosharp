@@ -17,7 +17,7 @@ namespace AOSharp.Core
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private unsafe struct SimpleItem_MemStruct
+        private new struct MemStruct
         {
 
         }

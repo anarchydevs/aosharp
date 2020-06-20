@@ -7,12 +7,12 @@ namespace AOSharp.Core.Imports
     public class VLayoutNode_c
     {
         [DllImport("GUI.dll", EntryPoint = "??0VLayoutNode@@QAE@XZ", CallingConvention = CallingConvention.ThisCall)]
-        internal unsafe static extern IntPtr Constructor(IntPtr pThis);
+        internal static extern IntPtr Constructor(IntPtr pThis);
 
         [DllImport("GUI.dll", EntryPoint = "??1VLayoutNode@@UAE@XZ", CallingConvention = CallingConvention.ThisCall)]
         internal static extern int Deconstructor(IntPtr pThis);
 
-        public unsafe static IntPtr Create()
+        public static IntPtr Create()
         {
             return Constructor(MSVCR100.New(0x2C));
         }

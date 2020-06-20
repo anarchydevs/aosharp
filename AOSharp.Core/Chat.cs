@@ -52,7 +52,7 @@ namespace AOSharp.Core
             }
         }
 
-        public unsafe static void WriteLine(string text, ChatColor color = ChatColor.Gold)
+        public static void WriteLine(string text, ChatColor color = ChatColor.Gold)
         {
             _messageQueue.Enqueue((text, color));
         }

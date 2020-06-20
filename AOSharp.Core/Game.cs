@@ -21,7 +21,7 @@ namespace AOSharp.Core
         public static EventHandler TeleportFailed; 
         public static EventHandler<uint> PlayfieldInit;
 
-        private unsafe static void Init()
+        private static unsafe void Init()
         {
             DummyItem_t.GetStat = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetStatDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 83 C1 34 8B 01 5D FF 60 04"));
             N3EngineClientAnarchy_t.GetItemActionInfo = Marshal.GetDelegateForFunctionPointer<N3EngineClientAnarchy_t.GetItemActionInfoDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 49 6C 8D 45 08 50 E8 ? ? ? ? 8B 00 5D C2 04 00"));

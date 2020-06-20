@@ -36,7 +36,7 @@ namespace AOSharp.Core.Inventory
 
         //This will likely be made internal once I provide a way of accessing the inventory of all types of containers.
         //For now just utilize this if you REALLY need the contents of something random like contracts (and i guess bank too)
-        public unsafe static List<Item> GetItems(Identity container)
+        public static unsafe List<Item> GetItems(Identity container)
         {
             List<Item> items = new List<Item>();
             IntPtr pEngine = N3Engine_t.GetInstance();
@@ -93,7 +93,7 @@ namespace AOSharp.Core.Inventory
             return items;
         }
 
-        internal unsafe static List<Item> GetContainerItems(Identity identity)
+        internal static unsafe List<Item> GetContainerItems(Identity identity)
         {
             List<Item> items = new List<Item>();
 

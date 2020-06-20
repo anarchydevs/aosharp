@@ -14,6 +14,6 @@ namespace AOSharp.Core.Imports
 
         //GetClientInst
         [DllImport("N3.dll", EntryPoint = "?GetClientInst@n3EngineClient_t@@QBEIXZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern int GetClientInst(IntPtr pThis);
+        public static extern int GetClientInst(IntPtr pThis);
     }
 }

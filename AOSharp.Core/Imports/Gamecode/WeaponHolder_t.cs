@@ -8,19 +8,19 @@ namespace AOSharp.Core.Imports
     internal class WeaponHolder_t
     {
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate IntPtr GetWeaponDelegate(IntPtr pThis, EquipSlot slot, int unk);
+        internal delegate IntPtr GetWeaponDelegate(IntPtr pThis, EquipSlot slot, int unk);
         internal static GetWeaponDelegate GetWeapon;
  
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate byte IsDynelInWeaponRangeDelegate(IntPtr pThis, IntPtr pWeapon, IntPtr pDynel);
+        internal delegate byte IsDynelInWeaponRangeDelegate(IntPtr pThis, IntPtr pWeapon, IntPtr pDynel);
         internal static IsDynelInWeaponRangeDelegate IsDynelInWeaponRange;
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate byte IsInRangeDelegate(IntPtr pThis);
+        internal delegate byte IsInRangeDelegate(IntPtr pThis);
         internal static IsInRangeDelegate IsInRange;
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate IntPtr GetDummyWeaponDelegate(IntPtr pThis, Stat stat);
+        internal delegate IntPtr GetDummyWeaponDelegate(IntPtr pThis, Stat stat);
         internal static GetDummyWeaponDelegate GetDummyWeapon;
     }
 }

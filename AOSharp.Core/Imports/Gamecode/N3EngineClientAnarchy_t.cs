@@ -9,11 +9,11 @@ namespace AOSharp.Core.Imports
     {
         //SecondarySpecialAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SecondarySpecialAttack@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@W4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern bool SecondarySpecialAttack(IntPtr pThis, Identity* target, Stat stat);
+        public static extern unsafe bool SecondarySpecialAttack(IntPtr pThis, Identity* target, Stat stat);
 
         //DefaultAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DefaultAttack@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
+        public static extern unsafe void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
 
         //StopAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_StopAttack@n3EngineClientAnarchy_t@@QBEXXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -21,7 +21,7 @@ namespace AOSharp.Core.Imports
 
         //GetSkill
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkill@n3EngineClientAnarchy_t@@QBEHABVIdentity_t@@W4Stat_e@GameData@@H0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
+        public static extern unsafe int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
 
         //IsSecondarySpecialAttackAvailable
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsSecondarySpecialAttackAvailable@n3EngineClientAnarchy_t@@QBE_NW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -33,19 +33,19 @@ namespace AOSharp.Core.Imports
 
         //CastNanoSpell
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
+        public static extern unsafe void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
 
         //PerformSpecialAction
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern byte PerformSpecialAction(IntPtr pThis, Identity* action);
+        public static extern unsafe byte PerformSpecialAction(IntPtr pThis, Identity* action);
 
         //GetName
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetName@n3EngineClientAnarchy_t@@QBEPBDABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetName(IntPtr pThis, Identity* identity, Identity* identityUnk);
+        public static extern unsafe IntPtr GetName(IntPtr pThis, Identity* identity, Identity* identityUnk);
 
         //IsFormulaReady
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsFormulaReady@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern byte IsFormulaReady(IntPtr pThis, Identity* identity);
+        public static extern unsafe byte IsFormulaReady(IntPtr pThis, Identity* identity);
 
         //HasPerk
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_HasPerk@n3EngineClientAnarchy_t@@QAE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -57,15 +57,15 @@ namespace AOSharp.Core.Imports
 
         //GetSpecialActionList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSpecialActionList@n3EngineClientAnarchy_t@@QAEPAV?$list@VSpecialAction_t@@V?$allocator@VSpecialAction_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern StdObjList* GetSpecialActionList(IntPtr pThis);
+        public static extern unsafe StdObjList* GetSpecialActionList(IntPtr pThis);
 
         //GetNanoSpellList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetNanoSpellList@n3EngineClientAnarchy_t@@QAEPBV?$list@HV?$allocator@H@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern StdObjList* GetNanoSpellList(IntPtr pThis);
+        public static extern unsafe StdObjList* GetNanoSpellList(IntPtr pThis);
 
         //GetNanoTemplateInfoList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetNanoTemplateInfoList@n3EngineClientAnarchy_t@@QBEPAV?$list@VNanoTemplateInfo_c@@V?$allocator@VNanoTemplateInfo_c@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern StdObjList* GetNanoTemplateInfoList(IntPtr pThis, Identity* identity);
+        public static extern unsafe StdObjList* GetNanoTemplateInfoList(IntPtr pThis, Identity* identity);
 
         //IsMoving
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsMoving@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -77,15 +77,15 @@ namespace AOSharp.Core.Imports
 
         //GetContainerInventoryList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetContainerInventoryList@n3EngineClientAnarchy_t@@QBEPBV?$list@VInventoryEntry_t@@V?$allocator@VInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetContainerInventoryList(IntPtr pThis, Identity* identity);
+        public static extern unsafe IntPtr GetContainerInventoryList(IntPtr pThis, Identity* identity);
 
         //GetInventoryVec
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetInventoryVec@n3EngineClientAnarchy_t@@QAEPBV?$vector@PAVNewInventoryEntry_t@@V?$allocator@PAVNewInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
+        public static extern unsafe IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
 
         //IsInTeam
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsInTeam@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern bool IsInTeam(IntPtr pThis, Identity* identity);
+        public static extern unsafe bool IsInTeam(IntPtr pThis, Identity* identity);
 
         //TradeskillCombine
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TradeskillCombine@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -93,11 +93,11 @@ namespace AOSharp.Core.Imports
 
         //GetClientDynelId
         [DllImport("Gamecode.dll", EntryPoint = "?GetClientDynelId@n3EngineClientAnarchy_t@@UBE?AVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern Identity* GetClientDynelId(IntPtr pThis);
+        public static extern unsafe Identity* GetClientDynelId(IntPtr pThis);
 
         //SelectedTarget
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SelectedTarget@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr SelectedTarget(IntPtr pThis, Identity* target);
+        public static extern unsafe IntPtr SelectedTarget(IntPtr pThis, Identity* target);
 
         //IsInRaidTeam
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsInRaidTeam@n3EngineClientAnarchy_t@@QAE_NXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -105,31 +105,31 @@ namespace AOSharp.Core.Imports
 
         //GetTeamMemberList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetTeamMemberList@n3EngineClientAnarchy_t@@QAEPAV?$vector@PAVTeamEntry_t@@V?$allocator@PAVTeamEntry_t@@@std@@@std@@H@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern StdObjVector* GetTeamMemberList(IntPtr pThis, int teamIndex);
+        public static extern unsafe StdObjVector* GetTeamMemberList(IntPtr pThis, int teamIndex);
 
         //GetFullPerkMap
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetFullPerkMap@n3EngineClientAnarchy_t@@QBEABV?$vector@VPerk_t@@V?$allocator@VPerk_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetFullPerkMap(IntPtr pThis);
+        public static extern IntPtr GetFullPerkMap(IntPtr pThis);
 
         //IsTeamLeader
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsTeamLeader@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern byte IsTeamLeader(IntPtr pThis, Identity* target);
+        public static extern unsafe byte IsTeamLeader(IntPtr pThis, Identity* target);
 
         //GetItemByTemplate
         [DllImport("Gamecode.dll", EntryPoint = "?GetItemByTemplate@n3EngineClientAnarchy_t@@ABEPAVDummyItemBase_t@@VIdentity_t@@ABV3@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern IntPtr GetItemByTemplate(IntPtr pThis, Identity template, Identity* unk);
+        public static extern unsafe IntPtr GetItemByTemplate(IntPtr pThis, Identity template, Identity* unk);
 
         //GetBuffCurrentTime
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffCurrentTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern int GetBuffCurrentTime(IntPtr pThis, Identity* identity, Identity* unk);
+        public static extern unsafe int GetBuffCurrentTime(IntPtr pThis, Identity* identity, Identity* unk);
 
         //GetBuffTotalTime
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffTotalTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
+        public static extern unsafe int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
 
         //CreateDummyItemID
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CreateDummyItemID@n3EngineClientAnarchy_t@@QBE_NAAVIdentity_t@@ABVACGItem_t@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern byte CreateDummyItemID(IntPtr pThis, Identity* template, ACGItem* acgItem);
+        public static extern unsafe byte CreateDummyItemID(IntPtr pThis, Identity* template, ACGItem* acgItem);
 
         //TextCommand
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TextCommand@n3EngineClientAnarchy_t@@QAE_NHPBDABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -142,7 +142,7 @@ namespace AOSharp.Core.Imports
         internal static GetMissionListDelegate GetMissionList;
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        internal unsafe delegate IntPtr GetItemActionInfoDelegate(IntPtr pThis, ItemActionInfo action);
+        internal delegate IntPtr GetItemActionInfoDelegate(IntPtr pThis, ItemActionInfo action);
         internal static GetItemActionInfoDelegate GetItemActionInfo;
     }
 }

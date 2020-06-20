@@ -10,9 +10,9 @@ namespace AOSharp.Core.Imports
         public static extern IntPtr GetInstanceIfAny();
 
         [DllImport("GUI.dll", EntryPoint = "?SetTarget@TargetingModule_t@@CAXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.Cdecl)]
-        public unsafe static extern void SetTarget(Identity* target, bool unk);
+        public static extern unsafe void SetTarget(Identity* target, bool unk);
 
         [DllImport("GUI.dll", EntryPoint = "?SelectSelf@TargetingModule_t@@QAEXXZ", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern void SelectSelf(IntPtr pThis);
+        public static extern void SelectSelf(IntPtr pThis);
     }
 }

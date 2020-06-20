@@ -42,7 +42,8 @@ namespace AOSharp.Core
 
         public unsafe bool Use(SimpleChar target, bool packetOnly = false)
         {
-            Targeting.SetTarget(target);
+            if (target != null)
+                Targeting.SetTarget(target);
 
             if (packetOnly)
             {
@@ -94,7 +95,7 @@ namespace AOSharp.Core
             });
         }
 
-        private unsafe static List<Perk> GetPerks()
+        private static unsafe List<Perk> GetPerks()
         {
             List<Perk> perks = new List<Perk>();
             IntPtr pEngine = N3Engine_t.GetInstance();

@@ -15,29 +15,29 @@ namespace AOSharp.Core
 
         public unsafe Vector3 Position
         {
-            get { return (*(MemStruct*)Pointer).Vehicle->Position; }
-            set { (*(MemStruct*)Pointer).Vehicle->Position = value; }
+            get => (*(MemStruct*)Pointer).Vehicle->Position;
+            set => (*(MemStruct*)Pointer).Vehicle->Position = value;
         }
 
         public unsafe Quaternion Rotation
         {
-            get { return (*(MemStruct*)Pointer).Vehicle->Rotation; }
-            set { N3Dynel_t.SetRelRot(Pointer, &value); }
+            get => (*(MemStruct*)Pointer).Vehicle->Rotation;
+            set => N3Dynel_t.SetRelRot(Pointer, &value);
         }
 
         public unsafe MovementState MovementState
         {
-            get { return (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State; }
-            set { (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State = value; }
+            get => (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State;
+            set => (*(MemStruct*)Pointer).Vehicle->CharMovementStatus->State = value;
         }
 
         public unsafe float Runspeed
         {
-            get { return (*(MemStruct*)Pointer).Vehicle->Runspeed; }
-            set { (*(MemStruct*)Pointer).Vehicle->Runspeed = value; }
+            get => (*(MemStruct*)Pointer).Vehicle->Runspeed;
+            set => (*(MemStruct*)Pointer).Vehicle->Runspeed = value;
         }
 
-        public unsafe virtual bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
+        public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
         public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
 

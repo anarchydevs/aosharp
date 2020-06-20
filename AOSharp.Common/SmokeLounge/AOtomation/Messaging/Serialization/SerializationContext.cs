@@ -47,13 +47,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         #region Public Properties
 
-        public IEnumerable<DiagnosticInfo> DiagnosticInfos
-        {
-            get
-            {
-                return this.diagnosticInfos;
-            }
-        }
+        public IEnumerable<DiagnosticInfo> DiagnosticInfos => this.diagnosticInfos;
 
         #endregion
 

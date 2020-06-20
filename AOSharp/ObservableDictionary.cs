@@ -22,14 +22,10 @@ namespace AOSharp
 
         public new TValue this[TKey key]
         {
-            get
-            {
-                return base[key];
-            }
+            get => base[key];
             set
             {
-                TValue oldValue;
-                bool exist = base.TryGetValue(key, out oldValue);
+                bool exist = base.TryGetValue(key, out TValue oldValue);
                 var oldItem = new KeyValuePair<TKey, TValue>(key, oldValue);
                 base[key] = value;
                 var newItem = new KeyValuePair<TKey, TValue>(key, value);
@@ -58,8 +54,7 @@ namespace AOSharp
 
         public new bool Remove(TKey key)
         {
-            TValue value;
-            if (base.TryGetValue(key, out value))
+            if (base.TryGetValue(key, out TValue value))
             {
                 var item = new KeyValuePair<TKey, TValue>(key, base[key]);
                 bool result = base.Remove(key);

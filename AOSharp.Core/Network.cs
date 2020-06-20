@@ -31,7 +31,7 @@ namespace AOSharp.Core
             Send(packet);
         }
 
-        public unsafe static void Send(byte[] payload)
+        public static unsafe void Send(byte[] payload)
         {
             IntPtr pClient = Client_t.GetInstanceIfAny();
 
