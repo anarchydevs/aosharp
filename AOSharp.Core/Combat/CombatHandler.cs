@@ -14,7 +14,7 @@ namespace AOSharp.Core.Combat
     {
         private float ACTION_TIMEOUT = 1f;
         private int MAX_CONCURRENT_PERKS = 4;
-        private Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
+        protected Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
         //protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
         private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
         private List<(int[] SpellGroup, SpellConditionProcessor ConditionProcessor)> _spellRules = new List<(int[], SpellConditionProcessor)>();
@@ -223,7 +223,7 @@ namespace AOSharp.Core.Combat
             public CombatActionQueueItem(ICombatAction action, SimpleChar target = null)
             {
                 CombatAction = action;
-                Target = target ?? DynelManager.LocalPlayer;
+                Target = target;
                 Timeout = Time.NormalTime + 1;
             }
 

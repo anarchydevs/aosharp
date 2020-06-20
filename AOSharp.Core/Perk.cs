@@ -42,7 +42,8 @@ namespace AOSharp.Core
 
         public unsafe bool Use(SimpleChar target, bool packetOnly = false)
         {
-            Targeting.SetTarget(target);
+            if (target != null)
+                Targeting.SetTarget(target);
 
             if (packetOnly)
             {
