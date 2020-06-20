@@ -98,15 +98,6 @@ namespace TestPlugin
                     Chat.WriteLine($"\t{pet.Name}");
                 }
 
-                IntPtr pEngine = N3Engine_t.GetInstance();
-
-                if (pEngine == IntPtr.Zero)
-                    return;
-
-                Identity self = DynelManager.LocalPlayer.Identity;
-                Identity nano = new Identity(IdentityType.NanoProgram, 223380);
-                N3EngineClientAnarchy_t.CastNanoSpell(pEngine, &nano, &self);
-
 
                 /*
                 Item item;

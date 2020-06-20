@@ -36,8 +36,8 @@ namespace AOSharp.Bootstrap.Imports
 
         //CastNanoSpell
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity);
-        public unsafe delegate void DCastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity);
+        public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
+        public unsafe delegate void DCastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity targetIdentity);
 
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsPerk@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsPerk(IntPtr pThis, uint id);

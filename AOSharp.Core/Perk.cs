@@ -126,9 +126,15 @@ namespace AOSharp.Core
 
         internal static void OnPerkFinished(int lowId, int highId, Identity owner)
         {
-            Perk perk;
-            if (!Find(highId, out perk))
+            if (owner != DynelManager.LocalPlayer.Identity)
                 return;
+
+            if (!Find(lowId, out Perk perk))
+            {
+                List<Perk> perks = Perk.List;
+                Chat.WriteLine($"Unable to find perk {lowId} {highId}");
+                return;
+            }
 
             PerkExecuted?.Invoke(null, new PerkExecutedEventArgs
             {
@@ -137,13 +143,10 @@ namespace AOSharp.Core
                 Perk = perk
             });
 
-            if (owner != DynelManager.LocalPlayer.Identity)
-                return;
-
             Identity dequeudPerk = _executingQueue.Dequeue().Identity;
             if (dequeudPerk.Instance != lowId && dequeudPerk.Instance != highId)
-                return;
-                //Chat.WriteLine($"Perk queue desync {perk.Identity} != {dequeudPerk}");
+                //return;
+                Chat.WriteLine($"Perk queue desync {perk.Identity} != {dequeudPerk}");
 
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.OnPerkExecuted(perk);

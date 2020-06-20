@@ -116,7 +116,10 @@ namespace AOSharp.Core.Combat
             {
                 //Drop any expired items
                 while (_actionQueue.Peek().Timeout <= Time.NormalTime)
+                {
+                    Chat.WriteLine("Action Timed out");
                     _actionQueue.Dequeue();
+                }
 
                 List<CombatActionQueueItem> dequeueList = new List<CombatActionQueueItem>();
 
@@ -205,6 +208,8 @@ namespace AOSharp.Core.Combat
 
         internal void OnPerkExecuted(Perk perk)
         {
+
+            Chat.WriteLine($"Perk Executed {perk.Name}");
             //Drop the queued action
             _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => (Perk)x.CombatAction != perk));
         }

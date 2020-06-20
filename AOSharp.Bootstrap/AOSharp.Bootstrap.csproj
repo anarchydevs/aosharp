@@ -57,6 +57,7 @@
     <Compile Include="Imports\Connection_t.cs" />
     <Compile Include="Imports\FlowControlModule_t.cs" />
     <Compile Include="Imports\MessageProtocol.cs" />
+    <Compile Include="Imports\N3InterfaceModule_t.cs" />
     <Compile Include="Imports\OptionPanelModule_c.cs" />
     <Compile Include="Imports\TeleportTrier_t.cs" />
     <Compile Include="Imports\N3EngineClientAnarchy_t.cs" />

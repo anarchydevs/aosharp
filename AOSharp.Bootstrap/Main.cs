@@ -158,9 +158,9 @@ namespace AOSharp.Bootstrap
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
 
-            //CreateHook("Gamecode.dll",
-            //           "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z",
-            //            new N3EngineClientAnarchy_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
+            //CreateHook("Interfaces.dll",
+            //           "?N3Msg_CastNanoSpell@N3InterfaceModule_t@@QBEXABVIdentity_t@@0@Z",
+            //            new N3InterfaceModule_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -208,7 +208,7 @@ namespace AOSharp.Bootstrap
             WindowController_c.ViewDeleted(pThis, pView);
         }
 
-        private unsafe void N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, Identity* nanoIdentity, Identity* targetIdentity)
+        private unsafe void N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, Identity* nanoIdentity, Identity target)
         {
             /*
             try
@@ -219,7 +219,7 @@ namespace AOSharp.Bootstrap
             catch (Exception) { }
             */
 
-            N3EngineClientAnarchy_t.CastNanoSpell(pThis, nanoIdentity, targetIdentity);
+            N3InterfaceModule_t.CastNanoSpell(pThis, nanoIdentity, target);
         }
 
 
