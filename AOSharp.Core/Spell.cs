@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AOSharp.Common.GameData;
 using AOSharp.Core.Imports;
 using AOSharp.Core.Combat;
@@ -17,6 +18,7 @@ namespace AOSharp.Core
         public readonly Identity Identity;
         public readonly Nanoline Nanoline;
         public readonly int StackingOrder;
+        public int Cost => GetCost();
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
@@ -46,8 +48,10 @@ namespace AOSharp.Core
 
         public void Cast(SimpleChar target)
         {
-            if (target != null)
-                Targeting.SetTarget(target);
+            if (target == null)
+            {
+                target = DynelManager.LocalPlayer;
+            }
 
             Network.Send(new CharacterActionMessage()
             {
@@ -90,6 +94,31 @@ namespace AOSharp.Core
                 return new Spell[0];
 
             return N3EngineClientAnarchy_t.GetNanoSpellList(pEngine)->ToList().Select(x => new Spell(new Identity(IdentityType.NanoProgram, (*(MemStruct*)x).Id))).ToArray();
+        }
+
+        private int GetCost()
+        {
+            int costModifier = DynelManager.LocalPlayer.GetStat(Stat.NPCostModifier);
+            int baseCost = GetStat(Stat.NanoPoints);
+
+            switch (DynelManager.LocalPlayer.Breed)
+            {
+                case Breed.Nanomage:
+                    costModifier = costModifier < 45 ? 45 : costModifier;
+                    break;
+                case Breed.Atrox:
+                    costModifier = costModifier < 55 ? 55 : costModifier;
+                    break;
+                case Breed.Solitus:
+                case Breed.Opifex:
+                default:
+                    costModifier = costModifier < 50 ? 50 : costModifier;
+                    break;
+            }
+
+            Chat.WriteLine($"name={Name}, costModifer={costModifier}, baseCost={baseCost}");
+
+            return (int)(baseCost * ((double)costModifier / 100));
         }
 
         public bool Equals(Spell other)
