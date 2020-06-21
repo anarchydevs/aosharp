@@ -54,7 +54,7 @@ namespace TestPlugin
 
                 Chat.WriteLine("Tests:");
 
-
+                Team.Members.ForEach(x => Chat.WriteLine($"{x.Name} IsLeader: {x.IsLeader}"));
 
                 /*
                 foreach(Spell spell in Spell.List)

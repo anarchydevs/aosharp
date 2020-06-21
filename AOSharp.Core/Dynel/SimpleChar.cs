@@ -74,22 +74,16 @@ namespace AOSharp.Core
             return Vector3.Angle(Rotation.Forward, target.Position - Position) <= 90f;
         }
 
-        public unsafe bool IsInRange(Dynel target)
+        public bool IsInAttackRange(bool requireAllWeapons = false)
         {
-            const EquipSlot mainHand = EquipSlot.Weap_RightHand;
-            const EquipSlot offHand = EquipSlot.Weap_LeftHand;
-
             Dictionary<EquipSlot, WeaponItem> weapons = DynelManager.LocalPlayer.Weapons;
 
             if (weapons.Count > 0)
             {
-                if (weapons.ContainsKey(mainHand))
-                    return weapons[mainHand].IsDynelInRange(target);
+                if (!requireAllWeapons)
+                    return weapons.Values.Any(x => x.IsDynelInRange(this));
 
-                if (weapons.ContainsKey(offHand))
-                    return weapons[offHand].IsDynelInRange(target);
-
-                return false;
+                return weapons.Values.Count(x => x.IsDynelInRange(this)) == weapons.Count;
             }
             else
             {
@@ -101,7 +95,7 @@ namespace AOSharp.Core
 
                 IntPtr pdummyWeaponUnk = *(IntPtr*)(dummyWeapon + 0xE4);
 
-                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, target.Pointer) == 0x01;
+                return WeaponHolder_t.IsDynelInWeaponRange(pWeaponHolder, pdummyWeaponUnk, Pointer) == 0x01;
             }
         }
 

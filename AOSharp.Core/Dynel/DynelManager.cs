@@ -35,6 +35,11 @@ namespace AOSharp.Core
             return (simpleChar = Characters.FirstOrDefault(x => x.Identity == identity)) != null;
         }
 
+        public static bool Find(string name, out SimpleChar simpleChar)
+        {
+            return (simpleChar = Characters.FirstOrDefault(x => x.Name == name)) != null;
+        }
+
         public static bool Exists(string name, bool includePets = false)
         {
             if(includePets)

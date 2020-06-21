@@ -17,14 +17,14 @@ namespace AOSharp.Core
         private readonly IntPtr _pWeaponHolder;
         private readonly IntPtr _pWeaponUnk;
 
-        public WeaponItem(IntPtr pointer, IntPtr pWeaponHolder, IntPtr pWeaponUnk) : base(pointer)
+        internal WeaponItem(IntPtr pointer, IntPtr pWeaponHolder, IntPtr pWeaponUnk) : base(pointer)
         {
             _pWeaponHolder = pWeaponHolder;
             _pWeaponUnk = pWeaponUnk;
             SpecialAttacks = GetSpecialAttacks();
         }
 
-        public WeaponItem(Dynel dynel) : base(dynel.Pointer)
+        internal WeaponItem(Dynel dynel) : base(dynel.Pointer)
         {
         }
 
