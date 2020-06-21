@@ -35,6 +35,10 @@ namespace AOSharp.Core.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
 
+        //GetCorrectActionId
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetCorrectActionID@n3EngineClientAnarchy_t@@QBEXAAVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe void GetCorrectActionId(IntPtr pThis, Identity* id);
+
         //PerformSpecialAction
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe byte PerformSpecialAction(IntPtr pThis, Identity* action);

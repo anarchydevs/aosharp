@@ -63,6 +63,7 @@ namespace TestPlugin
                 }
                 */
 
+                
                 foreach(Perk perk in Perk.List)
                 {
                     Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
@@ -86,6 +87,7 @@ namespace TestPlugin
                 }
                 */
 
+                /*
                 Chat.WriteLine("Pet Identities:");
                 foreach(Identity identity in DynelManager.LocalPlayer.Pets)
                 {
@@ -97,7 +99,7 @@ namespace TestPlugin
                 {
                     Chat.WriteLine($"\t{pet.Name}");
                 }
-
+                */
 
                 /*
                 Item item;
@@ -122,6 +124,7 @@ namespace TestPlugin
                 movementController.RunPath(testPath);
                 */
 
+                /*
                 Chat.WriteLine("Missions");
                 foreach (Mission mission in Mission.List)
                 {
@@ -130,12 +133,14 @@ namespace TestPlugin
                     Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
+                */
 
                 //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
 
                 _menu = new Menu("TestPlugin", "TestPlugin");
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 OptionPanel.AddMenu(_menu);
+
 
                 /*
                 List<Item> characterItems = Inventory.Items;
@@ -177,7 +182,6 @@ namespace TestPlugin
                 Network.N3MessageReceived += Network_N3MessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
-                Perk.PerkExecuted += Perk_PerkExecuted;
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 DynelManager.DynelSpawned += DynelSpawned;
@@ -253,11 +257,6 @@ namespace TestPlugin
         private void Game_OnTeleportEnded(object s, EventArgs e)
         {
             Chat.WriteLine($"Teleport Ended!");
-        }
-
-        private void Perk_PerkExecuted(object s, PerkExecutedEventArgs e)
-        {
-            Chat.WriteLine($"Perk {e.Perk.Name} executed by {e.OwnerIdentity}");
         }
 
         private void Item_ItemUsed(object s, ItemUsedEventArgs e)

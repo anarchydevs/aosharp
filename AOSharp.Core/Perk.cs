@@ -26,8 +26,6 @@ namespace AOSharp.Core
         private static Queue<QueueItem> _pendingQueue = new Queue<QueueItem>();
         private static Queue<QueueItem> _executingQueue = new Queue<QueueItem>();
 
-        public static EventHandler<PerkExecutedEventArgs> PerkExecuted;
-
         private Perk(IntPtr pointer, Identity identity, int hashInt) : base(identity)
         {
             Identity = identity;
@@ -125,32 +123,27 @@ namespace AOSharp.Core
                 _executingQueue.Dequeue();
         }
 
-        internal static void OnPerkFinished(int lowId, int highId, Identity owner)
+        internal static void OnPerkFinished(int lowId, int highId, int ql, Identity owner)
         {
-            if (owner != DynelManager.LocalPlayer.Identity)
-                return;
-
-            if (!Find(lowId, out Perk perk))
-            {
-                List<Perk> perks = Perk.List;
-                Chat.WriteLine($"Unable to find perk {lowId} {highId}");
-                return;
-            }
-
+            //Will have to implement this some other way
+            /*
             PerkExecuted?.Invoke(null, new PerkExecutedEventArgs
             {
                 OwnerIdentity = owner,
                 Owner = DynelManager.GetDynel(owner)?.Cast<SimpleChar>(),
                 Perk = perk
             });
+            */
 
-            Identity dequeudPerk = _executingQueue.Dequeue().Identity;
-            if (dequeudPerk.Instance != lowId && dequeudPerk.Instance != highId)
-                //return;
-                Chat.WriteLine($"Perk queue desync {perk.Identity} != {dequeudPerk}");
+            if (owner != DynelManager.LocalPlayer.Identity)
+                return;
+
+            DummyItem perkDummyItem = new DummyItem(lowId, highId, ql);
+
+            _executingQueue.Dequeue();
 
             if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnPerkExecuted(perk);
+                CombatHandler.Instance.OnPerkExecuted(perkDummyItem);
         }
 
         internal static void OnPerkQueued()
