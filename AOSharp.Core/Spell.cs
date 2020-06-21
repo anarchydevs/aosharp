@@ -116,8 +116,6 @@ namespace AOSharp.Core
                     break;
             }
 
-            Chat.WriteLine($"name={Name}, costModifer={costModifier}, baseCost={baseCost}");
-
             return (int)(baseCost * ((double)costModifier / 100));
         }
 
