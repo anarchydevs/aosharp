@@ -1,6 +1,6 @@
 ﻿namespace AOSharp.Common.GameData
 {
-    public enum Faction
+    public enum Side
     {
         Neutral = 0,
         Clan = 1,

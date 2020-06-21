@@ -49,7 +49,7 @@
     <Compile Include="GameData\DoorState.cs" />
     <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
-    <Compile Include="GameData\Faction.cs" />
+    <Compile Include="GameData\Side.cs" />
     <Compile Include="GameData\ACGItem.cs" />
     <Compile Include="GameData\PerkHash.cs" />
     <Compile Include="GameData\UseCriteriaOperator.cs" />
