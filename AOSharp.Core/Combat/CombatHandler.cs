@@ -156,7 +156,7 @@ namespace AOSharp.Core.Combat
                 if (!special.IsInRange(target))
                     continue;
 
-                if (special == SpecialAttack.Backstab && (target.FightingTarget == DynelManager.LocalPlayer || target.IsFacing(DynelManager.LocalPlayer)))
+                if (special == SpecialAttack.Backstab && (target.FightingTarget.Identity == DynelManager.LocalPlayer.Identity || target.IsFacing(DynelManager.LocalPlayer)))
                     continue;
 
                 special.UseOn(target);

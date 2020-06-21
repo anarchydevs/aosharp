@@ -8,7 +8,7 @@ using AOSharp.Core.Imports;
 
 namespace AOSharp.Core
 {
-    public static class Playfield
+    public static unsafe class Playfield
     {
         ///<summary>
         ///Playfield Identity
@@ -119,6 +119,16 @@ namespace AOSharp.Core
                 return false;
 
             return N3PlayfieldAnarchy_t.IsShadowlandPF(pPlayfield);
+        }
+
+        public static bool LineOfSight(Vector3 pos1, Vector3 pos2, int zoneCell = 1, bool unknown = false)
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+
+            if (pPlayfield == IntPtr.Zero)
+                return false;
+
+            return N3Playfield_t.LineOfSight(pPlayfield, &pos1, &pos2, zoneCell, false) == 1;
         }
 
         private static bool IsDungeonPF()

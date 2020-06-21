@@ -30,7 +30,7 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
 
         private uint race;
 
-        private Faction side;
+        private Side side;
 
         private uint value;
 
@@ -113,7 +113,7 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
             }
         }
 
-        public Faction Faction
+        public Side Side
         {
             get
             {
@@ -134,7 +134,7 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
         private void UpdateStats()
         {
             var sideValue = this.value & 7;
-            this.side = (Faction)sideValue;
+            this.side = (Side)sideValue;
             var fatnessValue = (this.value & 31) >> 3;
             this.fatness = (Fatness)fatnessValue;
             var breedValue = (this.value & 255) >> 5;

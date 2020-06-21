@@ -37,6 +37,12 @@ namespace AOSharp.Core
 
         public bool IsPet => Flags.HasFlag(DynelFlags.Pet);
 
+        public Profession Profession => (Profession)DynelManager.LocalPlayer.GetStat(Stat.Profession);
+
+        public Breed Breed => (Breed) DynelManager.LocalPlayer.GetStat(Stat.Breed);
+
+        public Side Side => (Side)DynelManager.LocalPlayer.GetStat(Stat.Side);
+
         public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
 
         public bool IsAlive => Health > 0;
@@ -68,7 +74,7 @@ namespace AOSharp.Core
 
             return new SimpleChar(pFightingTarget);
         }
-
+        
         public bool IsFacing(SimpleChar target)
         {
             return Vector3.Angle(Rotation.Forward, target.Position - Position) <= 90f;
@@ -134,10 +140,7 @@ namespace AOSharp.Core
                     {
                         if (special == SpecialAttack.SneakAttack)
                         {
-                            Profession playerProfession =
-                                (Profession) DynelManager.LocalPlayer.GetStat(Stat.Profession);
-
-                            if (playerProfession == Profession.Adventurer || playerProfession == Profession.Shade)
+                            if (Profession == Profession.Adventurer || Profession == Profession.Shade)
                             {
                                 if (DynelManager.LocalPlayer.GetStat(Stat.SneakAttack) >= 100)
                                 {
