@@ -46,7 +46,8 @@ namespace AOSharp.Core
 
         public void Cast(SimpleChar target)
         {
-            Targeting.SetTarget(target);
+            if (target != null)
+                Targeting.SetTarget(target);
 
             Network.Send(new CharacterActionMessage()
             {
