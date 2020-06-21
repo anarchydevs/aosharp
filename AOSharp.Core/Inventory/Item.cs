@@ -43,18 +43,16 @@ namespace AOSharp.Core.Inventory
             MoveToInventory((int)equipSlot);
         }
 
-        public void Use()
+        public void Use(SimpleChar target = null)
         {
-            Use(DynelManager.LocalPlayer);
-        }
+            if (target != null)
+                Targeting.SetTarget(target);
 
-        public void Use(SimpleChar target)
-        {
             Network.Send(new GenericCmdMessage()
             {
                 Action = GenericCmdAction.Use,
                 User = DynelManager.LocalPlayer.Identity,
-                Target = target.Identity
+                Target = Slot
             });
         }
 
