@@ -53,6 +53,8 @@ namespace AOSharp.Core
                 target = DynelManager.LocalPlayer;
             }
 
+            target.Target();
+
             Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.CastNano,
