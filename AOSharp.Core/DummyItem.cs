@@ -101,108 +101,116 @@ namespace AOSharp.Core
                 int param1 = *(int*)(pReq);
                 int param2 = *(int*)(pReq + 0x4);
                 int op = *(int*)(pReq + 0x8);
+
                 bool metReq = false;
                 bool result;
                 bool lastResult;
 
-                if (param1 == 0)
+
+                switch((UseCriteriaOperator)op)
                 {
-                    switch((UseCriteriaOperator)op)
-                    {
-                        case UseCriteriaOperator.And:
-                            if (prevReqsMet < 2)
-                                return false;
+                    case UseCriteriaOperator.EqualTo:
+                    case UseCriteriaOperator.LessThan:
+                    case UseCriteriaOperator.GreaterThan:
+                    case UseCriteriaOperator.BitAnd:
+                    case UseCriteriaOperator.NotBitAnd:
+                        if ((Stat)param1 == Stat.TargetFacing)
+                        {
+                            SimpleChar fightingTarget;
+                            if ((fightingTarget = DynelManager.LocalPlayer.FightingTarget) != null)
+                            {
+                                bool isFacing = fightingTarget.IsFacing(DynelManager.LocalPlayer);
+                                metReq = (param2 == 1) ? !isFacing : isFacing;
+                            }
+                        }
+                        else
+                        {
+                            int stat = skillCheckChar.GetStat((Stat)param1);
 
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
-
-                            //We can early exit on AND 
-                            if (!result || !lastResult)
-                                return false;
-
-                            metReq = true;
-                            break;
-                        case UseCriteriaOperator.Or:
-                            if (prevReqsMet < 2)
-                                return false;
-
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
-
-                            metReq = result || lastResult;
-                            break;
-                        case UseCriteriaOperator.Not:
-                            if (prevReqsMet < 1)
-                                return false;
-
-                            metReq = unk[(prevReqsMet--) - 1];
-                            break;
-                        case UseCriteriaOperator.OnTarget:
-                            if (target == null)
-                                break;
-
-                            skillCheckChar = target;
-                            continue;
-                        case UseCriteriaOperator.HasWornItem:
-                            metReq = false;
-                            break;
-                        case UseCriteriaOperator.IsNpc:
-                            if(param2 == 3)
-                                metReq = target.IsNpc;
-                            break;
-                        case UseCriteriaOperator.HasRunningNano:
-                            metReq = skillCheckChar.Buffs.Any(x => x.Identity.Instance == param2);
-                            break;
-                        case UseCriteriaOperator.HasPerk:
-                            metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2) == 1;
-                            break;
-                        case UseCriteriaOperator.IsPerkUnlocked:
-                            metReq = true;
-                            break;
-                        default:
-                            //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
+                            switch ((UseCriteriaOperator)op)
+                            {
+                                case UseCriteriaOperator.EqualTo:
+                                    metReq = (stat == param2);
+                                    break;
+                                case UseCriteriaOperator.LessThan:
+                                    metReq = (stat < param2);
+                                    break;
+                                case UseCriteriaOperator.GreaterThan:
+                                    metReq = (stat > param2);
+                                    break;
+                                case UseCriteriaOperator.BitAnd:
+                                    metReq = (stat & param2) == param2;
+                                    break;
+                                case UseCriteriaOperator.NotBitAnd:
+                                    metReq = (stat & param2) != param2;
+                                    break;
+                                default:
+                                    //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
+                                    break;
+                            }
+                        }
+                        break;
+                    case UseCriteriaOperator.And:
+                        if (prevReqsMet < 2)
                             return false;
-                    }
-                } 
-                else
-                {
-                    if ((Stat)param1 == Stat.TargetFacing)
-                    {
-                        SimpleChar fightingTarget;
-                        if ((fightingTarget = DynelManager.LocalPlayer.FightingTarget) != null)
-                        {
-                            bool isFacing = fightingTarget.IsFacing(DynelManager.LocalPlayer);
-                            metReq = (param2 == 1) ? !isFacing : isFacing;
-                        }
-                    }
-                    else
-                    {
-                        int stat = skillCheckChar.GetStat((Stat)param1);
 
-                        switch ((UseCriteriaOperator)op)
-                        {
-                            case UseCriteriaOperator.EqualTo:
-                                metReq = (stat == param2);
-                                break;
-                            case UseCriteriaOperator.LessThan:
-                                metReq = (stat < param2);
-                                break;
-                            case UseCriteriaOperator.GreaterThan:
-                                metReq = (stat > param2);
-                                break;
-                            case UseCriteriaOperator.BitAnd:
-                                metReq = (stat & param2) == param2;
-                                break;
-                            default:
-                                //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
-                                break;
-                        }
-                    }
+                        lastResult = unk[(prevReqsMet--) - 1];
+                        result = unk[(prevReqsMet--) - 1];
+
+                        //We can early exit on AND 
+                        if (!result || !lastResult)
+                            return false;
+
+                        metReq = true;
+                        break;
+                    case UseCriteriaOperator.Or:
+                        if (prevReqsMet < 2)
+                            return false;
+
+                        lastResult = unk[(prevReqsMet--) - 1];
+                        result = unk[(prevReqsMet--) - 1];
+
+                        metReq = result || lastResult;
+                        break;
+                    case UseCriteriaOperator.Not:
+                        if (prevReqsMet < 1)
+                            return false;
+
+                        metReq = unk[(prevReqsMet--) - 1];
+                        break;
+                    case UseCriteriaOperator.OnTarget:
+                        if (target == null)
+                            break;
+
+                        skillCheckChar = target;
+                        continue;
+                    case UseCriteriaOperator.OnUser:
+                        skillCheckChar = DynelManager.LocalPlayer;
+                        continue;
+                    case UseCriteriaOperator.HasWornItem:
+                        metReq = false;
+                        break;
+                    case UseCriteriaOperator.IsNpc:
+                        if(param2 == 3)
+                            metReq = target.IsNpc;
+                        break;
+                    case UseCriteriaOperator.HasRunningNano:
+                        metReq = skillCheckChar.Buffs.Any(x => x.Identity.Instance == param2);
+                        break;
+                    case UseCriteriaOperator.HasPerk:
+                        metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2) == 1;
+                        break;
+                    case UseCriteriaOperator.IsPerkUnlocked:
+                        metReq = true;
+                        break;
+                    default:
+                        //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
+                        return false;
                 }
 
                 unk[prevReqsMet++] = metReq;
 
-                //Chat.WriteLine($"Unk -- Param1: {param1} - Param2: {param2} - Op: {op} MetReq: {metReq} ------ {prevReqsMet} -- {unk[0]} {unk[1]} {unk[2]} {unk[3]}");
+                //Chat.WriteLine($"Name: {Name} -- Unk -- Param1: {param1} - Param2: {param2} - Op: {op} MetReq: {metReq} ------ {prevReqsMet} -- {unk[0]} {unk[1]} {unk[2]} {unk[3]}");
             }
 
             return unk[0];
