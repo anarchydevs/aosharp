@@ -1,4 +1,5 @@
 ﻿using AOSharp.Common.GameData;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Core.GameData;
 using System;
 using System.Collections.Generic;

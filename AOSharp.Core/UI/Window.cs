@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
+
 namespace AOSharp.Core.UI
 {
     public class Window

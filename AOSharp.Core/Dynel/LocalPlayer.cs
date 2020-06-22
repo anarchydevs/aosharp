@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Core
 {
@@ -62,24 +63,6 @@ namespace AOSharp.Core
 
             return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
         }
-
-        /*
-        public void CastNano(Identity nano, Dynel target)
-        {
-            //Targeting.SetTarget(target.Identity);
-            CastNano(nano, target.Identity);
-        }
-
-        public void CastNano(Identity nano, Identity target)
-        {
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            if (pEngine == IntPtr.Zero)
-                return;
-
-            N3EngineClientAnarchy_t.CastNanoSpell(pEngine, &nano, &target);
-        }
-        */
 
         public SimpleChar[] GetPetDynels()
         {

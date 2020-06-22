@@ -1,6 +1,6 @@
 ﻿using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using System;
 using System.Collections.Generic;
 using System.Linq;

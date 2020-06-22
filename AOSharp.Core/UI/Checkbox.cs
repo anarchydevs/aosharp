@@ -1,6 +1,7 @@
 ﻿using System;
 using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace AOSharp.Core.UI
 {
@@ -45,11 +46,10 @@ namespace AOSharp.Core.UI
 
         private unsafe bool GetIsChecked()
         {
-            IntPtr pNew = MSVCR100.New(0x100);
-
-            bool result = (new Variant(CheckBox_c.GetValue(_pointer, pNew))).AsInt32() == 1;
-
-            Variant_c.Deconstructor(pNew);
+            Variant pOutput = Variant.Create(0);
+            IntPtr what = CheckBox_c.GetValue(_pointer, pOutput.Pointer);
+            bool result = new Variant(what).AsInt32() == 1;
+            pOutput.Dispose();
 
             return result;
         }

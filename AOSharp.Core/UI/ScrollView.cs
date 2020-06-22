@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 namespace AOSharp.Core.UI
 {
     public class ScrollView : View

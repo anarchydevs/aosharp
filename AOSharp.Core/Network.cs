@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Core.Inventory;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;

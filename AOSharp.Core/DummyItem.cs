@@ -2,10 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
+using AOSharp.Common.Helpers;
 using AOSharp.Common.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.GameData;
-using System.CodeDom;
+using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace AOSharp.Core
 {

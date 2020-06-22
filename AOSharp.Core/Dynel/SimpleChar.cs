@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.GameData;
 using System.Net.NetworkInformation;
 using System.Net;

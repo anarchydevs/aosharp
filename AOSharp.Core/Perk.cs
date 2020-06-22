@@ -6,7 +6,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using AOSharp.Common.GameData;
 using AOSharp.Core.Combat;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core
@@ -64,7 +64,7 @@ namespace AOSharp.Core
                     return false;
 
                 Identity identity = Identity;
-                return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, &identity) == 1;
+                return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, &identity);
             }
         }
 

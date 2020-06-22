@@ -1,6 +1,6 @@
 ﻿using System;
-using AOSharp.Core.Imports;
-using AOSharp.Core.GameData;
+using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace AOSharp.Core.UI
 {

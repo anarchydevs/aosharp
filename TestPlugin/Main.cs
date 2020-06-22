@@ -12,7 +12,7 @@ using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Core.UI.Options;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace TestPlugin
@@ -63,7 +63,7 @@ namespace TestPlugin
                 }
                 */
 
-                
+
                 foreach(Perk perk in Perk.List)
                 {
                     Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
@@ -280,7 +280,7 @@ namespace TestPlugin
             if (Time.NormalTime > lastTrigger + 0.05)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
-                //IntPtr tooltip = AOSharp.Core.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
+                //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
 
                 /*
                 Spell testSpell;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using AOSharp.Bootstrap.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 
@@ -157,10 +157,6 @@ namespace AOSharp.Bootstrap
             CreateHook("Gamecode.dll",
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
-
-            //CreateHook("Interfaces.dll",
-            //           "?N3Msg_CastNanoSpell@N3InterfaceModule_t@@QBEXABVIdentity_t@@0@Z",
-            //            new N3InterfaceModule_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -208,21 +204,6 @@ namespace AOSharp.Bootstrap
             WindowController_c.ViewDeleted(pThis, pView);
         }
 
-        private unsafe void N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, Identity* nanoIdentity, Identity target)
-        {
-            /*
-            try
-            {
-                if (_pluginProxy.AttemptingSpellCast(nanoIdentity, targetIdentity))
-                    return;
-            }
-            catch (Exception) { }
-            */
-
-            N3InterfaceModule_t.CastNanoSpell(pThis, nanoIdentity, target);
-        }
-
-
         private unsafe void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, IntPtr identity, IntPtr pName)
         {
             try
@@ -234,7 +215,7 @@ namespace AOSharp.Bootstrap
 
         private unsafe bool N3EngineClientAnarchy_PerformSpecialAction_Hook(IntPtr pThis, IntPtr identity)
         {
-            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, identity);
+            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, (Identity*)identity.ToPointer());
 
             try
             {

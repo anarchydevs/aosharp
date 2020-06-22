@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using AOSharp.Common.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.Combat;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using AOSharp.Core.GameData;

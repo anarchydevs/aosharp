@@ -2,7 +2,8 @@
 using System.Security.Policy;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Helpers;
+using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core

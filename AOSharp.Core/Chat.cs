@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using AOSharp.Core.Imports;
-using AOSharp.Core.GameData;
-using System.Collections;
+using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.GameData;
 
 namespace AOSharp.Core
 {
@@ -57,18 +56,4 @@ namespace AOSharp.Core
             _messageQueue.Enqueue((text, color));
         }
     }
-}
-
-public enum ChatColor
-{
-    White = 0,
-    LightBlue = 4,
-    Yellow = 5,
-    Green = 8,
-    DarkPink = 9,
-    Black = 11,
-    Red = 12,
-    DarkBlue = 14,
-    Gold = 17,
-    Orange = 27
 }

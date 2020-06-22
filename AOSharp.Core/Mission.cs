@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using AOSharp.Core.GameData;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.GameData;
+using AOSharp.Common.Helpers;
 
 namespace AOSharp.Core
 {

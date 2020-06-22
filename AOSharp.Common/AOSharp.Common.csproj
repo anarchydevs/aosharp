@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\ChatColor.cs" />
     <Compile Include="GameData\Breed.cs" />
     <Compile Include="GameData\CharacterStatus.cs" />
     <Compile Include="GameData\ChatMessageType.cs" />
@@ -72,6 +74,8 @@
     <Compile Include="GameData\TradeAction.cs" />
     <Compile Include="GameData\Vector2.cs" />
     <Compile Include="GameData\Vector3.cs" />
+    <Compile Include="GameData\WindowFlags.cs" />
+    <Compile Include="GameData\WindowStyle.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\ActiveNano.cs" />
@@ -231,6 +235,62 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\StreamWriter.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\TypeInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\TypeSerializerBuilder.cs" />
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Unmanaged\DataTypes\StdObjList.cs" />
+    <Compile Include="Unmanaged\DataTypes\StdObjVector.cs" />
+    <Compile Include="Unmanaged\DataTypes\StdString.cs" />
+    <Compile Include="Unmanaged\DataTypes\StdStructVector.cs" />
+    <Compile Include="Unmanaged\DataTypes\Variant.cs" />
+    <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
+    <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\DummyItem_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\GameTime_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\N3EngineClientAnarchy_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\N3PlayfieldAnarchy_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\BorderView_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ChatGUIModule_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ChatWindowNode_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\CheckBox_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\FlowControlModule_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\HLayoutNode_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\HLayoutSpacer.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ListViewBaseItem_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ListViewBase_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\OptionPanelModule_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ScrollView_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\StringListViewItem_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\TabView.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\TargetingModule_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\TeamViewModule_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ToolTip_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ViewSelector_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\View_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\VLayoutNode_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\WindowController_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\Window_c.cs" />
+    <Compile Include="Unmanaged\Imports\Interfaces\Client_t.cs" />
+    <Compile Include="Unmanaged\Imports\Interfaces\N3InterfaceModule_t.cs" />
+    <Compile Include="Unmanaged\Imports\LDB\LDBFace.cs" />
+    <Compile Include="Unmanaged\Imports\MessageProtocol\MessageProtocol.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Dynel_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3EngineClient_t .cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Engine_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3InfoItemRemote_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Playfield_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Room_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Zone_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\RoomSurface_t.cs" />
+    <Compile Include="Unmanaged\Imports\N3\TilemapSurface_t.cs" />
+    <Compile Include="Unmanaged\Imports\Native\Kernel32.cs" />
+    <Compile Include="Unmanaged\Imports\Native\MSVCR100.cs" />
+    <Compile Include="Unmanaged\Imports\Native\Psapi.cs" />
+    <Compile Include="Unmanaged\Imports\Randy31\Debugger_t.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\String_c.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

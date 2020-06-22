@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.UI;
-using AOSharp.Core.GameData;
+using AOSharp.Common.Helpers;
 using AOSharp.Core.Combat;
 
 namespace AOSharp.Core
