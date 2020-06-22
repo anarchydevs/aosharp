@@ -16,6 +16,7 @@ namespace AOSharp.Core.Movement
         private float _timeSinceLastUnstuckCheck = 0f;
         private float _stopDist = 1f;
         private float _lastDist = 0f;
+        private float _nodeReachedDist = 1f;
         private bool _drawPath;
         private Queue<Vector3> _path = new Queue<Vector3>();
 
@@ -35,7 +36,7 @@ namespace AOSharp.Core.Movement
             if (!DynelManager.LocalPlayer.IsMoving)
                 Game.SetMovement(MovementAction.ForwardStart);
 
-            if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= _stopDist)
+            if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= (_path.Count > 1 ? _nodeReachedDist : _stopDist))
             {
                 _path.Dequeue();
 
@@ -92,18 +93,19 @@ namespace AOSharp.Core.Movement
                 Game.SetMovement(MovementAction.ForwardStop);
         }
 
-        public virtual void MoveTo(Vector3 pos)
+        public virtual void MoveTo(Vector3 pos, float stopDistance = 1f)
         {
-            RunPath(new List<Vector3> { pos });
+            RunPath(new List<Vector3> { pos }, stopDistance);
         }
 
-        public virtual void RunPath(List<Vector3> path)
+        public virtual void RunPath(List<Vector3> path, float stopDistance = 1f)
         {
+            _stopDist = stopDistance;
             _path.Clear();
 
             foreach (Vector3 wp in path)
             {
-                if (DynelManager.LocalPlayer.Position.DistanceFrom(wp) > _stopDist)
+                if (DynelManager.LocalPlayer.Position.DistanceFrom(wp) > _nodeReachedDist)
                     _path.Enqueue(wp);
             }
         }
