@@ -1,6 +1,7 @@
 ﻿using AOSharp.Common.GameData;
-using AOSharp.Core.GameData;
-using AOSharp.Core.Imports;
+using AOSharp.Common.Helpers;
+using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Imports;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;

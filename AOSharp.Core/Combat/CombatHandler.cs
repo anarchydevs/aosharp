@@ -43,9 +43,9 @@ namespace AOSharp.Core.Combat
                 SpecialAttacks(fightingTarget);
 
             //Only queue perks if we have no items awaiting usage and aren't over max concurrent perks
-            if(!_actionQueue.Any(x => x.CombatAction is Item))
+            if (!_actionQueue.Any(x => x.CombatAction is Item))
             {
-                foreach(var perkRule in _perkRules)
+                foreach (var perkRule in _perkRules)
                 {
                     if (_actionQueue.Count(x => x.CombatAction is Perk) >= MAX_CONCURRENT_PERKS)
                         break;
@@ -107,7 +107,7 @@ namespace AOSharp.Core.Combat
             if (_actionQueue.Count > 0)
             {
                 //Drop any expired items
-                while (_actionQueue.Peek().Timeout <= Time.NormalTime)
+                while (_actionQueue.Count > 0 && _actionQueue.Peek().Timeout <= Time.NormalTime)
                     _actionQueue.Dequeue();
 
                 List<CombatActionQueueItem> dequeueList = new List<CombatActionQueueItem>();
@@ -131,9 +131,9 @@ namespace AOSharp.Core.Combat
                             dequeueList.Add(actionItem);
                             continue;
                         }
-                        
+
                         actionItem.Used = true;
-                        actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;          
+                        actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;
                     }
                 }
 
@@ -156,7 +156,7 @@ namespace AOSharp.Core.Combat
                 if (!special.IsInRange(target))
                     continue;
 
-                if (special == SpecialAttack.Backstab && (target.FightingTarget.Identity == DynelManager.LocalPlayer.Identity || target.IsFacing(DynelManager.LocalPlayer)))
+                if (special == SpecialAttack.Backstab && (!target.IsAttacking || target.FightingTarget.Identity == DynelManager.LocalPlayer.Identity || target.IsFacing(DynelManager.LocalPlayer)))
                     continue;
 
                 special.UseOn(target);
