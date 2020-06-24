@@ -9,6 +9,8 @@ using System.Threading;
 using AOSharp.Common.Unmanaged.Imports;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
+using AOSharp.Common.Helpers;
+using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace AOSharp.Bootstrap
 {
@@ -21,6 +23,9 @@ namespace AOSharp.Bootstrap
         private ManualResetEvent _unloadEvent;
         private static List<LocalHook> _hooks = new List<LocalHook>();
         private PluginProxy _pluginProxy;
+
+        private string _lastChatInput;
+        private IntPtr _lastChatInputWindowPtr;
 
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
@@ -51,11 +56,13 @@ namespace AOSharp.Bootstrap
             _connectEvent.Set();
 
             SetupHooks();
+            //ProcessChatInputPatcher.Patch(this, Test);
         }
 
         private void OnIPCClientDisconnected(IPCServer pipe)
         {
             UnhookAll();
+            //ProcessChatInputPatcher.Unpatch();
 
             _ipcPipe.Close();
 
@@ -157,6 +164,14 @@ namespace AOSharp.Bootstrap
             CreateHook("Gamecode.dll",
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
+
+            if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
+            {
+                CommandInterpreter_c.ProcessChatInput = Marshal.GetDelegateForFunctionPointer<CommandInterpreter_c.DProcessChatInput>(pProcessCommand);
+                CommandInterpreter_c.GetCommand = Marshal.GetDelegateForFunctionPointer<CommandInterpreter_c.DGetCommand>(pGetCommand);
+                CreateHook(pProcessCommand, new CommandInterpreter_c.DProcessChatInput(ProcessChatInput_Hook));
+                CreateHook(pGetCommand, new CommandInterpreter_c.DGetCommand(GetCommand_Hook));
+            }
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)
@@ -164,7 +179,7 @@ namespace AOSharp.Bootstrap
             CreateHook(LocalHook.GetProcAddress(module, funcName), newFunc);
         }
 
-        private void CreateHook(IntPtr origFunc, Delegate newFunc)
+        public void CreateHook(IntPtr origFunc, Delegate newFunc)
         {
             LocalHook hook = LocalHook.Create(origFunc, newFunc, this);
             hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
@@ -177,7 +192,24 @@ namespace AOSharp.Bootstrap
                 hook.Dispose();
         }
 
-        public int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)
+        public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, StdString* commandText)
+        {
+            _lastChatInput = commandText->ToString();
+            _lastChatInputWindowPtr = pWindow;
+
+            return CommandInterpreter_c.ProcessChatInput(pThis, pWindow, commandText);
+        }
+
+        public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
+        {
+            IntPtr result;
+            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero)
+                _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
+
+            return result;
+        }
+
+        private int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)
         {
             //Let the client process the packet before we inspect it.
             int ret = MessageProtocol.DataBlockToMessage(size, pDataBlock);
@@ -219,7 +251,7 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if(specialActionResult && N3EngineClientAnarchy_t.IsPerk(pThis, (*(uint*)identity)))
+                if (specialActionResult && N3EngineClientAnarchy_t.IsPerk(pThis, (*(uint*)identity)))
                     _pluginProxy.ClientPerformedPerk(identity);
             }
             catch (Exception) { }
@@ -243,7 +275,7 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                if(!*FlowControlModule_t.pIsTeleporting)
+                if (!*FlowControlModule_t.pIsTeleporting)
                     _pluginProxy.TeleportStarted();
             }
             catch (Exception) { }
@@ -339,11 +371,18 @@ namespace AOSharp.Bootstrap
             public ViewDeletedDelegate ViewDeleted;
             public delegate void AttemptingSpellCastDelegate(AttemptingSpellCastEventArgs args);
             public AttemptingSpellCastDelegate AttemptingSpellCast;
+            public delegate void UnknownCommandDelegate(IntPtr pWindow, string command);
+            public UnknownCommandDelegate UnknownChatCommand;
         }
 
         public class PluginProxy : MarshalByRefObject
         {
             private static CoreDelegates _coreDelegates;
+
+            public void UnknownChatCommand(IntPtr pWindow, string command)
+            {
+                _coreDelegates.UnknownChatCommand?.Invoke(pWindow, command);
+            }
 
             public void DataBlockToMessage(byte[] datablock)
             {
@@ -357,7 +396,7 @@ namespace AOSharp.Bootstrap
 
             public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
             {
-                AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*) nanoIdentity, *(Identity*) targetIdentity);
+                AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*)nanoIdentity, *(Identity*)targetIdentity);
                 _coreDelegates.AttemptingSpellCast?.Invoke(eventArgs);
                 return eventArgs.Blocked;
             }
@@ -412,13 +451,13 @@ namespace AOSharp.Bootstrap
                 _coreDelegates.ViewDeleted?.Invoke(pView);
             }
 
-            private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T: class
+            private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T : class
             {
                 Type t = assembly.GetType(className);
 
                 if (t == null)
                     return default(T);
-                
+
                 MethodInfo m = t.GetMethod(methodName, BindingFlags.Static | BindingFlags.NonPublic);
 
                 if (m == null)
@@ -454,7 +493,8 @@ namespace AOSharp.Bootstrap
                     DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnMessage"),
                     JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
                     ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk"),
-                    AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast")
+                    AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
+                    UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.Chat", "OnUnknownCommand")
                 };
             }
 
@@ -476,7 +516,7 @@ namespace AOSharp.Bootstrap
                         try
                         {
                             Assembly.Load(reference);
-                        } 
+                        }
                         catch (FileNotFoundException)
                         {
                             Assembly.LoadFrom($"{Path.GetDirectoryName(assemblyPath)}\\{reference.Name}.dll");
@@ -485,7 +525,7 @@ namespace AOSharp.Bootstrap
 
                     // Find the first AOSharp.Core.IAOPluginEntry
                     Type[] exportedTypes = assembly.GetExportedTypes();
-                    foreach(Type type in exportedTypes)
+                    foreach (Type type in exportedTypes)
                     {
                         if (type.GetInterface("AOSharp.Core.IAOPluginEntry") == null)
                             continue;

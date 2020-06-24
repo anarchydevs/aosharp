@@ -141,6 +141,12 @@ namespace TestPlugin
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 OptionPanel.AddMenu(_menu);
 
+                Chat.RegisterCommand("thankstrey", (string  command, string[] param, IntPtr pWindow) =>
+                {
+                    int param1 = int.Parse(param[0]);
+                    int param2 = int.Parse(param[1]);
+                    Chat.WriteLine(pWindow, $"{param1} + {param2} = {param1 + param2}", ChatColor.Orange);
+                });
 
                 /*
                 List<Item> characterItems = Inventory.Items;

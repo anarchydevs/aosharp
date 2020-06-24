@@ -13,5 +13,11 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr GetCurrentProcess();
+
+        [DllImport("kernel32.dll")]
+        public static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+
+        [DllImport("kernel32.dll")]
+        public static extern void CopyMemory(IntPtr destination, IntPtr source, uint length);
     }
 }

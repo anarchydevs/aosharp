@@ -62,6 +62,7 @@
     <Compile Include="IPC\IPCServer.cs" />
     <Compile Include="IPC\Messages\LoadAssemblyMessage.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="ProcessChatInputPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

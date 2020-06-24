@@ -250,6 +250,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\N3PlayfieldAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\CommandInterpreter_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\BorderView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ChatGUIModule_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ChatWindowNode_t.cs" />
