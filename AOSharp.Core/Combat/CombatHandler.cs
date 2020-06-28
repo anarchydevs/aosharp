@@ -16,8 +16,9 @@ namespace AOSharp.Core.Combat
         private int MAX_CONCURRENT_PERKS = 4;
         protected Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
         //protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
-        private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
-        private List<(int[] SpellGroup, SpellConditionProcessor ConditionProcessor)> _spellRules = new List<(int[], SpellConditionProcessor)>();
+        //private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
+        private List<PerkRule> _perkRules = new List<PerkRule>();
+        private List<SpellRule> _spellRules = new List<SpellRule>();
 
         protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out SimpleChar target);
         protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out SimpleChar target);
@@ -45,7 +46,7 @@ namespace AOSharp.Core.Combat
             //Only queue perks if we have no items awaiting usage and aren't over max concurrent perks
             if (!_actionQueue.Any(x => x.CombatAction is Item))
             {
-                foreach (var perkRule in _perkRules)
+                foreach (var perkRule in _perkRules.OrderBy(p => (int)p.Priority))
                 {
                     if (_actionQueue.Count(x => x.CombatAction is Perk) >= MAX_CONCURRENT_PERKS)
                         break;
@@ -59,7 +60,7 @@ namespace AOSharp.Core.Combat
                     if (_actionQueue.Any(x => x.CombatAction is Perk action && action == perk))
                         continue;
 
-                    if (perkRule.ConditionProcessor != null && perkRule.ConditionProcessor.Invoke(perk, fightingTarget, out SimpleChar target))
+                    if (perkRule.PerkConditionProcessor != null && perkRule.PerkConditionProcessor.Invoke(perk, fightingTarget, out SimpleChar target))
                     {
                         if (!perk.MeetsUseReqs(target))
                             continue;
@@ -72,7 +73,7 @@ namespace AOSharp.Core.Combat
 
             if (!Spell.HasPendingCast)
             {
-                foreach (var spellRule in _spellRules)
+                foreach (var spellRule in _spellRules.OrderBy(s => (int)s.Priority))
                 {
                     Spell spell = null;
 
@@ -93,7 +94,7 @@ namespace AOSharp.Core.Combat
                     if (!spell.IsReady)
                         continue;
 
-                    if (spellRule.ConditionProcessor != null && spellRule.ConditionProcessor.Invoke(spell, fightingTarget, out SimpleChar target))
+                    if (spellRule.SpellConditionProcessor != null && spellRule.SpellConditionProcessor.Invoke(spell, fightingTarget, out SimpleChar target))
                     {
                         if (!spell.MeetsUseReqs(target))
                             continue;
@@ -163,32 +164,32 @@ namespace AOSharp.Core.Combat
             }
         }
 
-        protected void RegisterPerkProcessor(PerkHash perkHash, PerkConditionProcessor conditionProcessor)
+        protected void RegisterPerkProcessor(PerkHash perkHash, PerkConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
-            _perkRules.Add((perkHash, conditionProcessor));
+            _perkRules.Add(new PerkRule(perkHash, conditionProcessor, priority));
         }
 
-        protected void RegisterSpellProcessor(Spell spell, SpellConditionProcessor conditionProcessor)
+        protected void RegisterSpellProcessor(Spell spell, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
-            RegisterSpellProcessor(new[] { spell.Identity.Instance }, conditionProcessor);
+            RegisterSpellProcessor(new[] { spell.Identity.Instance }, conditionProcessor, priority);
         }
 
-        protected void RegisterSpellProcessor(IEnumerable<Spell> spellGroup, SpellConditionProcessor conditionProcessor)
+        protected void RegisterSpellProcessor(IEnumerable<Spell> spellGroup, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
-            RegisterSpellProcessor(spellGroup.GetIds(), conditionProcessor);
+            RegisterSpellProcessor(spellGroup.GetIds(), conditionProcessor, priority);
         }
 
-        protected void RegisterSpellProcessor(int spellId, SpellConditionProcessor conditionProcessor)
+        protected void RegisterSpellProcessor(int spellId, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
-            RegisterSpellProcessor(new[] { spellId }, conditionProcessor);
+            RegisterSpellProcessor(new[] { spellId }, conditionProcessor, priority);
         }
 
-        protected void RegisterSpellProcessor(int[] spellGroup, SpellConditionProcessor conditionProcessor)
+        protected void RegisterSpellProcessor(int[] spellGroup, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
             if (spellGroup.Length == 0)
                 return;
 
-            _spellRules.Add((spellGroup, conditionProcessor));
+            _spellRules.Add(new SpellRule(spellGroup, conditionProcessor, priority));
         }
 
         internal void OnPerkExecuted(DummyItem perkDummyItem)
@@ -254,6 +255,43 @@ namespace AOSharp.Core.Combat
             Damage,
             Heal,
             Buff
+        }
+
+        protected enum CombatActionPriority
+        {
+            High = 10,
+            Medium = 20,
+            Low = 30
+        }
+
+        protected readonly struct SpellRule
+        {
+            public int[] SpellGroup { get;  }
+            public SpellConditionProcessor SpellConditionProcessor { get; }
+            public CombatActionPriority Priority { get;  }
+
+            public SpellRule(int[] spellGroup, SpellConditionProcessor spellConditionProcessor,
+                CombatActionPriority combatActionPriority)
+            {
+                SpellGroup = spellGroup;
+                SpellConditionProcessor = spellConditionProcessor;
+                Priority = combatActionPriority;
+            }
+        }
+
+        protected readonly struct PerkRule
+        {
+            public PerkHash PerkHash { get; }
+            public PerkConditionProcessor PerkConditionProcessor { get;  }
+            public CombatActionPriority Priority { get; }
+
+            public PerkRule(PerkHash perkHash, PerkConditionProcessor perkConditionProcessor,
+                CombatActionPriority combatActionPriority)
+            {
+                PerkHash = perkHash;
+                PerkConditionProcessor = perkConditionProcessor;
+                Priority = combatActionPriority;
+            }
         }
     }
 }
