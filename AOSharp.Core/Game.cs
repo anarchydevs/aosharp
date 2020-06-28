@@ -9,6 +9,7 @@ using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.UI;
 using AOSharp.Common.Helpers;
 using AOSharp.Core.Combat;
+using AOSharp.Core.Inventory;
 
 namespace AOSharp.Core
 {
@@ -51,6 +52,7 @@ namespace AOSharp.Core
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.Update(deltaTime);
 
+            Item.Update();
             Perk.Update();
             Spell.Update();
 

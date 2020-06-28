@@ -14,6 +14,11 @@ namespace AOSharp.Core.Inventory
 
         public static List<Container> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Container(x.UniqueIdentity, x.Slot)).ToList();
 
+        public static bool Find(Identity slot, out Item item)
+        {
+            return (item = Items.FirstOrDefault(x => x.Slot == slot)) != null;
+        }
+
         public static bool Find(int id, out Item item)
         {
             return (item = Items.FirstOrDefault(x => x.LowId == id || x.HighId == id)) != null;

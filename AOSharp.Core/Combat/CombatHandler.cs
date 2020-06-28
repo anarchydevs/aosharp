@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -191,6 +192,21 @@ namespace AOSharp.Core.Combat
             _spellRules.Add((spellGroup, conditionProcessor));
         }
 
+        internal void OnItemUsed(int lowId, int highId, int ql)
+        {
+            //Drop the queued action
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => ((Item)x.CombatAction).LowId == lowId && ((Item)x.CombatAction).HighId == highId && ((Item)x.CombatAction).QualityLevel == ql));
+        }
+
+        internal void OnUsingItem(Item item, double timeout)
+        {
+            CombatActionQueueItem queueItem;
+            if ((queueItem = _actionQueue.FirstOrDefault(x => x.CombatAction is Item && (Item)x.CombatAction == item)) == null)
+                return;
+
+            queueItem.Timeout = timeout;
+        }
+
         internal void OnPerkExecuted(DummyItem perkDummyItem)
         {
             //Drop the queued action
@@ -240,7 +256,7 @@ namespace AOSharp.Core.Combat
                     case Perk perk:
                         return perk == ((Perk)other.CombatAction);
                     case Item item:
-                        return item.LowId == ((Item)other.CombatAction).LowId || item.HighId == ((Item)other.CombatAction).HighId;
+                        return item.LowId == ((Item)other.CombatAction).LowId && item.LowId == ((Item)other.CombatAction).HighId && item.HighId == ((Item)other.CombatAction).QualityLevel;
                     case Spell spell:
                         return spell == ((Spell)other.CombatAction);
                     default:

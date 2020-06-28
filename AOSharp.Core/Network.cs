@@ -6,6 +6,8 @@ using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Core.Inventory;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using AOSharp.Common.Helpers;
+using AOSharp.Common.GameData;
 
 namespace AOSharp.Core
 {
@@ -19,7 +21,8 @@ namespace AOSharp.Core
         {
             { N3MessageType.KnubotAnswerList, NpcDialog.OnKnubotAnswerList },
             { N3MessageType.CharacterAction, OnCharacterAction },
-            { N3MessageType.TemplateAction, OnTemplateAction }
+            { N3MessageType.TemplateAction, OnTemplateAction },
+            { N3MessageType.GenericCmd, OnGenericCmd }
         };
 
         public static void Send(N3Message message)
@@ -62,6 +65,8 @@ namespace AOSharp.Core
         {
             Message msg = PacketFactory.Disassemble(datablock);
 
+            //Chat.WriteLine(BitConverter.ToString(datablock).Replace("-", ""));
+
             if (msg == null)
                 return;
 
@@ -74,6 +79,21 @@ namespace AOSharp.Core
                 n3MsgCallbacks[n3Msg.N3MessageType].Invoke(n3Msg);
 
             N3MessageReceived?.Invoke(null, n3Msg);
+        }
+
+        private static void OnGenericCmd(N3Message n3Msg)
+        {
+            GenericCmdMessage genericCmdMessage = (GenericCmdMessage)n3Msg;
+
+            if (genericCmdMessage.User != DynelManager.LocalPlayer.Identity)
+                return;
+
+            switch (genericCmdMessage.Action)
+            {
+                case GenericCmdAction.Use:
+                    Item.OnUsingItem(genericCmdMessage.Target);
+                    break;
+            }
         }
 
         private static void OnCharacterAction(N3Message n3Msg)

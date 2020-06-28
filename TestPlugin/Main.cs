@@ -66,8 +66,8 @@ namespace TestPlugin
 
                 foreach(Perk perk in Perk.List)
                 {
-                    Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
-                    //Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
+                    //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
+                    Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
 
                 /*
@@ -207,7 +207,13 @@ namespace TestPlugin
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
 
-            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.GenericCmd)
+            {
+                GenericCmdMessage ayy = (GenericCmdMessage)n3Msg;
+                Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
+            }
+
+            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
             {
                 TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
                 Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
@@ -283,6 +289,11 @@ namespace TestPlugin
                 }
             }
 
+            if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
+            {
+                derp.Use();
+            }
+
             if (Time.NormalTime > lastTrigger + 0.05)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
@@ -305,6 +316,7 @@ namespace TestPlugin
                         testPerk.Use();
                 }
                 */
+
                 //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
                 //Targeting.SetTarget(randomTarget);
 

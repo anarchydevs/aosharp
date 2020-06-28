@@ -12,6 +12,8 @@ namespace AOSharp.Core.Inventory
 {
     public class Item : DummyItem, ICombatAction
     {
+        private const float USE_TIMEOUT = 1;
+
         public readonly int LowId;
         public readonly int HighId;
         public readonly int QualityLevel;
@@ -19,6 +21,9 @@ namespace AOSharp.Core.Inventory
         public readonly Identity Slot;
 
         public static EventHandler<ItemUsedEventArgs> ItemUsed;
+
+        public static bool HasPendingUse => _pendingUse.Slot != Identity.None;
+        private static (Identity Slot, double Timeout) _pendingUse = (Identity.None, 0);
 
         internal Item(int lowId, int highId, int ql) : base(lowId, highId, ql)
         {
@@ -54,6 +59,8 @@ namespace AOSharp.Core.Inventory
                 User = DynelManager.LocalPlayer.Identity,
                 Target = Slot
             });
+
+            _pendingUse = (Slot, Time.NormalTime + USE_TIMEOUT);
         }
 
         public void MoveToInventory(int targetSlot = 0x6F)
@@ -71,14 +78,40 @@ namespace AOSharp.Core.Inventory
             ContainerAddItem(Slot, target);
         }
 
+        internal static void Update()
+        {
+            if (_pendingUse.Slot != Identity.None && _pendingUse.Timeout <= Time.NormalTime)
+                _pendingUse.Slot = Identity.None;
+        }
+
+        internal static void OnUsingItem(Identity slot)
+        {
+            if (slot != _pendingUse.Slot || !Inventory.Find(slot, out Item item))
+                return;
+
+            double nextTimeout = Time.NormalTime + item.AttackDelay + USE_TIMEOUT;
+            _pendingUse = (slot, nextTimeout);
+
+            if (CombatHandler.Instance != null)
+                CombatHandler.Instance.OnUsingItem(item, nextTimeout);
+        }
+
         internal static void OnItemUsed(int lowId, int highId, int ql, Identity owner)
         {
             ItemUsed?.Invoke(null, new ItemUsedEventArgs
             {
                 OwnerIdentity = owner,
                 Owner = DynelManager.GetDynel(owner)?.Cast<SimpleChar>(),
-                Item = new Item(lowId, highId, ql, Identity.None, Identity.None)
+                Item = new Item(lowId, highId, ql)
             });
+
+            if (owner != DynelManager.LocalPlayer.Identity)
+                return;
+
+            _pendingUse = (Identity.None, 0);
+
+            if (CombatHandler.Instance != null)
+                CombatHandler.Instance.OnItemUsed(lowId, highId, ql);
         }
 
         //Direct access to the MoveItemToInventory packet for those who need it.
