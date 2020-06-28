@@ -37,11 +37,11 @@ namespace AOSharp.Core
 
         public bool IsPet => Flags.HasFlag(DynelFlags.Pet);
 
-        public Profession Profession => (Profession)DynelManager.LocalPlayer.GetStat(Stat.Profession);
+        public Profession Profession => (Profession)GetStat(Stat.Profession);
 
-        public Breed Breed => (Breed) DynelManager.LocalPlayer.GetStat(Stat.Breed);
+        public Breed Breed => (Breed)GetStat(Stat.Breed);
 
-        public Side Side => (Side)DynelManager.LocalPlayer.GetStat(Stat.Side);
+        public Side Side => (Side)GetStat(Stat.Side);
 
         public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
 
