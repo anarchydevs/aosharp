@@ -49,12 +49,12 @@ namespace AOSharp.Core
 
             UIController.UpdateViews();
 
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.Update(deltaTime);
-
             Item.Update();
             Perk.Update();
             Spell.Update();
+
+            if (CombatHandler.Instance != null)
+                CombatHandler.Instance.Update(deltaTime);
 
             OnUpdate?.Invoke(null, deltaTime);
 

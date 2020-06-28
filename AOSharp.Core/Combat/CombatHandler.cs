@@ -14,10 +14,9 @@ namespace AOSharp.Core.Combat
     public class CombatHandler
     {
         private float ACTION_TIMEOUT = 1f;
-        private int MAX_CONCURRENT_PERKS = 4;
+        private int MAX_CONCURRENT_PERKS = 3;
         protected Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
-        //protected Dictionary<(int lowId, int highId), ItemConditionProcessor> _itemRules = new Dictionary<(int lowId, int highId), ItemConditionProcessor>();
-        //private List<(PerkHash PerkHash, PerkConditionProcessor ConditionProcessor)> _perkRules = new List<(PerkHash, PerkConditionProcessor)>();
+        private List<ItemRule> _itemRules = new List<ItemRule>();
         private List<PerkRule> _perkRules = new List<PerkRule>();
         private List<SpellRule> _spellRules = new List<SpellRule>();
 
@@ -43,6 +42,29 @@ namespace AOSharp.Core.Combat
 
             if (fightingTarget != null)
                 SpecialAttacks(fightingTarget);
+  
+            foreach (var itemRule in _itemRules.OrderBy(p => (int)p.Priority))
+            {
+                //Find highest usable ql of the item
+                Item item;
+                if ((item = Inventory.Inventory.FindAll(itemRule.LowId, itemRule.HighId).OrderByDescending(x => x.QualityLevel).FirstOrDefault(x => x.MeetsSelfUseReqs())) == null)
+                    continue;
+
+                //Ignore the item if it's already queued
+                if (_actionQueue.Any(x => x.CombatAction is Item action && action == item))
+                    continue;
+
+                if (itemRule.ItemConditionProcessor != null && itemRule.ItemConditionProcessor.Invoke(item, fightingTarget, out SimpleChar target))
+                {
+                    if (!item.MeetsUseReqs(target))
+                        continue;
+
+                    //Chat.WriteLine($"Queueing item {item.Name} -- actionQ.Count = {_actionQueue.Count}");
+                    float queueOffset = _actionQueue.Where(x => x.CombatAction is Perk).Sum(x => ((Perk)x.CombatAction).AttackDelay);
+                    double timeoutOffset = item.AttackDelay + ACTION_TIMEOUT + queueOffset;
+                    _actionQueue.Enqueue(new CombatActionQueueItem(item, target, timeoutOffset));
+                }
+            }
 
             //Only queue perks if we have no items awaiting usage and aren't over max concurrent perks
             if (!_actionQueue.Any(x => x.CombatAction is Item))
@@ -66,7 +88,7 @@ namespace AOSharp.Core.Combat
                         if (!perk.MeetsUseReqs(target))
                             continue;
 
-                        //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count(x => x.CombatAction is Perk)}");
+                        //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count}");
                         _actionQueue.Enqueue(new CombatActionQueueItem(perk, target));
                     }
                 }
@@ -121,6 +143,12 @@ namespace AOSharp.Core.Combat
 
                     if (actionItem.CombatAction is Item item)
                     {
+                        if (Item.HasPendingUse)
+                            continue;
+
+                        if (_actionQueue.Any(x => x.CombatAction is Perk))
+                            continue;
+
                         //I have no real way of checking if a use action is valid so we'll just send it off and pray
                         item.Use(actionItem.Target);
                         actionItem.Used = true;
@@ -165,6 +193,11 @@ namespace AOSharp.Core.Combat
             }
         }
 
+        protected void RegisterItemProcessor(int lowId, int highId, ItemConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
+        {
+            _itemRules.Add(new ItemRule(lowId, highId, conditionProcessor, priority));
+        }
+
         protected void RegisterPerkProcessor(PerkHash perkHash, PerkConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
             _perkRules.Add(new PerkRule(perkHash, conditionProcessor, priority));
@@ -196,7 +229,7 @@ namespace AOSharp.Core.Combat
         internal void OnItemUsed(int lowId, int highId, int ql)
         {
             //Drop the queued action
-            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => ((Item)x.CombatAction).LowId == lowId && ((Item)x.CombatAction).HighId == highId && ((Item)x.CombatAction).QualityLevel == ql));
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Item action && action.LowId == lowId && action.HighId == highId && action.QualityLevel == ql)));
         }
 
         internal void OnUsingItem(Item item, double timeout)
@@ -211,7 +244,7 @@ namespace AOSharp.Core.Combat
         internal void OnPerkExecuted(DummyItem perkDummyItem)
         {
             //Drop the queued action
-            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => ((Perk)x.CombatAction).Name != perkDummyItem.Name));
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Perk action && action.Name == perkDummyItem.Name)));
         }
 
         internal void OnPerkLanded(Perk perk, double timeout)
@@ -237,11 +270,11 @@ namespace AOSharp.Core.Combat
             public bool Used = false;
             public double Timeout = 0;
 
-            public CombatActionQueueItem(ICombatAction action, SimpleChar target = null)
+            public CombatActionQueueItem(ICombatAction action, SimpleChar target = null, double timeoutOffset = 1)
             {
                 CombatAction = action;
                 Target = target;
-                Timeout = Time.NormalTime + 1;
+                Timeout = Time.NormalTime + timeoutOffset;
             }
 
             public bool Equals(CombatActionQueueItem other)
@@ -257,7 +290,9 @@ namespace AOSharp.Core.Combat
                     case Perk perk:
                         return perk == ((Perk)other.CombatAction);
                     case Item item:
-                        return item.LowId == ((Item)other.CombatAction).LowId && item.LowId == ((Item)other.CombatAction).HighId && item.HighId == ((Item)other.CombatAction).QualityLevel;
+                        Item item1 = item;
+                        Item item2 = (Item)other.CombatAction;
+                        return item.LowId == ((Item)other.CombatAction).LowId && item.HighId == ((Item)other.CombatAction).HighId && item.QualityLevel == ((Item)other.CombatAction).QualityLevel;
                     case Spell spell:
                         return spell == ((Spell)other.CombatAction);
                     default:
@@ -278,6 +313,23 @@ namespace AOSharp.Core.Combat
             High = 10,
             Medium = 20,
             Low = 30
+        }
+
+        protected readonly struct ItemRule
+        {
+            public int LowId { get; }
+            public int HighId { get; }
+            public ItemConditionProcessor ItemConditionProcessor { get; }
+            public CombatActionPriority Priority { get; }
+
+            public ItemRule(int lowId, int highId, ItemConditionProcessor itemConditionProcessor,
+                CombatActionPriority combatActionPriority)
+            {
+                LowId = lowId;
+                HighId = highId;
+                ItemConditionProcessor = itemConditionProcessor;
+                Priority = combatActionPriority;
+            }
         }
 
         protected readonly struct SpellRule

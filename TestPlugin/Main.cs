@@ -63,12 +63,12 @@ namespace TestPlugin
                 }
                 */
 
-
+                /*
                 foreach(Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
-                }
+                }*/
 
                 /*
                 Chat.WriteLine("Buffs:");

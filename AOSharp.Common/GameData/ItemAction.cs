@@ -2,6 +2,7 @@
 {
     public enum ItemActionInfo
     {
-        UseCriteria = 3
+        UseCriteria = 3,
+        Activate = 10
     }
 }

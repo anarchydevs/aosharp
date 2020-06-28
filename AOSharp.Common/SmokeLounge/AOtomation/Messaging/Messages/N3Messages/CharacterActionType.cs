@@ -66,6 +66,10 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 
         UploadNano = 0x000000CC,
 
+        PerkAvailable = 0x000000CE,
+
+        PerkUnavailable = 0x000000CF,
+
         TradeskillSourceChanged = 0x000000DC,
 
         TradeskillTargetChanged = 0x000000DD,

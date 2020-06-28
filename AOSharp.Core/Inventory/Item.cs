@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Core.Inventory
 {
-    public class Item : DummyItem, ICombatAction
+    public class Item : DummyItem, ICombatAction, IEquatable<Item>
     {
         private const float USE_TIMEOUT = 1;
 
@@ -133,6 +133,24 @@ namespace AOSharp.Core.Inventory
                 Target = target
             });
         }
+
+        public bool Equals(Item other)
+        {
+            if (object.ReferenceEquals(other, null))
+                return false;
+
+            return LowId == other.LowId && HighId == other.HighId && QualityLevel == other.QualityLevel && Slot == other.Slot;
+        }
+
+        public static bool operator ==(Item a, Item b)
+        {
+            if (object.ReferenceEquals(a, null))
+                return object.ReferenceEquals(b, null);
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Item a, Item b) => !(a == b);
     }
 
     public class ItemUsedEventArgs : EventArgs

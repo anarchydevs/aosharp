@@ -225,6 +225,8 @@ namespace AOSharp.Core
             return DummyItem_t.GetStat(Pointer, stat, detail);
         }
 
+        internal IntPtr GetItemActionInfo(ItemActionInfo itemActionInfo) => N3EngineClientAnarchy_t.GetItemActionInfo(Pointer, itemActionInfo);
+
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct MemStruct
         {
