@@ -23,6 +23,11 @@ namespace AOSharp.Core
             return buffs.Any(b => ids.Contains(b.Identity.Instance));
         }
 
+        public static bool Contains(this Buff[] buffs, Nanoline nanoline)
+        {
+            return buffs.Any(b => (Nanoline) b.GetStat(Stat.NanoStrain) == nanoline);
+        }
+
         public static IEnumerable<Spell> OrderByStackingOrder(this IEnumerable<Spell> spells)
         {
             return spells.OrderByDescending(x => x.StackingOrder);
