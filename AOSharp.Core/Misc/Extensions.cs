@@ -13,6 +13,16 @@ namespace AOSharp.Core
             return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;
         }
 
+        public static bool Contains(this Buff[] buffs, int id)
+        {
+            return Contains(buffs, new[] { id });
+        }
+
+        public static bool Contains(this Buff[] buffs, int[] ids)
+        {
+            return buffs.Any(b => ids.Contains(b.Identity.Instance));
+        }
+
         public static IEnumerable<Spell> OrderByStackingOrder(this IEnumerable<Spell> spells)
         {
             return spells.OrderByDescending(x => x.StackingOrder);
