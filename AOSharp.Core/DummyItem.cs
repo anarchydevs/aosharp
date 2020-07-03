@@ -196,6 +196,9 @@ namespace AOSharp.Core
                         case UseCriteriaOperator.HasRunningNano:
                             metReq = skillCheckChar.Buffs.Any(x => x.Identity.Instance == param2);
                             break;
+                        case UseCriteriaOperator.HasNotRunningNano:
+                            metReq = skillCheckChar.Buffs.All(x => x.Identity.Instance != param2);
+                            break;
                         case UseCriteriaOperator.HasPerk:
                             metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2) == 1;
                             break;
