@@ -36,6 +36,12 @@ namespace AOSharp.Core
             });
         }
 
+        public static void Disband()
+        {
+            Members.ForEach(x => Kick(x.Identity));
+        }
+
+
         public static void Accept(Identity target)
         {
             //TODO: Actually call the game function to accept so that the client doesn't bug out.
@@ -169,6 +175,11 @@ namespace AOSharp.Core
         public void Decline()
         {
             Team.Decline(Requester);
+            Responded = true;
+        }
+
+        public void Ignore()
+        {
             Responded = true;
         }
     }

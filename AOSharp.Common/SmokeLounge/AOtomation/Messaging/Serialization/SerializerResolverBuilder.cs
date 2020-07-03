@@ -15,7 +15,7 @@
 namespace SmokeLounge.AOtomation.Messaging.Serialization
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Net;
 
@@ -43,7 +43,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
     {
         #region Fields
 
-        private readonly Dictionary<Type, ISerializer> serializers;
+        private readonly ConcurrentDictionary<Type, ISerializer> serializers;
 
         #endregion
 
@@ -51,26 +51,19 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         public SerializerResolverBuilder()
         {
-            this.serializers = new Dictionary<Type, ISerializer>
-                                   {
-                                       { typeof(byte), new ByteSerializer() }, 
-                                       { typeof(short), new Int16Serializer() }, 
-                                       { typeof(int), new Int32Serializer() }, 
-                                       { typeof(long), new Int64Serializer() }, 
-                                       { typeof(IPAddress), new IPAddressSerializer() }, 
-                                       { typeof(float), new SingleSerializer() }, 
-                                       { typeof(string), new StringSerializer() }, 
-                                       { typeof(ushort), new UInt16Serializer() }, 
-                                       { typeof(uint), new UInt32Serializer() }, 
-                                       {
-                                           typeof(PlayfieldVendorInfo), 
-                                           new PlayfieldVendorInfoSerializer()
-                                       }, 
-                                       {
-                                           typeof(SimpleCharFullUpdateMessage), 
-                                           new SimpleCharFullUpdateSerializer()
-                                       }, 
-                                   };
+            this.serializers = new ConcurrentDictionary<Type, ISerializer>();
+            this.serializers.TryAdd(typeof(bool), new BoolSerializer());
+            this.serializers.TryAdd(typeof(byte), new ByteSerializer());
+            this.serializers.TryAdd(typeof(short), new Int16Serializer());
+            this.serializers.TryAdd(typeof(int), new Int32Serializer());
+            this.serializers.TryAdd(typeof(long), new Int64Serializer());
+            this.serializers.TryAdd(typeof(IPAddress), new IPAddressSerializer());
+            this.serializers.TryAdd(typeof(float), new SingleSerializer());
+            this.serializers.TryAdd(typeof(string), new StringSerializer());
+            this.serializers.TryAdd(typeof(ushort), new UInt16Serializer());
+            this.serializers.TryAdd(typeof(uint), new UInt32Serializer());
+            this.serializers.TryAdd(typeof(PlayfieldVendorInfo), new PlayfieldVendorInfoSerializer());
+            this.serializers.TryAdd(typeof(SimpleCharFullUpdateMessage), new SimpleCharFullUpdateSerializer());
         }
 
         #endregion
@@ -93,7 +86,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
                 var serializer = this.CreateSerializer(subType);
                 if (serializer != null)
                 {
-                    this.serializers.Add(subType, serializer);
+                    this.serializers.TryAdd(subType, serializer);
                 }
             }
 
@@ -132,14 +125,14 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
                 }
 
                 var arraySerializer = new ArraySerializer(type, serializer);
-                this.serializers.Add(type, arraySerializer);
+                this.serializers.TryAdd(type, arraySerializer);
                 return arraySerializer;
             }
 
             serializer = this.CreateSerializer(type);
             if (serializer != null)
             {
-                this.serializers.Add(type, serializer);
+                this.serializers.TryAdd(type, serializer);
             }
 
             return serializer;

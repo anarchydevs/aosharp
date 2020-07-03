@@ -26,17 +26,18 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         #region Constructors and Destructors
 
-        public PacketInspector()
+        public PacketInspector(TypeInfo typeInfo)
         {
-            this.typeInfo = new TypeInfo(typeof(MessageBody));
+            this.typeInfo = typeInfo;
         }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public TypeInfo FindSubType(StreamReader reader)
+        public TypeInfo FindSubType(StreamReader reader, out int identifier)
         {
+            identifier = 0;
             var current = this.typeInfo;
 
             while (current != null)
@@ -47,7 +48,6 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
                 }
 
                 reader.Position = current.KnownType.Offset;
-                int identifier;
                 switch (current.KnownType.IdentifierType)
                 {
                     case IdentifierType.Byte:

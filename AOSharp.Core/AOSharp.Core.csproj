@@ -36,7 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +55,8 @@
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\Container.cs" />
     <Compile Include="Inventory\Item.cs" />
+    <Compile Include="IPC\IPCChannel.cs" />
+    <Compile Include="IPC\IPCMessage.cs" />
     <Compile Include="MiscClientEvents.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Movement\MovementController.cs" />
@@ -117,6 +123,5 @@
       <Name>AOSharp.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -109,6 +109,7 @@ namespace AOSharp.Core.Combat
                             continue;
 
                         spell = curSpell;
+                        break;
                     }
 
                     if (spell == null)

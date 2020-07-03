@@ -64,6 +64,11 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             this.stream.Dispose();
         }
 
+        public bool ReadBool()
+        {
+            return this.reader.ReadBoolean();
+        }
+
         public byte ReadByte()
         {
             return this.reader.ReadByte();

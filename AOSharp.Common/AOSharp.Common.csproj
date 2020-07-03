@@ -78,6 +78,7 @@
     <Compile Include="GameData\WindowStyle.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Exceptions\ContractIdCollisionException.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\ActiveNano.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Appearance.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\BankSlot.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ArraySerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ArraySizeSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ByteSerializer.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\BoolSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldVendorInfoSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\SimpleCharFullUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\DiagnosticSerializer.cs" />

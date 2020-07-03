@@ -343,8 +343,10 @@ namespace AOSharp.Bootstrap
 
         public class CoreDelegates
         {
-            public delegate void CoreLoadedDelegate();
-            public CoreLoadedDelegate CoreLoaded;
+            public delegate void InitDelegate();
+            public InitDelegate Init;
+            public delegate void OnPluginLoadedDelegate(Assembly assembly);
+            public OnPluginLoadedDelegate OnPluginLoaded;
             public delegate void DynelSpawnedDelegate(IntPtr pDynel);
             public DynelSpawnedDelegate DynelSpawned;
             public delegate void DataBlockToMessageDelegate(byte[] datablock);
@@ -477,10 +479,10 @@ namespace AOSharp.Bootstrap
                     Assembly.Load(reference);
                 }
 
-                assembly.GetType("AOSharp.Core.Game")?.GetMethod("Init", BindingFlags.Static | BindingFlags.NonPublic)?.Invoke(null, null);
-
                 _coreDelegates = new CoreDelegates()
                 {
+                    Init = CreateDelegate<CoreDelegates.InitDelegate>(assembly, "AOSharp.Core.Game", "Init"),
+                    OnPluginLoaded = CreateDelegate<CoreDelegates.OnPluginLoadedDelegate>(assembly, "AOSharp.Core.Game", "OnPluginLoaded"),
                     Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
                     EarlyUpdate = CreateDelegate<CoreDelegates.EarlyUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnEarlyUpdateInternal"),
                     DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "OnDynelSpawned"),
@@ -496,6 +498,8 @@ namespace AOSharp.Bootstrap
                     AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
                     UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.Chat", "OnUnknownCommand")
                 };
+
+                _coreDelegates.Init();
             }
 
             public void LoadPlugin(string assemblyPath)
@@ -540,6 +544,8 @@ namespace AOSharp.Bootstrap
                         if (constructor == null)
                             continue;
 
+                        _coreDelegates.OnPluginLoaded(assembly);
+
                         object instance = constructor.Invoke(null);
 
                         if (instance == null) //Is this even possible?
@@ -549,9 +555,7 @@ namespace AOSharp.Bootstrap
                     }
                 }
                 catch (Exception ex)
-                {
-                    //return null;
-                    throw new InvalidOperationException(ex.Message);
+                {                  
                 }
             }
         }

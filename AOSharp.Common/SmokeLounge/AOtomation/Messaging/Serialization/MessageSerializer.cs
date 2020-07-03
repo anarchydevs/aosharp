@@ -35,14 +35,14 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         public MessageSerializer()
         {
-            this.packetInspector = new PacketInspector();
+            this.packetInspector = new PacketInspector(new TypeInfo(typeof(MessageBody)));
             this.serializerResolver = new SerializerResolverBuilder<MessageBody>().Build();
             this.headerSerializer = new HeaderSerializer();
         }
 
         public MessageSerializer(SerializerResolverBuilder serializerResolverBuilder)
         {
-            this.packetInspector = new PacketInspector();
+            this.packetInspector = new PacketInspector(new TypeInfo(typeof(MessageBody)));
             this.serializerResolver = serializerResolverBuilder.Build();
             this.headerSerializer = new HeaderSerializer();
         }
@@ -69,7 +69,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
         {
             serializationContext = null;
             var reader = new StreamReader(stream) { Position = 0 };
-            var subTypeInfo = this.packetInspector.FindSubType(reader);
+            var subTypeInfo = this.packetInspector.FindSubType(reader, out int _);
 
             if (subTypeInfo == null)
             {

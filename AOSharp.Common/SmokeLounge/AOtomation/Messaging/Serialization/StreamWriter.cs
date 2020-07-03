@@ -64,6 +64,11 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             this.stream.Dispose();
         }
 
+        public void WriteBool(bool value)
+        {
+            this.writer.Write(value);
+        }
+
         public void WriteByte(byte value)
         {
             this.writer.Write(value);

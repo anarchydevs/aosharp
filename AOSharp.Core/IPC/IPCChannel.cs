@@ -1,0 +1,147 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
+using SmokeLounge.AOtomation.Messaging.Serialization;
+using SmokeLounge.AOtomation.Messaging.Serialization.Serializers;
+using StreamWriter = SmokeLounge.AOtomation.Messaging.Serialization.StreamWriter;
+using StreamReader = SmokeLounge.AOtomation.Messaging.Serialization.StreamReader;
+using TypeInfo = SmokeLounge.AOtomation.Messaging.Serialization.TypeInfo;
+using AOSharp.Common.Unmanaged.Imports;
+using System.Reflection;
+using System.Runtime.InteropServices;
+
+namespace AOSharp.Core.IPC
+{
+    public class IPCChannel
+    {
+        private static IPAddress MulticastIP = IPAddress.Parse("224.0.0.111");
+        private static IPEndPoint _localEndPoint = new IPEndPoint(IPAddress.Any, Port);
+        private static IPEndPoint _remoteEndPoint = new IPEndPoint(MulticastIP, Port);
+        private const int Port = 1911;
+        private const ushort PacketPrefix = 0xFFFF;
+
+        private byte _channelId;
+        private UdpClient _udpClient;
+
+        private static SerializerResolver _serializerResolver = new SerializerResolverBuilder<IPCMessage>().Build();
+        private static TypeInfo _typeInfo = new TypeInfo(typeof(IPCMessage));
+        private static PacketInspector _packetInspector;
+
+        private Dictionary<int, Action<int, IPCMessage>> _callbacks = new Dictionary<int, Action<int, IPCMessage>>();
+
+        public IPCChannel(byte channelId)
+        {
+            _channelId = channelId;
+
+            _udpClient = new UdpClient();
+            _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpClient.Client.Bind(_localEndPoint);
+
+            _udpClient.JoinMulticastGroup(MulticastIP);
+            _udpClient.BeginReceive(ReceiveCallback, null);
+
+            _packetInspector = new PacketInspector(_typeInfo);
+        }
+
+        private void ReceiveCallback(IAsyncResult ar)
+        {
+            //try
+            //{
+                byte[] receiveBytes = _udpClient.EndReceive(ar, ref _localEndPoint);
+                _udpClient.BeginReceive(ReceiveCallback, null);
+
+                if (receiveBytes.Length < 11)
+                    return;
+
+                using (MemoryStream stream = new MemoryStream(receiveBytes))
+                {
+                    StreamReader reader = new StreamReader(stream) { Position = 0 };
+
+                    if (reader.ReadUInt16() != 0xFFFF)
+                        return;
+
+                    ushort len = reader.ReadUInt16();
+
+                    if (len != receiveBytes.Length)
+                        return;
+
+                    byte channelId = reader.ReadByte();
+
+                    if (channelId != _channelId)
+                        return;
+
+                    int charId = reader.ReadInt32();
+
+                    if (charId == Game.ClientInst)
+                        return;
+
+                    reader.Position = 2;
+                    TypeInfo subTypeInfo = _packetInspector.FindSubType(reader, out int opCode);
+
+                    if (subTypeInfo == null)
+                        return;
+
+                    var serializer = _serializerResolver.GetSerializer(subTypeInfo.Type);
+                    if (serializer == null)
+                        return;
+
+                    reader.Position = 11;
+                    SerializationContext serializationContext = new SerializationContext(_serializerResolver);
+
+                    IPCMessage message = (IPCMessage)serializer.Deserialize(reader, serializationContext);
+
+                    if (_callbacks.ContainsKey(opCode))
+                        _callbacks[opCode]?.Invoke(charId, message);
+                }
+            //}
+            //catch (Exception e)
+            //{
+            //    Chat.WriteLine($"ahhhhhhhhhhhhhhhhhhhhhhh {e.Message}");
+            //}
+        }
+
+        public void Broadcast(IPCMessage msg)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                ISerializer serializer = _serializerResolver.GetSerializer(msg.GetType());
+                if (serializer == null)
+                    return;
+
+                SerializationContext serializationContext = new SerializationContext(_serializerResolver);
+                StreamWriter writer = new StreamWriter(stream) { Position = 0 };
+                writer.WriteUInt16(PacketPrefix);
+                writer.WriteInt16(0);
+                writer.WriteByte(_channelId);
+                writer.WriteInt32(DynelManager.LocalPlayer.Identity.Instance);
+                writer.WriteInt16(msg.Opcode);
+                serializer.Serialize(writer, serializationContext, msg);
+                long length = writer.Position;
+                writer.Position = 2;
+                writer.WriteInt16((short)length);
+                writer.Dispose();
+
+                byte[] serialized = stream.ToArray();
+                _udpClient.Send(serialized, serialized.Length, _remoteEndPoint);
+            }
+        }
+
+        public void RegisterCallback(int opCode, Action<int, IPCMessage> callback)
+        {
+            if (_callbacks.ContainsKey(opCode))
+                return;
+
+            _callbacks.Add(opCode, callback);
+        }
+
+        internal static void LoadMessages(Assembly assembly)
+        {
+            _typeInfo.InitializeSubTypesForAssembly(assembly);
+        }
+    }
+}

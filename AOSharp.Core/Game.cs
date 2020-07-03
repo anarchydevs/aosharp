@@ -10,11 +10,17 @@ using AOSharp.Core.UI;
 using AOSharp.Common.Helpers;
 using AOSharp.Core.Combat;
 using AOSharp.Core.Inventory;
+using System.Reflection;
+using AOSharp.Core.IPC;
+using SmokeLounge.AOtomation.Messaging.Exceptions;
 
 namespace AOSharp.Core
 {
     public static class Game
     {
+        public static bool IsZoning { get; private set; }
+        public static int ClientInst => N3InterfaceModule_t.GetClientInst();
+
         public static EventHandler<float> OnEarlyUpdate;
         public static EventHandler<float> OnUpdate;
         public static EventHandler TeleportStarted;
@@ -36,6 +42,18 @@ namespace AOSharp.Core
 
             int* pGetOptionWindowOffset = (int*)(Kernel32.GetProcAddress(Kernel32.GetModuleHandle("GUI.dll"), "?ModuleActivated@OptionPanelModule_c@@UAEX_N@Z") + 0x14);
             OptionPanelModule_c.GetOptionWindow = Marshal.GetDelegateForFunctionPointer<OptionPanelModule_c.GetOptionWindowDelegate>(new IntPtr((int)pGetOptionWindowOffset + sizeof(int) + *pGetOptionWindowOffset));
+        }
+
+        private static void OnPluginLoaded(Assembly assembly)
+        {
+            try
+            {
+                IPCChannel.LoadMessages(assembly);
+            }
+            catch (ContractIdCollisionException e)
+            {
+                Chat.WriteLine(e.Message);
+            }
         }
 
         private static void OnEarlyUpdateInternal (float deltaTime)
@@ -63,16 +81,19 @@ namespace AOSharp.Core
 
         private static void OnTeleportStarted()
         {
+            IsZoning = true;
             TeleportStarted?.Invoke(null, EventArgs.Empty);
         }
 
         private static void OnTeleportEnded()
         {
+            IsZoning = false;
             TeleportEnded?.Invoke(null, EventArgs.Empty);
         }
 
         private static void OnTeleportFailed()
         {
+            IsZoning = false;
             TeleportFailed?.Invoke(null, EventArgs.Empty);
         }
 

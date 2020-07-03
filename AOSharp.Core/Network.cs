@@ -100,9 +100,6 @@ namespace AOSharp.Core
         {
             CharacterActionMessage charActionMessage = (CharacterActionMessage)n3Msg;
 
-            //if(charActionMessage.Action == CharacterActionType.PerkUnavailable)
-             //   Chat.WriteLine($"OnCharacterAction {charActionMessage.Action}\t{charActionMessage.Identity}\t{charActionMessage.Target}\t{charActionMessage.Parameter1}\t{charActionMessage.Parameter2}\t{charActionMessage.Unknown1}\t{charActionMessage.Unknown2}");
-
             switch (charActionMessage.Action)
             {
                 case CharacterActionType.LeaveTeam:

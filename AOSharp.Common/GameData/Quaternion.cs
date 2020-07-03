@@ -229,7 +229,7 @@ namespace AOSharp.Common.GameData
             return new Quaternion(x, y, z, w).Normalize();
         }
 
-        private static Quaternion AngleAxis(float degress, Vector3 axis)
+        public static Quaternion AngleAxis(float degress, Vector3 axis)
         {
             if (axis.Magnitude == 0.0f)
                 return Identity;

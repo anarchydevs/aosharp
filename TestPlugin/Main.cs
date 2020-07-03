@@ -12,13 +12,17 @@ using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Core.UI.Options;
+using AOSharp.Core.IPC;
 using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using TestPlugin.IPCMessages;
+using System.Threading;
 
 namespace TestPlugin
 {
     public class Main : IAOPluginEntry
     {
+        private IPCChannel _ipcChannel;
         private Menu _menu;
         private int i = 0;
         public void Run(string pluginDir)
@@ -135,22 +139,9 @@ namespace TestPlugin
                 }
                 */
 
-                //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
-
-                _menu = new Menu("TestPlugin", "TestPlugin");
-                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
-                OptionPanel.AddMenu(_menu);
-
-                Chat.RegisterCommand("thankstrey", (string  command, string[] param, IntPtr pWindow) =>
-                {
-                    int param1 = int.Parse(param[0]);
-                    int param2 = int.Parse(param[1]);
-                    Chat.WriteLine(pWindow, $"{param1} + {param2} = {param1 + param2}", ChatColor.Orange);
-                });
-
                 /*
                 List<Item> characterItems = Inventory.Items;
-            
+
                 foreach(Item item in characterItems)
                 {
                     Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
@@ -178,6 +169,48 @@ namespace TestPlugin
                     }
                 }
                 */
+
+                //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+
+                _menu = new Menu("TestPlugin", "TestPlugin");
+                _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
+                OptionPanel.AddMenu(_menu);
+
+                Chat.RegisterCommand("swim", (string  command, string[] param, IntPtr pWindow) =>
+                {
+                    Game.SetMovement(MovementAction.SwitchToSwim);
+                });
+
+                Chat.RegisterCommand("stopswim", (string command, string[] param, IntPtr pWindow) =>
+                {
+                    Game.SetMovement(MovementAction.LeaveSwim);
+                });
+
+                Chat.RegisterCommand("test", (string command, string[] param, IntPtr pWindow) =>
+                {
+                    try
+                    {
+                        _ipcChannel.Broadcast(new EmptyMessage());
+                    }
+                    catch(Exception e)
+                    {
+                        Chat.WriteLine(e.Message);
+                    }
+                });
+
+                _ipcChannel = new IPCChannel(1);
+
+                _ipcChannel.RegisterCallback((int)IPCOpcode.Test, (sender, msg) =>
+                {
+                        TestMessage testMsg = (TestMessage)msg;
+
+                        Chat.WriteLine($"TestMessage: {testMsg.Leet} - {testMsg.Position}");
+                });
+
+                _ipcChannel.RegisterCallback((int)IPCOpcode.Empty, (sender, msg) =>
+                {
+                    Chat.WriteLine($"EmptyMessage");
+                });
 
                 Game.OnUpdate += OnUpdate;
                 Game.TeleportStarted += Game_OnTeleportStarted;
@@ -207,11 +240,12 @@ namespace TestPlugin
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
 
+            /*
             if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.GenericCmd)
             {
                 GenericCmdMessage ayy = (GenericCmdMessage)n3Msg;
                 Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
-            }
+            }*/
 
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
             {
@@ -219,11 +253,18 @@ namespace TestPlugin
                 Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
             }
 
+            /*
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
             {
                 FeedbackMessage ayy = (FeedbackMessage)n3Msg;
                 Chat.WriteLine($"Feedback: {ayy.MessageId.ToString()}\t{ayy.CategoryId.ToString()}\t{ayy.Unknown1.ToString()}");
             }
+
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.CharacterAction)
+            {
+                CharacterActionMessage charActionMessage = (CharacterActionMessage)n3Msg;
+                Chat.WriteLine($"CharacterAction {charActionMessage.Action}\t{charActionMessage.Identity}\t{charActionMessage.Target}\t{charActionMessage.Parameter1}\t{charActionMessage.Parameter2}\t{charActionMessage.Unknown1}\t{charActionMessage.Unknown2}");
+            }*/
         }
 
         private void Team_TeamRequest(object s, TeamRequestEventArgs e)
@@ -277,6 +318,7 @@ namespace TestPlugin
         }
 
         double lastTrigger = Time.NormalTime;
+        float angle = 0;
 
         private void OnUpdate(object s, float deltaTime)
         {
@@ -289,12 +331,13 @@ namespace TestPlugin
                 }
             }
 
+            /*
             if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
             {
                 derp.Use();
-            }
+            }*/
 
-            if (Time.NormalTime > lastTrigger + 0.05)
+            if (Time.NormalTime > lastTrigger + 0.1)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -320,6 +363,13 @@ namespace TestPlugin
                 //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
                 //Targeting.SetTarget(randomTarget);
 
+                /*
+                _ipcChannel.Broadcast(new TestMessage()
+                {
+                    Position = DynelManager.LocalPlayer.Position,
+                    Leet = 1337
+                });
+                */
                 lastTrigger = Time.NormalTime;
             }
         }

@@ -17,8 +17,9 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Reflection;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
+    using SmokeLounge.AOtomation.Messaging.Exceptions;
 
     public class TypeInfo
     {
@@ -74,20 +75,27 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
 
         private void InitializeSubTypes()
         {
-            this.subTypes.Clear();
-            var types = this.type.Assembly.GetTypes().Where(t => t.BaseType == this.type);
+            InitializeSubTypesForAssembly(this.type.Assembly);
+        }
+
+        public void InitializeSubTypesForAssembly(Assembly assembly)
+        {
+            var types = assembly.GetTypes().Where(t => t.BaseType == this.type);
             foreach (var subType in types)
             {
                 var contract =
                     subType.GetCustomAttributes(typeof(AoContractAttribute), false)
                            .Cast<AoContractAttribute>()
                            .FirstOrDefault();
+
                 if (contract == null)
-                {
                     continue;
-                }
 
                 var typeInfo = new TypeInfo(subType);
+
+                if (this.subTypes.ContainsKey(contract.Identifier))
+                    throw new ContractIdCollisionException($"Contracts must have unique identifiers. {typeInfo.Type.Name}({contract.Identifier}) shares the same identifier as {this.subTypes[contract.Identifier].Type.Name}({contract.Identifier})");
+
                 this.subTypes.Add(contract.Identifier, typeInfo);
             }
         }
