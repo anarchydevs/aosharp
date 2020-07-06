@@ -41,13 +41,7 @@ namespace AOSharp.Core.Movement
                 _path.Dequeue();
 
                 if (_path.Count == 0)
-                {
-                    DestinationReachedEventArgs e = new DestinationReachedEventArgs();
-                    DestinationReached?.Invoke(this, e);
-
-                    if(e.Halt)
-                        Game.SetMovement(MovementAction.ForwardStop);
-                }
+                    OnDestinationReached();
             }
 
             if (_timeSinceLastUnstuckCheck > UnstuckInterval)
@@ -113,6 +107,15 @@ namespace AOSharp.Core.Movement
         public void LookAt(Vector3 pos)
         {
             DynelManager.LocalPlayer.Rotation = Quaternion.FromTo(DynelManager.LocalPlayer.Position, pos);
+        }
+
+        protected virtual void OnDestinationReached()
+        {
+            DestinationReachedEventArgs e = new DestinationReachedEventArgs();
+            DestinationReached?.Invoke(this, e);
+
+            if (e.Halt)
+                Game.SetMovement(MovementAction.ForwardStop);
         }
 
         protected virtual void OnStuck()

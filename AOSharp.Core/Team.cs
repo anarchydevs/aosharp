@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
@@ -38,7 +39,8 @@ namespace AOSharp.Core
 
         public static void Disband()
         {
-            Members.ForEach(x => Kick(x.Identity));
+            foreach (TeamMember member in Members.Where(x => !x.IsLeader))
+                Kick(member.Identity);
         }
 
 

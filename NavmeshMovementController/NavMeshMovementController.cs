@@ -3,6 +3,7 @@ using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 namespace AOSharp.Pathfinding
 {
@@ -45,9 +46,13 @@ namespace AOSharp.Pathfinding
                 if (_pathfinder == null)
                     return;
 
+                if (IsNavigating && pos == _goalPos)
+                    return;
+
                 List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, pos);
                 _goalPos = pos;
                 _usingNavmesh = useNavmesh;
+                _lastPathUpdate = 0;
                 RunPath(path);
             }
             else

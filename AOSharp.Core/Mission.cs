@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Helpers;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using System.Linq;
 
 namespace AOSharp.Core
 {
@@ -28,6 +30,12 @@ namespace AOSharp.Core
             Pointer = pointer;
         }
 
+
+        public static bool Find(string displayName, out Mission mission)
+        {
+            return (mission = GetMissions().FirstOrDefault(x => x.DisplayName == displayName)) != null;
+        }
+
         public static bool Exists(string displayName)
         {
             return GetMissions().Exists(x => x.DisplayName == displayName);
@@ -41,6 +49,15 @@ namespace AOSharp.Core
                 return null;
 
             return localPlayer.GetMissionList();
+        }
+
+        public void Delete()
+        {
+            Network.Send(new QuestMessage()
+            {
+                Action = QuestAction.Delete,
+                Mission = Identity
+            });
         }
 
         private string GetDisplayName()

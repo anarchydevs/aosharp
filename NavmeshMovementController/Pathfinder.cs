@@ -7,6 +7,7 @@ using AOSharp.Common.GameData;
 using org.critterai.nav;
 using oVector3 = org.critterai.Vector3;
 using AOSharp.Core;
+using NavmeshMovementController;
 
 namespace AOSharp.Pathfinding
 {
@@ -41,10 +42,10 @@ namespace AOSharp.Pathfinding
             List<Vector3> finalPath = new List<Vector3>();
 
             if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
-                return finalPath;
+                throw new OriginNotOnNavMeshException(start);
 
             if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint destination)) || destination.point == new oVector3())
-                return finalPath;
+                throw new DestinationNotOnNavMeshException(end);
 
             uint[] path = new uint[500];
             int pathCount;

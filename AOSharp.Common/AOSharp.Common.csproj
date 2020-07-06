@@ -165,7 +165,9 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamMemberInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamMemberMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TemplateActionMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAction.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TradeAction.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TradeMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3MessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\OperatorMessage.cs" />

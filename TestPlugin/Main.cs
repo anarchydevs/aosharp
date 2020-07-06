@@ -17,6 +17,7 @@ using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using TestPlugin.IPCMessages;
 using System.Threading;
+using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace TestPlugin
 {
@@ -188,15 +189,28 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, IntPtr pWindow) =>
                 {
+                    if (param.Length != 1)
+                        return;
+
                     try
                     {
-                        _ipcChannel.Broadcast(new EmptyMessage());
-                    }
-                    catch(Exception e)
-                    {
-                        Chat.WriteLine(e.Message);
-                    }
+                        Network.Send(new CharDCMoveMessage()
+                        {
+                            MoveType = (MovementAction)byte.Parse(param[0]),
+                            Heading = DynelManager.LocalPlayer.Rotation,
+                            Position = DynelManager.LocalPlayer.Position,
+                        });
+                    } catch { }
                 });
+
+                Chat.RegisterCommand("tokenize", (s, strings, arg3) =>
+                {
+                    string args = string.Join(" ", strings);
+
+                    Chat.WriteLine(string.Join(" ", args));
+                    System.Diagnostics.Debug.WriteLine(args);
+                });
+
 
                 _ipcChannel = new IPCChannel(1);
 
@@ -319,6 +333,7 @@ namespace TestPlugin
 
         double lastTrigger = Time.NormalTime;
         float angle = 0;
+        byte moveType = 0;
 
         private void OnUpdate(object s, float deltaTime)
         {
@@ -337,7 +352,7 @@ namespace TestPlugin
                 derp.Use();
             }*/
 
-            if (Time.NormalTime > lastTrigger + 0.1)
+            if (Time.NormalTime > lastTrigger + 0.2)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -370,6 +385,12 @@ namespace TestPlugin
                     Leet = 1337
                 });
                 */
+         
+                
+
+                if (moveType++ == 0x50)
+                    moveType = 0;
+                    
                 lastTrigger = Time.NormalTime;
             }
         }

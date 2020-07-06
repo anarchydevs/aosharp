@@ -30,6 +30,11 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             }
         }
 
+        public static IntPtr Create()
+        {
+            return Create(string.Empty);
+        }
+
         public static IntPtr Create(string str)
         {
             IntPtr pNew = MSVCR100.New(0x14);
