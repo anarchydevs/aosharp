@@ -37,7 +37,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
-                /*
+
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   Identity: {Playfield.Identity}");
                 Chat.WriteLine($"   Name: {Playfield.Name}");
@@ -45,7 +45,6 @@ namespace TestPlugin
                 Chat.WriteLine($"   IsDungeon: {Playfield.IsDungeon}");
                 Chat.WriteLine($"   IsShadowlands: {Playfield.IsShadowlands}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
-                */
 
                 Chat.WriteLine("Team:");
                 Chat.WriteLine($"\tIsInTeam: {Team.IsInTeam}");

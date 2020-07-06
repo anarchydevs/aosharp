@@ -38,7 +38,7 @@ namespace AOSharp.Core
                 return false;
 
             //Why is this inverted lol?
-            return N3EngineClientAnarchy_t.IsSecondarySpecialAttackAvailable(pEngine, _stat) == 0;
+            return !N3EngineClientAnarchy_t.IsSecondarySpecialAttackAvailable(pEngine, _stat);
         }
 
         public unsafe bool IsInRange(Dynel target)

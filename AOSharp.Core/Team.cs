@@ -108,7 +108,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return false;
 
-            return N3EngineClientAnarchy_t.IsInRaidTeam(pEngine) == 1;
+            return N3EngineClientAnarchy_t.IsInRaidTeam(pEngine);
         }
 
         private static unsafe List<TeamMember> GetMemberList()

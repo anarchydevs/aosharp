@@ -198,6 +198,7 @@ namespace AOSharp.Bootstrap
             ChatGUIModule_t.ExpandChatTextArgs(tokenized, StdString.Create(commandText->ToString()));
             _lastChatInput = ((StdString*)tokenized)->ToString();
             _lastChatInputWindowPtr = pWindow;
+            StdString.Dispose(tokenized);
 
             return CommandInterpreter_c.ProcessChatInput(pThis, pWindow, commandText);
         }

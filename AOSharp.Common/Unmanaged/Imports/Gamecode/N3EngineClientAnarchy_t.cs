@@ -8,6 +8,7 @@ namespace AOSharp.Common.Unmanaged.Imports
     public class N3EngineClientAnarchy_t
     {
         //SecondarySpecialAttack
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SecondarySpecialAttack@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@W4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe bool SecondarySpecialAttack(IntPtr pThis, Identity* target, Stat stat);
 
@@ -24,8 +25,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
 
         //IsSecondarySpecialAttackAvailable
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsSecondarySpecialAttackAvailable@n3EngineClientAnarchy_t@@QBE_NW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern byte IsSecondarySpecialAttackAvailable(IntPtr pThis, Stat stat);
+        public static extern bool IsSecondarySpecialAttackAvailable(IntPtr pThis, Stat stat);
 
         //GetAttackRange
         [DllImport("Gamecode.dll", EntryPoint = "?GetAttackRange@n3EngineClientAnarchy_t@@QBEMXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -41,6 +43,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe void GetCorrectActionId(IntPtr pThis, Identity* id);
 
         //PerformSpecialAction
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe bool PerformSpecialAction(IntPtr pThis, Identity* action);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
@@ -51,16 +54,19 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe IntPtr GetName(IntPtr pThis, Identity* identity, Identity* identityUnk);
 
         //IsFormulaReady
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsFormulaReady@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe byte IsFormulaReady(IntPtr pThis, Identity* identity);
+        public static extern unsafe bool IsFormulaReady(IntPtr pThis, Identity* identity);
 
         //HasPerk
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_HasPerk@n3EngineClientAnarchy_t@@QAE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern byte HasPerk(IntPtr pThis, int perkId);
+        public static extern bool HasPerk(IntPtr pThis, int perkId);
 
         //IsAttacking
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsAttacking@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
-        public static extern byte IsAttacking(IntPtr pThis);
+        public static extern bool IsAttacking(IntPtr pThis);
 
         //GetSpecialActionList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSpecialActionList@n3EngineClientAnarchy_t@@QAEPAV?$list@VSpecialAction_t@@V?$allocator@VSpecialAction_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
@@ -91,6 +97,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
 
         //IsInTeam
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsInTeam@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe bool IsInTeam(IntPtr pThis, Identity* identity);
 
@@ -107,8 +114,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe IntPtr SelectedTarget(IntPtr pThis, Identity* target);
 
         //IsInRaidTeam
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsInRaidTeam@n3EngineClientAnarchy_t@@QAE_NXZ", CallingConvention = CallingConvention.ThisCall)]
-        public static extern byte IsInRaidTeam(IntPtr pThis);
+        public static extern bool IsInRaidTeam(IntPtr pThis);
 
         //GetTeamMemberList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetTeamMemberList@n3EngineClientAnarchy_t@@QAEPAV?$vector@PAVTeamEntry_t@@V?$allocator@PAVTeamEntry_t@@@std@@@std@@H@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -119,8 +127,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern IntPtr GetFullPerkMap(IntPtr pThis);
 
         //IsTeamLeader
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsTeamLeader@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe byte IsTeamLeader(IntPtr pThis, Identity* target);
+        public static extern unsafe bool IsTeamLeader(IntPtr pThis, Identity* target);
 
         //GetItemByTemplate
         [DllImport("Gamecode.dll", EntryPoint = "?GetItemByTemplate@n3EngineClientAnarchy_t@@ABEPAVDummyItemBase_t@@VIdentity_t@@ABV3@@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -135,8 +144,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
 
         //CreateDummyItemID
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CreateDummyItemID@n3EngineClientAnarchy_t@@QBE_NAAVIdentity_t@@ABVACGItem_t@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe byte CreateDummyItemID(IntPtr pThis, Identity* template, ACGItem* acgItem);
+        public static extern unsafe bool CreateDummyItemID(IntPtr pThis, Identity* template, ACGItem* acgItem);
 
         //TextCommand
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TextCommand@n3EngineClientAnarchy_t@@QAE_NHPBDABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
@@ -160,6 +170,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DRunEngine(IntPtr pThis, float unk);
 
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SendInPlayMessage@n3EngineClientAnarchy_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool SendInPlayMessage(IntPtr pThis);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
@@ -170,6 +181,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DPlayfieldInit(IntPtr pThis, uint id);
 
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsPerk@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsPerk(IntPtr pThis, uint id);
     }

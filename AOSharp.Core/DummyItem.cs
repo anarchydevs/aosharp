@@ -61,7 +61,7 @@ namespace AOSharp.Core
 
             fixed (Identity* pDummyItemId = &dummyItemId)
             {
-                return N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, pDummyItemId, &itemInfo) == 1;
+                return N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, pDummyItemId, &itemInfo);
             }
         }
 
@@ -200,7 +200,7 @@ namespace AOSharp.Core
                             metReq = skillCheckChar.Buffs.All(x => x.Identity.Instance != param2);
                             break;
                         case UseCriteriaOperator.HasPerk:
-                            metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2) == 1;
+                            metReq = N3EngineClientAnarchy_t.HasPerk(pEngine, param2);
                             break;
                         case UseCriteriaOperator.IsPerkUnlocked:
                             metReq = true;

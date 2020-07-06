@@ -128,7 +128,7 @@ namespace AOSharp.Core
             if (pPlayfield == IntPtr.Zero)
                 return false;
 
-            return N3Playfield_t.LineOfSight(pPlayfield, &pos1, &pos2, zoneCell, false) == 1;
+            return N3Playfield_t.LineOfSight(pPlayfield, &pos1, &pos2, zoneCell, false);
         }
 
         private static bool IsDungeonPF()

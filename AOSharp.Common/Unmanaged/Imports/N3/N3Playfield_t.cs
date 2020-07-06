@@ -7,17 +7,20 @@ namespace AOSharp.Common.Unmanaged.Imports
 {
     public class N3Playfield_t
     {
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("N3.dll", EntryPoint = "?LineOfSight@n3Playfield_t@@QBE_NABVVector3_t@@0H_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe byte LineOfSight(IntPtr pThis, Vector3* pos1, Vector3* pos2, int zoneCell, bool unknown);
+        public static extern unsafe bool LineOfSight(IntPtr pThis, Vector3* pos1, Vector3* pos2, int zoneCell, bool unknown);
 
         [DllImport("N3.dll", EntryPoint = "?AddChildDynel@n3Playfield_t@@QAEXPAVn3Dynel_t@@ABVVector3_t@@ABVQuaternion_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void AddChildDynel(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DAddChildDynel(IntPtr pThis, IntPtr pDynel, IntPtr pos, IntPtr rot);
 
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("N3.dll", EntryPoint = "?IsDungeon@n3Playfield_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsDungeon(IntPtr pThis);
 
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("N3.dll", EntryPoint = "?IsBattleStation@n3Playfield_t@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsBattleStation(IntPtr pThis);
 

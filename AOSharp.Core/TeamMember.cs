@@ -34,7 +34,7 @@ namespace AOSharp.Core
                 return false;
 
             Identity identity = Identity;
-            return N3EngineClientAnarchy_t.IsTeamLeader(pEngine, &identity) == 1;
+            return N3EngineClientAnarchy_t.IsTeamLeader(pEngine, &identity);
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
