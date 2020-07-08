@@ -101,16 +101,5 @@ namespace AOSharp.Core
         {
             PlayfieldInit?.Invoke(null, id);
         }
-
-        //TODO: Find a home for this.
-        public static void SetMovement(MovementAction action)
-        {
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            if (pEngine == IntPtr.Zero)
-                return;
-
-            N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
-        }
     }
 }

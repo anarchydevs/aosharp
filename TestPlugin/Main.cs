@@ -176,17 +176,17 @@ namespace TestPlugin
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 OptionPanel.AddMenu(_menu);
 
-                Chat.RegisterCommand("swim", (string  command, string[] param, IntPtr pWindow) =>
+                Chat.RegisterCommand("swim", (string  command, string[] param, ChatWindow chatWindow) =>
                 {
-                    Game.SetMovement(MovementAction.SwitchToSwim);
+                    MovementController.SetMovement(MovementAction.SwitchToSwim);
                 });
 
-                Chat.RegisterCommand("stopswim", (string command, string[] param, IntPtr pWindow) =>
+                Chat.RegisterCommand("stopswim", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    Game.SetMovement(MovementAction.LeaveSwim);
+                    MovementController.SetMovement(MovementAction.LeaveSwim);
                 });
 
-                Chat.RegisterCommand("test", (string command, string[] param, IntPtr pWindow) =>
+                Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     if (param.Length != 1)
                         return;

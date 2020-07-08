@@ -86,13 +86,14 @@
     <Compile Include="SpecialAttack.cs" />
     <Compile Include="GameData\Cooldown.cs" />
     <Compile Include="GameData\SpecialAction.cs" />
-    <Compile Include="Chat.cs" />
+    <Compile Include="UI\Chat.cs" />
     <Compile Include="Dynel\Dynel.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IAOPluginEntry.cs" />
     <Compile Include="Playfield\Playfield.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ChatWindow.cs" />
     <Compile Include="UI\Checkbox.cs" />
     <Compile Include="UI\BorderView.cs" />
     <Compile Include="UI\LayoutNode.cs" />

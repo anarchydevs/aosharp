@@ -1,6 +1,7 @@
 ﻿using AOSharp.Common.GameData;
 using System;
 using System.Collections.Generic;
+using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Core.Movement
 {
@@ -34,7 +35,7 @@ namespace AOSharp.Core.Movement
                 return;
 
             if (!DynelManager.LocalPlayer.IsMoving)
-                Game.SetMovement(MovementAction.ForwardStart);
+                SetMovement(MovementAction.ForwardStart);
 
             if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= (_path.Count > 1 ? _nodeReachedDist : _stopDist))
             {
@@ -61,7 +62,7 @@ namespace AOSharp.Core.Movement
 
             if (_timeSinceLastUpdate > UpdateInterval)
             {
-                Game.SetMovement(MovementAction.Update);
+                SetMovement(MovementAction.Update);
                 _timeSinceLastUpdate = 0f;
             }
 
@@ -84,7 +85,7 @@ namespace AOSharp.Core.Movement
             _path.Clear();
 
             if(DynelManager.LocalPlayer.IsMoving)
-                Game.SetMovement(MovementAction.ForwardStop);
+                SetMovement(MovementAction.ForwardStop);
         }
 
         public virtual void MoveTo(Vector3 pos, float stopDistance = 1f)
@@ -115,12 +116,22 @@ namespace AOSharp.Core.Movement
             DestinationReached?.Invoke(this, e);
 
             if (e.Halt)
-                Game.SetMovement(MovementAction.ForwardStop);
+                SetMovement(MovementAction.ForwardStop);
         }
 
         protected virtual void OnStuck()
         {
             //Chat.WriteLine("Stuck!?");
+        }
+
+        public static void SetMovement(MovementAction action)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return;
+
+            N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
@@ -15,7 +16,7 @@ namespace AOSharp.Core
     {
         public static EventHandler<N3Message> N3MessageReceived;
 
-        private static Queue<Message> _messageQueue = new Queue<Message>();
+        private static ConcurrentQueue<Message> _messageQueue = new ConcurrentQueue<Message>();
 
         private static Dictionary<N3MessageType, Action<N3Message>> n3MsgCallbacks = new Dictionary<N3MessageType, Action<N3Message>>
         {
@@ -52,13 +53,9 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
-            while (_messageQueue.Count > 0)
-            {
-                Message msg = _messageQueue.Dequeue();
-
+            while (_messageQueue.TryDequeue(out Message msg))
                 if (msg.Header.PacketType == PacketType.N3Message)
                     OnN3Message((N3Message)msg.Body);
-            }
         }
 
         private static void OnMessage(byte[] datablock)

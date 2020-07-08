@@ -11,6 +11,8 @@ namespace AOSharp.Core
 {
     public unsafe class LocalPlayer : SimpleChar
     {
+        private const float AttackAttemptDelay = 0.5f;
+
         public Dictionary<Stat, Cooldown> Cooldowns => GetCooldowns();
 
         internal List<Mission> MissionList => GetMissionList();
@@ -18,6 +20,10 @@ namespace AOSharp.Core
         public float AttackRange => GetAttackRange();
 
         public Identity[] Pets => ((MemStruct*)Pointer)->NpcHolder->GetPets();
+
+        public bool IsAttackPending => Time.NormalTime < _nextAttack;
+
+        private static double _nextAttack;
 
         internal IntPtr NanoControllerPointer => (*(MemStruct*)Pointer).NanoController;
 
@@ -42,6 +48,8 @@ namespace AOSharp.Core
                 return;
 
             N3EngineClientAnarchy_t.DefaultAttack(pEngine, &target, true);
+
+            _nextAttack = Time.NormalTime + AttackAttemptDelay;
         }
 
         public void StopAttack()

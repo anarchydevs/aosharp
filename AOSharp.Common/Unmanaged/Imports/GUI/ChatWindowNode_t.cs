@@ -10,7 +10,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static IntPtr ChatWindowController = Kernel32.GetProcAddress(Kernel32.GetModuleHandle("GUI.dll"), "?s_pcInstance@ChatGUIModule_c@@0PAV1@A") + 0x1C;
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        public unsafe delegate int AppendTextDelegate(IntPtr pThis, StdString* message, ChatColor color);
+        public unsafe delegate int AppendTextDelegate(IntPtr pThis, IntPtr pMsg, ChatColor color);
         public static AppendTextDelegate AppendText; 
     }
 }

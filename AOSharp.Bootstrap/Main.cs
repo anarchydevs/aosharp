@@ -194,6 +194,7 @@ namespace AOSharp.Bootstrap
 
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, StdString* commandText)
         {
+            
             IntPtr tokenized = StdString.Create();
             ChatGUIModule_t.ExpandChatTextArgs(tokenized, StdString.Create(commandText->ToString()));
             _lastChatInput = ((StdString*)tokenized)->ToString();
@@ -205,8 +206,9 @@ namespace AOSharp.Bootstrap
 
         public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
         {
+            
             IntPtr result;
-            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero)
+            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk)
                 _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;

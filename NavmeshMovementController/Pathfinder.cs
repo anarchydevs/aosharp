@@ -7,6 +7,7 @@ using AOSharp.Common.GameData;
 using org.critterai.nav;
 using oVector3 = org.critterai.Vector3;
 using AOSharp.Core;
+using AOSharp.Core.UI;
 using NavmeshMovementController;
 
 namespace AOSharp.Pathfinding
