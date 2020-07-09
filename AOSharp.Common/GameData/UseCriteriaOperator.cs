@@ -106,6 +106,7 @@
         NotBitAnd = 107,
         ObtainedItem = 108,
         OnUnknown = 110,
+        HasNcuFor = 127,
         Blank = 255,
     }
 }

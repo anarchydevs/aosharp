@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using AOSharp.Core;
 using AOSharp.Core.Inventory;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core.Combat
 {
@@ -47,7 +48,8 @@ namespace AOSharp.Core.Combat
             {
                 //Find highest usable ql of the item
                 Item item;
-                if ((item = Inventory.Inventory.FindAll(itemRule.LowId, itemRule.HighId).OrderByDescending(x => x.QualityLevel).FirstOrDefault(x => x.MeetsSelfUseReqs())) == null)
+                if ((item = Inventory.Inventory.FindAll(itemRule.LowId, itemRule.HighId)
+                    .OrderByDescending(x => x.QualityLevel).FirstOrDefault(x => x.MeetsSelfUseReqs())) == null)
                     continue;
 
                 //Ignore the item if it's already queued

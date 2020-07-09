@@ -5,6 +5,8 @@ using AOSharp.Common.Unmanaged.Imports;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using AOSharp.Core.Inventory;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
@@ -204,6 +206,23 @@ namespace AOSharp.Core
                             break;
                         case UseCriteriaOperator.IsPerkUnlocked:
                             metReq = true;
+                            break;
+                        case UseCriteriaOperator.HasNcuFor:
+                            //TODO: check against actual nano program NCU cost
+                            metReq = skillCheckChar.GetStat(Stat.MaxNCU) - skillCheckChar.GetStat(Stat.CurrentNCU) > 0;
+                            break;
+                        case UseCriteriaOperator.HasWieldedItem:
+                            if (criteriaSource == CriteriaSource.Target)
+                            {
+                                metReq = true;
+                            }
+                            else
+                            {
+                                metReq = Inventory.Inventory.Items.Any(i =>
+                                    (i.LowId == param2 || i.HighId == param2) &&
+                                    (i.Slot.Instance >= (int)EquipSlot.Weap_Hud1 &&
+                                     i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
+                            }
                             break;
                         default:
                             //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
