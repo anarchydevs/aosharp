@@ -20,5 +20,13 @@ namespace AOSharp.Common.GameData
             MaxX = 99999,
             MaxY = 99999
         };
+
+        public Rect(float minX, float minY, float maxX, float maxY)
+        {
+            MinX = minX;
+            MinY = minY;
+            MaxX = maxX;
+            MaxY = maxY;
+        }
     }
 }

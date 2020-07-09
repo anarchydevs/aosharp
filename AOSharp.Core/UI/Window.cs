@@ -7,6 +7,9 @@ using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
+using System.IO;
+using AOSharp.Common.Helpers;
+using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Core.UI
 {
@@ -29,6 +32,23 @@ namespace AOSharp.Core.UI
                 return null;
 
             return new Window(pWindow);
+        }
+
+        public static Window CreateFromXml(string name, string path)
+        {
+            if (!File.Exists(path))
+                return null;
+
+            Window window = Create(new Rect(50, 50, 300, 300), name, name, WindowStyle.Default, WindowFlags.AutoScale);
+
+            if (!GUIUnk.LoadViewFromXml(out IntPtr pView, StdString.Create(path), StdString.Create()))
+                return null;
+
+            window.AppendTab(name, new View(pView, false));
+
+            window.MoveToCenter();
+
+            return window;
         }
 
         public void Show(bool visible)
@@ -72,6 +92,11 @@ namespace AOSharp.Core.UI
         public void AppendChild(View view, bool unk)
         {
             Window_c.AppendChild(_pointer, view.Pointer, unk);
+        }
+
+        public void MoveToCenter()
+        {
+            Window_c.MoveToCenter(_pointer);
         }
 
         public TabView GetTabView()

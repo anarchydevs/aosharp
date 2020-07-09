@@ -1,0 +1,35 @@
+﻿using System;
+using System.Text;
+using System.Runtime.InteropServices;
+using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.GameData;
+
+namespace AOSharp.Common.Unmanaged.Imports
+{
+    public class RadioButton_c
+    {
+        [DllImport("GUI.dll", EntryPoint = "??0RadioButton_c@@QAE@ABVRect@@ABVString@@1HII@Z", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern IntPtr Constructor(IntPtr pThis, IntPtr pName, IntPtr pLabel, int unk1, uint unk2, uint unk3);
+
+        [DllImport("GUI.dll", EntryPoint = "??1RadioButton_c@@UAE@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern int Deconstructor(IntPtr pThis);
+
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("GUI.dll", EntryPoint = "?GetState@RadioButton_c@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool GetState(IntPtr pThis);
+
+        public static IntPtr Create(string name, string labelText, int unk1, uint unk2, uint unk3)
+        {
+            IntPtr pNew = MSVCR100.New(0x168);
+            IntPtr pName = StdString.Create(name);
+            IntPtr pLabel = StdString.Create(labelText);
+
+            IntPtr pView = Constructor(pNew, pName, pLabel, unk1, unk2, unk3);
+
+            StdString.Dispose(pName);
+            StdString.Dispose(pLabel);
+
+            return pView;
+        }
+    }
+}

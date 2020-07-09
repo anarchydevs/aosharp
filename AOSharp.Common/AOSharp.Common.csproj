@@ -255,6 +255,9 @@
     <Compile Include="Unmanaged\Imports\Gamecode\N3PlayfieldAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\GUIUnk.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\RadioButtonGroup_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\RadioButton_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\CommandInterpreter_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\BorderView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ChatGUIModule_t.cs" />
@@ -297,6 +300,7 @@
     <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\String_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

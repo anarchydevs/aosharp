@@ -94,6 +94,9 @@
     <Compile Include="Playfield\Playfield.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ChatWindow.cs" />
+    <Compile Include="UI\Options\MenuTest.cs" />
+    <Compile Include="UI\RadioButtonGroup.cs" />
+    <Compile Include="UI\RadioButton.cs" />
     <Compile Include="UI\Checkbox.cs" />
     <Compile Include="UI\BorderView.cs" />
     <Compile Include="UI\LayoutNode.cs" />

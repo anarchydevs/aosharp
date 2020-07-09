@@ -38,6 +38,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
 
+                /*
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   Identity: {Playfield.Identity}");
                 Chat.WriteLine($"   Name: {Playfield.Name}");
@@ -45,6 +46,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   IsDungeon: {Playfield.IsDungeon}");
                 Chat.WriteLine($"   IsShadowlands: {Playfield.IsShadowlands}");
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
+                */
 
                 Chat.WriteLine("Team:");
                 Chat.WriteLine($"\tIsInTeam: {Team.IsInTeam}");
@@ -174,6 +176,7 @@ namespace TestPlugin
 
                 _menu = new Menu("TestPlugin", "TestPlugin");
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
+                //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
 
                 Chat.RegisterCommand("swim", (string  command, string[] param, ChatWindow chatWindow) =>
@@ -188,18 +191,7 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    if (param.Length != 1)
-                        return;
-
-                    try
-                    {
-                        Network.Send(new CharDCMoveMessage()
-                        {
-                            MoveType = (MovementAction)byte.Parse(param[0]),
-                            Heading = DynelManager.LocalPlayer.Rotation,
-                            Position = DynelManager.LocalPlayer.Position,
-                        });
-                    } catch { }
+                    Window.CreateFromXml("Test", @"Test.xml").Show(true);
                 });
 
                 Chat.RegisterCommand("tokenize", (s, strings, arg3) =>

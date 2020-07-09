@@ -17,6 +17,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?Show@Window@@QAEX_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void Show(IntPtr pThis, bool visible);
 
+        [DllImport("GUI.dll", EntryPoint = "?MoveToCenter@Window@@QAEXXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void MoveToCenter(IntPtr pThis);
+
         [DllImport("GUI.dll", EntryPoint = "?GetTabView@Window@@QBEPAVTabView@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetTabView(IntPtr pThis);
 
