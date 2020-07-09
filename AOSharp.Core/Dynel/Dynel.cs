@@ -39,6 +39,8 @@ namespace AOSharp.Core
 
         public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
+        public virtual string Name => GetName();
+
         public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
 
         public Dynel(IntPtr pointer)
@@ -63,6 +65,19 @@ namespace AOSharp.Core
             Identity unk = new Identity();
 
             return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, detail, &unk);
+        }
+
+        private string GetName()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return string.Empty;
+
+            Identity identity = Identity;
+            Identity unk = new Identity();
+
+            return Marshal.PtrToStringAnsi(N3EngineClientAnarchy_t.GetName(pEngine, ref identity, ref unk));
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
