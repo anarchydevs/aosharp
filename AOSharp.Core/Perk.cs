@@ -16,21 +16,19 @@ namespace AOSharp.Core
     {
         private const float PERK_TIMEOUT = 1;
 
-        public unsafe bool IsAvailable => !(*(SpecialActionMemStruct*)_pointer).IsOnCooldown;
+        public unsafe bool IsAvailable => GetIsAvailable();
         public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
         public readonly Identity Identity;
         public readonly PerkHash Hash;
-        private IntPtr _pointer;
 
         public static List<Perk> List => GetPerks();
         private static Queue<QueueItem> _pendingQueue = new Queue<QueueItem>();
         private static Queue<QueueItem> _executingQueue = new Queue<QueueItem>();
 
-        private Perk(IntPtr pointer, Identity identity, int hashInt) : base(identity)
+        private Perk(Identity identity, int hashInt) : base(identity)
         {
             Identity = identity;
-            _pointer = pointer;
             Hash = (PerkHash)hashInt;
         }
 
@@ -67,6 +65,17 @@ namespace AOSharp.Core
                 Identity identity = Identity;
                 return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, &identity);
             }
+        }
+
+        private bool GetIsAvailable()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return false;
+
+            Identity identity = Identity;
+            return N3EngineClientAnarchy_t.GetSpecialActionState(pEngine, ref identity) == SpecialActionState.Ready;
         }
 
         public static bool Find(int id, out Perk perk)
@@ -109,7 +118,7 @@ namespace AOSharp.Core
                 if (specialAction.Identity.Type != IdentityType.PerkHash)
                     continue;
 
-                perks.Add(new Perk(pAction, specialAction.TemplateIdentity, specialAction.Identity.Instance));
+                perks.Add(new Perk(specialAction.TemplateIdentity, specialAction.Identity.Instance));
             }
 
             return perks;

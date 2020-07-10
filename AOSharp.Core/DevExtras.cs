@@ -16,6 +16,7 @@ namespace AOSharp.Core
         [DllImport("Utils.dll", EntryPoint = "?AddVariable@DistributedValue_c@@SAXABVString@@ABVVariant@@_N2@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern void AddVariable(IntPtr pPathStr, IntPtr pVariant, bool unk1, bool unk2);
 
+
         //Packed with random tests. Don't invoke unless you want weird stuff to execute.
         public static void Test(ChatWindow chatWindow)
         {
@@ -25,11 +26,6 @@ namespace AOSharp.Core
             AddVariable(pName, pVariant, true, true);
             */
 
-            if (Inventory.Inventory.Find(296465, 296465, out Item item))
-            {
-                for(int i = 0; i < 50; i++)
-                    chatWindow.WriteLine($"{i} - {item.GetItemActionInfo((ItemActionInfo)i).ToString("X4")}");
-            }
         }
 
         //Loads all surfaces (Collision) for the current playfield. Used by me to generate navmeshes.

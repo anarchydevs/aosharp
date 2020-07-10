@@ -187,5 +187,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsPerk@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsPerk(IntPtr pThis, int id);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSpecialActionState@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern SpecialActionState GetSpecialActionState(IntPtr pThis, ref Identity action);
     }
 }

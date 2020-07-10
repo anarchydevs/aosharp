@@ -246,11 +246,6 @@ namespace AOSharp.Core.Combat
 
         internal void OnPerkExecuted(DummyItem perkDummyItem)
         {
-            Perk perk = _actionQueue.FirstOrDefault(x => x.CombatAction is Perk action && action.Name == perkDummyItem.Name).CombatAction as Perk;
-
-            if (perk != null)
-                Chat.WriteLine($"{perk.Name} executed and IsAvailable: {perk.IsAvailable} {DynelManager.LocalPlayer.Cooldowns.Count}");
-
             //Drop the queued action
             _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Perk action && action.Name == perkDummyItem.Name)));
         }

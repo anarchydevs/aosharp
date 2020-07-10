@@ -334,7 +334,7 @@ namespace TestPlugin
                 derp.Use();
             }*/
 
-            if (Time.NormalTime > lastTrigger + 0.2)
+            if (Time.NormalTime > lastTrigger + 0.5)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -348,15 +348,16 @@ namespace TestPlugin
                 }
                 */
 
+
                 /*
                 Perk testPerk;
-                if(Perk.Find("Dance of Fools", out testPerk))
+                if(Perk.Find("Bot Confinement", out testPerk))
                 {
-                    if (testPerk.IsAvailable)
-                        testPerk.Use();
-                }
-                */
-
+                    Chat.WriteLine($"Bot Confinement IsAvailable: {testPerk.IsAvailable}");
+                    //if (testPerk.IsAvailable)
+                    //   testPerk.Use();
+                }*/
+                
                 //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
                 //Targeting.SetTarget(randomTarget);
 
@@ -367,12 +368,7 @@ namespace TestPlugin
                     Leet = 1337
                 });
                 */
-         
-                
-
-                if (moveType++ == 0x50)
-                    moveType = 0;
-                    
+                     
                 lastTrigger = Time.NormalTime;
             }
         }
