@@ -13,8 +13,6 @@ namespace AOSharp.Core
 {
     public unsafe class SimpleChar : Dynel
     {
-        public string Name => (*(MemStruct*)Pointer).Name.ToString();
-
         public int Health => GetStat(Stat.Health);
 
         public int MaxHealth => GetStat(Stat.MaxHealth);

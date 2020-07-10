@@ -27,8 +27,8 @@ namespace AOSharp.Bootstrap
         public TeleportFailedDelegate TeleportFailed;
         public delegate void JoinTeamRequestDelegate(Identity pIdentity, IntPtr pName);
         public JoinTeamRequestDelegate JoinTeamRequest;
-        public delegate void ClientPerformedPerkDelegate(Identity pIdentity);
-        public ClientPerformedPerkDelegate ClientPerformedPerk;
+        public delegate void ClientPerformedSpecialActionDelegate(Identity pIdentity);
+        public ClientPerformedSpecialActionDelegate ClientPerformedSpecialAction;
         public delegate void PlayfieldInitDelegate(uint id);
         public PlayfieldInitDelegate PlayfieldInit;
         public delegate void OptionPanelActivatedDelegate(IntPtr pOptionPanelModule, bool unk);
@@ -67,9 +67,9 @@ namespace AOSharp.Bootstrap
             return eventArgs.Blocked;
         }
 
-        public unsafe void ClientPerformedPerk(IntPtr identity)
+        public unsafe void ClientPerformedSpecialAction(IntPtr identity)
         {
-            _coreDelegates.ClientPerformedPerk?.Invoke(*(Identity*)identity);
+            _coreDelegates.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
         }
 
         public void DynelSpawned(IntPtr pDynel)
@@ -158,7 +158,7 @@ namespace AOSharp.Bootstrap
                 ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
                 DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnMessage"),
                 JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
-                ClientPerformedPerk = CreateDelegate<CoreDelegates.ClientPerformedPerkDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedPerk"),
+                ClientPerformedSpecialAction = CreateDelegate<CoreDelegates.ClientPerformedSpecialActionDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedSpecialAction"),
                 AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
                 UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand")
             };

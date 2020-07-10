@@ -8,6 +8,7 @@ using AOSharp.Common.GameData;
 using AOSharp.Core.Combat;
 using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
@@ -167,7 +168,7 @@ namespace AOSharp.Core
                 CombatHandler.Instance.OnPerkLanded(perk, nextTimeout);
         }
 
-        private static void OnClientPerformedPerk(Identity identity)
+        private static void OnClientPerformedSpecialAction(Identity identity)
         {
             Perk perk;
             if (!Find(identity.Instance, out perk))

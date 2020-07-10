@@ -179,19 +179,10 @@ namespace TestPlugin
                 //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
 
-                Chat.RegisterCommand("swim", (string  command, string[] param, ChatWindow chatWindow) =>
-                {
-                    MovementController.SetMovement(MovementAction.SwitchToSwim);
-                });
-
-                Chat.RegisterCommand("stopswim", (string command, string[] param, ChatWindow chatWindow) =>
-                {
-                    MovementController.SetMovement(MovementAction.LeaveSwim);
-                });
-
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    Window.CreateFromXml("Test", @"Test.xml").Show(true);
+                    //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
+                    DevExtras.Test(chatWindow);
                 });
 
                 Chat.RegisterCommand("tokenize", (s, strings, arg3) =>

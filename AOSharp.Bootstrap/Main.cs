@@ -255,8 +255,8 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if (specialActionResult && N3EngineClientAnarchy_t.IsPerk(pThis, (*(uint*)identity)))
-                    _pluginProxy.ClientPerformedPerk(identity);
+                if (specialActionResult)
+                    _pluginProxy.ClientPerformedSpecialAction(identity);
             }
             catch (Exception) { }
 
