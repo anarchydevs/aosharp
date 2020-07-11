@@ -37,10 +37,13 @@ namespace AOSharp.Core
             return Use(DynelManager.LocalPlayer, packetOnly);
         }
 
-        public unsafe bool Use(SimpleChar target, bool packetOnly = false)
+        public unsafe bool Use(SimpleChar target, bool setTarget = false, bool packetOnly = false)
         {
-            if (target != null)
-                Targeting.SetTarget(target);
+            if (target == null)
+                target = DynelManager.LocalPlayer;
+
+            if (setTarget)
+                target.Target();
 
             if (packetOnly)
             {
@@ -63,7 +66,7 @@ namespace AOSharp.Core
                     return false;
 
                 Identity identity = Identity;
-                return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, &identity);
+                return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, ref identity);
             }
         }
 

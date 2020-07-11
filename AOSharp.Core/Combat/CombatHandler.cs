@@ -21,9 +21,9 @@ namespace AOSharp.Core.Combat
         private List<PerkRule> _perkRules = new List<PerkRule>();
         private List<SpellRule> _spellRules = new List<SpellRule>();
 
-        protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget,  out SimpleChar target);
-        protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, out SimpleChar target);
-        protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, out SimpleChar target);
+        protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
+        protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
+        protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
 
         public static CombatHandler Instance { get; private set; }
 
@@ -56,15 +56,20 @@ namespace AOSharp.Core.Combat
                 if (_actionQueue.Any(x => x.CombatAction is Item action && action == item))
                     continue;
 
-                if (itemRule.ItemConditionProcessor != null && itemRule.ItemConditionProcessor.Invoke(item, fightingTarget, out SimpleChar target))
+                (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+
+                if (itemRule.ItemConditionProcessor != null && itemRule.ItemConditionProcessor.Invoke(item, fightingTarget, ref actionTarget))
                 {
-                    if (!item.MeetsUseReqs(target))
+                    if (!item.MeetsUseReqs(actionTarget.Target))
+                        continue;
+
+                    if (actionTarget.Target != null && !item.IsInRange(actionTarget.Target))
                         continue;
 
                     //Chat.WriteLine($"Queueing item {item.Name} -- actionQ.Count = {_actionQueue.Count}");
                     float queueOffset = _actionQueue.Where(x => x.CombatAction is Perk).Sum(x => ((Perk)x.CombatAction).AttackDelay);
                     double timeoutOffset = item.AttackDelay + ACTION_TIMEOUT + queueOffset;
-                    _actionQueue.Enqueue(new CombatActionQueueItem(item, target, timeoutOffset));
+                    _actionQueue.Enqueue(new CombatActionQueueItem(item, actionTarget.Target, actionTarget.ShouldSetTarget, timeoutOffset));
                 }
             }
 
@@ -85,13 +90,18 @@ namespace AOSharp.Core.Combat
                     if (_actionQueue.Any(x => x.CombatAction is Perk action && action == perk))
                         continue;
 
-                    if (perkRule.PerkConditionProcessor != null && perkRule.PerkConditionProcessor.Invoke(perk, fightingTarget, out SimpleChar target))
+                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+
+                    if (perkRule.PerkConditionProcessor != null && perkRule.PerkConditionProcessor.Invoke(perk, fightingTarget, ref actionTarget))
                     {
-                        if (!perk.MeetsUseReqs(target))
+                        if (!perk.MeetsUseReqs(actionTarget.Target))
+                            continue;
+
+                        if (actionTarget.Target != null && !perk.IsInRange(actionTarget.Target))
                             continue;
 
                         //Chat.WriteLine($"Queueing perk {perk.Name} -- actionQ.Count = {_actionQueue.Count}");
-                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, target));
+                        _actionQueue.Enqueue(new CombatActionQueueItem(perk, actionTarget.Target, actionTarget.ShouldSetTarget));
                     }
                 }
             }
@@ -120,12 +130,14 @@ namespace AOSharp.Core.Combat
                     if (!spell.IsReady)
                         continue;
 
-                    if (spellRule.SpellConditionProcessor != null && spellRule.SpellConditionProcessor.Invoke(spell, fightingTarget, out SimpleChar target))
+                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+
+                    if (spellRule.SpellConditionProcessor != null && spellRule.SpellConditionProcessor.Invoke(spell, fightingTarget, ref actionTarget))
                     {
-                        if (!spell.MeetsUseReqs(target))
+                        if (!spell.MeetsUseReqs(actionTarget.Target))
                             continue;
 
-                        spell.Cast(target);
+                        spell.Cast(actionTarget.Target, actionTarget.ShouldSetTarget);
                         break;
                     }
                 }
@@ -153,13 +165,13 @@ namespace AOSharp.Core.Combat
                             continue;
 
                         //I have no real way of checking if a use action is valid so we'll just send it off and pray
-                        item.Use(actionItem.Target);
+                        item.Use(actionItem.Target, actionItem.ShouldSetTarget);
                         actionItem.Used = true;
                         actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;
                     }
                     else if (actionItem.CombatAction is Perk perk)
                     {
-                        if (!perk.Use(actionItem.Target))
+                        if (!perk.Use(actionItem.Target, actionItem.ShouldSetTarget))
                         {
                             dequeueList.Add(actionItem);
                             continue;
@@ -271,12 +283,14 @@ namespace AOSharp.Core.Combat
             public ICombatAction CombatAction;
             public SimpleChar Target;
             public bool Used = false;
+            public bool ShouldSetTarget = false;
             public double Timeout = 0;
 
-            public CombatActionQueueItem(ICombatAction action, SimpleChar target = null, double timeoutOffset = 1)
+            public CombatActionQueueItem(ICombatAction action, SimpleChar target, bool shouldSetTarget, double timeoutOffset = 1)
             {
                 CombatAction = action;
                 Target = target;
+                ShouldSetTarget = shouldSetTarget;
                 Timeout = Time.NormalTime + timeoutOffset;
             }
 

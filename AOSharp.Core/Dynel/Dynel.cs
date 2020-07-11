@@ -80,6 +80,11 @@ namespace AOSharp.Core
             return Marshal.PtrToStringAnsi(N3EngineClientAnarchy_t.GetName(pEngine, ref identity, ref unk));
         }
 
+        public float DistanceFrom(Dynel dynel)
+        {
+            return Vector3.Distance(Position, dynel.Position);
+        }
+
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         protected unsafe struct MemStruct
         {

@@ -182,17 +182,20 @@ namespace TestPlugin
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
-                    DevExtras.Test(chatWindow);
+                    //DevExtras.Test(chatWindow);
+
+                    if (DynelManager.LocalPlayer.FightingTarget != null)
+                    {
+                        chatWindow.WriteLine(DynelManager.LocalPlayer.GetLogicalRangeToTarget(DynelManager.LocalPlayer.FightingTarget).ToString());
+
+
+                        if (Perk.Find("Capture Vigor", out Perk perk))
+                        {
+                            chatWindow.WriteLine(perk.GetStat(Stat.AttackRange).ToString());
+                            chatWindow.WriteLine(perk.IsInRange(DynelManager.LocalPlayer.FightingTarget).ToString());
+                        }
+                    }
                 });
-
-                Chat.RegisterCommand("tokenize", (s, strings, arg3) =>
-                {
-                    string args = string.Join(" ", strings);
-
-                    Chat.WriteLine(string.Join(" ", args));
-                    System.Diagnostics.Debug.WriteLine(args);
-                });
-
 
                 _ipcChannel = new IPCChannel(1);
 
@@ -314,8 +317,6 @@ namespace TestPlugin
         }
 
         double lastTrigger = Time.NormalTime;
-        float angle = 0;
-        byte moveType = 0;
 
         private void OnUpdate(object s, float deltaTime)
         {
@@ -326,6 +327,12 @@ namespace TestPlugin
                     Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
                     Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
                 }
+            }
+
+            if(DynelManager.LocalPlayer.FightingTarget != null)
+            {              
+                if (SpecialAttack.FastAttack.IsInRange(DynelManager.LocalPlayer.FightingTarget) && SpecialAttack.FastAttack.IsAvailable())
+                    SpecialAttack.FastAttack.UseOn(DynelManager.LocalPlayer.FightingTarget);
             }
 
             /*
@@ -347,6 +354,7 @@ namespace TestPlugin
                         testSpell.Cast();
                 }
                 */
+
 
 
                 /*
