@@ -189,7 +189,10 @@ namespace AOSharp.Core
                             metReq = unk[(prevReqsMet--) - 1];
                             break;
                         case UseCriteriaOperator.HasWornItem:
-                            metReq = false;
+                            metReq = Inventory.Inventory.Find(param2, out Item item) &&
+                                     (item.Slot.Type == IdentityType.ArmorPage ||
+                                      item.Slot.Type == IdentityType.ImplantPage ||
+                                      item.Slot.Type == IdentityType.WeaponPage);
                             break;
                         case UseCriteriaOperator.IsNpc:
                             if (param2 == 3)
