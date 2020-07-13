@@ -130,7 +130,7 @@ namespace AOSharp.Core.Combat
                     if (!spell.IsReady)
                         continue;
 
-                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, true);
 
                     if (spellRule.SpellConditionProcessor != null && spellRule.SpellConditionProcessor.Invoke(spell, fightingTarget, ref actionTarget))
                     {
