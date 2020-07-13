@@ -45,7 +45,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         //PerformSpecialAction
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool PerformSpecialAction(IntPtr pThis, Identity* action);
+        public static extern bool PerformSpecialAction(IntPtr pThis, ref Identity action);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate bool DPerformSpecialAction(IntPtr pThis, IntPtr identity);
 

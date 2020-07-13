@@ -18,6 +18,8 @@ namespace AOSharp.Core
 
         public float AttackDelay => GetStat(Stat.AttackDelay) / 100;
 
+        public virtual float AttackRange => GetStat(Stat.AttackRange);
+
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
@@ -248,6 +250,11 @@ namespace AOSharp.Core
         public int GetStat(Stat stat, int detail = 2)
         {
             return DummyItem_t.GetStat(Pointer, stat, detail);
+        }
+
+        public virtual bool IsInRange(SimpleChar target)
+        {
+            return DynelManager.LocalPlayer.GetLogicalRangeToTarget(target) < AttackRange;
         }
 
         internal IntPtr GetItemActionInfo(ItemActionInfo itemActionInfo) => N3EngineClientAnarchy_t.GetItemActionInfo(Pointer, itemActionInfo);

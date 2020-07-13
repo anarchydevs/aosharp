@@ -19,6 +19,8 @@ namespace AOSharp.Core
         public readonly Nanoline Nanoline;
         public readonly int StackingOrder;
         public int Cost => GetCost();
+
+        public override float AttackRange => base.AttackRange * (1 + GetStat(Stat.NanoRange) / 100);
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
@@ -41,19 +43,18 @@ namespace AOSharp.Core
             return (spell = List.FirstOrDefault(x => x.Name == name)) != null;
         }
 
-        public void Cast()
+        public void Cast(bool setTarget = false)
         {
-            Cast(DynelManager.LocalPlayer);
+            Cast(DynelManager.LocalPlayer, setTarget);
         }
 
-        public void Cast(SimpleChar target)
+        public void Cast(SimpleChar target, bool setTarget = false)
         {
             if (target == null)
-            {
                 target = DynelManager.LocalPlayer;
-            }
 
-            target.Target();
+            if(setTarget)
+                target.Target();
 
             Network.Send(new CharacterActionMessage()
             {

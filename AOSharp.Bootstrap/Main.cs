@@ -251,7 +251,7 @@ namespace AOSharp.Bootstrap
 
         private unsafe bool N3EngineClientAnarchy_PerformSpecialAction_Hook(IntPtr pThis, IntPtr identity)
         {
-            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, (Identity*)identity.ToPointer());
+            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, ref *(Identity*)identity);
 
             try
             {
