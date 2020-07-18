@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventArgs\AttemptingSpellCastEventArgs.cs" />
+    <Compile Include="EventArgs\GroupMessageEventArgs.cs" />
     <Compile Include="IPC\HookOpCode.cs" />
     <Compile Include="IPC\IPCAsyncResult.cs" />
     <Compile Include="IPC\IPCClient.cs" />

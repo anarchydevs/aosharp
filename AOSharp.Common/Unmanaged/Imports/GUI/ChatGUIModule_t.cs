@@ -12,5 +12,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?ExpandChatTextArgs@ChatGUIModule_c@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern StdString* ExpandChatTextArgs(IntPtr pOut, IntPtr pMsg);
 
+        //HandleGroupMessage
+        [DllImport("GUI.dll", EntryPoint = "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void HandleGroupMessage(IntPtr pThis, IntPtr pGroupMessage);
+
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        public delegate void DHandleGroupAction(IntPtr pThis, IntPtr pGroupMessage);
     }
 }

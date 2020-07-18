@@ -37,6 +37,7 @@ namespace TestPlugin
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
+                Chat.GroupMessageReceived += GroupMessageReceived;
 
                 /*
                 Chat.WriteLine("Playfield");
@@ -62,119 +63,113 @@ namespace TestPlugin
 
                 Team.Members.ForEach(x => Chat.WriteLine($"{x.Name} IsLeader: {x.IsLeader}"));
 
-                /*
-                foreach(Spell spell in Spell.List)
-                {
-                    Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
-                }
-                */
-
-                /*
-                foreach(Perk perk in Perk.List)
+                foreach (Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
-                }*/
-
-                /*
-                Chat.WriteLine("Buffs:");
-                foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
-                {
-                    Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
-                }
-                */
-
-                /*
-                Perk perk;
-                if(Perk.Find(PerkHash.Gore, out perk))
-                {
-                    if(DynelManager.LocalPlayer.FightingTarget != null)
-                        Chat.WriteLine($"Can use perk? {perk.MeetsUseReqs(DynelManager.LocalPlayer.FightingTarget)}");
-                }
-                */
-
-                /*
-                Chat.WriteLine("Pet Identities:");
-                foreach(Identity identity in DynelManager.LocalPlayer.Pets)
-                {
-                    Chat.WriteLine($"\t{identity}");
                 }
 
-                Chat.WriteLine("Pet Dynels:");
-                foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
-                {
-                    Chat.WriteLine($"\t{pet.Name}");
-                }
-                */
+               /*
+               foreach(Spell spell in Spell.List)
+               {
+                   Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
+               }
+               */
 
-                /*
-                Item item;
-                if(Inventory.Find(244216, out item))
-                {
-                    DummyItem dummyItem = DummyItem.GetFromTemplate(item.Slot);
-                    dummyItem.MeetsUseReqs();
-                }
-                */
+               /*
+c
 
-                //DevExtras.Test();
+               /*
+               Chat.WriteLine("Buffs:");
+               foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
+               {
+                   Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
+               }
+               */
 
-                /*
-                MovementController movementController = new MovementController(true);
+               
+               /*
+               Chat.WriteLine("Pet Identities:");
+               foreach(Identity identity in DynelManager.LocalPlayer.Pets)
+               {
+                   Chat.WriteLine($"\t{identity}");
+               }
 
-                List<Vector3> testPath = new List<Vector3> {
-                    new Vector3(438.6, 8.0f, 524.4f),
-                    new Vector3(446.8f, 8.0f, 503.7f),
-                    new Vector3(460.8, 15.1f, 414.0f) 
-                };
+               Chat.WriteLine("Pet Dynels:");
+               foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
+               {
+                   Chat.WriteLine($"\t{pet.Name}");
+               }
+               */
 
-                movementController.RunPath(testPath);
-                */
+               /*
+               Item item;
+               if(Inventory.Find(244216, out item))
+               {
+                   DummyItem dummyItem = DummyItem.GetFromTemplate(item.Slot);
+                   dummyItem.MeetsUseReqs();
+               }
+               */
 
-                /*
-                Chat.WriteLine("Missions");
-                foreach (Mission mission in Mission.List)
-                {
-                    Chat.WriteLine($"   {mission.Identity.ToString()}");
-                    Chat.WriteLine($"       Source: {mission.Source.ToString()}");
-                    Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
-                    Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
-                }
-                */
+               //DevExtras.Test();
 
-                /*
-                List<Item> characterItems = Inventory.Items;
+               /*
+               MovementController movementController = new MovementController(true);
 
-                foreach(Item item in characterItems)
-                {
-                    Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
-                }
+               List<Vector3> testPath = new List<Vector3> {
+                   new Vector3(438.6, 8.0f, 524.4f),
+                   new Vector3(446.8f, 8.0f, 503.7f),
+                   new Vector3(460.8, 15.1f, 414.0f) 
+               };
 
-                Chat.WriteLine("Backpacks:");
+               movementController.RunPath(testPath);
+               */
 
-                List<Container> backpacks = Inventory.Backpacks;
-                foreach(Container backpack in backpacks)
-                {
-                    Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
-                }        
-                */
+               /*
+               Chat.WriteLine("Missions");
+               foreach (Mission mission in Mission.List)
+               {
+                   Chat.WriteLine($"   {mission.Identity.ToString()}");
+                   Chat.WriteLine($"       Source: {mission.Source.ToString()}");
+                   Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
+                   Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
+               }
+               */
 
-                /*
-                Item noviRing;
-                if (Inventory.Find(226307, out noviRing))
-                {
-                    //noviRing.Equip(EquipSlot.Cloth_RightFinger);
+               /*
+               List<Item> characterItems = Inventory.Items;
 
-                    Container openBag = Inventory.Backpacks.FirstOrDefault(x => x.IsOpen);
-                    if(openBag != null)
-                    {
-                        noviRing.MoveToContainer(openBag);
-                    }
-                }
-                */
+               foreach(Item item in characterItems)
+               {
+                   Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
+               }
 
-                //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+               Chat.WriteLine("Backpacks:");
 
-                _menu = new Menu("TestPlugin", "TestPlugin");
+               List<Container> backpacks = Inventory.Backpacks;
+               foreach(Container backpack in backpacks)
+               {
+                   Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
+               }        
+               */
+
+               /*
+               Item noviRing;
+               if (Inventory.Find(226307, out noviRing))
+               {
+                   //noviRing.Equip(EquipSlot.Cloth_RightFinger);
+
+                   Container openBag = Inventory.Backpacks.FirstOrDefault(x => x.IsOpen);
+                   if(openBag != null)
+                   {
+                       noviRing.MoveToContainer(openBag);
+                   }
+               }
+               */
+
+               //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+
+               _menu = new Menu("TestPlugin", "TestPlugin");
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
@@ -228,6 +223,12 @@ namespace TestPlugin
             {
                 Chat.WriteLine(e.Message);
             }
+        }
+
+        private void GroupMessageReceived(object sender, GroupMessageEventArgs e)
+        {
+            e.Cancel = true;
+            Chat.WriteLine($"[{e.Message.SenderId}] {e.Message.SenderName} just sent a message in [{e.Message.ChannelType}:{e.Message.ChannelIdMaybe}]");
         }
 
         private void AttemptingSpellCast(object sender, AttemptingSpellCastEventArgs e)
