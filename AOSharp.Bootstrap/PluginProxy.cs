@@ -39,6 +39,8 @@ namespace AOSharp.Bootstrap
         public AttemptingSpellCastDelegate AttemptingSpellCast;
         public delegate void UnknownCommandDelegate(IntPtr pWindow, string command);
         public UnknownCommandDelegate UnknownChatCommand;
+        public delegate void HandleGroupMessageDelegate(GroupMessageEventArgs args);
+        public HandleGroupMessageDelegate HandleGroupMessage;
     }
 
     public class PluginProxy : MarshalByRefObject
@@ -117,6 +119,13 @@ namespace AOSharp.Bootstrap
             _coreDelegates.ViewDeleted?.Invoke(pView);
         }
 
+        public bool HandleGroupMessage(IntPtr pGroupMessage)
+        {
+            GroupMessageEventArgs eventArgs = new GroupMessageEventArgs(new GroupMessage(pGroupMessage));
+            _coreDelegates.HandleGroupMessage?.Invoke(eventArgs);
+            return eventArgs.Cancel;
+        }
+
         private T CreateDelegate<T>(Assembly assembly, string className, string methodName) where T : class
         {
             Type t = assembly.GetType(className);
@@ -160,7 +169,8 @@ namespace AOSharp.Bootstrap
                 JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
                 ClientPerformedSpecialAction = CreateDelegate<CoreDelegates.ClientPerformedSpecialActionDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedSpecialAction"),
                 AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
-                UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand")
+                UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand"),
+                HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage")
             };
 
             _coreDelegates.Init();

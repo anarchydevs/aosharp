@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.GameData;
 using System.Linq;
+using AOSharp.Bootstrap;
 using AOSharp.Core.UI;
 
 namespace AOSharp.Core.UI
@@ -12,7 +13,7 @@ namespace AOSharp.Core.UI
     {
         private static Dictionary<string, Action<string, string[], ChatWindow>> _customCommands = new Dictionary<string, Action<string, string[], ChatWindow>>();
         private static ConcurrentQueue<(string, ChatColor)> _messageQueue = new ConcurrentQueue<(string, ChatColor)>();
-
+        public static EventHandler<GroupMessageEventArgs> GroupMessageReceived;
         public static void RegisterCommand(string command, Action<string, string[], ChatWindow> callback)
         {
             if(!_customCommands.ContainsKey(command))
@@ -34,6 +35,11 @@ namespace AOSharp.Core.UI
                 _customCommands[commandParts[0]]?.Invoke(commandParts[0], commandParts.Skip(1).ToArray(), chatWindow);
             else
                 chatWindow.WriteLine($"No chat command or script named \"{commandParts[0]}\" available.", ChatColor.LightBlue);
+        }
+
+        private static void OnGroupMessage(GroupMessageEventArgs args)
+        {
+            GroupMessageReceived?.Invoke(null, args);
         }
 
         public static void WriteLine(object obj, ChatColor color = ChatColor.Gold)

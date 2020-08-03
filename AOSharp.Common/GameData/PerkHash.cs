@@ -133,5 +133,8 @@
         CaptureEssence = 0x43504553,
         UnsealedBlight = 0x5541424C,
         CaptureVigor = 0x43505649,
+
+        //Genius
+        RegainNano = 0x52474E4E
     }
 }

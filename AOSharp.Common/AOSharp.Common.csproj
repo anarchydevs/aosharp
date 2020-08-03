@@ -51,6 +51,7 @@
     <Compile Include="GameData\DoorState.cs" />
     <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
+    <Compile Include="GameData\GroupMessage.cs" />
     <Compile Include="GameData\SpecialActionState.cs" />
     <Compile Include="GameData\Side.cs" />
     <Compile Include="GameData\ACGItem.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\N3PlayfieldAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\GUIUnk.cs" />
     <Compile Include="Unmanaged\Imports\GUI\RadioButtonGroup_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\RadioButton_c.cs" />

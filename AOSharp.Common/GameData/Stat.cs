@@ -385,7 +385,7 @@
         NanoPoints = 0x197,
         TrainSkill = 0x198,
         TrainSkillCost = 0x199,
-        IsFightingMe = 0x19A,
+        NumFightingOpponents = 0x19A,
         MultipleCount = 0x19C,
         EffectType = 0x19D,
         ImpactEffectType = 0x19E,

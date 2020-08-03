@@ -27,6 +27,11 @@ namespace AOSharp.Core.Combat
 
         public static CombatHandler Instance { get; private set; }
 
+        protected virtual bool ShouldUseSpecialAttack(SpecialAttack specialAttack)
+        {
+            return true;
+        }
+
         public static void Set(CombatHandler combatHandler)
         {
             Instance = combatHandler;
@@ -130,7 +135,7 @@ namespace AOSharp.Core.Combat
                     if (!spell.IsReady)
                         continue;
 
-                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+                    (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, true);
 
                     if (spellRule.SpellConditionProcessor != null && spellRule.SpellConditionProcessor.Invoke(spell, fightingTarget, ref actionTarget))
                     {
@@ -191,6 +196,9 @@ namespace AOSharp.Core.Combat
         {
             foreach (SpecialAttack special in DynelManager.LocalPlayer.SpecialAttacks)
             {
+                if (!ShouldUseSpecialAttack(special))
+                    continue;
+
                 if (special == SpecialAttack.AimedShot ||
                     special == SpecialAttack.SneakAttack)
                     continue;

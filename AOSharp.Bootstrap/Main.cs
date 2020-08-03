@@ -3,6 +3,7 @@ using EasyHook;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -165,6 +166,10 @@ namespace AOSharp.Bootstrap
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
 
+            CreateHook("GUI.dll",
+                "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", 
+                new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+
             if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
             {
                 CommandInterpreter_c.ProcessChatInput = Marshal.GetDelegateForFunctionPointer<CommandInterpreter_c.DProcessChatInput>(pProcessCommand);
@@ -205,12 +210,19 @@ namespace AOSharp.Bootstrap
 
         public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
         {
-            
             IntPtr result;
             if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk)
                 _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;
+        }
+
+        public unsafe void HandleGroupMessageHook(IntPtr pThis, IntPtr pGroupMessage)
+        {
+            bool cancel = _pluginProxy.HandleGroupMessage(pGroupMessage);
+
+            if (!cancel)
+                ChatGUIModule_t.HandleGroupMessage(pThis, pGroupMessage);
         }
 
         private int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)

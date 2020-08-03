@@ -88,6 +88,10 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 
         TradeskillRequirement = 0x000000E3,
 
-        TradeskillResult = 0x000000E4
+        TradeskillResult = 0x000000E4,
+
+        JoinBattlestationQueue = 0x000000FD,
+
+        LeaveBattlestationQueue = 0x000000FF
     }
 }
