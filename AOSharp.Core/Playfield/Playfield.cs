@@ -46,9 +46,14 @@ namespace AOSharp.Core
         public static string Name => GetName();
 
         ///<summary>
-        ///Get zones for playfield. Will convert to Zone objects later..
+        ///Get zones (cells) for playfield.
         ///</summary>
         public static List<Zone> Zones => GetZones();
+
+        ///<summary>
+        ///Get rooms for playfield if in a dungeon.
+        ///</summary>
+        public static List<Room> Rooms => GetRooms();
 
         //TODO: Convert to use n3Playfield_t::GetPlayfieldDynels() to remove dependencies on hard-coded offsets
         internal static unsafe List<IntPtr> GetPlayfieldDynels()
@@ -99,6 +104,16 @@ namespace AOSharp.Core
                 return new List<Zone>();
 
             return (*N3Playfield_t.GetZones(pPlayfield)).ToList().Select(x => new Zone(x)).ToList();
+        }
+
+        private static unsafe List<Room> GetRooms()
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+
+            if (pPlayfield == IntPtr.Zero || !IsDungeon)
+                return new List<Room>();
+
+            return (*N3Playfield_t.GetZones(pPlayfield)).ToList().Select(x => new Room(x)).ToList();
         }
 
         private static bool AreVehiclesAllowed()

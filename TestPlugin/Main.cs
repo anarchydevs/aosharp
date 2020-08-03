@@ -68,18 +68,31 @@ namespace TestPlugin
 
                 Team.Members.ForEach(x => Chat.WriteLine($"{x.Name} IsLeader: {x.IsLeader}"));
 
+                foreach(Room room in Playfield.Rooms)
+                {
+                    Chat.WriteLine($"Ptr: {room.Pointer.ToString("X4")}\tName: {room.Name}\tIdx: {room.Instance}\tRot: {room.Rotation}\tPos: {room.Position}\tCenter: {room.Center}\tTemplatePos: {room.TemplatePos}\tYOffset: {room.YOffset}\tNumDoors: {room.NumDoors}\tFloor: {room.Floor}");
+                }
+
+                //AO3D export
+                foreach (Room room in Playfield.Rooms)
+                {
+                    Chat.WriteLine($"new RoomInstance(\"{room.Name}\", {room.Floor}, new Vector3{room.Position}, {(int)room.Rotation / 90}, {room.LocalRect.MinX}, {room.LocalRect.MinY}, {room.LocalRect.MaxX}, {room.LocalRect.MaxY}, new Vector3{room.Center}, new Vector3{room.TemplatePos}),");
+                }
+
                 /*
                 foreach(Spell spell in Spell.List)
                 {
                     Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
                 }
                 */
-                
+
+                /*
                 foreach(Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
+                */
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -146,6 +159,7 @@ namespace TestPlugin
                 }
                 */
 
+                /*
                 List<Item> characterItems = Inventory.Items;
                 //List<Item> characterItems = Inventory.Items;
 
@@ -153,6 +167,7 @@ namespace TestPlugin
                 {
                     Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
                 }
+                */
                 /*
                 Chat.WriteLine("Backpacks:");
 

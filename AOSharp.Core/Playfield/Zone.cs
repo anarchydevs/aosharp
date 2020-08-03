@@ -9,6 +9,8 @@ namespace AOSharp.Core
 {
     public class Zone
     {
+        public int Instance => N3Zone_t.GetInstance(Pointer);
+
         public readonly IntPtr Pointer;
 
         public Zone(IntPtr pointer)

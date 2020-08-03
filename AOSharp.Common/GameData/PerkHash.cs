@@ -144,6 +144,48 @@
         BattleGroupHeal4 = 0x42544834,
 
         //Specialist Healer
-        HaleAndHearty = 0x5445484C
+        HaleAndHearty = 0x5445484C,
+ 
+        //Heavy Ranged
+        LaserPaintTarget = 0x4C415049,
+        WeaponBash = 0x57454253,
+        TriangulateTarget = 0x54525441,
+        NapalmSpray = 0x4E505352,
+
+        //Special Forces
+        FieldBandage = 0x4645424E,
+        Tracer = 0x54524143,
+        ContainedBurst = 0x434E4255,
+        Violence = 0x45454544,
+        Guardian = 0x41524449,
+
+        //Power In Numbers
+        SupressiveHorde = 0x5350484F,
+        ClipFever = 0x434C4645,
+        MuzzleOverload = 0x4D5A4F56,
+
+        //Champion Of Heavy Infantry
+        Fuzz = 0x4358575A,
+        FireFrenzy = 0x46524652,
+
+        //Soldier LE
+        FuriousAmmunition = 0x494E414D,
+        GrazeJugularVein = 0x52544D4F,
+
+        //Power Up
+        PowerCombo = 0x5057434F,
+        PowerBlast = 0x504F424C,
+        PowerShock = 0x504F5348,
+        PowerVolley = 0x504F564F,
+        Energize = 0x45524749,
+
+        //LoopHole
+        Antitrust = 0x4E544954,
+        Puppeteer = 0x50555050,
+
+        //Pistol Mastery
+        Deadeye = 0x4E4F534D,
+        DoubleShot = 0x44425348,
+        QuickShot = 0x51495348,
     }
 }

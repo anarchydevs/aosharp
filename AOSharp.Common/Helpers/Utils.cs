@@ -9,6 +9,9 @@ namespace AOSharp.Common.Helpers
     {
         public static unsafe string UnsafePointerToString(IntPtr pointer)
         {
+            if (pointer == IntPtr.Zero)
+                return string.Empty;
+
             byte* pStr = (byte*)pointer.ToPointer();
 
             int cLen = 0;
