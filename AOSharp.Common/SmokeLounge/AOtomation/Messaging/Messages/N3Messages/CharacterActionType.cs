@@ -28,6 +28,8 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 
         TeamRequestResponse = 0x00000023,
 
+        SplitItem = 0x00000034,
+
         RemoveFriendlyNano = 0x00000041,
 
         QueuePerk = 0x00000050,

@@ -154,6 +154,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\OrgServerMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldAnarchyFMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SetStatMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\InventoryUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ShopUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SimpleCharFullUpdateFlags.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SimpleCharFullUpdateMessage.cs" />

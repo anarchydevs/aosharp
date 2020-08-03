@@ -7,6 +7,7 @@ using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Core.Inventory;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using AOSharp.Core.UI;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.GameData;
 
@@ -14,8 +15,10 @@ namespace AOSharp.Core
 {
     public static class Network
     {
+        public static EventHandler<byte[]> PacketReceived;
         public static EventHandler<N3Message> N3MessageReceived;
 
+        private static ConcurrentQueue<byte[]> _rawPacketueue = new ConcurrentQueue<byte[]>();
         private static ConcurrentQueue<Message> _messageQueue = new ConcurrentQueue<Message>();
 
         private static Dictionary<N3MessageType, Action<N3Message>> n3MsgCallbacks = new Dictionary<N3MessageType, Action<N3Message>>
@@ -53,13 +56,19 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
+            while (_rawPacketueue.TryDequeue(out byte[] packet))
+                    PacketReceived?.Invoke(null, packet);
+
             while (_messageQueue.TryDequeue(out Message msg))
                 if (msg.Header.PacketType == PacketType.N3Message)
                     OnN3Message((N3Message)msg.Body);
         }
 
+
         private static void OnMessage(byte[] datablock)
         {
+            _rawPacketueue.Enqueue(datablock);
+
             Message msg = PacketFactory.Disassemble(datablock);
 
             //Chat.WriteLine(BitConverter.ToString(datablock).Replace("-", ""));

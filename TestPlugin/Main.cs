@@ -18,6 +18,8 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using TestPlugin.IPCMessages;
 using System.Threading;
 using AOSharp.Common.Unmanaged.DataTypes;
+using Zoltu.IO;
+using SmokeLounge.AOtomation.Messaging.Messages;
 
 namespace TestPlugin
 {
@@ -60,6 +62,10 @@ namespace TestPlugin
 
                 Chat.WriteLine("Tests:");
 
+                Chat.WriteLine($"Base stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 1)}");
+                Chat.WriteLine($"Modified stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 2)}");
+                Chat.WriteLine($"No Trickle stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 3)}");
+
                 Team.Members.ForEach(x => Chat.WriteLine($"{x.Name} IsLeader: {x.IsLeader}"));
 
                 /*
@@ -68,13 +74,12 @@ namespace TestPlugin
                     Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
                 }
                 */
-
-                /*
+                
                 foreach(Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
-                }*/
+                }
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -141,14 +146,14 @@ namespace TestPlugin
                 }
                 */
 
-                /*
                 List<Item> characterItems = Inventory.Items;
+                //List<Item> characterItems = Inventory.Items;
 
-                foreach(Item item in characterItems)
+                foreach (Item item in characterItems)
                 {
                     Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
                 }
-
+                /*
                 Chat.WriteLine("Backpacks:");
 
                 List<Container> backpacks = Inventory.Backpacks;
@@ -157,7 +162,6 @@ namespace TestPlugin
                     Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
                 }        
                 */
-
                 /*
                 Item noviRing;
                 if (Inventory.Find(226307, out noviRing))
@@ -218,6 +222,7 @@ namespace TestPlugin
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
                 Network.N3MessageReceived += Network_N3MessageReceived;
+                Network.PacketReceived += Network_PacketReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
                 Item.ItemUsed += Item_ItemUsed;
@@ -235,16 +240,130 @@ namespace TestPlugin
             Chat.WriteLine($"{e.Nano}, {e.Target}");
         }
 
+        private void Network_PacketReceived(object s, byte[] packet)
+        {
+            N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
+            //Chat.WriteLine($"{msgType}");
+
+            //if (msgType == N3MessageType.Feedback)
+            //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+
+            if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)
+            {
+                Identity Identity;
+                int Version;
+                Vector3 CharacterCoordinates;
+                byte Unknown2;
+                Identity PlayfieldId1;
+                int Unknown3;
+                uint Unknown4;
+                Identity PlayfieldId2;
+                Identity PlayfieldId3;
+
+                PlayfieldACGInfo PlayfieldAcgInfo = null;
+
+                int PlayfieldX;
+                int PlayfieldZ;
+
+                using (MemoryStream stream = new MemoryStream(packet))
+                {
+                    using (BigEndianBinaryReader reader = new BigEndianBinaryReader(stream))
+                    {
+                        reader.BaseStream.Position = 20;
+                        Identity = new Identity((IdentityType)reader.ReadInt32(), reader.ReadInt32());
+                        reader.ReadByte();
+
+                        Version = reader.ReadInt32();
+                        CharacterCoordinates = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        Chat.WriteLine(CharacterCoordinates);
+                        Unknown2 = reader.ReadByte();
+                        PlayfieldId1 = new Identity((IdentityType)reader.ReadInt32(), reader.ReadInt32());
+                        Chat.WriteLine(PlayfieldId1);
+
+                        Unknown3 = reader.ReadInt32();
+                        Unknown4 = reader.ReadUInt32();
+                        PlayfieldId2 = new Identity((IdentityType)reader.ReadInt32(), reader.ReadInt32());
+                        PlayfieldId3 = new Identity((IdentityType)reader.ReadInt32(), reader.ReadInt32());
+                        Chat.WriteLine(PlayfieldId2);
+                        Chat.WriteLine(PlayfieldId3);
+
+                        switch (PlayfieldId3.Type)
+                        {
+                            case IdentityType.ACGBuildingGeneratorData:
+                                {
+                                    PlayfieldAcgInfo = new PlayfieldACGInfo()
+                                    {
+                                        Revision = reader.ReadInt32(),
+                                        Version = reader.ReadInt16(),
+                                        Width = reader.ReadInt16(),
+                                        Height = reader.ReadInt16(),
+                                        Unknown3 = reader.ReadInt16(),
+                                        TemplateId = (TemplatePlayfields)reader.ReadInt32(),
+                                        AmbientR = reader.ReadByte(),
+                                        AmbientG = reader.ReadByte(),
+                                        AmbientB = reader.ReadByte(),
+                                        Rooms = new List<RoomInstance>()
+                                    };
+
+                                    var roomCnt = reader.ReadInt32();
+                                    for (int i = 0; i < roomCnt; i++)
+                                    {
+                                        var rI = new RoomInstance
+                                        {
+                                            RoomId = reader.ReadInt16(),
+                                            Floor = reader.ReadByte(),
+                                            X = reader.ReadByte(),
+                                            Y = reader.ReadByte(),
+                                            Rotation = reader.ReadByte()
+                                        };
+                                        PlayfieldAcgInfo.Rooms.Add(rI);
+                                    }
+                                    break;
+                                }
+                            case IdentityType.ProxyInstance:
+                                reader.ReadInt32();
+                                reader.ReadInt32();
+
+                                var roomCount = reader.ReadInt32();
+                                for (var i = 0; i < roomCount; i++)
+                                {
+
+                                    reader.ReadInt32();
+                                    reader.ReadInt32();
+                                    reader.ReadInt32();
+                                    reader.ReadInt32();
+                                    reader.ReadInt32();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        PlayfieldX = reader.ReadInt32();
+                        PlayfieldZ = reader.ReadInt32();
+                    }
+                }
+
+                Chat.WriteLine($"Template: {PlayfieldAcgInfo.TemplateId}");
+                foreach (RoomInstance room in PlayfieldAcgInfo.Rooms)
+                    Chat.WriteLine($"{room.RoomId}\t{room.Floor}\t{room.X}\t{room.Y}\t{room.Rotation}");
+            }
+        }
+
+
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
 
-            /*
-            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.GenericCmd)
+            
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)
             {
-                GenericCmdMessage ayy = (GenericCmdMessage)n3Msg;
-                Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
-            }*/
+                PlayfieldAnarchyFMessage ayy = (PlayfieldAnarchyFMessage)n3Msg;
+                //Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
+            }
+
+            //if (n3Msg.N3MessageType == N3MessageType.CharDCMove)
+            //    Chat.WriteLine($"MoveType: {((CharDCMoveMessage)n3Msg).MoveType}");
 
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
             {

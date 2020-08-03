@@ -98,7 +98,7 @@ namespace AOSharp.Core.Inventory
             return items;
         }
 
-        internal static unsafe List<Item> GetContainerItems(Identity identity)
+        public static unsafe List<Item> GetContainerItems(Identity identity)
         {
             List<Item> items = new List<Item>();
 
@@ -155,6 +155,9 @@ namespace AOSharp.Core.Inventory
 
             [FieldOffset(0x14)]
             public int QualityLevel;
+
+            [FieldOffset(0x18)]
+            public int Quantity;
 
             [FieldOffset(0x24)]
             public int Unk2; //Some other flags?

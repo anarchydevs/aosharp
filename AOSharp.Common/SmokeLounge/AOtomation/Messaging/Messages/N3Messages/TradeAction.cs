@@ -18,7 +18,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
     {
         None = 0x00, 
 
-        End = 0x01, 
+        Accept = 0x01, 
 
         Decline = 0x02, 
 

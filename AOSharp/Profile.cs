@@ -81,7 +81,7 @@ namespace AOSharp
                     Assemblies = plugins
                 });
 
-                pipe.OnDisconnected += (e) => 
+                pipe.OnDisconnected += (e) =>
                 {
                     _ipcClient = null;
                     IsInjected = false;

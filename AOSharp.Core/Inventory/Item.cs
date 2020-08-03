@@ -81,6 +81,16 @@ namespace AOSharp.Core.Inventory
             ContainerAddItem(Slot, target);
         }
 
+        public void Split(int count)
+        {
+            Network.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.SplitItem,
+                Target = Slot,
+                Parameter2 = count
+            });
+        }
+
         internal static void Update()
         {
             if (_pendingUse.Slot != Identity.None && _pendingUse.Timeout <= Time.NormalTime)
@@ -117,7 +127,6 @@ namespace AOSharp.Core.Inventory
                 CombatHandler.Instance.OnItemUsed(lowId, highId, ql);
         }
 
-        //Direct access to the MoveItemToInventory packet for those who need it.
         public static void MoveItemToInventory(Identity source, int slot)
         {
             Network.Send(new ClientMoveItemToInventory()
@@ -127,13 +136,32 @@ namespace AOSharp.Core.Inventory
             });
         }
 
-        //Direct access to the ContainerAddItem packet for those who need it.
         public static void ContainerAddItem(Identity source, Identity target)
         {
             Network.Send(new ClientContainerAddItem()
             {
                 Source = source,
                 Target = target
+            });
+        }
+
+        public static void SplitItem(Identity source, int count)
+        {
+            Network.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.SplitItem,
+                Target = source,
+                Parameter2 = count
+            });
+        }
+
+        public static void Use(Identity slot)
+        {
+            Network.Send(new GenericCmdMessage()
+            {
+                Action = GenericCmdAction.Use,
+                User = DynelManager.LocalPlayer.Identity,
+                Target = slot
             });
         }
 
