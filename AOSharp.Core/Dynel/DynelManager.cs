@@ -25,6 +25,13 @@ namespace AOSharp.Core
             return AllDynels.FirstOrDefault(x => x.Identity == identity);
         }
 
+        public static T GetDynel<T>(Identity identity) where T : Dynel
+        {
+            Dynel dynel = AllDynels.FirstOrDefault(x => x.Identity == identity);
+
+            return dynel == null ? null : dynel.Cast<T>();
+        }
+
         public static bool Find(Identity identity, out Dynel dynel)
         {
             return (dynel = AllDynels.FirstOrDefault(x => x.Identity == identity)) != null;

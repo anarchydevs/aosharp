@@ -8,6 +8,11 @@ namespace AOSharp.Core
 {
     public static class Extensions
     {
+        public static T Cast<T>(this Dynel dynel) where T : Dynel
+        {
+            return (T)Activator.CreateInstance(typeof(T), dynel.Pointer);
+        }
+
         public static bool Find(this Buff[] buffs, int id, out Buff buff)
         {
             return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;

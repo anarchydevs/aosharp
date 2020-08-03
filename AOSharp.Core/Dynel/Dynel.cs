@@ -95,12 +95,4 @@ namespace AOSharp.Core
             public Vehicle* Vehicle;
         }
     }
-
-    public static class DynelExtensions
-    {
-        public static T Cast<T>(this Dynel dynel) where T : Dynel
-        {
-            return (T)Activator.CreateInstance(typeof(T), dynel.Pointer);
-        }
-    }
 }

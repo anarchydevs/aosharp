@@ -135,6 +135,15 @@
         CaptureVigor = 0x43505649,
 
         //Genius
-        RegainNano = 0x52474E4E
+        RegainNano = 0x52474E4E,
+
+        //Assault Force Medic
+        BattleGroupHeal1 = 0x42544841,
+        BattleGroupHeal2 = 0x4241484C,
+        BattleGroupHeal3 = 0x42544845,
+        BattleGroupHeal4 = 0x42544834,
+
+        //Specialist Healer
+        HaleAndHearty = 0x5445484C
     }
 }

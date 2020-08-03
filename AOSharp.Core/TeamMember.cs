@@ -15,6 +15,7 @@ namespace AOSharp.Core
         public readonly Profession Profession;
         public readonly int Level;
         public readonly int TeamIndex;
+        public SimpleChar Character => DynelManager.GetDynel<SimpleChar>(Identity);
         public bool IsLeader => GetIsLeader();
 
         internal unsafe TeamMember(IntPtr pointer, int teamIndex)
