@@ -167,8 +167,12 @@ namespace AOSharp.Bootstrap
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
 
             CreateHook("GUI.dll",
-                "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", 
-                new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+                        "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", 
+                        new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+
+            CreateHook("Connection.dll",
+                        "?Send@Connection_t@@QAEHIIPBX@Z",
+                        new Connection_t.DSend(Send_Hook));
 
             if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
             {
@@ -225,20 +229,29 @@ namespace AOSharp.Bootstrap
                 ChatGUIModule_t.HandleGroupMessage(pThis, pGroupMessage);
         }
 
-        private int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)
+        private int Send_Hook(IntPtr pConnection, uint unk, int len, byte[] buf)
         {
-            //Let the client process the packet before we inspect it.
-            int ret = MessageProtocol.DataBlockToMessage(size, pDataBlock);
-
             try
             {
-                byte[] buffer = new byte[size];
-                Marshal.Copy(pDataBlock, buffer, 0, size);
-                _pluginProxy.DataBlockToMessage(buffer);
+                _pluginProxy.SentPacket(buf);
             }
             catch (Exception) { }
 
-            return ret;
+            return Connection_t.Send(pConnection, unk, len, buf);
+        }
+
+        private IntPtr DataBlockToMessage_Hook(uint size, byte[] dataBlock)
+        {
+            //Let the client process the packet before we inspect it.
+            IntPtr pMsg = MessageProtocol.DataBlockToMessage(size, dataBlock);
+
+            try
+            {
+                _pluginProxy.DataBlockToMessage(dataBlock);
+            }
+            catch (Exception) { }
+
+            return pMsg;
         }
 
         private void WindowController_ViewDeleted_Hook(IntPtr pThis, IntPtr pView)

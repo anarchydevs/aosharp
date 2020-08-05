@@ -13,6 +13,7 @@ using AOSharp.Core.Inventory;
 using System.Reflection;
 using AOSharp.Core.IPC;
 using SmokeLounge.AOtomation.Messaging.Exceptions;
+using AOSharp.Core.Movement;
 
 namespace AOSharp.Core
 {
@@ -71,6 +72,9 @@ namespace AOSharp.Core
             Item.Update();
             Perk.Update();
             Spell.Update();
+
+            MovementController.UpdateInternal();
+            Targeting.Update();
 
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.Update(deltaTime);

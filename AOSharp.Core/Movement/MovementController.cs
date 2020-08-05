@@ -1,7 +1,9 @@
 ﻿using AOSharp.Common.GameData;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using AOSharp.Common.Unmanaged.Imports;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core.Movement
 {
@@ -21,12 +23,20 @@ namespace AOSharp.Core.Movement
         private bool _drawPath;
         private Queue<Vector3> _path = new Queue<Vector3>();
 
+        private static ConcurrentQueue<MovementAction> _movementActionQueue = new ConcurrentQueue<MovementAction>();
+
         public EventHandler<DestinationReachedEventArgs> DestinationReached;
 
         public MovementController(bool drawPath = false)
         {
             Game.OnUpdate += Update;
             _drawPath = drawPath;
+        }
+
+        internal static void UpdateInternal()
+        {
+            while (_movementActionQueue.TryDequeue(out MovementAction action))
+                ChangeMovement(action);
         }
 
         protected virtual void Update(object s, float deltaTime)
@@ -124,14 +134,30 @@ namespace AOSharp.Core.Movement
             //Chat.WriteLine("Stuck!?");
         }
 
+        //Must be called from game loop!
+        private static void ChangeMovement(MovementAction action)
+        {
+            if (action == MovementAction.LeaveSit)
+            {
+                Network.Send(new CharacterActionMessage()
+                {
+                    Action = CharacterActionType.StandUp
+                });
+            }
+            else
+            {
+                IntPtr pEngine = N3Engine_t.GetInstance();
+
+                if (pEngine == IntPtr.Zero)
+                    return;
+
+                N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
+            }       
+        }
+
         public static void SetMovement(MovementAction action)
         {
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            if (pEngine == IntPtr.Zero)
-                return;
-
-            N3EngineClientAnarchy_t.MovementChanged(pEngine, action, 0, 0, true);
+            _movementActionQueue.Enqueue(action);
         }
     }
 

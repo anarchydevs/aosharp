@@ -55,7 +55,7 @@ namespace TestPlugin
                 Chat.WriteLine($"\tIsLeader: {Team.IsLeader}");
                 Chat.WriteLine($"\tIsRaid: {Team.IsRaid}");
 
-                foreach(TeamMember teamMember in Team.Members)
+                foreach (TeamMember teamMember in Team.Members)
                 {
                     Chat.WriteLine($"\t{teamMember.Name} - {teamMember.Identity} - {teamMember.Level} - {teamMember.Profession} - IsLeader:{teamMember.IsLeader} @ Team {teamMember.TeamIndex + 1}");
                 }
@@ -68,7 +68,7 @@ namespace TestPlugin
 
                 Team.Members.ForEach(x => Chat.WriteLine($"{x.Name} IsLeader: {x.IsLeader}"));
 
-                foreach(Room room in Playfield.Rooms)
+                foreach (Room room in Playfield.Rooms)
                 {
                     Chat.WriteLine($"Ptr: {room.Pointer.ToString("X4")}\tName: {room.Name}\tIdx: {room.Instance}\tRot: {room.Rotation}\tPos: {room.Position}\tCenter: {room.Center}\tTemplatePos: {room.TemplatePos}\tYOffset: {room.YOffset}\tNumDoors: {room.NumDoors}\tFloor: {room.Floor}");
                 }
@@ -220,9 +220,9 @@ namespace TestPlugin
 
                 _ipcChannel.RegisterCallback((int)IPCOpcode.Test, (sender, msg) =>
                 {
-                        TestMessage testMsg = (TestMessage)msg;
+                    TestMessage testMsg = (TestMessage)msg;
 
-                        Chat.WriteLine($"TestMessage: {testMsg.Leet} - {testMsg.Position}");
+                    Chat.WriteLine($"TestMessage: {testMsg.Leet} - {testMsg.Position}");
                 });
 
                 _ipcChannel.RegisterCallback((int)IPCOpcode.Empty, (sender, msg) =>
@@ -237,6 +237,7 @@ namespace TestPlugin
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
                 Network.N3MessageReceived += Network_N3MessageReceived;
+                Network.N3MessageSent += Network_N3MessageSent;
                 Network.PacketReceived += Network_PacketReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
@@ -365,6 +366,10 @@ namespace TestPlugin
             }
         }
 
+        private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+        {
+            Chat.WriteLine($"{n3Msg.N3MessageType}");
+        }
 
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {

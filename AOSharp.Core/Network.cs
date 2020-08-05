@@ -17,9 +17,13 @@ namespace AOSharp.Core
     {
         public static EventHandler<byte[]> PacketReceived;
         public static EventHandler<N3Message> N3MessageReceived;
+        public static EventHandler<byte[]> PacketSent;
+        public static EventHandler<N3Message> N3MessageSent;
 
-        private static ConcurrentQueue<byte[]> _rawPacketueue = new ConcurrentQueue<byte[]>();
-        private static ConcurrentQueue<Message> _messageQueue = new ConcurrentQueue<Message>();
+        private static ConcurrentQueue<byte[]> _rawInboundPacketQueue = new ConcurrentQueue<byte[]>();
+        private static ConcurrentQueue<Message> _inboundMessageQueue = new ConcurrentQueue<Message>();
+        private static ConcurrentQueue<byte[]> _rawOutboundPacketQueue = new ConcurrentQueue<byte[]>();
+        private static ConcurrentQueue<Message> _outboundMessageQueue = new ConcurrentQueue<Message>();
 
         private static Dictionary<N3MessageType, Action<N3Message>> n3MsgCallbacks = new Dictionary<N3MessageType, Action<N3Message>>
         {
@@ -51,23 +55,29 @@ namespace AOSharp.Core
             if (pConnection == IntPtr.Zero)
                 return;
 
-            Connection_t.Send(pConnection, 0, payload.Length, Marshal.UnsafeAddrOfPinnedArrayElement(payload, 0));
+            Connection_t.Send(pConnection, 0, payload.Length, payload);
         }
 
         internal static void Update()
         {
-            while (_rawPacketueue.TryDequeue(out byte[] packet))
-                    PacketReceived?.Invoke(null, packet);
+            while (_rawInboundPacketQueue.TryDequeue(out byte[] packet))
+                PacketReceived?.Invoke(null, packet);
 
-            while (_messageQueue.TryDequeue(out Message msg))
+            while (_inboundMessageQueue.TryDequeue(out Message msg))
                 if (msg.Header.PacketType == PacketType.N3Message)
-                    OnN3Message((N3Message)msg.Body);
+                    OnInboundN3Message((N3Message)msg.Body);
+
+            while (_rawOutboundPacketQueue.TryDequeue(out byte[] packet))
+                PacketSent?.Invoke(null, packet);
+
+            while (_outboundMessageQueue.TryDequeue(out Message msg))
+                if (msg.Header.PacketType == PacketType.N3Message)
+                    OnOutboundN3Message((N3Message)msg.Body);
         }
 
-
-        private static void OnMessage(byte[] datablock)
+        private static void OnInboundMessage(byte[] datablock)
         {
-            _rawPacketueue.Enqueue(datablock);
+            _rawInboundPacketQueue.Enqueue(datablock);
 
             Message msg = PacketFactory.Disassemble(datablock);
 
@@ -76,15 +86,34 @@ namespace AOSharp.Core
             if (msg == null)
                 return;
 
-            _messageQueue.Enqueue(msg);
+            _inboundMessageQueue.Enqueue(msg);
         }
 
-        private static void OnN3Message(N3Message n3Msg)
+        private static void OnOutboundMessage(byte[] datablock)
+        {
+            _rawOutboundPacketQueue.Enqueue(datablock);
+
+            Message msg = PacketFactory.Disassemble(datablock);
+
+            //Chat.WriteLine(BitConverter.ToString(datablock).Replace("-", ""));
+
+            if (msg == null)
+                return;
+
+            _outboundMessageQueue.Enqueue(msg);
+        }
+
+        private static void OnInboundN3Message(N3Message n3Msg)
         {
             if (n3MsgCallbacks.ContainsKey(n3Msg.N3MessageType))
                 n3MsgCallbacks[n3Msg.N3MessageType].Invoke(n3Msg);
 
             N3MessageReceived?.Invoke(null, n3Msg);
+        }
+
+        private static void OnOutboundN3Message(N3Message n3Msg)
+        {
+            N3MessageSent?.Invoke(null, n3Msg);
         }
 
         private static void OnGenericCmd(N3Message n3Msg)

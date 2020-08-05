@@ -15,6 +15,8 @@ namespace AOSharp.Bootstrap
         public DynelSpawnedDelegate DynelSpawned;
         public delegate void DataBlockToMessageDelegate(byte[] datablock);
         public DataBlockToMessageDelegate DataBlockToMessage;
+        public delegate void SentPacketDelegate(byte[] datablock);
+        public SentPacketDelegate SentPacket;
         public delegate void UpdateDelegate(float deltaTime);
         public UpdateDelegate Update;
         public delegate void EarlyUpdateDelegate(float deltaTime);
@@ -55,6 +57,11 @@ namespace AOSharp.Bootstrap
         public void DataBlockToMessage(byte[] datablock)
         {
             _coreDelegates.DataBlockToMessage?.Invoke(datablock);
+        }
+
+        public void SentPacket(byte[] datablock)
+        {
+            _coreDelegates.SentPacket?.Invoke(datablock);
         }
 
         public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName)
@@ -165,7 +172,8 @@ namespace AOSharp.Bootstrap
                 PlayfieldInit = CreateDelegate<CoreDelegates.PlayfieldInitDelegate>(assembly, "AOSharp.Core.Game", "OnPlayfieldInit"),
                 OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionPanel", "OnOptionPanelActivated"),
                 ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
-                DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnMessage"),
+                DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnInboundMessage"),
+                SentPacket = CreateDelegate<CoreDelegates.SentPacketDelegate>(assembly, "AOSharp.Core.Network", "OnOutboundMessage"),
                 JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
                 ClientPerformedSpecialAction = CreateDelegate<CoreDelegates.ClientPerformedSpecialActionDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedSpecialAction"),
                 AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
