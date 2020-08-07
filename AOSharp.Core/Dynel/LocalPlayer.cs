@@ -39,7 +39,6 @@ namespace AOSharp.Core
             Attack(target.Identity);
         }
 
-        //TODO: Silence this function to prevent flood of "Please wait until previous action has finished."
         public void Attack(Identity target)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();

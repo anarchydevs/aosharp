@@ -66,6 +66,7 @@ namespace AOSharp.Core
         private static void OnUpdateInternal(float deltaTime)
         {
             Network.Update();
+            IPCChannel.Update();
 
             UIController.UpdateViews();
 
@@ -74,7 +75,6 @@ namespace AOSharp.Core
             Spell.Update();
 
             MovementController.UpdateInternal();
-            Targeting.Update();
 
             if (CombatHandler.Instance != null)
                 CombatHandler.Instance.Update(deltaTime);
