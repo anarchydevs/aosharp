@@ -218,7 +218,7 @@
         //Champion of Heavy Infantry
         Bluntness = 0x55535648,
 
-        //Bio Caccoon
+        //Bio Cacoon
         BioRegrowth = 0x42495247,
         BioRejuvenation = 0x4249524A,
         BioCocoon = 0x42494343,
