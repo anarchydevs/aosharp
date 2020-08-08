@@ -187,5 +187,41 @@
         Deadeye = 0x4E4F534D,
         DoubleShot = 0x44425348,
         QuickShot = 0x51495348,
+
+        //SMG Mastery
+        NeutroniumSlug = 0x4E45534C,
+        SolidSlug = 0x534C5355,
+        JarringBurst = 0x4A414255,
+        ReinforceSlugs = 0x5245534C,
+
+        //Crusade
+        Purify = 0x554B4746,
+        Insight = 0x4A475447,
+        ForceOpponent = 0x464F4F50,
+
+        //Cybernetic Samurai
+        SeppukuSlash = 0x514A4F50,
+        HonoringTheAncients = 0x484F5448,
+        BladeWhirlwind = 0x424C5752,
+        DeepCuts = 0x44454354,
+
+        //Holy Mark
+        MarkOfTheUnclean = 0x4D4B4F48,
+        MarkOfSufferance = 0x4D414F53,
+        MarkOfVengeance = 0x4D4B4F56,
+
+        //Blessing
+        CuringTouch = 0x4355544F,
+        DevotionalArmor = 0x4445414D,
+        LayOnHands = 0x4C414f4E,
+
+        //Champion of Heavy Infantry
+        Bluntness = 0x55535648,
+
+        //Bio Cacoon
+        BioRegrowth = 0x42495247,
+        BioRejuvenation = 0x4249524A,
+        BioCocoon = 0x42494343,
+        BioShield = 0x42495349,
     }
 }
