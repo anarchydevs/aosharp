@@ -4,7 +4,7 @@ using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
 namespace AOSharp.Common.GameData
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size=0xC)]
     public struct Vector3
     {
         public const float ZeroTolerance = 1e-6f;
