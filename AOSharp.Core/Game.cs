@@ -47,6 +47,8 @@ namespace AOSharp.Core
 
             int* pGetOptionWindowOffset = (int*)(Kernel32.GetProcAddress(Kernel32.GetModuleHandle("GUI.dll"), "?ModuleActivated@OptionPanelModule_c@@UAEX_N@Z") + 0x14);
             OptionPanelModule_c.GetOptionWindow = Marshal.GetDelegateForFunctionPointer<OptionPanelModule_c.GetOptionWindowDelegate>(new IntPtr((int)pGetOptionWindowOffset + sizeof(int) + *pGetOptionWindowOffset));
+
+            MovementController.Instance = new MovementController();
         }
 
         private static void OnPluginLoaded(Assembly assembly)
@@ -77,10 +79,8 @@ namespace AOSharp.Core
             Perk.Update();
             Spell.Update();
 
-            MovementController.UpdateInternal();
-
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.Update(deltaTime);
+            MovementController.Instance?.Update();
+            CombatHandler.Instance?.Update(deltaTime);
 
             OnUpdate?.Invoke(null, deltaTime);
 
@@ -90,6 +90,7 @@ namespace AOSharp.Core
         private static void OnTeleportStarted()
         {
             IsZoning = true;
+            MovementController.Instance?.Halt();
             TeleportStarted?.Invoke(null, EventArgs.Empty);
         }
 

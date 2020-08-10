@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core.Movement
 {
@@ -13,120 +14,139 @@ namespace AOSharp.Core.Movement
         private const float UnstuckInterval = 5f;
         private const float UnstuckThreshold = 2f;
 
-        public bool IsNavigating => _path.Count != 0;
+        public bool IsNavigating => _paths.Count != 0;
 
-        private float _timeSinceLastUpdate = 0f;
-        private float _timeSinceLastUnstuckCheck = 0f;
-        private float _stopDist = 1f;
+        private double _nextUpdate = 0;
+        private double _nextUstuckCheck = Time.NormalTime;
         private float _lastDist = 0f;
-        private float _nodeReachedDist = 1f;
         private bool _drawPath;
-        private Queue<Vector3> _path = new Queue<Vector3>();
+        protected Queue<Path> _paths = new Queue<Path>();
 
-        private static ConcurrentQueue<MovementAction> _movementActionQueue = new ConcurrentQueue<MovementAction>();
+        private ConcurrentQueue<MovementAction> _movementActionQueue = new ConcurrentQueue<MovementAction>();
 
-        public EventHandler<DestinationReachedEventArgs> DestinationReached;
+        public static MovementController Instance { get; internal set; }
 
-        public MovementController(bool drawPath = false)
+        public MovementController(bool drawPath = true)
         {
-            Game.OnUpdate += Update;
             _drawPath = drawPath;
         }
 
-        internal static void UpdateInternal()
+        public static void Set(MovementController movementcontroller)
+        {
+            Instance = movementcontroller;
+        }
+
+        public virtual void Update()
         {
             while (_movementActionQueue.TryDequeue(out MovementAction action))
                 ChangeMovement(action);
-        }
 
-        protected virtual void Update(object s, float deltaTime)
-        {
-            if (_path.Count == 0)
+            if (_paths.Count == 0)
                 return;
 
             if (!DynelManager.LocalPlayer.IsMoving)
                 SetMovement(MovementAction.ForwardStart);
 
-            if (DynelManager.LocalPlayer.IsMoving && DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek()) <= (_path.Count > 1 ? _nodeReachedDist : _stopDist))
+            Vector3 waypoint;
+            if (!_paths.Peek().GetNextWaypoint(out waypoint))
             {
-                _path.Dequeue();
+                Path path = _paths.Dequeue();
+                path.DestinationReachedCallback?.Invoke();
 
-                if (_path.Count == 0)
-                    OnDestinationReached();
+                if (_paths.Count == 0 && path.StopAtDest)
+                    SetMovement(MovementAction.ForwardStop);
+
+                return;
             }
 
-            if (_timeSinceLastUnstuckCheck > UnstuckInterval)
+            if (Time.NormalTime > _nextUstuckCheck)
             {
-                float currentDist = DynelManager.LocalPlayer.Position.DistanceFrom(_path.Peek());
+                float currentDist = DynelManager.LocalPlayer.Position.DistanceFrom(waypoint);
 
                 if (_lastDist - currentDist <= UnstuckThreshold)
-                {
                     OnStuck();
-                }
 
                 _lastDist = currentDist;
-                _timeSinceLastUnstuckCheck = 0;
+                _nextUstuckCheck = Time.NormalTime + UnstuckInterval;
             }
 
-            LookAt(_path.Peek());
+            LookAt(waypoint);
 
-            if (_timeSinceLastUpdate > UpdateInterval)
+            if (Time.NormalTime > _nextUpdate)
             {
                 SetMovement(MovementAction.Update);
-                _timeSinceLastUpdate = 0f;
+                _nextUpdate = Time.NormalTime + UpdateInterval;
             }
 
             if (_drawPath)
-            {
-                Vector3 lastWaypoint = DynelManager.LocalPlayer.Position;
-                foreach (Vector3 waypoint in _path)
-                {
-                    Debug.DrawLine(lastWaypoint, waypoint, DebuggingColor.Yellow);
-                    lastWaypoint = waypoint;
-                }
-            }
-
-            _timeSinceLastUpdate += deltaTime;
-            _timeSinceLastUnstuckCheck += deltaTime;
+                _paths.Peek().Draw();
         }
 
         public void Halt()
         {
-            _path.Clear();
+            _paths.Clear();
 
             if(DynelManager.LocalPlayer.IsMoving)
                 SetMovement(MovementAction.ForwardStop);
         }
 
-        public virtual void MoveTo(Vector3 pos, float stopDistance = 1f)
+        public virtual void SetDestination(Vector3 pos)
         {
-            RunPath(new List<Vector3> { pos }, stopDistance);
+            SetDestination(pos, out _);
         }
 
-        public virtual void RunPath(List<Vector3> path, float stopDistance = 1f)
+        public virtual void AppendDestination(Vector3 pos)
         {
-            _stopDist = stopDistance;
-            _path.Clear();
+            AppendDestination(pos, out _);
+        }
 
-            foreach (Vector3 wp in path)
-            {
-                if (DynelManager.LocalPlayer.Position.DistanceFrom(wp) > _nodeReachedDist)
-                    _path.Enqueue(wp);
-            }
+        public virtual bool SetDestination(Vector3 pos, out Path path)
+        {
+            return SetPath(new List<Vector3> { pos }, out path);
+        }
+
+        public virtual bool AppendDestination(Vector3 pos, out Path path)
+        {
+            return AppendPath(new List<Vector3> { pos }, out path);
+        }
+
+        public void SetPath(List<Vector3> waypoints)
+        {
+            SetPath(waypoints, out _);
+        }
+
+        public void AppendPath(List<Vector3> waypoints)
+        {
+            AppendPath(waypoints, out _);
+        }
+
+        public virtual bool SetPath(List<Vector3> waypoints, out Path path)
+        {
+            _paths.Clear();
+            return AppendPath(waypoints, out path);
+        }
+
+        public virtual bool AppendPath(List<Vector3> waypoints, out Path path)
+        {
+            path = new Path(waypoints);
+            AppendPath(path);
+            return true;
+        }
+
+        public virtual void SetPath(Path path)
+        {
+            _paths.Clear();
+            AppendPath(path);
+        }
+
+        public virtual void AppendPath(Path path)
+        {
+            _paths.Enqueue(path);
         }
 
         public void LookAt(Vector3 pos)
         {
             DynelManager.LocalPlayer.Rotation = Quaternion.FromTo(DynelManager.LocalPlayer.Position, pos);
-        }
-
-        protected virtual void OnDestinationReached()
-        {
-            DestinationReachedEventArgs e = new DestinationReachedEventArgs();
-            DestinationReached?.Invoke(this, e);
-
-            if (e.Halt)
-                SetMovement(MovementAction.ForwardStop);
         }
 
         protected virtual void OnStuck()
@@ -155,19 +175,72 @@ namespace AOSharp.Core.Movement
             }       
         }
 
-        public static void SetMovement(MovementAction action)
+        public void SetMovement(MovementAction action)
         {
             _movementActionQueue.Enqueue(action);
         }
     }
 
-    public class DestinationReachedEventArgs : EventArgs
+    public class Path
     {
-        public bool Halt { get; set; }
+        public float NodeReachedDist = 1;
+        public float DestinationReachedDist = 1;
+        public bool StopAtDest = true;
+        protected Queue<Vector3> _waypoints = new Queue<Vector3>();
+        public Action DestinationReachedCallback;
 
-        public DestinationReachedEventArgs(bool halt = true)
+        public Path(Vector3 destination) : this(new List<Vector3>() { destination })
         {
-            Halt = halt;
+
+        }
+
+        public Path(List<Vector3> waypoints)
+        {
+            SetWaypoints(waypoints);
+        }
+
+        protected void SetWaypoints(List<Vector3> waypoints)
+        {
+            _waypoints.Clear();
+
+            foreach (Vector3 waypoint in waypoints)
+            {
+                if (DynelManager.LocalPlayer.Position.DistanceFrom(waypoint) > NodeReachedDist)
+                    _waypoints.Enqueue(waypoint);
+            }
+        }
+
+        internal bool GetNextWaypoint(out Vector3 waypoint)
+        {
+            if (_waypoints.Count == 0)
+            {
+                waypoint = Vector3.Zero;
+                return false;
+            }
+
+            if (DynelManager.LocalPlayer.Position.DistanceFrom(_waypoints.Peek()) <= (_waypoints.Count > 1 ? NodeReachedDist : DestinationReachedDist))
+            {
+                _waypoints.Dequeue();
+
+                if (_waypoints.Count == 0)
+                {
+                    waypoint = Vector3.Zero;
+                    return false;
+                }
+            }
+
+            waypoint = _waypoints.Peek();
+            return true;
+        }
+
+        internal void Draw()
+        {
+            Vector3 lastWaypoint = DynelManager.LocalPlayer.Position;
+            foreach (Vector3 waypoint in _waypoints)
+            {
+                Debug.DrawLine(lastWaypoint, waypoint, DebuggingColor.Yellow);
+                lastWaypoint = waypoint;
+            }
         }
     }
 }

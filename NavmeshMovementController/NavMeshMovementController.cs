@@ -4,18 +4,18 @@ using AOSharp.Common.GameData;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using Path = AOSharp.Core.Movement.Path;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Pathfinding
 {
     public class NavMeshMovementController : MovementController
     {
-        private const float PATH_UPDATE_INTERVAL = 2f;
+        private const float PathUpdateInterval = 2f;
 
         private Pathfinder _pathfinder = null;
         private readonly string _navMeshFolderPath;
-        private float _lastPathUpdate = 0f;
-        private Vector3 _goalPos = Vector3.Zero;
-        private bool _usingNavmesh = true;
+        private double _nextPathUpdate = 0;
 
         public NavMeshMovementController(string navMeshFolderPath, bool drawPath = false) : base(drawPath)
         {
@@ -25,40 +25,46 @@ namespace AOSharp.Pathfinding
             Game.PlayfieldInit += OnPlayfieldInit;
         }
 
-        protected override void Update(object s, float deltaTime)
+        public override void Update()
         {
-            if (_usingNavmesh && IsNavigating && _lastPathUpdate > PATH_UPDATE_INTERVAL)
+            if (IsNavigating && _paths.Peek() is NavMeshPath path && Time.NormalTime > _nextPathUpdate)
             {
-                List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, _goalPos);
-                RunPath(path);
-                _lastPathUpdate = 0;
+                path.UpdatePath(_pathfinder);
+                _nextPathUpdate = Time.NormalTime + PathUpdateInterval;
             }
 
-            _lastPathUpdate += deltaTime;
-
-            base.Update(s, deltaTime);
+            base.Update();
         }
 
-        public void MoveTo(Vector3 pos, bool useNavmesh = true)
+        public void SetNavMeshDestination(Vector3 destination)
         {
-            if (useNavmesh)
-            {
-                if (_pathfinder == null)
-                    return;
+            SetNavMeshDestination(destination, out _);
+        }
 
-                if (IsNavigating && pos == _goalPos)
-                    return;
+        public void AppendNavMeshDestination(Vector3 destination)
+        {
+            AppendNavMeshDestination(destination, out _);
+        }
 
-                List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, pos);
-                _goalPos = pos;
-                _usingNavmesh = useNavmesh;
-                _lastPathUpdate = 0;
-                RunPath(path);
-            }
-            else
-            {
-                base.MoveTo(pos);
-            }
+        public bool SetNavMeshDestination(Vector3 destination, out NavMeshPath path)
+        {
+            _paths.Clear();
+            return AppendNavMeshDestination(destination, out path);
+        }
+
+        public bool AppendNavMeshDestination(Vector3 destination, out NavMeshPath path)
+        {
+            path = new NavMeshPath(destination);
+
+            if (_pathfinder == null)
+                return false;
+
+            if (IsNavigating && _paths.Peek() is NavMeshPath navPath && navPath.Destination == destination)
+                return false;
+
+            path.UpdatePath(_pathfinder);
+            base.AppendPath(path);
+            return true;
         }
 
         private void OnPlayfieldInit(object s, uint id)
@@ -73,6 +79,22 @@ namespace AOSharp.Pathfinding
                 throw new FileNotFoundException($"Unable to find navmesh file: {navFile}");
 
             _pathfinder = Pathfinder.Create(navFile);
+        }
+    }
+
+    public class NavMeshPath : Path
+    {
+        public readonly Vector3 Destination;
+
+        public NavMeshPath(Vector3 dstPos) : base(new List<Vector3>())
+        {
+            Destination = dstPos;
+        }
+
+        internal void UpdatePath(Pathfinder pathfinder)
+        {
+            List<Vector3> waypoints = pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, Destination);
+            base.SetWaypoints(waypoints);
         }
     }
 }
