@@ -70,6 +70,8 @@ namespace AOSharp.Core
 
         private static void OnUpdateInternal(float deltaTime)
         {
+            DynelManager.Update();
+
             Network.Update();
             IPCChannel.Update();
 

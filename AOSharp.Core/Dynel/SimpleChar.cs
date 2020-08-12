@@ -41,6 +41,8 @@ namespace AOSharp.Core
 
         public Side Side => (Side)GetStat(Stat.Side);
 
+        public bool IsInPlay => (*(MemStruct*)Pointer).IsInPlay;
+
         public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
 
         public bool IsAlive => Health > 0;
@@ -184,6 +186,10 @@ namespace AOSharp.Core
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private new struct MemStruct
         {
+            [MarshalAs(UnmanagedType.U1)]
+            [FieldOffset(0xC9)]
+            public bool IsInPlay;
+
             [FieldOffset(0x154)]
             public StdString Name;
 

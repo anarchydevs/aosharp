@@ -30,7 +30,8 @@ namespace AOSharp.Core
             { N3MessageType.KnubotAnswerList, NpcDialog.OnKnubotAnswerList },
             { N3MessageType.CharacterAction, OnCharacterAction },
             { N3MessageType.TemplateAction, OnTemplateAction },
-            { N3MessageType.GenericCmd, OnGenericCmd }
+            { N3MessageType.GenericCmd, OnGenericCmd },
+            { N3MessageType.CharInPlay, OnCharInPlay }
         };
 
         public static void Send(N3Message message)
@@ -114,6 +115,11 @@ namespace AOSharp.Core
         private static void OnOutboundN3Message(N3Message n3Msg)
         {
             N3MessageSent?.Invoke(null, n3Msg);
+        }
+
+        private static void OnCharInPlay(N3Message n3Msg)
+        {
+            DynelManager.OnCharInPlay(n3Msg.Identity);
         }
 
         private static void OnGenericCmd(N3Message n3Msg)

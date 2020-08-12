@@ -9,6 +9,7 @@ namespace AOSharp.Core
     public static class DynelManager
     {
         public static EventHandler<Dynel> DynelSpawned;
+        public static EventHandler<SimpleChar> CharInPlay;
 
         public static LocalPlayer LocalPlayer => GetLocalPlayer();
 
@@ -19,6 +20,17 @@ namespace AOSharp.Core
         public static IEnumerable<SimpleChar> NPCs => Characters.Where(x => x.IsNpc && !x.IsPet);
 
         public static IEnumerable<SimpleChar> Players => Characters.Where(x => x.IsPlayer);
+
+        private static Queue<Dynel> _queuedDynelSpawns = new Queue<Dynel>();
+
+        internal static void Update()
+        {
+            while (_queuedDynelSpawns.Count > 0)
+            {
+                Dynel dynel = _queuedDynelSpawns.Dequeue();
+                DynelSpawned?.Invoke(null, dynel);
+            }
+        }
 
         public static Dynel GetDynel(Identity identity)
         {
@@ -83,9 +95,15 @@ namespace AOSharp.Core
             return Playfield.GetPlayfieldDynels().Select(pDynel => new Dynel(pDynel)).ToList();
         }
 
+        internal static void OnCharInPlay(Identity identity)
+        {
+            if(Find(identity, out SimpleChar character))
+                CharInPlay?.Invoke(null, character);
+        }
+
         private static void OnDynelSpawned(IntPtr pDynel)
         {
-            DynelSpawned?.Invoke(null, new Dynel(pDynel));
+            _queuedDynelSpawns.Enqueue(new Dynel(pDynel));
         }
     }
 }

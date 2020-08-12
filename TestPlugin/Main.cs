@@ -244,6 +244,7 @@ namespace TestPlugin
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 DynelManager.DynelSpawned += DynelSpawned;
+                DynelManager.CharInPlay += CharInPlay;
             }
             catch (Exception e)
             {
@@ -368,7 +369,7 @@ namespace TestPlugin
 
         private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
-            Chat.WriteLine($"{n3Msg.N3MessageType}");
+            //Chat.WriteLine($"{n3Msg.N3MessageType}");
         }
 
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
@@ -385,12 +386,13 @@ namespace TestPlugin
             //if (n3Msg.N3MessageType == N3MessageType.CharDCMove)
             //    Chat.WriteLine($"MoveType: {((CharDCMoveMessage)n3Msg).MoveType}");
 
+            /*
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
             {
                 TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
                 Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
             }
-
+            */
             /*
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
             {
@@ -480,7 +482,7 @@ namespace TestPlugin
                 derp.Use();
             }*/
 
-            if (Time.NormalTime > lastTrigger + 0.5)
+            if (Time.NormalTime > lastTrigger + 2)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -522,14 +524,17 @@ namespace TestPlugin
 
         private void DynelSpawned(object s, Dynel dynel)
         {
-            /*
             if (dynel.Identity.Type == IdentityType.SimpleChar)
             {
                 SimpleChar c = dynel.Cast<SimpleChar>();
 
-                Chat.WriteLine($"SimpleChar Spawned(TestPlugin): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health}");
+                Chat.WriteLine($"SimpleChar Spawned(TestPlugin): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health} -- IsInPlay: {c.IsInPlay}");
             }
-            */
+        }
+
+        private void CharInPlay(object s, SimpleChar character)
+        {
+            Chat.WriteLine($"{character.Name} is now in play.");
         }
     }
 }

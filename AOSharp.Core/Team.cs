@@ -19,21 +19,26 @@ namespace AOSharp.Core
         public static EventHandler<TeamRequestEventArgs> TeamRequest;
         public static EventHandler<Identity> MemberLeft;
 
-        public static void Invite(Identity target)
+        public static void Invite(SimpleChar player)
+        {
+            Invite(player.Identity);
+        }
+
+        public static void Invite(Identity player)
         {
             Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequest,
-                Target = target
+                Target = player
             });
         }
 
-        public static void Kick(Identity target)
+        public static void Kick(Identity player)
         {
             Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamKick,
-                Target = target
+                Target = player
             });
         }
 
