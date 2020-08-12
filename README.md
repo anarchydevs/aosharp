@@ -5,4 +5,4 @@ https://gitlab.com/never-knows-best/aosharp-automation
 
 Syntax is bound to change frequently as the code expands so deal with it.
 
-Delmus#7524 for any questions/requests
+https://discord.gg/UyVD7C9 for any questions/requests
