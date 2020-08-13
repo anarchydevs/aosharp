@@ -148,8 +148,7 @@ namespace TestPlugin
                 movementController.RunPath(testPath);
                 */
 
-                /*
-                Chat.WriteLine("Missions");
+                Chat.WriteLine($"Missions ({Mission.List.Count})");
                 foreach (Mission mission in Mission.List)
                 {
                     Chat.WriteLine($"   {mission.Identity.ToString()}");
@@ -157,7 +156,6 @@ namespace TestPlugin
                     Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
-                */
 
                 /*
                 List<Item> characterItems = Inventory.Items;

@@ -41,6 +41,8 @@ namespace AOSharp.Core
 
         public Side Side => (Side)GetStat(Stat.Side);
 
+        public int Level => GetStat(Stat.Level);
+
         public bool IsInPlay => (*(MemStruct*)Pointer).IsInPlay;
 
         public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;

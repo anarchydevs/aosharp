@@ -18,6 +18,11 @@ namespace AOSharp.Core.UI
             _pointer = pointer;
         }
 
+        public void WriteLine(object obj, ChatColor color = ChatColor.Gold)
+        {
+            WriteLine(obj.ToString(), color);
+        }
+
         public void WriteLine(string text, ChatColor color = ChatColor.Gold)
         {
             IntPtr pMsg = StdString.Create(text);
