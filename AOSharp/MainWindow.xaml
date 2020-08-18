@@ -71,6 +71,10 @@
                         HorizontalAlignment="Right"
                         Margin="3"
                         Click="ShowAddPluginDialog">Add Plugin</Button>
+                <Button Width="100" 
+                    HorizontalAlignment="Left"
+                    Margin="385,3,0,0"
+                    Click="RemovePlugin" Content="Remove Plugin" RenderTransformOrigin="0.763,0.53" Height="28" VerticalAlignment="Top"/>
             </Grid>
             <DataGrid Name="PluginsDataGrid"
                       ItemsSource="{Binding Path=Plugins}"

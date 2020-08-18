@@ -52,18 +52,29 @@ namespace AOSharp
             }
         }
 
+        public new bool Remove(TKey key, TValue value) 
+        {
+            if (base.ContainsKey(key))
+            {
+                var item = new KeyValuePair<TKey, TValue>(key, value);
+                bool result = base.Remove(item.Key);
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+                return result;
+            }
+            return false;
+        }
+        /*
         public new bool Remove(TKey key)
         {
             if (base.TryGetValue(key, out TValue value))
             {
                 var item = new KeyValuePair<TKey, TValue>(key, base[key]);
                 bool result = base.Remove(key);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, base.Keys.ToList().IndexOf(key)));
-                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
                 return result;
             }
             return false;
-        }
+        }*/
 
         public new void Clear()
         {
