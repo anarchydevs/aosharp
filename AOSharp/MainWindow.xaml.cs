@@ -125,7 +125,6 @@ namespace AOSharp
                 Version = fileInfo.FileVersion,
                 Path = dataModel.DllPath
             });
-
             Config.Save();
 
             await this.HideMetroDialogAsync(addPluginDialog);
@@ -219,6 +218,31 @@ namespace AOSharp
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private async void RemovePlugin(object sender, RoutedEventArgs e)
+        {
+
+            //Check if we are currently injected before doing anything
+            if (!PluginsDataGrid.IsEnabled)
+                return;
+            
+            //Get the currently selected profile
+            Profile selectedProfile = (Profile)ProfileListBox.SelectedItem;
+            if (selectedProfile == null)
+                return;
+            
+            //Get the currently selected item from the DataGrid and check if it is currently Enabled and if so disable it before removing
+            KeyValuePair<string, Plugin> plugin = (KeyValuePair<string, Plugin>)PluginsDataGrid.SelectedItem;
+            if (plugin.Value.IsEnabled)
+                plugin.Value.IsEnabled = false;
+
+            selectedProfile.EnabledPlugins.Remove(plugin.Key);
+
+            //Remove the plugin from the Config and save the updated config
+            Config.Plugins.Remove(plugin.Key);
+            PluginsDataGrid.DataContext = Config;
+            Config.Save();
         }
     }
 
