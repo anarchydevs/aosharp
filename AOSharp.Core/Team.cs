@@ -29,7 +29,8 @@ namespace AOSharp.Core
             Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequest,
-                Target = player
+                Target = player,
+                Parameter1 = 1
             });
         }
 

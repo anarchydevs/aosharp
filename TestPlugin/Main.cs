@@ -80,9 +80,7 @@ namespace TestPlugin
                     Chat.WriteLine($"new RoomInstance(\"{room.Name}\", {room.Floor}, new Vector3{room.Position}, {(int)room.Rotation / 90}, {room.LocalRect.MinX}, {room.LocalRect.MinY}, {room.LocalRect.MaxX}, {room.LocalRect.MaxY}, new Vector3{room.Center}, new Vector3{room.TemplatePos}),");
                 }
                 */
-                Identity leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet").Identity;
-                Chat.WriteLine(leet);
-                DynelManager.LocalPlayer.Pets.Attack(leet);
+
 
                 /*
                 foreach(Spell spell in Spell.List)
