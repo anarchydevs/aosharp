@@ -80,6 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\Directories.cs" />
     <Compile Include="ObservableDictionary.cs" />
+    <Compile Include="SimpleCommand.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -98,7 +99,7 @@
   <ItemGroup>
     <Compile Include="Models\AddAssemblyModel.cs" />
     <Compile Include="Models\ProfilesModel.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Models\PluginModel.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

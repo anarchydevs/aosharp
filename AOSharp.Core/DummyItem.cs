@@ -166,8 +166,8 @@ namespace AOSharp.Core
                             if (prevReqsMet < 2)
                                 return false;
 
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
+                            lastResult = unk[--prevReqsMet];
+                            result = unk[--prevReqsMet];
 
                             //We can early exit on AND 
                             if (!result || !lastResult)
@@ -179,8 +179,8 @@ namespace AOSharp.Core
                             if (prevReqsMet < 2)
                                 return false;
 
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
+                            lastResult = unk[--prevReqsMet];
+                            result = unk[--prevReqsMet];
 
                             metReq = result || lastResult;
                             break;
@@ -188,7 +188,7 @@ namespace AOSharp.Core
                             if (prevReqsMet < 1)
                                 return false;
 
-                            metReq = unk[(prevReqsMet--) - 1];
+                            metReq = !unk[--prevReqsMet];
                             break;
                         case UseCriteriaOperator.HasWornItem:
                             metReq = Inventory.Inventory.Find(param2, out Item item) &&

@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using System.Windows.Input;
+using AOSharp.Core;
 
 namespace AOSharp
 {
-    public class Plugin : INotifyPropertyChanged
+    public class PluginModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
 
@@ -30,7 +32,15 @@ namespace AOSharp
             }
         }
 
+        [JsonIgnore]
+        public ICommand RemoveCommand { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public PluginModel()
+        {
+            this.RemoveCommand = new SimpleCommand() { ExecuteDelegate = Remove };
+        }
 
         private void OnPropertyChanged(string propertyName)
         {
@@ -38,6 +48,12 @@ namespace AOSharp
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private void Remove(object obj)
+        {
+            var args = (Tuple<ObservableDictionary<string, PluginModel>, string>)obj;
+            args.Item1.Remove(args.Item2, this);
         }
     }
 }

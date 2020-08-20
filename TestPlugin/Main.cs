@@ -62,6 +62,7 @@ namespace TestPlugin
 
                 Chat.WriteLine("Tests:");
 
+                /*
                 Chat.WriteLine($"Base stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 1)}");
                 Chat.WriteLine($"Modified stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 2)}");
                 Chat.WriteLine($"No Trickle stat: {DynelManager.LocalPlayer.GetStat(Stat.RunSpeed, 3)}");
@@ -78,6 +79,10 @@ namespace TestPlugin
                 {
                     Chat.WriteLine($"new RoomInstance(\"{room.Name}\", {room.Floor}, new Vector3{room.Position}, {(int)room.Rotation / 90}, {room.LocalRect.MinX}, {room.LocalRect.MinY}, {room.LocalRect.MaxX}, {room.LocalRect.MaxY}, new Vector3{room.Center}, new Vector3{room.TemplatePos}),");
                 }
+                */
+                Identity leet = DynelManager.Characters.FirstOrDefault(x => x.Name == "Leet").Identity;
+                Chat.WriteLine(leet);
+                DynelManager.LocalPlayer.Pets.Attack(leet);
 
                 /*
                 foreach(Spell spell in Spell.List)
@@ -134,7 +139,7 @@ namespace TestPlugin
                 }
                 */
 
-                //DevExtras.Test();
+                //DevExtras.LoadAllSurfaces();
 
                 /*
                 MovementController movementController = new MovementController(true);

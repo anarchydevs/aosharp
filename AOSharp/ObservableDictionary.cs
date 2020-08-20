@@ -57,14 +57,15 @@ namespace AOSharp
             if (base.ContainsKey(key))
             {
                 var item = new KeyValuePair<TKey, TValue>(key, value);
+                int index = base.Keys.ToList().IndexOf(key);
                 bool result = base.Remove(item.Key);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
                 this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
                 return result;
             }
             return false;
         }
-        /*
+
         public new bool Remove(TKey key)
         {
             if (base.TryGetValue(key, out TValue value))
@@ -74,7 +75,7 @@ namespace AOSharp
                 return result;
             }
             return false;
-        }*/
+        }
 
         public new void Clear()
         {

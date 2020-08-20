@@ -114,7 +114,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //SelectedTarget
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SelectedTarget@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr SelectedTarget(IntPtr pThis, Identity* target);
+        public static extern IntPtr SelectedTarget(IntPtr pThis, ref Identity target);
 
         //IsInRaidTeam
         [return: MarshalAs(UnmanagedType.U1)]

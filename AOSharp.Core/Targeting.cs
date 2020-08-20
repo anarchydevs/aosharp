@@ -22,14 +22,14 @@ namespace AOSharp.Core
         {
             if (!packetOnly)
             {
-                TargetingModule_t.SetTarget(&target, false);
+                TargetingModule_t.SetTarget(ref target, false);
 
                 IntPtr pEngine = N3Engine_t.GetInstance();
 
                 if (pEngine == IntPtr.Zero)
                     return;
 
-                N3EngineClientAnarchy_t.SelectedTarget(pEngine, &target);
+                N3EngineClientAnarchy_t.SelectedTarget(pEngine, ref target);
             }
             else
             {

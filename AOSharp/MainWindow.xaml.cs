@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Win32;
 using MahApps.Metro.Controls;
@@ -69,6 +70,12 @@ namespace AOSharp
 
             Config = Config.Load(Directories.ConfigFilePath);
 
+            Config.Plugins.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            {
+                if(e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
+                Config.Save();
+            };
+
             this.DataContext = this;
 
             InitializeComponent();
@@ -119,13 +126,12 @@ namespace AOSharp
 
             FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(dataModel.DllPath);
 
-            Config.Plugins.Add(Utils.HashFromFile(dataModel.DllPath), new Plugin()
+            Config.Plugins.Add(Utils.HashFromFile(dataModel.DllPath), new PluginModel()
             {
                 Name = fileInfo.ProductName,
                 Version = fileInfo.FileVersion,
                 Path = dataModel.DllPath
             });
-            Config.Save();
 
             await this.HideMetroDialogAsync(addPluginDialog);
         }
@@ -137,7 +143,7 @@ namespace AOSharp
             if (selectedProfile == null)
                 return;
 
-            KeyValuePair<string, Plugin> plugin = (KeyValuePair<string, Plugin>)PluginsDataGrid.SelectedItem;
+            KeyValuePair<string, PluginModel> plugin = (KeyValuePair<string, PluginModel>)PluginsDataGrid.SelectedItem;
 
             if (plugin.Value.IsEnabled)
                 selectedProfile.EnabledPlugins.Add(plugin.Key);
@@ -159,7 +165,7 @@ namespace AOSharp
 
             if(profile == null)
             {
-                foreach (Plugin plugin in Config.Plugins.Values)
+                foreach (PluginModel plugin in Config.Plugins.Values)
                     plugin.IsEnabled = false;
 
                 PluginsDataGrid.IsEnabled = false;
@@ -169,7 +175,7 @@ namespace AOSharp
                 PluginsDataGrid.IsEnabled = true;
             }
 
-            foreach (KeyValuePair<string, Plugin> plugin in Config.Plugins)
+            foreach (KeyValuePair<string, PluginModel> plugin in Config.Plugins)
                 plugin.Value.IsEnabled = profile.EnabledPlugins.Contains(plugin.Key);
         }
 
@@ -219,31 +225,6 @@ namespace AOSharp
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-        private async void RemovePlugin(object sender, RoutedEventArgs e)
-        {
-
-            //Check if we are currently injected before doing anything
-            if (!PluginsDataGrid.IsEnabled)
-                return;
-            
-            //Get the currently selected profile
-            Profile selectedProfile = (Profile)ProfileListBox.SelectedItem;
-            if (selectedProfile == null)
-                return;
-            
-            //Get the currently selected item from the DataGrid and check if it is currently Enabled and if so disable it before removing
-            KeyValuePair<string, Plugin> plugin = (KeyValuePair<string, Plugin>)PluginsDataGrid.SelectedItem;
-            if (plugin.Value.IsEnabled)
-                plugin.Value.IsEnabled = false;
-
-            selectedProfile.EnabledPlugins.Remove(plugin.Key);
-
-            //Remove the plugin from the Config and save the updated config
-            Config.Plugins.Remove(plugin.Key);
-            PluginsDataGrid.DataContext = Config;
-            Config.Save();
-        }
     }
 
     [ValueConversion(typeof(bool), typeof(Visibility))]
@@ -275,6 +256,26 @@ namespace AOSharp
             if (Equals(value, FalseValue))
                 return false;
             return null;
+        }
+    }
+
+    public class RemovePluginConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[1] == DependencyProperty.UnsetValue)
+            {
+                return null;
+            }
+
+            Tuple<ObservableDictionary<string, PluginModel>, string> tuple = new Tuple<ObservableDictionary<string, PluginModel>, string>(
+                (ObservableDictionary<string, PluginModel>)values[0], (string)values[1]);
+            return tuple;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

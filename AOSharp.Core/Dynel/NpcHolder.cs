@@ -15,9 +15,9 @@ namespace AOSharp.Core
         [FieldOffset(0x1C)]
         public IntPtr pPetUnk;
 
-        internal Identity[] GetPets()
+        internal Pet[] GetPets()
         {
-            List<Identity> petIdentities = new List<Identity>();
+            List<Pet> petIdentities = new List<Pet>();
 
             if (pPetUnk == IntPtr.Zero)
                 return petIdentities.ToArray();
@@ -26,7 +26,7 @@ namespace AOSharp.Core
             {
                 PetEntry petEntry = (*(PetEntry*)pPet);
 
-                petIdentities.Add(petEntry.Identity);
+                petIdentities.Add(new Pet(petEntry.Identity));
             }
 
             return petIdentities.ToArray();
