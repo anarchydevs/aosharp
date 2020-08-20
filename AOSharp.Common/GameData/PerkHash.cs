@@ -2,6 +2,15 @@
 {
     public enum PerkHash
     {
+        //ENF LE Procs -- some missing
+        IgnorePain = 0x49475049,
+        TearLigaments = 0x42415353,
+        VileRage = 0x49534952,
+        ShrugOffHits = 0x564E534D,
+        BustKneecaps = 0x58435346,
+        ViolationBuffer = 0x42554B45,
+        ShieldOfTheOgre = 0x494E48,
+
         //MA LE Procs -- some missing
         DebilitatingStrike = 0x44425354,
         HealingMeditation = 0x484C4D44,
@@ -218,24 +227,24 @@
         //Champion of Heavy Infantry
         Bluntness = 0x55535648,
 
-        //Bio Cocoon
+        //Bio Shield
         BioRegrowth = 0x42495247,
         BioRejuvenation = 0x4249524A,
         BioCocoon = 0x42494343,
         BioShield = 0x42495349,
 
-        //Reaver
-        SliceandDice = 0x53414149,
-        PainLance = 0x50414C41,
-        Transfix = 0x52414E53,
-        Cleave = 0x434C4541,
+        //Bone Crusher (2hb)
+        SeismicSmash = 0x534D534D,
+        OverwhelmingMight = 0x4F454D47,
+        HammerAndAnvil = 0x484D4144,
+        Pulverize = 0x50554C56,
 
-        //Solitus Primary Genome
-        TackyHack = 0x54414843,
-
-        //Mutate
-        CauseofAnger = 0x43534F41,
-        ArouseAnger = 0x4155414E,
+        //MannersOfMongo
+        GroinKick = 0x474F4B4B,
+        Hatred = 0x4E4D5754,
+        Headbutt = 0x54585844,
+        Charge = 0x42585558,
+        Taunt = 0x47445A48,
 
         //Form of Troll
         Avalanche = 0x4156414C,
@@ -243,52 +252,5 @@
         DisableNaturalHealing = 0x44494E54,
         TrollForm = 0x5452464F,
 
-        //Colossal Health
-        Lifeblood = 0x4C494645,
-        BlessingofLife = 0x424E4F49,
-
-        //Nano Surgeon
-        TreatmentTransfer = 0x54525452,
-        MaliciousProhibition = 0x4D41504F,
-        TeamHeal = 0x54414841,
-        EnhancedHeal = 0x45484841,
-
-        //Embrace
-        Mistreatment = 0x52454154,
-
-        //Doc LE Procs
-        MuscleMemory = 0x4E464C41,
-        AnatomicBlight = 0x54484F47,
-        RestrictiveBandaging = 0x5450464F,
-        Pathogen = 0x43494353,
-        BloodTransfusion = 0x444E4355,
-        Anesthetic = 0x4B4C4650,
-        Astringent = 0x4D4D4154,
-        Inflammation = 0x5253424E,
-        Antiseptic = 0x41565752,
-        HealingCare = 0x5951545A,
-
-        //Keeper LE procs
-        BenevolentBarrier = 0x52495354,
-        FaithfulReconstruction = 0x5357544F,
-        HonorRestored = 0x434E4445,
-        IgnoretheUnrepentant = 0x45545455,
-        Subjugation = 0x5248424F,
-        PureStrike = 0x45535455,
-        EschewtheFaithless = 0x445A5455,
-        RighteousStrike = 0x46545345,
-        RighteousSmite = 0x46465245,
-        AmbientPurification = 0x46454955,
-        SymbioticBypass = 0x5249534D,
-        VirtuousReaper = 0x46485245,
-
-        //Enforcer LE Procs
-        InspireRage = 0x49535247,
-        IgnorePain = 0x49475049,
-        TearLigaments = 0x42415353,
-        VileRage = 0x49534952,
-        ShrugOffHits = 0x564E534D,
-        BustKneecaps = 0x58435346,
-        ViolationBuffer = 0x42554B45,
     }
 }
