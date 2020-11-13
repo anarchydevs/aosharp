@@ -23,6 +23,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using AOSharp.Data;
 using AOSharp.Models;
+using Serilog;
 
 namespace AOSharp
 {
@@ -67,6 +68,10 @@ namespace AOSharp
         {
             //_profiles = GetProfiles();
             //_assemblies = GetAssemblies();
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("Log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
 
             Config = Config.Load(Directories.ConfigFilePath);
 

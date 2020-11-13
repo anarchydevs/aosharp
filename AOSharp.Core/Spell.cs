@@ -17,6 +17,7 @@ namespace AOSharp.Core
 
         public readonly Identity Identity;
         public readonly Nanoline Nanoline;
+        public readonly int NCU;
         public readonly int StackingOrder;
         public int Cost => GetCost();
 
@@ -31,6 +32,8 @@ namespace AOSharp.Core
         {
             Identity = identity;
             Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
+            StackingOrder = GetStat(Stat.StackingOrder);
+            NCU = GetStat(Stat.Level);
         }
 
         public static bool Find(int id, out Spell spell)

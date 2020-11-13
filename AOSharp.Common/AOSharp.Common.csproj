@@ -107,9 +107,11 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerField.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\VendingMachineSlot.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\InitiateCompressionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Message.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessageBody.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\MessageBody.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
@@ -180,6 +182,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\WeaponItemFullUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3MessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\OperatorMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatPacketType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\PacketType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\PingMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessage.cs" />
@@ -303,6 +306,7 @@
     <Compile Include="Unmanaged\Imports\N3\N3Zone_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\RoomSurface_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\TilemapSurface_t.cs" />
+    <Compile Include="Unmanaged\Imports\Native\Ws2_32.cs" />
     <Compile Include="Unmanaged\Imports\Native\Kernel32.cs" />
     <Compile Include="Unmanaged\Imports\Native\MSVCR100.cs" />
     <Compile Include="Unmanaged\Imports\Native\Psapi.cs" />

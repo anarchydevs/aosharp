@@ -19,6 +19,12 @@ namespace AOSharp.Core
 
         public float AttackRange => GetAttackRange();
 
+        public int CurrentNCU => GetStat(Stat.CurrentNCU);
+
+        public int MaxNCU => GetStat(Stat.MaxNCU);
+
+        public int RemainingNCU => MaxNCU - CurrentNCU;
+
         public Pet[] Pets => ((MemStruct*)Pointer)->NpcHolder->GetPets();
 
         public bool IsAttackPending => Time.NormalTime < _nextAttack;

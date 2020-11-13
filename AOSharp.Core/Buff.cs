@@ -14,6 +14,9 @@ namespace AOSharp.Core
     {
         public readonly Identity Owner;
         public readonly Identity Identity;
+        public readonly Nanoline Nanoline;
+        public readonly int NCU;
+        public readonly int StackingOrder;
         public float RemainingTime => GetCurrentTime();
         public float TotalTime => GetTotalTime();
 
@@ -21,6 +24,9 @@ namespace AOSharp.Core
         {
             Owner = owner;
             Identity = identity;
+            Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
+            StackingOrder = GetStat(Stat.StackingOrder);
+            NCU = GetStat(Stat.Level);
         }
 
         private unsafe float GetCurrentTime()

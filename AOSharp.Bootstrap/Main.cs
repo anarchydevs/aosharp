@@ -12,6 +12,8 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.DataTypes;
+using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+using Serilog;
 
 namespace AOSharp.Bootstrap
 {
@@ -24,14 +26,28 @@ namespace AOSharp.Bootstrap
         private ManualResetEvent _unloadEvent;
         private static List<LocalHook> _hooks = new List<LocalHook>();
         private PluginProxy _pluginProxy;
+        private ChatSocketListener _chatSocketListener;
 
         private string _lastChatInput;
         private IntPtr _lastChatInputWindowPtr;
 
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
+            /*
+            try
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .WriteTo.File("Log.txt", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine();
+            }
+            */
             _connectEvent = new ManualResetEvent(false);
             _unloadEvent = new ManualResetEvent(false);
+            _chatSocketListener = new ChatSocketListener();
 
             //Setup IPC server that will be used for handling API requests and events.
             _ipcPipe = new IPCServer(inChannelName);
@@ -113,10 +129,7 @@ namespace AOSharp.Bootstrap
             catch (Exception e)
             {
                 //TODO: Send IPC message back to loader on error
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"AOSharp.Bootstrap_Exception.txt", true))
-                {
-                    file.WriteLine($"{DateTime.Now}: {e.Message}");
-                }
+                Log.Error(e.Message);
             }
         }
 
@@ -167,12 +180,18 @@ namespace AOSharp.Bootstrap
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
 
             CreateHook("GUI.dll",
-                        "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", 
+                        "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z",
                         new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
 
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
+
+            /*
+            CreateHook("ws2_32.dll",
+                        "recv",
+                        new Ws2_32.RecvDelegate(WsRecv_Hook));
+            */
 
             if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
             {
@@ -201,8 +220,23 @@ namespace AOSharp.Bootstrap
                 hook.Dispose();
         }
 
+        public unsafe int WsRecv_Hook(int socket, IntPtr buffer, int len, int flags)
+        {
+            int bytesRead = Ws2_32.recv(socket, buffer, len, flags);
+
+            if (socket == ChatSocketListener.Socket)
+            {
+                byte[] trimmedBuffer = new byte[bytesRead];
+                Marshal.Copy(buffer, trimmedBuffer, 0, bytesRead);
+
+                List<byte[]> packets = _chatSocketListener.ProcessBuffer(trimmedBuffer);
+            }
+
+            return bytesRead;
+        }
+
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, StdString* commandText)
-        {        
+        {
             IntPtr tokenized = StdString.Create();
             ChatGUIModule_t.ExpandChatTextArgs(tokenized, StdString.Create(commandText->ToString()));
             _lastChatInput = ((StdString*)tokenized)->ToString();

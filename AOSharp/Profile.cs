@@ -8,6 +8,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using AOSharp.Bootstrap.IPC;
 using EasyHook;
+using Serilog;
 
 namespace AOSharp
 {
@@ -92,8 +93,9 @@ namespace AOSharp
 
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error($"Failed to inject bootloader. \n\n{e.Message}");
                 return false;
             }
         }
