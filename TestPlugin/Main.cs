@@ -237,14 +237,15 @@ namespace TestPlugin
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
-                Network.N3MessageReceived += Network_N3MessageReceived;
-                Network.N3MessageSent += Network_N3MessageSent;
-                Network.PacketReceived += Network_PacketReceived;
+                //Network.N3MessageReceived += Network_N3MessageReceived;
+                //Network.N3MessageSent += Network_N3MessageSent;
+                //Network.PacketReceived += Network_PacketReceived;
+                Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
-                DynelManager.DynelSpawned += DynelSpawned;
+                //DynelManager.DynelSpawned += DynelSpawned;
                 DynelManager.CharInPlay += CharInPlay;
             }
             catch (Exception e)
@@ -366,6 +367,12 @@ namespace TestPlugin
                 foreach (RoomInstance room in PlayfieldAcgInfo.Rooms)
                     Chat.WriteLine($"{room.RoomId}\t{room.Floor}\t{room.X}\t{room.Y}\t{room.Rotation}");
             }
+        }
+
+        private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
+        {
+            if (chatMessage.PacketType == ChatPacketType.PrivateMessage)
+                Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
         }
 
         private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)

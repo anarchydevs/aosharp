@@ -8,6 +8,7 @@ using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.Combat;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using AOSharp.Core.GameData;
+using SmokeLounge.AOtomation.Messaging.GameData;
 
 namespace AOSharp.Core
 {

@@ -33,18 +33,10 @@ namespace AOSharp.Bootstrap
 
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
-            /*
-            try
-            {
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.File("Log.txt", rollingInterval: RollingInterval.Day)
-                    .CreateLogger();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine();
-            }
-            */
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("AOSharp.Bootstrapper.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug)
+                .CreateLogger();
+
             _connectEvent = new ManualResetEvent(false);
             _unloadEvent = new ManualResetEvent(false);
             _chatSocketListener = new ChatSocketListener();
@@ -187,11 +179,9 @@ namespace AOSharp.Bootstrap
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
 
-            /*
             CreateHook("ws2_32.dll",
                         "recv",
                         new Ws2_32.RecvDelegate(WsRecv_Hook));
-            */
 
             if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
             {
@@ -230,6 +220,9 @@ namespace AOSharp.Bootstrap
                 Marshal.Copy(buffer, trimmedBuffer, 0, bytesRead);
 
                 List<byte[]> packets = _chatSocketListener.ProcessBuffer(trimmedBuffer);
+
+                foreach (byte[] packet in packets)
+                    _pluginProxy.ChatRecv(packet);
             }
 
             return bytesRead;

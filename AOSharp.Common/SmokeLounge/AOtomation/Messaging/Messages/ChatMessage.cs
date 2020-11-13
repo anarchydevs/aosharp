@@ -12,27 +12,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-//wtf is this file?
-
-/*
-using AOSharp.Common.GameData;
-
-namespace SmokeLounge.AOtomation.Messaging.GameData
+namespace SmokeLounge.AOtomation.Messaging.Messages
 {
-    using SmokeLounge.AOtomation.Messaging.Serialization;
-    using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
-
     public class ChatMessage
     {
-        #region AoMember Properties
+        #region Public Properties
 
-        [AoMember(0, SerializeSize = ArraySizeType.Int16)]
-        public string Text { get; set; }
+        public ChatMessageBody Body { get; set; }
 
-        [AoMember(1)]
-        public ChatMessageType Type { get; set; }
+        public ChatHeader Header { get; set; }
 
         #endregion
     }
 }
-*/

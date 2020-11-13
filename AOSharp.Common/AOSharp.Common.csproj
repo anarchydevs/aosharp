@@ -108,8 +108,10 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\VendingMachineSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\InitiateCompressionMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessageBody.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\MessageBody.cs" />
@@ -125,7 +127,6 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\RaidCmdType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\RaidCmdMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharacterActionMessage.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharacterActionType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharDCMoveMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharInPlayMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ChatCmdMessage.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\MappingAttributes\AoMemberAttribute.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\MappingAttributes\AoUsesFlagsAttribute.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\MemberOptions.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\ChatMessageSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\MessageSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\PacketInspector.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Probe.cs" />
@@ -237,6 +239,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldVendorInfoSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\SimpleCharFullUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\DiagnosticSerializer.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ChatHeaderSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\HeaderSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Int16Serializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Int32Serializer.cs" />

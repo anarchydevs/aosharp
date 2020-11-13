@@ -10,6 +10,7 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using AOSharp.Core.UI;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.GameData;
+using SmokeLounge.AOtomation.Messaging.GameData;
 
 namespace AOSharp.Core
 {
@@ -19,11 +20,13 @@ namespace AOSharp.Core
         public static EventHandler<N3Message> N3MessageReceived;
         public static EventHandler<byte[]> PacketSent;
         public static EventHandler<N3Message> N3MessageSent;
+        public static EventHandler<ChatMessageBody> ChatMessageReceived;
 
         private static ConcurrentQueue<byte[]> _rawInboundPacketQueue = new ConcurrentQueue<byte[]>();
         private static ConcurrentQueue<Message> _inboundMessageQueue = new ConcurrentQueue<Message>();
         private static ConcurrentQueue<byte[]> _rawOutboundPacketQueue = new ConcurrentQueue<byte[]>();
         private static ConcurrentQueue<Message> _outboundMessageQueue = new ConcurrentQueue<Message>();
+        private static ConcurrentQueue<ChatMessage> _inboundChatMessageQueue = new ConcurrentQueue<ChatMessage>();
 
         private static Dictionary<N3MessageType, Action<N3Message>> n3MsgCallbacks = new Dictionary<N3MessageType, Action<N3Message>>
         {
@@ -74,6 +77,19 @@ namespace AOSharp.Core
             while (_outboundMessageQueue.TryDequeue(out Message msg))
                 if (msg.Header.PacketType == PacketType.N3Message)
                     OnOutboundN3Message((N3Message)msg.Body);
+
+            while (_inboundChatMessageQueue.TryDequeue(out ChatMessage msg))
+                ChatMessageReceived?.Invoke(null, msg.Body);
+        }
+
+        private static void OnChatMessage(byte[] packet)
+        {
+            ChatMessage msg = ChatPacketFactory.Disassemble(packet);
+
+            if (msg == null)
+                return;
+
+            _inboundChatMessageQueue.Enqueue(msg);
         }
 
         private static void OnInboundMessage(byte[] datablock)

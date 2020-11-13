@@ -4,7 +4,7 @@
     {
         TeamRequest = 0x0000001A,
         CastNano = 0x00000013,
-        TeamRequestReply = 0x00000015,
+        TeamRequestReply = 0x0000001C,
         TeamKickMember = 0x00000016,
         LeaveTeam = 0x00000020,
         AcceptTeamRequest = 0x00000023,
@@ -44,5 +44,13 @@
         TeamRequestInvite = 0x0000001A,
         Split = 0x00000022,
         DuelUpdate = 0x00000106,
+        TeamRequestResponse = 0x00000023,
+        SplitItem = 0x00000034,
+        QueuePerk = 0x00000050,
+        UsePerk = 0x000000B3,
+        PerkAvailable = 0x000000CE,
+        PerkUnavailable = 0x000000CF,
+        JoinBattlestationQueue = 0x000000FD,
+        LeaveBattlestationQueue = 0x000000FF
     }
 }

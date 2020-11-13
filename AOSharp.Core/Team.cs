@@ -4,6 +4,7 @@ using System.Linq;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
+using SmokeLounge.AOtomation.Messaging.GameData;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -38,7 +39,7 @@ namespace AOSharp.Core
         {
             Network.Send(new CharacterActionMessage()
             {
-                Action = CharacterActionType.TeamKick,
+                Action = CharacterActionType.TeamKickMember,
                 Target = player
             });
         }

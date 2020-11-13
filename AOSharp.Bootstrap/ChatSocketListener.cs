@@ -20,32 +20,40 @@ namespace AOSharp.Bootstrap
         internal List<byte[]> ProcessBuffer(byte[] frameBuffer)
         {
             List<byte[]> packets = new List<byte[]>();
-            _buffer = _buffer.Concat(frameBuffer).ToArray();
 
-            while (_buffer.Length > 0)
+            try
             {
+                _buffer = _buffer.Concat(frameBuffer).ToArray();
 
-                if (_buffer.Length < 4)
+                while (_buffer.Length > 0)
                 {
-                    Log.Error($"ChatSocketListener buffer.Length ({_buffer.Length}) < 4!");
-                    throw new Exception(); //Cause AO to crash
+
+                    if (_buffer.Length < 4)
+                    {
+                        Log.Error($"ChatSocketListener buffer.Length ({_buffer.Length}) < 4!");
+                        throw new Exception(); //Cause AO to crash
+                    }
+
+                    ushort length = (ushort)(((ushort)(_buffer[2] << 8) + _buffer[3]) + 4);
+
+                    if (_buffer.Length < length)
+                        return packets;
+
+                    packets.Add(_buffer.Take(length).ToArray());
+                    _buffer = _buffer.Skip(length).ToArray();
                 }
 
-                ushort length = (ushort)(((ushort)(_buffer[2] << 8) + _buffer[3]) + 4);
+                foreach (byte[] packet in packets)
+                {
+                    Log.Information($"ChatPacket({(ChatPacketType)((short)(packet[0] << 8) + packet[1])}): {BitConverter.ToString(packet).Replace("-", "")}");
+                }
 
-                if (_buffer.Length < length)
-                    return packets;
-
-                packets.Add(_buffer.Take(length).ToArray());
-                _buffer = _buffer.Skip(length).ToArray();
+                Log.Information($"Remaining buffer {_buffer.Length}");
             }
-
-            foreach(byte[] packet in packets)
+            catch (Exception e)
             {
-                Log.Debug($"ChatPacket({(ChatPacketType)((short)(_buffer[0] << 8) + _buffer[1])}): {BitConverter.ToString(packet).Replace("-", "")}");
+                Log.Error(e.Message);
             }
-
-            Log.Debug($"Remaining buffer {_buffer.Length}"); 
 
             return packets;
         }

@@ -15,6 +15,8 @@ namespace AOSharp.Bootstrap
         public DynelSpawnedDelegate DynelSpawned;
         public delegate void DataBlockToMessageDelegate(byte[] datablock);
         public DataBlockToMessageDelegate DataBlockToMessage;
+        public delegate void ChatRecvDelegate(byte[] packet);
+        public ChatRecvDelegate ChatRecv;
         public delegate void SentPacketDelegate(byte[] datablock);
         public SentPacketDelegate SentPacket;
         public delegate void UpdateDelegate(float deltaTime);
@@ -57,6 +59,11 @@ namespace AOSharp.Bootstrap
         public void DataBlockToMessage(byte[] datablock)
         {
             _coreDelegates.DataBlockToMessage?.Invoke(datablock);
+        }
+
+        public void ChatRecv(byte[] packet)
+        {
+            _coreDelegates.ChatRecv?.Invoke(packet);
         }
 
         public void SentPacket(byte[] datablock)
@@ -173,6 +180,7 @@ namespace AOSharp.Bootstrap
                 OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionPanel", "OnOptionPanelActivated"),
                 ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
                 DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnInboundMessage"),
+                ChatRecv = CreateDelegate<CoreDelegates.ChatRecvDelegate>(assembly, "AOSharp.Core.Network", "OnChatMessage"),
                 SentPacket = CreateDelegate<CoreDelegates.SentPacketDelegate>(assembly, "AOSharp.Core.Network", "OnOutboundMessage"),
                 JoinTeamRequest = CreateDelegate<CoreDelegates.JoinTeamRequestDelegate>(assembly, "AOSharp.Core.Team", "OnJoinTeamRequest"),
                 ClientPerformedSpecialAction = CreateDelegate<CoreDelegates.ClientPerformedSpecialActionDelegate>(assembly, "AOSharp.Core.Perk", "OnClientPerformedSpecialAction"),

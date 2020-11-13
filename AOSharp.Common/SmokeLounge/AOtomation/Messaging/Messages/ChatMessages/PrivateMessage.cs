@@ -14,6 +14,7 @@
 
 namespace SmokeLounge.AOtomation.Messaging.Messages
 {
+    using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
     [AoContract((int)ChatPacketType.PrivateMessage)]
@@ -30,5 +31,17 @@ namespace SmokeLounge.AOtomation.Messaging.Messages
         }
 
         #endregion
+
+        [AoMember(0)]
+        public uint Sender { get; set; }
+
+        [AoMember(1, SerializeSize = ArraySizeType.Int16)]
+        public string Text { get; set; }
+
+        [AoMember(2)]
+        public short Unk1 { get; set; }
+
+        [AoMember(3)]
+        public byte Unk2 { get; set; }
     }
 }
