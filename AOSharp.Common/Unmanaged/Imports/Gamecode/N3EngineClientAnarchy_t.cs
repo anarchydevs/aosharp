@@ -146,6 +146,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffTotalTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
 
+        //RemoveBuff
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_RemoveBuff@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe bool RemoveBuff(IntPtr pThis, ref Identity identity);
+
         //CreateDummyItemID
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CreateDummyItemID@n3EngineClientAnarchy_t@@QBE_NAAVIdentity_t@@ABVACGItem_t@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]

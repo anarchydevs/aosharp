@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 
 namespace AOSharp.Common.Unmanaged.Imports
@@ -8,5 +9,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public unsafe delegate int AppendSystemTextDelegate(int unk, [MarshalAs(UnmanagedType.LPStr)] string message, ChatColor color);
         public static AppendSystemTextDelegate AppendSystemText;
+
+        [return: MarshalAs(UnmanagedType.U1)]
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+        public unsafe delegate bool IsInLineOfSightDelegate(IntPtr pThis, IntPtr pTarget);
+        public static IsInLineOfSightDelegate IsInLineOfSight;
     }
 }

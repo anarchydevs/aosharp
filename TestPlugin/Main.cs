@@ -204,6 +204,10 @@ namespace TestPlugin
                     //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
                     //DevExtras.Test(chatWindow);
 
+                    if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
+                        testBuff.Remove();
+
+                    /*
                     if (DynelManager.LocalPlayer.FightingTarget != null)
                     {
                         chatWindow.WriteLine(DynelManager.LocalPlayer.GetLogicalRangeToTarget(DynelManager.LocalPlayer.FightingTarget).ToString());
@@ -214,7 +218,7 @@ namespace TestPlugin
                             chatWindow.WriteLine(perk.GetStat(Stat.AttackRange).ToString());
                             chatWindow.WriteLine(perk.IsInRange(DynelManager.LocalPlayer.FightingTarget).ToString());
                         }
-                    }
+                    }*/
                 });
 
                 _ipcChannel = new IPCChannel(1);

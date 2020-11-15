@@ -76,6 +76,11 @@ namespace AOSharp.Core
 
             return new SimpleChar(pFightingTarget);
         }
+
+        public bool IsInLightOfSight()
+        {
+            return GamecodeUnk.IsInLineOfSight(DynelManager.LocalPlayer.Pointer, Pointer);
+        }
         
         public bool IsFacing(SimpleChar target)
         {

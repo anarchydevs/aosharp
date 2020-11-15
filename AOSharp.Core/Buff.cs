@@ -54,5 +54,16 @@ namespace AOSharp.Core
                 return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, pIdentity, pOwner) / 100f;
             }
         }
+
+        public bool Remove()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return false;
+
+            Identity identity = Identity;
+            return N3EngineClientAnarchy_t.RemoveBuff(pEngine, ref identity);
+        }
     }
 }
