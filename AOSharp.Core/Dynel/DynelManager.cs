@@ -74,6 +74,9 @@ namespace AOSharp.Core
 
         public static bool IsValid(Dynel dynel)
         {
+            if (dynel == null)
+                return false;
+
             return AllDynels.Any(x => x.Pointer == dynel.Pointer);
         }
 

@@ -106,6 +106,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Tower.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerField.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfoPacket.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MarketSendSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\VendingMachineSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MarketSendMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommand.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommandMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\StopFightMessage.cs" />

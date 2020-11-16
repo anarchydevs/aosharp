@@ -266,10 +266,10 @@ namespace TestPlugin
         private void Network_PacketReceived(object s, byte[] packet)
         {
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
-            //Chat.WriteLine($"{msgType}");
+            Chat.WriteLine($"{msgType}");
 
-            //if (msgType == N3MessageType.Feedback)
-            //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+            if (msgType == N3MessageType.FollowTarget)
+                Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)
             {
@@ -488,13 +488,34 @@ namespace TestPlugin
                     SpecialAttack.FastAttack.UseOn(DynelManager.LocalPlayer.FightingTarget);
             }
 
+            foreach(SimpleChar character in DynelManager.Characters)
+            {
+                if (character.IsPathing)
+                {
+                    Debug.DrawLine(character.Position, character.PathingDestination, DebuggingColor.LightBlue);
+                    Debug.DrawSphere(character.PathingDestination, 0.2f, DebuggingColor.LightBlue);
+                }
+            }
+
+            Vector3 rayOrigin = DynelManager.LocalPlayer.Position;
+            Vector3 rayTarget = DynelManager.LocalPlayer.Position;
+            rayTarget.Y = 0;
+
+            if (Playfield.Raycast(rayOrigin, rayTarget, out Vector3 hitPos, out Vector3 hitNormal))
+            {
+                Debug.DrawLine(rayOrigin, rayTarget, DebuggingColor.White);
+                Debug.DrawLine(hitPos, hitPos+hitNormal, DebuggingColor.Yellow);
+                Debug.DrawSphere(hitPos, 0.2f, DebuggingColor.White);
+                Debug.DrawSphere(hitPos + hitNormal, 0.2f, DebuggingColor.Yellow);
+            }
+
             /*
             if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
             {
                 derp.Use();
             }*/
 
-            if (Time.NormalTime > lastTrigger + 2)
+            if (Time.NormalTime > lastTrigger + 0.2)
             {
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
@@ -507,8 +528,6 @@ namespace TestPlugin
                         testSpell.Cast();
                 }
                 */
-
-
 
                 /*
                 Perk testPerk;

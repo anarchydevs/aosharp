@@ -83,14 +83,6 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
         }
 
-        public float GetLogicalRangeToTarget(SimpleChar target)
-        {
-            float hisRadius = (target.GetStat(Stat.Scale) * target.GetStat(Stat.CharRadius)) / 100f;
-            float myRadius = (GetStat(Stat.Scale) * GetStat(Stat.CharRadius)) / 100f;
-            float ourPhysicalDist = Vector3.Distance(Position, target.Position);
-            return ourPhysicalDist - hisRadius - myRadius;
-        }
-
         private Dictionary<Stat, Cooldown> GetCooldowns()
         {
             Dictionary<Stat, Cooldown> cooldowns = new Dictionary<Stat, Cooldown>();

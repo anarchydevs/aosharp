@@ -214,7 +214,7 @@ namespace AOSharp.Bootstrap
         {
             int bytesRead = Ws2_32.recv(socket, buffer, len, flags);
 
-            if (socket == ChatSocketListener.Socket)
+            if (_pluginProxy != null && socket == ChatSocketListener.Socket)
             {
                 byte[] trimmedBuffer = new byte[bytesRead];
                 Marshal.Copy(buffer, trimmedBuffer, 0, bytesRead);
@@ -242,7 +242,7 @@ namespace AOSharp.Bootstrap
         public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
         {
             IntPtr result;
-            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk)
+            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
                 _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;
@@ -250,7 +250,10 @@ namespace AOSharp.Bootstrap
 
         public unsafe void HandleGroupMessageHook(IntPtr pThis, IntPtr pGroupMessage)
         {
-            bool cancel = _pluginProxy.HandleGroupMessage(pGroupMessage);
+            bool cancel = false;
+            
+            if(_pluginProxy != null)
+                cancel = _pluginProxy.HandleGroupMessage(pGroupMessage);
 
             if (!cancel)
                 ChatGUIModule_t.HandleGroupMessage(pThis, pGroupMessage);
@@ -260,7 +263,10 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.SentPacket(buf);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.SentPacket(buf);
+                }
             }
             catch (Exception) { }
 
@@ -274,7 +280,10 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                _pluginProxy.DataBlockToMessage(dataBlock);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.DataBlockToMessage(dataBlock);
+                }
             }
             catch (Exception) { }
 
@@ -285,7 +294,10 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.ViewDeleted(pView);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.ViewDeleted(pView);
+                }
             }
             catch (Exception) { }
 
@@ -296,7 +308,10 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.JoinTeamRequest(identity, pName);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.JoinTeamRequest(identity, pName);
+                }
             }
             catch (Exception) { }
         }
@@ -307,8 +322,12 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if (specialActionResult)
-                    _pluginProxy.ClientPerformedSpecialAction(identity);
+                if (_pluginProxy != null)
+                {
+                    if (specialActionResult)
+                        _pluginProxy.ClientPerformedSpecialAction(identity);
+                }
+                    
             }
             catch (Exception) { }
 
@@ -321,8 +340,11 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if (unk)
-                    _pluginProxy.OptionPanelActivated(pThis, unk);
+                if (_pluginProxy != null)
+                {
+                    if (unk)
+                        _pluginProxy.OptionPanelActivated(pThis, unk);
+                }
             }
             catch (Exception) { }
         }
@@ -331,8 +353,11 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                if (!*FlowControlModule_t.pIsTeleporting)
-                    _pluginProxy.TeleportStarted();
+                if (_pluginProxy != null)
+                {
+                    if (!*FlowControlModule_t.pIsTeleporting)
+                        _pluginProxy.TeleportStarted();
+                }
             }
             catch (Exception) { }
 
@@ -343,7 +368,8 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.TeleportFailed();
+                if (_pluginProxy != null)
+                    _pluginProxy.TeleportFailed();
             }
             catch (Exception) { }
 
@@ -354,7 +380,8 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.TeleportEnded();
+                if (_pluginProxy != null)
+                    _pluginProxy.TeleportEnded();
             }
             catch (Exception) { }
 
@@ -367,7 +394,8 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                _pluginProxy.PlayfieldInit(id);
+                if (_pluginProxy != null)
+                    _pluginProxy.PlayfieldInit(id);
             }
             catch (Exception) { }
         }
@@ -376,11 +404,14 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.EarlyUpdate(deltaTime);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.EarlyUpdate(deltaTime);
 
-                N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+                    N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
 
-                _pluginProxy.Update(deltaTime);
+                    _pluginProxy.Update(deltaTime);
+                }
             }
             catch (Exception) { }
         }
@@ -392,7 +423,8 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                _pluginProxy.DynelSpawned(pDynel);
+                if (_pluginProxy != null)
+                    _pluginProxy.DynelSpawned(pDynel);
             }
             catch (Exception) { }
         }

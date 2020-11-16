@@ -135,6 +135,18 @@ namespace AOSharp.Core
 
             return N3PlayfieldAnarchy_t.IsShadowlandPF(pPlayfield);
         }
+        public static bool Raycast(Vector3 pos1, Vector3 pos2, out Vector3 hitPos, out Vector3 hitNormal)
+        {
+            hitPos = Vector3.Zero;
+            hitNormal = Vector3.Zero;
+
+            IntPtr pSurface = GetSurface();
+
+            if (pSurface == IntPtr.Zero)
+                return false;
+
+            return TilemapSurface_t.GetLineIntersection(pSurface, ref pos1, ref pos2, ref hitPos, ref hitNormal, 1, IntPtr.Zero);
+        }
 
         public static bool LineOfSight(Vector3 pos1, Vector3 pos2, int zoneCell = 1, bool unknown = false)
         {

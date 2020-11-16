@@ -13,6 +13,8 @@ namespace AOSharp.Core
 
         public DynelFlags Flags => (DynelFlags)GetStat(Stat.Flags);
 
+        public unsafe IntPtr VehiclePointer => new IntPtr((*(MemStruct*)Pointer).Vehicle);
+
         public unsafe Vector3 Position
         {
             get => (*(MemStruct*)Pointer).Vehicle->Position;
@@ -38,6 +40,9 @@ namespace AOSharp.Core
         }
 
         public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
+
+        protected unsafe bool IsPathing => (*(MemStruct*)Pointer).Vehicle->PathingDestination != Vector3.Zero;
+        protected unsafe Vector3 PathingDestination => (*(MemStruct*)Pointer).Vehicle->PathingDestination;
 
         public virtual string Name => GetName();
 

@@ -66,11 +66,17 @@ namespace AOSharp.Core
 
         private static void OnEarlyUpdateInternal (float deltaTime)
         {
+            if (DynelManager.LocalPlayer == null)
+                return;
+
             OnEarlyUpdate?.Invoke(null, deltaTime);
         }
 
         private static void OnUpdateInternal(float deltaTime)
         {
+            if (DynelManager.LocalPlayer == null)
+                return;
+
             DynelManager.Update();
 
             Network.Update();

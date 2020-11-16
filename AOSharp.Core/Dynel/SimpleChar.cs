@@ -57,6 +57,9 @@ namespace AOSharp.Core
 
         public HashSet<SpecialAttack> SpecialAttacks => GetSpecialAttacks();
 
+        public new bool IsPathing => base.IsPathing;
+        public new Vector3 PathingDestination => base.PathingDestination;
+
         internal IntPtr pWeaponHolder => (IntPtr)(*(MemStruct*)Pointer).WeaponHolder;
 
         public SimpleChar(IntPtr pointer) : base(pointer)
@@ -75,6 +78,14 @@ namespace AOSharp.Core
                 return null;
 
             return new SimpleChar(pFightingTarget);
+        }
+
+        public float GetLogicalRangeToTarget(SimpleChar target)
+        {
+            float hisRadius = (target.GetStat(Stat.Scale) * target.GetStat(Stat.CharRadius)) / 100f;
+            float myRadius = (GetStat(Stat.Scale) * GetStat(Stat.CharRadius)) / 100f;
+            float ourPhysicalDist = Vector3.Distance(Position, target.Position);
+            return ourPhysicalDist - hisRadius - myRadius;
         }
 
         public bool IsInLightOfSight()

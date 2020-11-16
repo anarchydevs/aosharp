@@ -87,8 +87,7 @@ namespace AOSharp.Core.Movement
         {
             _paths.Clear();
 
-            if(DynelManager.LocalPlayer.IsMoving)
-                SetMovement(MovementAction.ForwardStop);
+            SetMovement(MovementAction.FullStop);
         }
 
         public virtual void SetDestination(Vector3 pos)
@@ -147,7 +146,11 @@ namespace AOSharp.Core.Movement
 
         public void LookAt(Vector3 pos)
         {
-            DynelManager.LocalPlayer.Rotation = Quaternion.FromTo(DynelManager.LocalPlayer.Position, pos);
+            Vector3 myPos = DynelManager.LocalPlayer.Position;
+            myPos.Y = 0;
+            Vector3 dstPos = pos;
+            dstPos.Y = 0;
+            DynelManager.LocalPlayer.Rotation = Quaternion.FromTo(myPos, dstPos);
         }
 
         protected virtual void OnStuck()
