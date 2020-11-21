@@ -85,11 +85,13 @@ namespace AOSharp.Core.Inventory
 
                 if (pActualItem != IntPtr.Zero)
                 {
+                    try {
                     int lowId = (*(ItemMemStruct*)pActualItem).LowId;
                     int highId = (*(ItemMemStruct*)pActualItem).HighId;
                     int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
                     Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
                     items.Add(new Item(lowId, highId, ql, unqiueIdentity, new Identity(slotType, i)));
+                    } catch { }
                 }
 
                 i++;
@@ -126,12 +128,15 @@ namespace AOSharp.Core.Inventory
 
                 if (pActualItem != IntPtr.Zero)
                 {
-                    int lowId = (*(ItemMemStruct*)pActualItem).LowId;
-                    int highId = (*(ItemMemStruct*)pActualItem).HighId;
-                    int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
-                    Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
-                    Identity slot = *((Identity*)(containerInvList[i] + 0x8));
-                    items.Add(new Item(lowId, highId, ql, unqiueIdentity, slot));
+                    try
+                    {
+                        int lowId = (*(ItemMemStruct*)pActualItem).LowId;
+                        int highId = (*(ItemMemStruct*)pActualItem).HighId;
+                        int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
+                        Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
+                        Identity slot = *((Identity*)(containerInvList[i] + 0x8));
+                        items.Add(new Item(lowId, highId, ql, unqiueIdentity, slot));
+                    } catch {}
                     i++;
                 }
             }
