@@ -9,7 +9,7 @@ namespace AOSharp.Core
     public class Pet : PetBase
     {
         public SimpleChar Character => DynelManager.GetDynel<SimpleChar>(Identity);
-
+        public PetType Type => Character != null ? (PetType)Character.GetStat(Stat.PetType) : PetType.Unknown;
         public Pet(Identity identity) : base(identity)
         {
         }

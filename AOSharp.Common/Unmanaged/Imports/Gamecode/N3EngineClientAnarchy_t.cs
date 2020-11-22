@@ -22,7 +22,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetSkill
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkill@n3EngineClientAnarchy_t@@QBEHABVIdentity_t@@W4Stat_e@GameData@@H0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
+        public static extern int GetSkill(IntPtr pThis, ref Identity dynel, Stat stat, int detail, ref Identity unk);
 
         //IsSecondarySpecialAttackAvailable
         [return: MarshalAs(UnmanagedType.U1)]

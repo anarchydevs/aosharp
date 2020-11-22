@@ -25,7 +25,7 @@ namespace AOSharp.Core
 
         public int RemainingNCU => MaxNCU - CurrentNCU;
 
-        public Pet[] Pets => ((MemStruct*)Pointer)->NpcHolder->GetPets();
+        public Pet[] Pets => GetPets();
 
         public bool IsAttackPending => Time.NormalTime < _nextAttack;
 
@@ -122,6 +122,28 @@ namespace AOSharp.Core
             }
 
             return missions;
+        }
+
+        private Pet[] GetPets()
+        {
+            List<Pet> pets = new List<Pet>();
+            IntPtr pPetWindowModule = PetWindowModule_c.GetInstance();
+
+            if (pPetWindowModule == IntPtr.Zero)
+                return pets.ToArray();
+
+            for (byte i = 1; i < 6; i++)
+            {
+                Identity pet = Identity.None;
+                PetWindowModule_c.GetPetID(pPetWindowModule, ref pet, i);
+
+                if (pet == Identity.None)
+                    continue;
+
+                pets.Add(new Pet(pet));
+            }
+
+            return pets.ToArray();
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

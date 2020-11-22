@@ -22,8 +22,11 @@ namespace AOSharp.Core
             if (pPetUnk == IntPtr.Zero)
                 return petIdentities.ToArray();
 
+            UI.Chat.WriteLine($"PetUnk: {pPetUnk.ToString("X4")}");
+
             foreach (IntPtr pPet in ((StdObjList*)(pPetUnk + 0x4))->ToList())
             {
+                UI.Chat.WriteLine(pPet.ToString("X4"));
                 PetEntry petEntry = (*(PetEntry*)pPet);
 
                 petIdentities.Add(new Pet(petEntry.Identity));

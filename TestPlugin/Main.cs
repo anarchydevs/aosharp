@@ -215,6 +215,7 @@ namespace TestPlugin
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
 
+                    /*
                     if (Targeting.Target == null)
                         Chat.WriteLine("No target");
                     else
@@ -225,6 +226,17 @@ namespace TestPlugin
                         Chat.WriteLine("No target or target isn't a char");
                     else
                         Chat.WriteLine(Targeting.TargetChar.Identity);
+                    */
+
+                    
+                    foreach(Pet pet in DynelManager.LocalPlayer.Pets)
+                    {
+                        Chat.WriteLine(pet.Character != null ? pet.Character.Name : "No pet character found");
+                        Chat.WriteLine(pet.Type);
+                    }
+                    
+
+                    DevExtras.Test();
 
                     //if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
                     //    testBuff.Remove();

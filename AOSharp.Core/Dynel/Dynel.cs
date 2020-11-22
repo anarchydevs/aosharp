@@ -69,9 +69,9 @@ namespace AOSharp.Core
 
             //Copy identity
             Identity identity = Identity;
-            Identity unk = new Identity();
+            Identity junk = new Identity();
 
-            return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, detail, &unk);
+            return N3EngineClientAnarchy_t.GetSkill(pEngine, ref identity, stat, detail, ref junk);
         }
 
         private string GetName()
