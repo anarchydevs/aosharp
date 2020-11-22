@@ -20,7 +20,7 @@ namespace AOSharp.Core.UI
 
         public void WriteLine(object obj, ChatColor color = ChatColor.Gold)
         {
-            WriteLine(obj.ToString(), color);
+            WriteLine((obj == null) ? "null" : obj.ToString(), color);
         }
 
         public void WriteLine(string text, ChatColor color = ChatColor.Gold)

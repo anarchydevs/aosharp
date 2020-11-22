@@ -51,7 +51,7 @@ namespace AOSharp.Core.UI
 
         public static void WriteLine(object obj, ChatColor color = ChatColor.Gold)
         {
-            WriteLine(obj.ToString(), color);
+            WriteLine((obj == null) ? "null" : obj.ToString(), color);
         }
 
         public static void WriteLine(string text, ChatColor color = ChatColor.Gold)

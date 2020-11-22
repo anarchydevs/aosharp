@@ -213,7 +213,18 @@ namespace TestPlugin
                     //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
                     //DevExtras.Test(chatWindow);
 
-                    DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
+                    //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
+
+                    if (Targeting.Target == null)
+                        Chat.WriteLine("No target");
+                    else
+                        Chat.WriteLine(Targeting.Target.Identity);
+
+
+                    if (Targeting.TargetChar == null)
+                        Chat.WriteLine("No target or target isn't a char");
+                    else
+                        Chat.WriteLine(Targeting.TargetChar.Identity);
 
                     //if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
                     //    testBuff.Remove();
@@ -252,7 +263,7 @@ namespace TestPlugin
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
-                Network.N3MessageReceived += Network_N3MessageReceived;
+                //Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
                 //Network.PacketReceived += Network_PacketReceived;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
