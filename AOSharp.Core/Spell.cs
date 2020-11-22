@@ -9,6 +9,7 @@ using AOSharp.Core.Combat;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using AOSharp.Core.GameData;
 using SmokeLounge.AOtomation.Messaging.GameData;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
@@ -84,8 +85,15 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
+            try
+            {
             if (_pendingCast.Spell != null && _pendingCast.Timeout <= Time.NormalTime)
                 _pendingCast.Spell = null;
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (Spell): {e.Message}");
+            }
         }
 
         public static Spell[] GetSpellsForNanoline(Nanoline nanoline)

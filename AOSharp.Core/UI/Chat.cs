@@ -22,9 +22,16 @@ namespace AOSharp.Core.UI
 
         internal static void Update()
         {
-            while (_messageQueue.TryDequeue(out (string text, ChatColor color) msg))
-                GamecodeUnk.AppendSystemText(0, msg.text, msg.color);
-        }
+            try
+            {
+                while (_messageQueue.TryDequeue(out (string text, ChatColor color) msg))
+                    GamecodeUnk.AppendSystemText(0, msg.text, msg.color);
+            }
+            catch (Exception e)
+            {
+                WriteLine($"This shouldn't happen pls report (Chat): {e.Message}");
+            }
+}
 
         private static void OnUnknownCommand(IntPtr pWindow, string command)
         {

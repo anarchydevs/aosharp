@@ -60,6 +60,10 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         [AoMember(0)]
         public Identity Identity { get; set; }
 
+        public PetBase()
+        {
+        }
+
         public PetBase(Identity identity)
         {
             Identity = identity;

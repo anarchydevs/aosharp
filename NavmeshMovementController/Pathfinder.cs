@@ -35,18 +35,19 @@ namespace AOSharp.Pathfinding
             if (NavUtil.Failed(NavmeshQuery.Create(_navMesh, 1000, out _query)))
                 throw new Exception("NavQuery failed");
 
-            _pathCorridor = new PathCorridor(100, 100, _query, _filter);
+            _pathCorridor = new PathCorridor(1000, 1000, _query, _filter);
         }
+
 
         public List<Vector3> GeneratePath(Vector3 start, Vector3 end)
         {
             List<Vector3> finalPath = new List<Vector3>();
 
-            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
-                throw new OriginNotOnNavMeshException(start);
+            if (NavUtil.Failed(GetNavMeshPoint(start, new oVector3(0.5f, 2, 0.5f), out NavmeshPoint origin)) || origin.point == new oVector3())
+                throw new PointNotOnNavMeshException(start);
 
-            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint destination)) || destination.point == new oVector3())
-                throw new DestinationNotOnNavMeshException(end);
+            if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.5f, 2, 0.5f), out NavmeshPoint destination)) || destination.point == new oVector3())
+                throw new PointNotOnNavMeshException(end);
 
             uint[] path = new uint[500];
             int pathCount;
@@ -87,7 +88,7 @@ namespace AOSharp.Pathfinding
             if (NavUtil.Failed(GetNavMeshPoint(end, new oVector3(0.3f, 2, 0.3f), out NavmeshPoint destination)) || destination.point == new oVector3())
                 return null;
 
-            uint[] path = new uint[1000];
+            uint[] path = new uint[250];
             int pathCount;
 
             if (origin.polyRef == destination.polyRef)
@@ -106,9 +107,9 @@ namespace AOSharp.Pathfinding
                 }
                 else if (destination.polyRef != path[pathCount - 1])
                 {
-                    Console.WriteLine("Unable to generate full path: " + status);
+                    //Chat.WriteLine("Unable to generate full path: " + status);
                     //throw new Exception("Unable to generate full path: " + status);
-                    return null;
+                    //return null;
                 }
             }
 
@@ -118,9 +119,10 @@ namespace AOSharp.Pathfinding
             return _pathCorridor;
         }
 
+        /*
         public float GetPathDistance(Vector3 start, Vector3 end)
         {
-            List<Vector3> path = GeneratePath(start, end);
+            List<Vector3> path = GeneratePath(start, end).;
             float distance = 0;
 
             for (int i = 0; i < path.Count - 1; i++)
@@ -130,6 +132,7 @@ namespace AOSharp.Pathfinding
 
             return distance;
         }
+        */
 
         private oVector3[] StraightenPath(oVector3 start, oVector3 end, uint[] path, int pathCount)
         {
@@ -155,7 +158,7 @@ namespace AOSharp.Pathfinding
 
             try
             {
-                stream = new FileStream(filePath, FileMode.Open);
+                stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 NavStatus status = Navmesh.Create((byte[])formatter.Deserialize(stream), out Navmesh navMesh);
                 if (status == NavStatus.Sucess)
                     return new Pathfinder(navMesh);

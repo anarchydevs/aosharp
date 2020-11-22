@@ -130,11 +130,18 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
-            while(_pendingQueue.Count > 0 && _pendingQueue.Peek().Timeout <= Time.NormalTime)
-                _pendingQueue.Dequeue();
+            try
+            {
+                while(_pendingQueue.Count > 0 && _pendingQueue.Peek().Timeout <= Time.NormalTime)
+                    _pendingQueue.Dequeue();
 
-            while (_executingQueue.Count > 0 && _executingQueue.Peek().Timeout <= Time.NormalTime)
-                _executingQueue.Dequeue();
+                while (_executingQueue.Count > 0 && _executingQueue.Peek().Timeout <= Time.NormalTime)
+                    _executingQueue.Dequeue();
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (Perk): {e.Message}");
+            }
         }
 
         internal static void OnPerkFinished(int lowId, int highId, int ql, Identity owner)

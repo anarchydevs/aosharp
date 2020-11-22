@@ -1,7 +1,8 @@
-﻿using System;
-using System.Reflection;
-using AOSharp.Common.GameData;
+﻿using AOSharp.Common.GameData;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace AOSharp.Bootstrap
 {
@@ -50,93 +51,94 @@ namespace AOSharp.Bootstrap
     public class PluginProxy : MarshalByRefObject
     {
         private static CoreDelegates _coreDelegates;
+        public Queue<PluginInitialization> _pendingInitializationQueue = new Queue<PluginInitialization>();
 
         public void UnknownChatCommand(IntPtr pWindow, string command)
         {
-            _coreDelegates.UnknownChatCommand?.Invoke(pWindow, command);
+            _coreDelegates?.UnknownChatCommand?.Invoke(pWindow, command);
         }
 
         public void DataBlockToMessage(byte[] datablock)
         {
-            _coreDelegates.DataBlockToMessage?.Invoke(datablock);
+            _coreDelegates?.DataBlockToMessage?.Invoke(datablock);
         }
 
         public void ChatRecv(byte[] packet)
         {
-            _coreDelegates.ChatRecv?.Invoke(packet);
+            _coreDelegates?.ChatRecv?.Invoke(packet);
         }
 
         public void SentPacket(byte[] datablock)
         {
-            _coreDelegates.SentPacket?.Invoke(datablock);
+            _coreDelegates?.SentPacket?.Invoke(datablock);
         }
 
         public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName)
         {
-            _coreDelegates.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
+            _coreDelegates?.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
         }
 
         public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
         {
             AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*)nanoIdentity, *(Identity*)targetIdentity);
-            _coreDelegates.AttemptingSpellCast?.Invoke(eventArgs);
+            _coreDelegates?.AttemptingSpellCast?.Invoke(eventArgs);
             return eventArgs.Blocked;
         }
 
         public unsafe void ClientPerformedSpecialAction(IntPtr identity)
         {
-            _coreDelegates.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
+            _coreDelegates?.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
         }
 
         public void DynelSpawned(IntPtr pDynel)
         {
-            _coreDelegates.DynelSpawned?.Invoke(pDynel);
+            _coreDelegates?.DynelSpawned?.Invoke(pDynel);
         }
 
         public void Update(float deltaTime)
         {
-            _coreDelegates.Update?.Invoke(deltaTime);
+            _coreDelegates?.Update?.Invoke(deltaTime);
         }
 
         public void EarlyUpdate(float deltaTime)
         {
-            _coreDelegates.EarlyUpdate?.Invoke(deltaTime);
+            _coreDelegates?.EarlyUpdate?.Invoke(deltaTime);
         }
 
         public void TeleportStarted()
         {
-            _coreDelegates.TeleportStarted?.Invoke();
+            _coreDelegates?.TeleportStarted?.Invoke();
         }
 
         public unsafe void TeleportEnded()
         {
-            _coreDelegates.TeleportEnded?.Invoke();
+            _coreDelegates?.TeleportEnded?.Invoke();
         }
 
         public void TeleportFailed()
         {
-            _coreDelegates.TeleportFailed?.Invoke();
+            _coreDelegates?.TeleportFailed?.Invoke();
         }
 
         public void PlayfieldInit(uint id)
         {
-            _coreDelegates.PlayfieldInit?.Invoke(id);
+            _coreDelegates?.PlayfieldInit?.Invoke(id);
         }
 
         public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
         {
-            _coreDelegates.OptionPanelActivated?.Invoke(pOptionPanelModule, unk);
+            _coreDelegates?.OptionPanelActivated?.Invoke(pOptionPanelModule, unk);
         }
 
         public void ViewDeleted(IntPtr pView)
         {
-            _coreDelegates.ViewDeleted?.Invoke(pView);
+            _coreDelegates?.ViewDeleted?.Invoke(pView);
         }
 
         public bool HandleGroupMessage(IntPtr pGroupMessage)
         {
             GroupMessageEventArgs eventArgs = new GroupMessageEventArgs(new GroupMessage(pGroupMessage));
-            _coreDelegates.HandleGroupMessage?.Invoke(eventArgs);
+            _coreDelegates?.HandleGroupMessage?.Invoke(eventArgs);
             return eventArgs.Cancel;
         }
 
@@ -241,12 +243,42 @@ namespace AOSharp.Bootstrap
                     if (instance == null) //Is this even possible?
                         continue;
 
-                    method.Invoke(instance, new object[] { Path.GetDirectoryName(assemblyPath) });
+                    PluginInitialization pii = new PluginInitialization(instance, method, Path.GetDirectoryName(assemblyPath));
+                    _pendingInitializationQueue.Enqueue(pii);
                 }
             }
             catch (Exception ex)
             {
             }
+        }
+
+        public void RunPendingPluginInitializations()
+        {
+            while (_pendingInitializationQueue.Count > 0)
+                _pendingInitializationQueue.Dequeue().Invoke();
+        }
+    }
+
+    public class PluginInitialization
+    {
+        private object _instance;
+        private MethodInfo _method;
+        private string _assemblyDir;
+
+        public PluginInitialization(object instance, MethodInfo method, string assemblyDir)
+        {
+            _instance = instance;
+            _method = method;
+            _assemblyDir = assemblyDir;
+        }
+
+        public void Invoke()
+        {
+            try
+            {
+                _method.Invoke(_instance, new object[] { _assemblyDir });
+            }
+            catch { }
         }
     }
 }

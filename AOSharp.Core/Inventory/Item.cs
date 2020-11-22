@@ -1,5 +1,6 @@
 ﻿using AOSharp.Common.GameData;
 using AOSharp.Core.Combat;
+using AOSharp.Core.UI;
 using SmokeLounge.AOtomation.Messaging.GameData;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System;
@@ -94,9 +95,16 @@ namespace AOSharp.Core.Inventory
 
         internal static void Update()
         {
-            if (_pendingUse.Slot != Identity.None && _pendingUse.Timeout <= Time.NormalTime)
-                _pendingUse.Slot = Identity.None;
-        }
+            try
+            {
+                if (_pendingUse.Slot != Identity.None && _pendingUse.Timeout <= Time.NormalTime)
+                    _pendingUse.Slot = Identity.None;
+            }
+            catch (Exception e) 
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (Item): {e.Message}");
+            }
+}
 
         internal static void OnUsingItem(Identity slot)
         {

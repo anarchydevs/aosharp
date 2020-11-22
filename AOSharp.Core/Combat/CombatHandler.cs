@@ -39,7 +39,14 @@ namespace AOSharp.Core.Combat
 
         internal void Update(float deltaTime)
         {
-            OnUpdate(deltaTime);
+            //try
+            //{
+                OnUpdate(deltaTime);
+            //}
+            //catch (Exception e) 
+            //{
+            //    Chat.WriteLine($"This shouldn't happen pls report (CombatHandler): {e.Message}");
+            //}
         }
 
         protected virtual void OnUpdate(float deltaTime)

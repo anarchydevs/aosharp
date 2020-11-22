@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using AOSharp.Core.IPC;
-using ProtoBuf;
 using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 using TestPlugin.IPCMessages;
 

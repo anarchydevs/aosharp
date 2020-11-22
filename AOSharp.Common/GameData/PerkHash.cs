@@ -204,6 +204,10 @@
         Fuzz = 0x4358575A,
         FireFrenzy = 0x46524652,
 
+        //Champion of Light Artillery
+        Implode = 0x4D504C4F,
+        Collapser = 0x434F4C4C,
+
         //Soldier LE
         FuriousAmmunition = 0x494E414D,
         GrazeJugularVein = 0x52544D4F,
@@ -218,6 +222,11 @@
         //LoopHole
         Antitrust = 0x4E544954,
         Puppeteer = 0x50555050,
+
+        //Shotgun Mastery
+        PointBlank = 0x4A425742,
+        EasyShot = 0x45415348,
+        LegShot = 0x4C475348,
 
         //Pistol Mastery
         Deadeye = 0x4E4F534D,

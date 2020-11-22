@@ -39,48 +39,58 @@ namespace AOSharp.Core.Movement
 
         public virtual void Update()
         {
-            while (_movementActionQueue.TryDequeue(out MovementAction action))
-                ChangeMovement(action);
-
-            if (_paths.Count == 0)
-                return;
-
-            if (!DynelManager.LocalPlayer.IsMoving)
-                SetMovement(MovementAction.ForwardStart);
-
-            Vector3 waypoint;
-            if (!_paths.Peek().GetNextWaypoint(out waypoint))
+            try
             {
-                Path path = _paths.Dequeue();
-                path.DestinationReachedCallback?.Invoke();
+                while (_movementActionQueue.TryDequeue(out MovementAction action))
+                    ChangeMovement(action);
 
-                if (_paths.Count == 0 && path.StopAtDest)
-                    SetMovement(MovementAction.ForwardStop);
+                if (_paths.Count == 0)
+                    return;
 
-                return;
+                if (!DynelManager.LocalPlayer.IsMoving)
+                    SetMovement(MovementAction.ForwardStart);
+
+                if (!_paths.Peek().Initialized)
+                    _paths.Peek().OnPathStart();
+
+                Vector3 waypoint;
+                if (!_paths.Peek().GetNextWaypoint(out waypoint))
+                {
+                    Path path = _paths.Dequeue();
+                    path.OnPathFinished();
+
+                    if (_paths.Count == 0 && path.StopAtDest)
+                        SetMovement(MovementAction.ForwardStop);
+
+                    return;
+                }
+
+                if (Time.NormalTime > _nextUstuckCheck)
+                {
+                    float currentDist = DynelManager.LocalPlayer.Position.DistanceFrom(waypoint);
+
+                    if (_lastDist - currentDist <= UnstuckThreshold)
+                        OnStuck();
+
+                    _lastDist = currentDist;
+                    _nextUstuckCheck = Time.NormalTime + UnstuckInterval;
+                }
+
+                LookAt(waypoint);
+
+                if (Time.NormalTime > _nextUpdate)
+                {
+                    SetMovement(MovementAction.Update);
+                    _nextUpdate = Time.NormalTime + UpdateInterval;
+                }
+
+                if (_drawPath)
+                    _paths.Peek().Draw();
             }
-
-            if (Time.NormalTime > _nextUstuckCheck)
+            catch (Exception e)
             {
-                float currentDist = DynelManager.LocalPlayer.Position.DistanceFrom(waypoint);
-
-                if (_lastDist - currentDist <= UnstuckThreshold)
-                    OnStuck();
-
-                _lastDist = currentDist;
-                _nextUstuckCheck = Time.NormalTime + UnstuckInterval;
+                Chat.WriteLine($"This shouldn't happen pls report (MovementController): {e.Message}");
             }
-
-            LookAt(waypoint);
-
-            if (Time.NormalTime > _nextUpdate)
-            {
-                SetMovement(MovementAction.Update);
-                _nextUpdate = Time.NormalTime + UpdateInterval;
-            }
-
-            if (_drawPath)
-                _paths.Peek().Draw();
         }
 
         public void Halt()
@@ -190,6 +200,7 @@ namespace AOSharp.Core.Movement
         public float NodeReachedDist = 1;
         public float DestinationReachedDist = 1;
         public bool StopAtDest = true;
+        public bool Initialized = false;
         protected Queue<Vector3> _waypoints = new Queue<Vector3>();
         public Action DestinationReachedCallback;
 
@@ -202,6 +213,17 @@ namespace AOSharp.Core.Movement
         {
             SetWaypoints(waypoints);
         }
+
+        public virtual void OnPathStart()
+        {
+            Initialized = true;
+        }
+
+        public virtual void OnPathFinished()
+        {
+            DestinationReachedCallback?.Invoke();
+        }
+
 
         protected void SetWaypoints(List<Vector3> waypoints)
         {

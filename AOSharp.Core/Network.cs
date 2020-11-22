@@ -64,22 +64,29 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
-            while (_rawInboundPacketQueue.TryDequeue(out byte[] packet))
-                PacketReceived?.Invoke(null, packet);
+            try
+            {
+                while (_rawInboundPacketQueue.TryDequeue(out byte[] packet))
+                    PacketReceived?.Invoke(null, packet);
 
-            while (_inboundMessageQueue.TryDequeue(out Message msg))
-                if (msg.Header.PacketType == PacketType.N3Message)
-                    OnInboundN3Message((N3Message)msg.Body);
+                while (_inboundMessageQueue.TryDequeue(out Message msg))
+                    if (msg.Header.PacketType == PacketType.N3Message)
+                        OnInboundN3Message((N3Message)msg.Body);
 
-            while (_rawOutboundPacketQueue.TryDequeue(out byte[] packet))
-                PacketSent?.Invoke(null, packet);
+                while (_rawOutboundPacketQueue.TryDequeue(out byte[] packet))
+                    PacketSent?.Invoke(null, packet);
 
-            while (_outboundMessageQueue.TryDequeue(out Message msg))
-                if (msg.Header.PacketType == PacketType.N3Message)
-                    OnOutboundN3Message((N3Message)msg.Body);
+                while (_outboundMessageQueue.TryDequeue(out Message msg))
+                    if (msg.Header.PacketType == PacketType.N3Message)
+                        OnOutboundN3Message((N3Message)msg.Body);
 
-            while (_inboundChatMessageQueue.TryDequeue(out ChatMessage msg))
-                ChatMessageReceived?.Invoke(null, msg.Body);
+                while (_inboundChatMessageQueue.TryDequeue(out ChatMessage msg))
+                    ChatMessageReceived?.Invoke(null, msg.Body);
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (Network): {e.Message}");
+            }
         }
 
         private static void OnChatMessage(byte[] packet)

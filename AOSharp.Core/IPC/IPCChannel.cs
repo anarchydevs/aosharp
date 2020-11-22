@@ -57,8 +57,15 @@ namespace AOSharp.Core.IPC
 
         internal static void Update()
         {
-            foreach (IPCChannel ipcChannel in _ipcChannels)
-                ipcChannel.ProcessQueue();
+            try
+            {
+                foreach (IPCChannel ipcChannel in _ipcChannels)
+                    ipcChannel.ProcessQueue();
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (IPC): {e.Message}");
+            }
         }
 
         private void ProcessQueue()

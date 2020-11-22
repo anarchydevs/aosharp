@@ -406,6 +406,8 @@ namespace AOSharp.Bootstrap
             {
                 if (_pluginProxy != null)
                 {
+                    _pluginProxy.RunPendingPluginInitializations();
+
                     _pluginProxy.EarlyUpdate(deltaTime);
 
                     N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);

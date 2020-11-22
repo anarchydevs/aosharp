@@ -39,6 +39,8 @@ namespace AOSharp.Core
             set => (*(MemStruct*)Pointer).Vehicle->Runspeed = value;
         }
 
+        public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
+
         public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
         protected unsafe bool IsPathing => (*(MemStruct*)Pointer).Vehicle->PathingDestination != Vector3.Zero;
@@ -46,7 +48,7 @@ namespace AOSharp.Core
 
         public virtual string Name => GetName();
 
-        public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
+        public bool IsValid => DynelManager.IsValid(this);
 
         public Dynel(IntPtr pointer)
         {

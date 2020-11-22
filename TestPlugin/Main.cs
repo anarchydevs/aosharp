@@ -89,13 +89,13 @@ namespace TestPlugin
                 }
                 */
 
-                /*
+                
                 foreach(Perk perk in Perk.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
-                */
+                
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -199,13 +199,24 @@ namespace TestPlugin
                 //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
 
+                Chat.RegisterCommand("split", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    if (param.Length < 2)
+                        return;
+
+                    if (Inventory.Find(int.Parse(param[0]), out Item item))
+                        item.Split(int.Parse(param[1]));
+                });
+
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
                     //DevExtras.Test(chatWindow);
 
-                    if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
-                        testBuff.Remove();
+                    DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
+
+                    //if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
+                    //    testBuff.Remove();
 
                     /*
                     if (DynelManager.LocalPlayer.FightingTarget != null)
@@ -241,7 +252,7 @@ namespace TestPlugin
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
-                //Network.N3MessageReceived += Network_N3MessageReceived;
+                Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
                 //Network.PacketReceived += Network_PacketReceived;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
@@ -386,7 +397,7 @@ namespace TestPlugin
 
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
-            //Chat.WriteLine($"{n3Msg.N3MessageType}");
+            Chat.WriteLine($"{n3Msg.N3MessageType}");
 
             
             if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)

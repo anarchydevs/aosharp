@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
@@ -25,10 +26,17 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
-            while (_queuedDynelSpawns.Count > 0)
+            try
             {
-                Dynel dynel = _queuedDynelSpawns.Dequeue();
-                DynelSpawned?.Invoke(null, dynel);
+                while (_queuedDynelSpawns.Count > 0)
+                {
+                    Dynel dynel = _queuedDynelSpawns.Dequeue();
+                    DynelSpawned?.Invoke(null, dynel);
+                }
+            }
+            catch (Exception e) 
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (DynelManager): {e.Message}");
             }
         }
 
@@ -77,7 +85,7 @@ namespace AOSharp.Core
             if (dynel == null)
                 return false;
 
-            return AllDynels.Any(x => x.Pointer == dynel.Pointer);
+            return AllDynels.Any(x => x.Pointer == dynel.Pointer && x.Identity == dynel.Identity && dynel.VehiclePointer != IntPtr.Zero);
         }
 
         private static LocalPlayer GetLocalPlayer()
@@ -89,13 +97,12 @@ namespace AOSharp.Core
 
             IntPtr pLocalPlayer = N3EngineClient_t.GetClientControlDynel(pEngine);
 
-
             return pLocalPlayer == IntPtr.Zero ? null : new LocalPlayer(pLocalPlayer);
         }
 
         private static List<Dynel> GetDynels()
         {
-            return Playfield.GetPlayfieldDynels().Select(pDynel => new Dynel(pDynel)).ToList();
+            return Playfield.GetPlayfieldDynels().Select(pDynel => new Dynel(pDynel)).Where(x => x.VehiclePointer != IntPtr.Zero).ToList();
         }
 
         internal static void OnCharInPlay(Identity identity)

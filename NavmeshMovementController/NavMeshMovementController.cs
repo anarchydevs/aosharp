@@ -2,38 +2,51 @@
 using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System;
 using Path = AOSharp.Core.Movement.Path;
+using oVector3 = org.critterai.Vector3;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using org.critterai.nav;
+using AOSharp.Core.UI;
+using NavmeshMovementController;
 
 namespace AOSharp.Pathfinding
 {
     public class NavMeshMovementController : MovementController
     {
-        private const float PathUpdateInterval = 2f;
+        private const float PathUpdateInterval = 1f;
 
         private Pathfinder _pathfinder = null;
-        private readonly string _navMeshFolderPath;
+        protected readonly string _navMeshFolderPath;
         private double _nextPathUpdate = 0;
 
         public NavMeshMovementController(string navMeshFolderPath, bool drawPath = false) : base(drawPath)
         {
             _navMeshFolderPath = navMeshFolderPath;
-            LoadPather((uint)Playfield.ModelIdentity.Instance);
+            LoadPather();
 
             Game.PlayfieldInit += OnPlayfieldInit;
         }
 
         public override void Update()
         {
-            if (IsNavigating && _paths.Peek() is NavMeshPath path && Time.NormalTime > _nextPathUpdate)
+            if (IsNavigating && _paths.Peek() is NavMeshPath path && path.Initialized && Time.NormalTime > _nextPathUpdate)
             {
-                path.UpdatePath(_pathfinder);
+                path.UpdatePath();
                 _nextPathUpdate = Time.NormalTime + PathUpdateInterval;
             }
 
             base.Update();
+        }
+
+        public void Test()
+        {
+            if (NavUtil.Failed(_pathfinder.GetNavMeshPoint(new Vector3(149.2292, 0.4225993, 206.8754), new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
+                Chat.WriteLine("Failed to find origin");
+            else
+                Chat.WriteLine($"Found origin at {origin.point}");
         }
 
         public void SetNavMeshDestination(Vector3 destination)
@@ -54,7 +67,7 @@ namespace AOSharp.Pathfinding
 
         public bool AppendNavMeshDestination(Vector3 destination, out NavMeshPath path)
         {
-            path = new NavMeshPath(destination);
+            path = new NavMeshPath(_pathfinder, destination);
 
             if (_pathfinder == null)
                 return false;
@@ -62,39 +75,84 @@ namespace AOSharp.Pathfinding
             if (IsNavigating && _paths.Peek() is NavMeshPath navPath && navPath.Destination == destination)
                 return false;
 
-            path.UpdatePath(_pathfinder);
             base.AppendPath(path);
             return true;
         }
 
         private void OnPlayfieldInit(object s, uint id)
         {
-            LoadPather(id);
+            LoadPather();
         }
 
-        private void LoadPather(uint id)
+        protected virtual bool LoadPather()
         {
             string navFile = $"{_navMeshFolderPath}\\{Playfield.ModelIdentity.Instance}.navmesh";
-            if (!File.Exists(navFile))
-                throw new FileNotFoundException($"Unable to find navmesh file: {navFile}");
 
-            _pathfinder = Pathfinder.Create(navFile);
+            if (!File.Exists(navFile))
+                return false;
+
+            try
+            {
+                _pathfinder = Pathfinder.Create(navFile);
+            } 
+            catch(Exception e)
+            {
+                Chat.WriteLine(e.Message);
+            }
+
+            return true;
         }
     }
 
     public class NavMeshPath : Path
     {
+        private Pathfinder _pathfinder;
+        private PathCorridor _pathCorridor;
         public readonly Vector3 Destination;
 
-        public NavMeshPath(Vector3 dstPos) : base(new List<Vector3>())
+        public NavMeshPath(Pathfinder pathfinder, Vector3 dstPos) : base(new List<Vector3>())
         {
+            _pathfinder = pathfinder;
             Destination = dstPos;
         }
 
-        internal void UpdatePath(Pathfinder pathfinder)
+        public override void OnPathStart()
         {
-            List<Vector3> waypoints = pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, Destination);
-            base.SetWaypoints(waypoints);
+            UpdatePath();
+
+            base.OnPathStart();
+        }
+
+        public override void OnPathFinished()
+        {
+            base.OnPathFinished();
+        }
+
+        internal void UpdatePath()
+        {
+            /*
+            List<Vector3> waypoints = new List<Vector3>();
+            _pathCorridor.MovePosition(DynelManager.LocalPlayer.Position.ToCAIVector3());
+
+            if (_pathCorridor == null || _pathCorridor.Corners.cornerCount == 0)
+            {
+                base.SetWaypoints(new List<Vector3>());
+                return;
+            }
+
+            foreach (oVector3 wp in _pathCorridor.Corners.verts.Take(_pathCorridor.Corners.cornerCount))
+                waypoints.Add(new Vector3(wp.x, wp.y, wp.z));
+            */
+
+            try
+            {
+                base.SetWaypoints(_pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, Destination));
+            }
+            catch(PointNotOnNavMeshException e)
+            {
+                Chat.WriteLine(e.Message);
+                base.SetWaypoints(new List<Vector3>());
+            }
         }
     }
 }

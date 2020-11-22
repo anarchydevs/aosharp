@@ -91,7 +91,14 @@ namespace AOSharp.Core
             MovementController.Instance?.Update();
             CombatHandler.Instance?.Update(deltaTime);
 
-            OnUpdate?.Invoke(null, deltaTime);
+            try
+            { 
+                OnUpdate?.Invoke(null, deltaTime);
+            }
+            catch(Exception e)
+            {
+                Chat.WriteLine(e.Message);
+            }
 
             Chat.Update();
         }
