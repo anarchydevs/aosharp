@@ -16,6 +16,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DefaultAttack@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
 
+        //TeamJoinRequest
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TeamJoinRequest@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe bool TeamJoinRequest(IntPtr pThis, ref Identity identity, bool force);
+
         //StopAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_StopAttack@n3EngineClientAnarchy_t@@QBEXXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern void StopAttack(IntPtr pThis);

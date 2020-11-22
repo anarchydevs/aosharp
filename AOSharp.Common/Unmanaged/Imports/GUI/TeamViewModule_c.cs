@@ -19,5 +19,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern unsafe void SlotJoinTeamRequest(IntPtr pThis, Identity* identity, IntPtr pName);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public unsafe delegate void DSlotJoinTeamRequest(IntPtr pThis, IntPtr identity, IntPtr pName);
+
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        public unsafe delegate void DSlotJoinTeamRequestFailed(IntPtr pThis, ref Identity identity);
     }
 }

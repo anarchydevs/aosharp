@@ -167,6 +167,14 @@ namespace AOSharp.Bootstrap
                         "?SlotJoinTeamRequest@TeamViewModule_c@@AAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
                         new TeamViewModule_c.DSlotJoinTeamRequest(TeamViewModule_SlotJoinTeamRequest_Hook));
 
+            CreateHook("GUI.dll",
+                        "?SlotJoinTeamRequestFailedTooLow@TeamViewModule_c@@AAEXABVIdentity_t@@@Z",
+                        new TeamViewModule_c.DSlotJoinTeamRequestFailed(TeamViewModule_SlotJoinTeamRequestFailed_Hook));
+
+            CreateHook("GUI.dll",
+                        "?SlotJoinTeamRequestFailedTooHigh@TeamViewModule_c@@AAEXABVIdentity_t@@@Z",
+                        new TeamViewModule_c.DSlotJoinTeamRequestFailed(TeamViewModule_SlotJoinTeamRequestFailed_Hook));
+
             CreateHook("Gamecode.dll",
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
@@ -312,6 +320,20 @@ namespace AOSharp.Bootstrap
                 {
                     _pluginProxy.JoinTeamRequest(identity, pName);
                 }
+            }
+            catch (Exception) { }
+        }
+
+        private unsafe void TeamViewModule_SlotJoinTeamRequestFailed_Hook(IntPtr pThis, ref Identity identity)
+        {
+            try
+            {
+                IntPtr pEngine = N3Engine_t.GetInstance();
+
+                if (pEngine == IntPtr.Zero)
+                    return;
+
+                N3EngineClientAnarchy_t.TeamJoinRequest(pEngine, ref identity, true);
             }
             catch (Exception) { }
         }
