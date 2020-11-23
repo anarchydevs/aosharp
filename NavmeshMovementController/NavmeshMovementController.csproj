@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NavMeshes\4321.navmesh" />
+    <None Include="NavMeshes\4368.navmesh" />
     <None Include="NavMeshes\4605.navmesh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -92,6 +93,7 @@
     <None Include="NavMeshes\4367.navmesh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="NavMeshes\4696.navmesh" />
     <None Include="NavMeshes\6011.navmesh" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,6 +13,11 @@ namespace AOSharp.Core
             return (T)Activator.CreateInstance(typeof(T), dynel.Pointer);
         }
 
+        public static bool Find(this Buff[] buffs, Spell spell, out Buff buff)
+        {
+            return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == spell.Identity.Instance)) != null;
+        }
+
         public static bool Find(this Buff[] buffs, int id, out Buff buff)
         {
             return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;

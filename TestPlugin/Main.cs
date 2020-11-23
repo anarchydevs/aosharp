@@ -228,15 +228,20 @@ namespace TestPlugin
                         Chat.WriteLine(Targeting.TargetChar.Identity);
                     */
 
-                    
+                    if (Spell.Find(263303, out Spell spell))
+                        Chat.WriteLine(spell.MeetsUseReqs(DynelManager.LocalPlayer.Pets[0].Character));
+
+                    Chat.WriteLine(DynelManager.LocalPlayer.Pets[0].Character.GetStat(Stat.MonsterData));
+
+                    /*
                     foreach(Pet pet in DynelManager.LocalPlayer.Pets)
                     {
                         Chat.WriteLine(pet.Character != null ? pet.Character.Name : "No pet character found");
                         Chat.WriteLine(pet.Type);
                     }
-                    
+                    */
 
-                    DevExtras.Test();
+                    //DevExtras.Test();
 
                     //if (DynelManager.LocalPlayer.Buffs.Find(215264, out Buff testBuff))
                     //    testBuff.Remove();
