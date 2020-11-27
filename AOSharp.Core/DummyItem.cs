@@ -253,6 +253,13 @@ namespace AOSharp.Core
                                      i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
                             }
                             break;
+                        case UseCriteriaOperator.IsSameAs:
+                            //Not sure what these parmas correlatwe to but I don't know any other item that uses this operator either.
+                            if(param1 == 1 && param2 == 3)
+                            {
+                                metReq = target != null && target.Identity != DynelManager.LocalPlayer.Identity;
+                            }
+                            break;
                         default:
                             //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");
                             return false;

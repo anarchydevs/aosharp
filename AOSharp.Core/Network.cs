@@ -85,7 +85,7 @@ namespace AOSharp.Core
             }
             catch (Exception e)
             {
-                Chat.WriteLine($"This shouldn't happen pls report (Network): {e.Message}");
+                //Chat.WriteLine($"This shouldn't happen pls report (Network): {e.Message}");
             }
         }
 

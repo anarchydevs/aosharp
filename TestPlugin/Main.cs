@@ -548,6 +548,13 @@ namespace TestPlugin
                 Debug.DrawSphere(hitPos + hitNormal, 0.2f, DebuggingColor.Yellow);
             }
 
+            if (Spell.Find(275029, out Spell spell))
+            {
+                Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs()}");
+                Chat.WriteLine($"Drain Self Self: {spell.MeetsSelfUseReqs()}");
+                Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
+            }
+
             /*
             if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
             {
