@@ -254,10 +254,13 @@ namespace AOSharp.Core
                             }
                             break;
                         case UseCriteriaOperator.IsSameAs:
-                            //Not sure what these parmas correlatwe to but I don't know any other item that uses this operator either.
+                            //Not sure what these parmas correlate to but I don't know any other item that uses this operator either.
                             if(param1 == 1 && param2 == 3)
                             {
-                                metReq = target != null && target.Identity != DynelManager.LocalPlayer.Identity;
+                                if (target == null)
+                                    metReq = false;
+                                else
+                                    metReq = target.Identity == DynelManager.LocalPlayer.Identity;
                             }
                             break;
                         default:

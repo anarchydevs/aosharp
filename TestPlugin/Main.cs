@@ -228,10 +228,12 @@ namespace TestPlugin
                         Chat.WriteLine(Targeting.TargetChar.Identity);
                     */
 
-                    if (Spell.Find(263303, out Spell spell))
-                        Chat.WriteLine(spell.MeetsUseReqs(DynelManager.LocalPlayer.Pets[0].Character));
-
-                    Chat.WriteLine(DynelManager.LocalPlayer.Pets[0].Character.GetStat(Stat.MonsterData));
+                    if (Spell.Find(85872, out Spell spell))
+                    {
+                        Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs()}");
+                        Chat.WriteLine($"Drain Self Self: {spell.MeetsSelfUseReqs()}");
+                        Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
+                    }
 
                     /*
                     foreach(Pet pet in DynelManager.LocalPlayer.Pets)
@@ -546,13 +548,6 @@ namespace TestPlugin
                 Debug.DrawLine(hitPos, hitPos+hitNormal, DebuggingColor.Yellow);
                 Debug.DrawSphere(hitPos, 0.2f, DebuggingColor.White);
                 Debug.DrawSphere(hitPos + hitNormal, 0.2f, DebuggingColor.Yellow);
-            }
-
-            if (Spell.Find(275029, out Spell spell))
-            {
-                Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs()}");
-                Chat.WriteLine($"Drain Self Self: {spell.MeetsSelfUseReqs()}");
-                Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
             }
 
             /*
