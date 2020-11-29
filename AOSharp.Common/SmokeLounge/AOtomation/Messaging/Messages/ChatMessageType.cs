@@ -14,7 +14,7 @@
 
 namespace SmokeLounge.AOtomation.Messaging.Messages
 {
-    public enum ChatPacketType : short
+    public enum ChatMessageType : short
     {
         LookupMessage = 0x0015,
         PrivateMessage = 0x001E,

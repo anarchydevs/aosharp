@@ -45,7 +45,7 @@ namespace AOSharp.Bootstrap
 
                 foreach (byte[] packet in packets)
                 {
-                    Log.Information($"ChatPacket({(ChatPacketType)((short)(packet[0] << 8) + packet[1])}): {BitConverter.ToString(packet).Replace("-", "")}");
+                    Log.Information($"ChatPacket({(ChatMessageType)((short)(packet[0] << 8) + packet[1])}): {BitConverter.ToString(packet).Replace("-", "")}");
                 }
 
                 Log.Information($"Remaining buffer {_buffer.Length}");

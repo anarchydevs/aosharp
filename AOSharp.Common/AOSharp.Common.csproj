@@ -186,7 +186,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\WeaponItemFullUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3MessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\OperatorMessage.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatPacketType.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\PacketType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\PingMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessage.cs" />

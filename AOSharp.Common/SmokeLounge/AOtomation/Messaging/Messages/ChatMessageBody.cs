@@ -22,7 +22,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages
     {
         #region Public Properties
 
-        public abstract ChatPacketType PacketType { get; }
+        public abstract ChatMessageType PacketType { get; }
 
         #endregion
     }

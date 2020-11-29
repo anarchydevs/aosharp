@@ -1,6 +1,6 @@
 ﻿namespace AOSharp.Common.GameData
 {
-    public enum ChatMessageType : byte
+    public enum ChatRange: byte
     {
         Say = 0x00,
         Whisper = 0x01,

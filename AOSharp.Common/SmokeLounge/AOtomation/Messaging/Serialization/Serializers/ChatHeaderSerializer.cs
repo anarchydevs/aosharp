@@ -64,7 +64,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers
             PropertyMetaData propertyMetaData = null)
         {
             var header = new ChatHeader();
-            header.PacketType = (ChatPacketType)streamReader.ReadInt16();
+            header.PacketType = (ChatMessageType)streamReader.ReadInt16();
             header.Size = streamReader.ReadInt16();
             return header;
         }

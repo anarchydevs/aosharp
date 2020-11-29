@@ -20,6 +20,7 @@ using System.Threading;
 using AOSharp.Common.Unmanaged.DataTypes;
 using Zoltu.IO;
 using SmokeLounge.AOtomation.Messaging.Messages;
+using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 
 namespace TestPlugin
 {
@@ -416,7 +417,7 @@ namespace TestPlugin
 
         private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
         {
-            if (chatMessage.PacketType == ChatPacketType.PrivateMessage)
+            if (chatMessage.PacketType == ChatMessageType.PrivateMessage)
                 Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
         }
 
