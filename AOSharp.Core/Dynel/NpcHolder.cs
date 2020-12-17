@@ -15,18 +15,21 @@ namespace AOSharp.Core
         [FieldOffset(0x1C)]
         public IntPtr pPetUnk;
 
-        internal Identity[] GetPets()
+        internal Pet[] GetPets()
         {
-            List<Identity> petIdentities = new List<Identity>();
+            List<Pet> petIdentities = new List<Pet>();
 
             if (pPetUnk == IntPtr.Zero)
                 return petIdentities.ToArray();
 
+            UI.Chat.WriteLine($"PetUnk: {pPetUnk.ToString("X4")}");
+
             foreach (IntPtr pPet in ((StdObjList*)(pPetUnk + 0x4))->ToList())
             {
+                UI.Chat.WriteLine(pPet.ToString("X4"));
                 PetEntry petEntry = (*(PetEntry*)pPet);
 
-                petIdentities.Add(petEntry.Identity);
+                petIdentities.Add(new Pet(petEntry.Identity));
             }
 
             return petIdentities.ToArray();

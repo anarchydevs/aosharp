@@ -16,16 +16,16 @@ namespace AOSharp.Core
         [DllImport("Utils.dll", EntryPoint = "?AddVariable@DistributedValue_c@@SAXABVString@@ABVVariant@@_N2@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern void AddVariable(IntPtr pPathStr, IntPtr pVariant, bool unk1, bool unk2);
 
+        //Mali likes cute anime traps (Git Test Pls Ignore)
 
         //Packed with random tests. Don't invoke unless you want weird stuff to execute.
-        public static void Test(ChatWindow chatWindow)
+        public static void Test()
         {
             /*
             IntPtr pName = StdString.Create("Well_this_is_op");
             IntPtr pVariant = Variant.Create(1).Pointer;
             AddVariable(pName, pVariant, true, true);
             */
-
         }
 
         //Loads all surfaces (Collision) for the current playfield. Used by me to generate navmeshes.

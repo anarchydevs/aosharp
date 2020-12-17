@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
@@ -12,8 +11,8 @@ using StreamWriter = SmokeLounge.AOtomation.Messaging.Serialization.StreamWriter
 using StreamReader = SmokeLounge.AOtomation.Messaging.Serialization.StreamReader;
 using TypeInfo = SmokeLounge.AOtomation.Messaging.Serialization.TypeInfo;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Core.UI;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace AOSharp.Core.IPC
 {
@@ -32,7 +31,9 @@ namespace AOSharp.Core.IPC
         private static TypeInfo _typeInfo = new TypeInfo(typeof(IPCMessage));
         private static PacketInspector _packetInspector;
 
+        private ConcurrentQueue<byte[]> _packetQueue = new ConcurrentQueue<byte[]>();
         private Dictionary<int, Action<int, IPCMessage>> _callbacks = new Dictionary<int, Action<int, IPCMessage>>();
+        private static List<IPCChannel> _ipcChannels = new List<IPCChannel>();
 
         public IPCChannel(byte channelId)
         {
@@ -46,19 +47,49 @@ namespace AOSharp.Core.IPC
             _udpClient.BeginReceive(ReceiveCallback, null);
 
             _packetInspector = new PacketInspector(_typeInfo);
+            _ipcChannels.Add(this);
+        }
+
+        ~IPCChannel()
+        {
+            _ipcChannels.Remove(this);
+        }
+
+        internal static void Update()
+        {
+            try
+            {
+                foreach (IPCChannel ipcChannel in _ipcChannels)
+                    ipcChannel.ProcessQueue();
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (IPC): {e.Message}");
+            }
+        }
+
+        private void ProcessQueue()
+        {
+            while (_packetQueue.TryDequeue(out byte[] msgBytes))
+                ProcessIPCMessage(msgBytes);
         }
 
         private void ReceiveCallback(IAsyncResult ar)
         {
-            //try
-            //{
-                byte[] receiveBytes = _udpClient.EndReceive(ar, ref _localEndPoint);
-                _udpClient.BeginReceive(ReceiveCallback, null);
+            byte[] receiveBytes = _udpClient.EndReceive(ar, ref _localEndPoint);
+            _udpClient.BeginReceive(ReceiveCallback, null);
 
-                if (receiveBytes.Length < 11)
-                    return;
+            if (receiveBytes.Length < 11)
+                return;
 
-                using (MemoryStream stream = new MemoryStream(receiveBytes))
+            _packetQueue.Enqueue(receiveBytes);
+        }
+
+        private void ProcessIPCMessage(byte[] msgBytes)
+        {
+            try
+            {
+                using (MemoryStream stream = new MemoryStream(msgBytes))
                 {
                     StreamReader reader = new StreamReader(stream) { Position = 0 };
 
@@ -67,7 +98,7 @@ namespace AOSharp.Core.IPC
 
                     ushort len = reader.ReadUInt16();
 
-                    if (len != receiveBytes.Length)
+                    if (len != msgBytes.Length)
                         return;
 
                     byte channelId = reader.ReadByte();
@@ -98,11 +129,12 @@ namespace AOSharp.Core.IPC
                     if (_callbacks.ContainsKey(opCode))
                         _callbacks[opCode]?.Invoke(charId, message);
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    Chat.WriteLine($"ahhhhhhhhhhhhhhhhhhhhhhh {e.Message}");
-            //}
+            }
+            catch (Exception e)
+            {
+                //If you get this message and it concerns you please create an issue or contact me on Discord!
+                Chat.WriteLine($"Failed to process IPC message {e.Message}");
+            }
         }
 
         public void Broadcast(IPCMessage msg)

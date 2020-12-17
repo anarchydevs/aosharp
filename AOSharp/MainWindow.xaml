@@ -30,6 +30,7 @@
             <local:BoolToVisibilityConverter x:Key="BoolToVisibleConverter"
                                              TrueValue="Visible" 
                                              FalseValue="Collapsed" />
+            <local:RemovePluginConverter x:Key="RemovePluginConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -76,7 +77,9 @@
                       ItemsSource="{Binding Path=Plugins}"
                       AutoGenerateColumns="False" 
                       CanUserAddRows="False"
-                      IsEnabled="false">
+                      IsEnabled="false"
+                      IsReadOnly="true"
+                      SelectedItem="{Binding SelectedRow, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Enabled">
                         <DataGridTemplateColumn.CellTemplate>
@@ -95,6 +98,26 @@
                                         Binding="{Binding Value.Path}" 
                                         Width="*"/>
                 </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <ContextMenu  x:Key="RowMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="Remove" Command="{Binding Value.RemoveCommand}">
+                            <MenuItem.CommandParameter>
+                                <MultiBinding Converter="{StaticResource RemovePluginConverter}">
+                                    <Binding Path="DataContext.Plugins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"/>
+                                    <Binding Path="Key"/>
+                                </MultiBinding>
+                            </MenuItem.CommandParameter>
+                        </MenuItem>
+                    </ContextMenu>
+                    <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" >
+                        <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                    </Style>
+                </DataGrid.RowStyle>
             </DataGrid>
         </DockPanel>
     </Grid>

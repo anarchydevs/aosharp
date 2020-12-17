@@ -19,7 +19,13 @@ namespace AOSharp.Core
 
         public float AttackRange => GetAttackRange();
 
-        public Identity[] Pets => ((MemStruct*)Pointer)->NpcHolder->GetPets();
+        public int CurrentNCU => GetStat(Stat.CurrentNCU);
+
+        public int MaxNCU => GetStat(Stat.MaxNCU);
+
+        public int RemainingNCU => MaxNCU - CurrentNCU;
+
+        public Pet[] Pets => GetPets();
 
         public bool IsAttackPending => Time.NormalTime < _nextAttack;
 
@@ -31,15 +37,17 @@ namespace AOSharp.Core
         {
         }
 
-        public void Attack(Dynel target)
+        public void Attack(Dynel target, bool attackWithPets = true)
         {
             if (target.GetStat(Stat.Health) == 0)
                 return;
 
             Attack(target.Identity);
+
+            if (attackWithPets && Pets.Length > 0)
+                Pets.Attack(target.Identity);
         }
 
-        //TODO: Silence this function to prevent flood of "Please wait until previous action has finished."
         public void Attack(Identity target)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
@@ -60,6 +68,9 @@ namespace AOSharp.Core
                 return;
 
             N3EngineClientAnarchy_t.StopAttack(pEngine);
+
+            if (Pets.Length > 0)
+                Pets.Follow();
         }
 
         public float GetAttackRange()
@@ -70,27 +81,6 @@ namespace AOSharp.Core
                 return 0f;
 
             return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
-        }
-
-        public float GetLogicalRangeToTarget(SimpleChar target)
-        {
-            float hisRadius = (target.GetStat(Stat.Scale) * target.GetStat(Stat.CharRadius)) / 100f;
-            float myRadius = (GetStat(Stat.Scale) * GetStat(Stat.CharRadius)) / 100f;
-            float ourPhysicalDist = Vector3.Distance(Position, target.Position);
-            return ourPhysicalDist - hisRadius - myRadius;
-        }
-
-        public SimpleChar[] GetPetDynels()
-        {
-            List<SimpleChar> petChars = new List<SimpleChar>();
-
-            foreach (Identity identity in Pets)
-            {
-                if (DynelManager.Find(identity, out SimpleChar petChar))
-                    petChars.Add(petChar);
-            }
-
-            return petChars.ToArray();
         }
 
         private Dictionary<Stat, Cooldown> GetCooldowns()
@@ -132,6 +122,28 @@ namespace AOSharp.Core
             }
 
             return missions;
+        }
+
+        private Pet[] GetPets()
+        {
+            List<Pet> pets = new List<Pet>();
+            IntPtr pPetWindowModule = PetWindowModule_c.GetInstance();
+
+            if (pPetWindowModule == IntPtr.Zero)
+                return pets.ToArray();
+
+            for (byte i = 1; i < 6; i++)
+            {
+                Identity pet = Identity.None;
+                PetWindowModule_c.GetPetID(pPetWindowModule, ref pet, i);
+
+                if (pet == Identity.None)
+                    continue;
+
+                pets.Add(new Pet(pet));
+            }
+
+            return pets.ToArray();
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

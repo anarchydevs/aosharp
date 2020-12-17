@@ -87,7 +87,7 @@ namespace AOSharp.Core
             if (pCriteria == IntPtr.Zero)
                 return true;
 
-            bool[] unk = new bool[4];
+            bool[] unk = new bool[8];
             byte prevReqsMet = 0;
             SimpleChar skillCheckChar = DynelManager.LocalPlayer;
             CriteriaSource criteriaSource = CriteriaSource.Self;
@@ -134,6 +134,10 @@ namespace AOSharp.Core
                                     bool isFacing = fightingTarget.IsFacing(DynelManager.LocalPlayer);
                                     metReq = (param2 == 1) ? !isFacing : isFacing;
                                 }
+                            } 
+                            else if((Stat)param1 == Stat.MonsterData) // Ignore this check because something funky is going on with it.
+                            {
+                                metReq = true;
                             }
                             else
                             {
@@ -166,8 +170,8 @@ namespace AOSharp.Core
                             if (prevReqsMet < 2)
                                 return false;
 
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
+                            lastResult = unk[--prevReqsMet];
+                            result = unk[--prevReqsMet];
 
                             //We can early exit on AND 
                             if (!result || !lastResult)
@@ -179,8 +183,8 @@ namespace AOSharp.Core
                             if (prevReqsMet < 2)
                                 return false;
 
-                            lastResult = unk[(prevReqsMet--) - 1];
-                            result = unk[(prevReqsMet--) - 1];
+                            lastResult = unk[--prevReqsMet];
+                            result = unk[--prevReqsMet];
 
                             metReq = result || lastResult;
                             break;
@@ -188,7 +192,7 @@ namespace AOSharp.Core
                             if (prevReqsMet < 1)
                                 return false;
 
-                            metReq = unk[(prevReqsMet--) - 1];
+                            metReq = !unk[--prevReqsMet];
                             break;
                         case UseCriteriaOperator.HasWornItem:
                             metReq = Inventory.Inventory.Find(param2, out Item item) &&
@@ -216,6 +220,26 @@ namespace AOSharp.Core
                             //TODO: check against actual nano program NCU cost
                             metReq = skillCheckChar.GetStat(Stat.MaxNCU) - skillCheckChar.GetStat(Stat.CurrentNCU) > 0;
                             break;
+                        case UseCriteriaOperator.TestNumPets:
+                            Pet[] pets = DynelManager.LocalPlayer.Pets;
+                            if (pets.Any(x => x.Type == PetType.Unknown))
+                            {
+                                metReq = false;
+                                break;
+                            }
+
+                            PetType type = PetType.Unknown;
+                            if (param2 == 1)
+                                type = PetType.Attack;
+                            else if (param2 == 1001)
+                                type = PetType.Heal;
+                            else if (param2 == 2001)
+                                type = PetType.Support;
+                            else if (param2 == 4001)
+                                type = PetType.Social;
+
+                            metReq = !pets.Any(x => x.Type == type);
+                            break;
                         case UseCriteriaOperator.HasWieldedItem:
                             if (criteriaSource == CriteriaSource.Target)
                             {
@@ -227,6 +251,16 @@ namespace AOSharp.Core
                                     (i.LowId == param2 || i.HighId == param2) &&
                                     (i.Slot.Instance >= (int)EquipSlot.Weap_Hud1 &&
                                      i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
+                            }
+                            break;
+                        case UseCriteriaOperator.IsSameAs:
+                            //Not sure what these parmas correlate to but I don't know any other item that uses this operator either.
+                            if(param1 == 1 && param2 == 3)
+                            {
+                                if (target == null)
+                                    metReq = false;
+                                else
+                                    metReq = target.Identity == DynelManager.LocalPlayer.Identity;
                             }
                             break;
                         default:

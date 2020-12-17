@@ -4,6 +4,7 @@ using System.Linq;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
+using SmokeLounge.AOtomation.Messaging.GameData;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -19,21 +20,27 @@ namespace AOSharp.Core
         public static EventHandler<TeamRequestEventArgs> TeamRequest;
         public static EventHandler<Identity> MemberLeft;
 
-        public static void Invite(Identity target)
+        public static void Invite(SimpleChar player)
+        {
+            Invite(player.Identity);
+        }
+
+        public static void Invite(Identity player)
         {
             Network.Send(new CharacterActionMessage()
             {
                 Action = CharacterActionType.TeamRequest,
-                Target = target
+                Target = player,
+                Parameter1 = 1
             });
         }
 
-        public static void Kick(Identity target)
+        public static void Kick(Identity player)
         {
             Network.Send(new CharacterActionMessage()
             {
-                Action = CharacterActionType.TeamKick,
-                Target = target
+                Action = CharacterActionType.TeamKickMember,
+                Target = player
             });
         }
 

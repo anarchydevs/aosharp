@@ -8,9 +8,24 @@ namespace AOSharp.Core
 {
     public static class Extensions
     {
+        public static T Cast<T>(this Dynel dynel) where T : Dynel
+        {
+            return (T)Activator.CreateInstance(typeof(T), dynel.Pointer);
+        }
+
+        public static bool Find(this Buff[] buffs, Spell spell, out Buff buff)
+        {
+            return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == spell.Identity.Instance)) != null;
+        }
+
         public static bool Find(this Buff[] buffs, int id, out Buff buff)
         {
             return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;
+        }
+
+        public static bool Find(this Buff[] buffs, Nanoline nanoline, out Buff buff)
+        {
+            return (buff = buffs.FirstOrDefault(x => (Nanoline)x.GetStat(Stat.NanoStrain) == nanoline)) != null;
         }
 
         public static bool Contains(this Buff[] buffs, int id)

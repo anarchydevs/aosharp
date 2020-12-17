@@ -14,6 +14,9 @@ namespace AOSharp.Core
     {
         public readonly Identity Owner;
         public readonly Identity Identity;
+        public readonly Nanoline Nanoline;
+        public readonly int NCU;
+        public readonly int StackingOrder;
         public float RemainingTime => GetCurrentTime();
         public float TotalTime => GetTotalTime();
 
@@ -21,6 +24,9 @@ namespace AOSharp.Core
         {
             Owner = owner;
             Identity = identity;
+            Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
+            StackingOrder = GetStat(Stat.StackingOrder);
+            NCU = GetStat(Stat.Level);
         }
 
         private unsafe float GetCurrentTime()
@@ -47,6 +53,17 @@ namespace AOSharp.Core
                 fixed (Identity* pOwner = &Owner) {
                 return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, pIdentity, pOwner) / 100f;
             }
+        }
+
+        public bool Remove()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return false;
+
+            Identity identity = Identity;
+            return N3EngineClientAnarchy_t.RemoveBuff(pEngine, ref identity);
         }
     }
 }

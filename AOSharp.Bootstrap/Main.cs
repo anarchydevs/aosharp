@@ -12,6 +12,8 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.DataTypes;
+using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+using Serilog;
 
 namespace AOSharp.Bootstrap
 {
@@ -24,14 +26,20 @@ namespace AOSharp.Bootstrap
         private ManualResetEvent _unloadEvent;
         private static List<LocalHook> _hooks = new List<LocalHook>();
         private PluginProxy _pluginProxy;
+        private ChatSocketListener _chatSocketListener;
 
         private string _lastChatInput;
         private IntPtr _lastChatInputWindowPtr;
 
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("AOSharp.Bootstrapper.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug)
+                .CreateLogger();
+
             _connectEvent = new ManualResetEvent(false);
             _unloadEvent = new ManualResetEvent(false);
+            _chatSocketListener = new ChatSocketListener();
 
             //Setup IPC server that will be used for handling API requests and events.
             _ipcPipe = new IPCServer(inChannelName);
@@ -113,10 +121,7 @@ namespace AOSharp.Bootstrap
             catch (Exception e)
             {
                 //TODO: Send IPC message back to loader on error
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"AOSharp.Bootstrap_Exception.txt", true))
-                {
-                    file.WriteLine($"{DateTime.Now}: {e.Message}");
-                }
+                Log.Error(e.Message);
             }
         }
 
@@ -162,13 +167,29 @@ namespace AOSharp.Bootstrap
                         "?SlotJoinTeamRequest@TeamViewModule_c@@AAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
                         new TeamViewModule_c.DSlotJoinTeamRequest(TeamViewModule_SlotJoinTeamRequest_Hook));
 
+            CreateHook("GUI.dll",
+                        "?SlotJoinTeamRequestFailedTooLow@TeamViewModule_c@@AAEXABVIdentity_t@@@Z",
+                        new TeamViewModule_c.DSlotJoinTeamRequestFailed(TeamViewModule_SlotJoinTeamRequestFailed_Hook));
+
+            CreateHook("GUI.dll",
+                        "?SlotJoinTeamRequestFailedTooHigh@TeamViewModule_c@@AAEXABVIdentity_t@@@Z",
+                        new TeamViewModule_c.DSlotJoinTeamRequestFailed(TeamViewModule_SlotJoinTeamRequestFailed_Hook));
+
             CreateHook("Gamecode.dll",
                         "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z",
                         new N3EngineClientAnarchy_t.DPerformSpecialAction(N3EngineClientAnarchy_PerformSpecialAction_Hook));
 
             CreateHook("GUI.dll",
-                "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", 
-                new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+                        "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z",
+                        new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+
+            CreateHook("Connection.dll",
+                        "?Send@Connection_t@@QAEHIIPBX@Z",
+                        new Connection_t.DSend(Send_Hook));
+
+            CreateHook("ws2_32.dll",
+                        "recv",
+                        new Ws2_32.RecvDelegate(WsRecv_Hook));
 
             CreateHook("DatabaseController.dll",
                 "?GetDbObject@ResourceDatabase_t@@UAEPAVDbObject_t@@ABVIdentity_t@@@Z",
@@ -207,8 +228,26 @@ namespace AOSharp.Bootstrap
                 hook.Dispose();
         }
 
+        public unsafe int WsRecv_Hook(int socket, IntPtr buffer, int len, int flags)
+        {
+            int bytesRead = Ws2_32.recv(socket, buffer, len, flags);
+
+            if (_pluginProxy != null && socket == ChatSocketListener.Socket)
+            {
+                byte[] trimmedBuffer = new byte[bytesRead];
+                Marshal.Copy(buffer, trimmedBuffer, 0, bytesRead);
+
+                List<byte[]> packets = _chatSocketListener.ProcessBuffer(trimmedBuffer);
+
+                foreach (byte[] packet in packets)
+                    _pluginProxy.ChatRecv(packet);
+            }
+
+            return bytesRead;
+        }
+
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, StdString* commandText)
-        {        
+        {
             IntPtr tokenized = StdString.Create();
             ChatGUIModule_t.ExpandChatTextArgs(tokenized, StdString.Create(commandText->ToString()));
             _lastChatInput = ((StdString*)tokenized)->ToString();
@@ -221,7 +260,7 @@ namespace AOSharp.Bootstrap
         public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
         {
             IntPtr result;
-            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk)
+            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
                 _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;
@@ -229,33 +268,54 @@ namespace AOSharp.Bootstrap
 
         public unsafe void HandleGroupMessageHook(IntPtr pThis, IntPtr pGroupMessage)
         {
-            bool cancel = _pluginProxy.HandleGroupMessage(pGroupMessage);
+            bool cancel = false;
+            
+            if(_pluginProxy != null)
+                cancel = _pluginProxy.HandleGroupMessage(pGroupMessage);
 
             if (!cancel)
                 ChatGUIModule_t.HandleGroupMessage(pThis, pGroupMessage);
         }
 
-        private int DataBlockToMessage_Hook(int size, IntPtr pDataBlock)
+        private int Send_Hook(IntPtr pConnection, uint unk, int len, byte[] buf)
         {
-            //Let the client process the packet before we inspect it.
-            int ret = MessageProtocol.DataBlockToMessage(size, pDataBlock);
-
             try
             {
-                byte[] buffer = new byte[size];
-                Marshal.Copy(pDataBlock, buffer, 0, size);
-                _pluginProxy.DataBlockToMessage(buffer);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.SentPacket(buf);
+                }
             }
             catch (Exception) { }
 
-            return ret;
+            return Connection_t.Send(pConnection, unk, len, buf);
+        }
+
+        private IntPtr DataBlockToMessage_Hook(uint size, byte[] dataBlock)
+        {
+            //Let the client process the packet before we inspect it.
+            IntPtr pMsg = MessageProtocol.DataBlockToMessage(size, dataBlock);
+
+            try
+            {
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.DataBlockToMessage(dataBlock);
+                }
+            }
+            catch (Exception) { }
+
+            return pMsg;
         }
 
         private void WindowController_ViewDeleted_Hook(IntPtr pThis, IntPtr pView)
         {
             try
             {
-                _pluginProxy.ViewDeleted(pView);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.ViewDeleted(pView);
+                }
             }
             catch (Exception) { }
 
@@ -266,7 +326,24 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.JoinTeamRequest(identity, pName);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.JoinTeamRequest(identity, pName);
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private unsafe void TeamViewModule_SlotJoinTeamRequestFailed_Hook(IntPtr pThis, ref Identity identity)
+        {
+            try
+            {
+                IntPtr pEngine = N3Engine_t.GetInstance();
+
+                if (pEngine == IntPtr.Zero)
+                    return;
+
+                N3EngineClientAnarchy_t.TeamJoinRequest(pEngine, ref identity, true);
             }
             catch (Exception) { }
         }
@@ -277,8 +354,12 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if (specialActionResult)
-                    _pluginProxy.ClientPerformedSpecialAction(identity);
+                if (_pluginProxy != null)
+                {
+                    if (specialActionResult)
+                        _pluginProxy.ClientPerformedSpecialAction(identity);
+                }
+                    
             }
             catch (Exception) { }
 
@@ -291,8 +372,11 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                if (unk)
-                    _pluginProxy.OptionPanelActivated(pThis, unk);
+                if (_pluginProxy != null)
+                {
+                    if (unk)
+                        _pluginProxy.OptionPanelActivated(pThis, unk);
+                }
             }
             catch (Exception) { }
         }
@@ -301,8 +385,11 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                if (!*FlowControlModule_t.pIsTeleporting)
-                    _pluginProxy.TeleportStarted();
+                if (_pluginProxy != null)
+                {
+                    if (!*FlowControlModule_t.pIsTeleporting)
+                        _pluginProxy.TeleportStarted();
+                }
             }
             catch (Exception) { }
 
@@ -313,7 +400,8 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.TeleportFailed();
+                if (_pluginProxy != null)
+                    _pluginProxy.TeleportFailed();
             }
             catch (Exception) { }
 
@@ -324,7 +412,8 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.TeleportEnded();
+                if (_pluginProxy != null)
+                    _pluginProxy.TeleportEnded();
             }
             catch (Exception) { }
 
@@ -337,7 +426,8 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                _pluginProxy.PlayfieldInit(id);
+                if (_pluginProxy != null)
+                    _pluginProxy.PlayfieldInit(id);
             }
             catch (Exception) { }
         }
@@ -346,11 +436,16 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                _pluginProxy.EarlyUpdate(deltaTime);
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.RunPendingPluginInitializations();
 
-                N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+                    _pluginProxy.EarlyUpdate(deltaTime);
 
-                _pluginProxy.Update(deltaTime);
+                    N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+
+                    _pluginProxy.Update(deltaTime);
+                }
             }
             catch (Exception) { }
         }
@@ -362,7 +457,8 @@ namespace AOSharp.Bootstrap
 
             try
             {
-                _pluginProxy.DynelSpawned(pDynel);
+                if (_pluginProxy != null)
+                    _pluginProxy.DynelSpawned(pDynel);
             }
             catch (Exception) { }
         }

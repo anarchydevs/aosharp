@@ -11,11 +11,10 @@ namespace AOSharp
 {
     public class Config
     {
-        public ObservableDictionary<string, Plugin> Plugins { get; set; }
+        public ObservableDictionary<string, PluginModel> Plugins { get; set; }
 
         public ObservableCollection<Profile> Profiles { get; set; }
 
-        private object _lock = new object();
         protected string _path;
 
         public static Config Load(string path)
@@ -30,7 +29,7 @@ namespace AOSharp
             {
                 config = new Config()
                 {
-                    Plugins = new ObservableDictionary<string, Plugin>(),
+                    Plugins = new ObservableDictionary<string, PluginModel>(),
                     Profiles = new ObservableCollection<Profile>()
                 };
             }
@@ -42,10 +41,7 @@ namespace AOSharp
 
         public void Save()
         {
-            lock(_lock)
-            {
-                File.WriteAllText(_path, JsonConvert.SerializeObject(this, Formatting.Indented));
-            }
+            File.WriteAllText(_path, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
     }
 }

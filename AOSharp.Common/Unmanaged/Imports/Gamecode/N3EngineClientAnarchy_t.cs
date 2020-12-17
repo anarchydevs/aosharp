@@ -16,13 +16,18 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DefaultAttack@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
 
+        //TeamJoinRequest
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TeamJoinRequest@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe bool TeamJoinRequest(IntPtr pThis, ref Identity identity, bool force);
+
         //StopAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_StopAttack@n3EngineClientAnarchy_t@@QBEXXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern void StopAttack(IntPtr pThis);
 
         //GetSkill
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkill@n3EngineClientAnarchy_t@@QBEHABVIdentity_t@@W4Stat_e@GameData@@H0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe int GetSkill(IntPtr pThis, Identity* dynel, Stat stat, int detail, Identity* unk);
+        public static extern int GetSkill(IntPtr pThis, ref Identity dynel, Stat stat, int detail, ref Identity unk);
 
         //IsSecondarySpecialAttackAvailable
         [return: MarshalAs(UnmanagedType.U1)]
@@ -114,7 +119,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //SelectedTarget
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SelectedTarget@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr SelectedTarget(IntPtr pThis, Identity* target);
+        public static extern IntPtr SelectedTarget(IntPtr pThis, ref Identity target);
 
         //IsInRaidTeam
         [return: MarshalAs(UnmanagedType.U1)]
@@ -145,6 +150,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         //GetBuffTotalTime
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffTotalTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
+
+        //RemoveBuff
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_RemoveBuff@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe bool RemoveBuff(IntPtr pThis, ref Identity identity);
 
         //CreateDummyItemID
         [return: MarshalAs(UnmanagedType.U1)]

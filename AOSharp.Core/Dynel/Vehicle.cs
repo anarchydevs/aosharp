@@ -23,5 +23,9 @@ namespace AOSharp.Core
 
         [FieldOffset(0x178)]
         public CharMovementStatus* CharMovementStatus;
+
+        //NPCVehicle only
+        [FieldOffset(0x190)]
+        public Vector3 PathingDestination;
     }
 }

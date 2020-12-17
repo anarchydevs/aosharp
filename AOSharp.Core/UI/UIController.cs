@@ -17,9 +17,16 @@ namespace AOSharp.Core.UI
 
         internal static void UpdateViews()
         {
-            foreach(View view in _views.Values)
+            try
             {
-                view.Update();
+                foreach(View view in _views.Values)
+                {
+                    view.Update();
+                }
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (UIController): {e.Message}");
             }
         }
 

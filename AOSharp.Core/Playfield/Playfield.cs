@@ -46,9 +46,14 @@ namespace AOSharp.Core
         public static string Name => GetName();
 
         ///<summary>
-        ///Get zones for playfield. Will convert to Zone objects later..
+        ///Get zones (cells) for playfield.
         ///</summary>
         public static List<Zone> Zones => GetZones();
+
+        ///<summary>
+        ///Get rooms for playfield if in a dungeon.
+        ///</summary>
+        public static List<Room> Rooms => GetRooms();
 
         //TODO: Convert to use n3Playfield_t::GetPlayfieldDynels() to remove dependencies on hard-coded offsets
         internal static unsafe List<IntPtr> GetPlayfieldDynels()
@@ -101,6 +106,16 @@ namespace AOSharp.Core
             return (*N3Playfield_t.GetZones(pPlayfield)).ToList().Select(x => new Zone(x)).ToList();
         }
 
+        private static unsafe List<Room> GetRooms()
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+
+            if (pPlayfield == IntPtr.Zero || !IsDungeon)
+                return new List<Room>();
+
+            return (*N3Playfield_t.GetZones(pPlayfield)).ToList().Select(x => new Room(x)).ToList();
+        }
+
         private static bool AreVehiclesAllowed()
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
@@ -119,6 +134,18 @@ namespace AOSharp.Core
                 return false;
 
             return N3PlayfieldAnarchy_t.IsShadowlandPF(pPlayfield);
+        }
+        public static bool Raycast(Vector3 pos1, Vector3 pos2, out Vector3 hitPos, out Vector3 hitNormal)
+        {
+            hitPos = Vector3.Zero;
+            hitNormal = Vector3.Zero;
+
+            IntPtr pSurface = GetSurface();
+
+            if (pSurface == IntPtr.Zero)
+                return false;
+
+            return TilemapSurface_t.GetLineIntersection(pSurface, ref pos1, ref pos2, ref hitPos, ref hitNormal, 1, IntPtr.Zero);
         }
 
         public static bool LineOfSight(Vector3 pos1, Vector3 pos2, int zoneCell = 1, bool unknown = false)

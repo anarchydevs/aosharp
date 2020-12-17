@@ -13,6 +13,8 @@ namespace AOSharp.Core
 
         public DynelFlags Flags => (DynelFlags)GetStat(Stat.Flags);
 
+        public unsafe IntPtr VehiclePointer => new IntPtr((*(MemStruct*)Pointer).Vehicle);
+
         public unsafe Vector3 Position
         {
             get => (*(MemStruct*)Pointer).Vehicle->Position;
@@ -37,11 +39,16 @@ namespace AOSharp.Core
             set => (*(MemStruct*)Pointer).Vehicle->Runspeed = value;
         }
 
+        public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
+
         public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
+
+        protected unsafe bool IsPathing => (*(MemStruct*)Pointer).Vehicle->PathingDestination != Vector3.Zero;
+        protected unsafe Vector3 PathingDestination => (*(MemStruct*)Pointer).Vehicle->PathingDestination;
 
         public virtual string Name => GetName();
 
-        public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
+        public bool IsValid => DynelManager.IsValid(this);
 
         public Dynel(IntPtr pointer)
         {
@@ -62,9 +69,9 @@ namespace AOSharp.Core
 
             //Copy identity
             Identity identity = Identity;
-            Identity unk = new Identity();
+            Identity junk = new Identity();
 
-            return N3EngineClientAnarchy_t.GetSkill(pEngine, &identity, stat, detail, &unk);
+            return N3EngineClientAnarchy_t.GetSkill(pEngine, ref identity, stat, detail, ref junk);
         }
 
         private string GetName()
@@ -93,14 +100,6 @@ namespace AOSharp.Core
 
             [FieldOffset(0x50)]
             public Vehicle* Vehicle;
-        }
-    }
-
-    public static class DynelExtensions
-    {
-        public static T Cast<T>(this Dynel dynel) where T : Dynel
-        {
-            return (T)Activator.CreateInstance(typeof(T), dynel.Pointer);
         }
     }
 }

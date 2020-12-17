@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using AOSharp.Core.GameData;
 using AOSharp.Common.GameData;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core
 {
@@ -16,10 +17,14 @@ namespace AOSharp.Core
         {
         }
 
-        [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private new struct MemStruct
+        public void Use()
         {
-
+            Network.Send(new GenericCmdMessage()
+            {
+                Action = GenericCmdAction.Use,
+                User = DynelManager.LocalPlayer.Identity,
+                Target = Identity
+            });
         }
     }
 }

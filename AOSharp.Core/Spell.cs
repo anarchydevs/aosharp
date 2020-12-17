@@ -8,6 +8,8 @@ using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.Combat;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using AOSharp.Core.GameData;
+using SmokeLounge.AOtomation.Messaging.GameData;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
@@ -17,6 +19,7 @@ namespace AOSharp.Core
 
         public readonly Identity Identity;
         public readonly Nanoline Nanoline;
+        public readonly int NCU;
         public readonly int StackingOrder;
         public int Cost => GetCost();
 
@@ -31,6 +34,8 @@ namespace AOSharp.Core
         {
             Identity = identity;
             Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
+            StackingOrder = GetStat(Stat.StackingOrder);
+            NCU = GetStat(Stat.Level);
         }
 
         public static bool Find(int id, out Spell spell)
@@ -80,8 +85,15 @@ namespace AOSharp.Core
 
         internal static void Update()
         {
+            try
+            {
             if (_pendingCast.Spell != null && _pendingCast.Timeout <= Time.NormalTime)
                 _pendingCast.Spell = null;
+            }
+            catch (Exception e)
+            {
+                Chat.WriteLine($"This shouldn't happen pls report (Spell): {e.Message}");
+            }
         }
 
         public static Spell[] GetSpellsForNanoline(Nanoline nanoline)

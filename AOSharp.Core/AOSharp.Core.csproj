@@ -65,6 +65,9 @@
     <Compile Include="NpcDialog.cs" />
     <Compile Include="DummyItem.cs" />
     <Compile Include="Buff.cs" />
+    <Compile Include="ChatPacketFactory.cs" />
+    <Compile Include="Pet.cs" />
+    <Compile Include="Playfield\Room.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="Playfield\Zone.cs" />

@@ -41,6 +41,10 @@ namespace AOSharp.Core
 
         public Side Side => (Side)GetStat(Stat.Side);
 
+        public int Level => GetStat(Stat.Level);
+
+        public bool IsInPlay => (*(MemStruct*)Pointer).IsInPlay;
+
         public bool IsAttacking => (*(MemStruct*)Pointer).WeaponHolder->AttackingState == 0x02;
 
         public bool IsAlive => Health > 0;
@@ -52,6 +56,9 @@ namespace AOSharp.Core
         public Dictionary<EquipSlot, WeaponItem> Weapons => GetWeapons();
 
         public HashSet<SpecialAttack> SpecialAttacks => GetSpecialAttacks();
+
+        public new bool IsPathing => base.IsPathing;
+        public new Vector3 PathingDestination => base.PathingDestination;
 
         internal IntPtr pWeaponHolder => (IntPtr)(*(MemStruct*)Pointer).WeaponHolder;
 
@@ -71,6 +78,19 @@ namespace AOSharp.Core
                 return null;
 
             return new SimpleChar(pFightingTarget);
+        }
+
+        public float GetLogicalRangeToTarget(SimpleChar target)
+        {
+            float hisRadius = (target.GetStat(Stat.Scale) * target.GetStat(Stat.CharRadius)) / 100f;
+            float myRadius = (GetStat(Stat.Scale) * GetStat(Stat.CharRadius)) / 100f;
+            float ourPhysicalDist = Vector3.Distance(Position, target.Position);
+            return ourPhysicalDist - hisRadius - myRadius;
+        }
+
+        public bool IsInLightOfSight()
+        {
+            return GamecodeUnk.IsInLineOfSight(DynelManager.LocalPlayer.Pointer, Pointer);
         }
         
         public bool IsFacing(SimpleChar target)
@@ -184,6 +204,10 @@ namespace AOSharp.Core
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private new struct MemStruct
         {
+            [MarshalAs(UnmanagedType.U1)]
+            [FieldOffset(0xC9)]
+            public bool IsInPlay;
+
             [FieldOffset(0x154)]
             public StdString Name;
 

@@ -12,6 +12,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+//wtf is this file?
+
+/*
 using AOSharp.Common.GameData;
 
 namespace SmokeLounge.AOtomation.Messaging.GameData
@@ -32,3 +35,4 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
         #endregion
     }
 }
+*/

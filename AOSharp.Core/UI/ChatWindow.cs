@@ -18,11 +18,23 @@ namespace AOSharp.Core.UI
             _pointer = pointer;
         }
 
+        public void WriteLine(object obj, ChatColor color = ChatColor.Gold)
+        {
+            WriteLine((obj == null) ? "null" : obj.ToString(), color);
+        }
+
         public void WriteLine(string text, ChatColor color = ChatColor.Gold)
         {
-            IntPtr pMsg = StdString.Create(text);
-            ChatWindowNode_t.AppendText(_pointer, pMsg, color);
-            StdString.Dispose(pMsg);
+            if (_pointer != IntPtr.Zero)
+            {
+                IntPtr pMsg = StdString.Create(text);
+                ChatWindowNode_t.AppendText(_pointer, pMsg, color);
+                StdString.Dispose(pMsg);
+            }
+            else
+            {
+                Chat.WriteLine(text, color);
+            }
         }
     }
 }

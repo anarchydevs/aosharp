@@ -15,5 +15,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         //GetClientInst
         [DllImport("N3.dll", EntryPoint = "?GetClientInst@n3EngineClient_t@@QBEIXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern int GetClientInst(IntPtr pThis);
+
+        [DllImport("N3.dll", EntryPoint = "?SendIIRToServer@n3EngineClient_t@@QBEXABVn3InfoItemRemote_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SendIIRToServer(IntPtr pThis, IntPtr pIIR);
     }
 }
