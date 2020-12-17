@@ -191,10 +191,6 @@ namespace AOSharp.Bootstrap
                         "recv",
                         new Ws2_32.RecvDelegate(WsRecv_Hook));
 
-            CreateHook("DatabaseController.dll",
-                "?GetDbObject@ResourceDatabase_t@@UAEPAVDbObject_t@@ABVIdentity_t@@@Z",
-                new ResourceDatabase_t.DGetDbObject(GetDbObject_Hook));
-
             if (ProcessChatInputPatcher.Patch(out IntPtr pProcessCommand, out IntPtr pGetCommand))
             {
                 CommandInterpreter_c.ProcessChatInput = Marshal.GetDelegateForFunctionPointer<CommandInterpreter_c.DProcessChatInput>(pProcessCommand);
@@ -202,12 +198,6 @@ namespace AOSharp.Bootstrap
                 CreateHook(pProcessCommand, new CommandInterpreter_c.DProcessChatInput(ProcessChatInput_Hook));
                 CreateHook(pGetCommand, new CommandInterpreter_c.DGetCommand(GetCommand_Hook));
             }
-        }
-
-        private unsafe IntPtr GetDbObject_Hook(IntPtr pthis, IntPtr pIdentity)
-        {
-            IntPtr rdbObject = ResourceDatabase_t.GetDbObject(pthis, pIdentity);
-            return rdbObject;
         }
 
         private void CreateHook(string module, string funcName, Delegate newFunc)

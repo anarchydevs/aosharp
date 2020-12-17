@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battlestation.cs" />
-    <Compile Include="Buffs\BuffHandler.cs" />
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
     <Compile Include="Dynel\NpcHolder.cs" />
@@ -132,6 +131,5 @@
       <Name>AOSharp.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
