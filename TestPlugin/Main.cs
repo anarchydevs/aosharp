@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using TestPlugin.IPCMessages;
 using System.Threading;
 using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Imports.GUI;
 
 namespace TestPlugin
 {
@@ -26,19 +28,92 @@ namespace TestPlugin
         private IPCChannel _ipcChannel;
         private Menu _menu;
         private int i = 0;
+        private double effectDelay = 3;
+        private double nextEffect = 0;
+
+        private int[] effects = {
+            2100,
+            2101,
+            11506,
+            11508,
+            12510,
+            12601,
+            13600,
+            13900,
+            14600,
+            17953,
+            43005,
+            43006,
+            43007,
+            43008,
+            43009,
+            43015,
+            43016,
+            43017,
+            43025,
+            43037,
+            43057,
+            43133,
+            43135,
+            43141,
+            43142,
+            43154,
+            43235,
+            43307,
+            43365,
+            43424,
+            43443,
+            43453,
+            43454,
+            43458,
+            43464,
+            43471,
+            43658,
+            43722,
+            43744,
+            45001,
+            45006,
+            45026,
+            45057,
+            45071,
+            47349,
+            47377,
+            47382,
+            47388,
+            47397,
+            47403,
+            //71015,
+            71123,
+            71129,
+            71214,
+            71223,
+            71228,
+            71300,
+            72020,
+            72027,
+            72332,
+            73000,
+            96001,
+            96019,
+            96020
+        };
+
+        private int currentEffect = 0;
+        private bool effectsEnabled = false;
+
         public void Run(string pluginDir)
         {
             try
             {
-                Chat.WriteLine("TestPlugin loaded");
-
+                Chat.WriteLine("Changing area. Please wait.", ChatColor.Red);
+                Chat.WriteLine("Entering 'Kaneko Gardens'", ChatColor.Red);
                 Chat.WriteLine($"LocalPlayer: {DynelManager.LocalPlayer.Identity}");
                 Chat.WriteLine($"   Name: {DynelManager.LocalPlayer.Name}");
                 Chat.WriteLine($"   Pos: {DynelManager.LocalPlayer.Position}");
                 Chat.WriteLine($"   MoveState: {DynelManager.LocalPlayer.MovementState}");
                 Chat.WriteLine($"   Health: {DynelManager.LocalPlayer.GetStat(Stat.Health)}");
                 Chat.GroupMessageReceived += GroupMessageReceived;
-
+                Chat.RegisterCommand("effect", EffectCallback);
                 /*
                 Chat.WriteLine("Playfield");
                 Chat.WriteLine($"   Identity: {Playfield.Identity}");
@@ -49,12 +124,18 @@ namespace TestPlugin
                 Chat.WriteLine($"   NumDynels: {DynelManager.AllDynels.Count}");
                 */
 
-                Chat.WriteLine("Team:");
                 Chat.WriteLine($"\tIsInTeam: {Team.IsInTeam}");
                 Chat.WriteLine($"\tIsLeader: {Team.IsLeader}");
                 Chat.WriteLine($"\tIsRaid: {Team.IsRaid}");
 
-                foreach(TeamMember teamMember in Team.Members)
+                IntPtr pBrowserModule = BrowserModule_c.GetInstance();
+                if (pBrowserModule != IntPtr.Zero)
+                {
+                    BrowserModule_c.SlotBrowserWindow(pBrowserModule, false);
+                    //BrowserWindow_c.CreateBrowserWindow(pBrowserModule);
+                }
+
+                foreach (TeamMember teamMember in Team.Members)
                 {
                     Chat.WriteLine($"\t{teamMember.Name} - {teamMember.Identity} - {teamMember.Level} - {teamMember.Profession} - IsLeader:{teamMember.IsLeader} @ Team {teamMember.TeamIndex + 1}");
                 }
@@ -69,107 +150,114 @@ namespace TestPlugin
                     Chat.WriteLine($"{perk.Name} = 0x{((uint)perk.Hash).ToString("X4")},");
                 }
 
-               /*
-               foreach(Spell spell in Spell.List)
-               {
-                   Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
-               }
-               */
 
-               /*
-c
+                foreach (Item item in Inventory.Items)
+                {
+                    Chat.WriteLine($"[{item.LowId}-{item.HighId}:{item.QualityLevel}  {item.Name}]");
+                }
 
-               /*
-               Chat.WriteLine("Buffs:");
-               foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
-               {
-                   Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
-               }
-               */
 
-               
-               /*
-               Chat.WriteLine("Pet Identities:");
-               foreach(Identity identity in DynelManager.LocalPlayer.Pets)
-               {
-                   Chat.WriteLine($"\t{identity}");
-               }
+                /*
+                foreach(Spell spell in Spell.List)
+                {
+                    Chat.WriteLine($"\t{spell.Identity}\t{spell.Name}\t{spell.MeetsUseReqs()}\t{spell.IsReady}");
+                }
+                */
 
-               Chat.WriteLine("Pet Dynels:");
-               foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
-               {
-                   Chat.WriteLine($"\t{pet.Name}");
-               }
-               */
+                /*
+ c
 
-               /*
-               Item item;
-               if(Inventory.Find(244216, out item))
-               {
-                   DummyItem dummyItem = DummyItem.GetFromTemplate(item.Slot);
-                   dummyItem.MeetsUseReqs();
-               }
-               */
+                /*
+                Chat.WriteLine("Buffs:");
+                foreach(Buff buff in DynelManager.LocalPlayer.Buffs)
+                {
+                    Chat.WriteLine($"\tBuff: {buff.Name}\t{buff.RemainingTime}/{buff.TotalTime}");
+                }
+                */
 
-               //DevExtras.Test();
 
-               /*
-               MovementController movementController = new MovementController(true);
+                /*
+                Chat.WriteLine("Pet Identities:");
+                foreach(Identity identity in DynelManager.LocalPlayer.Pets)
+                {
+                    Chat.WriteLine($"\t{identity}");
+                }
 
-               List<Vector3> testPath = new List<Vector3> {
-                   new Vector3(438.6, 8.0f, 524.4f),
-                   new Vector3(446.8f, 8.0f, 503.7f),
-                   new Vector3(460.8, 15.1f, 414.0f) 
-               };
+                Chat.WriteLine("Pet Dynels:");
+                foreach(SimpleChar pet in DynelManager.LocalPlayer.GetPetDynels())
+                {
+                    Chat.WriteLine($"\t{pet.Name}");
+                }
+                */
 
-               movementController.RunPath(testPath);
-               */
+                /*
+                Item item;
+                if(Inventory.Find(244216, out item))
+                {
+                    DummyItem dummyItem = DummyItem.GetFromTemplate(item.Slot);
+                    dummyItem.MeetsUseReqs();
+                }
+                */
 
-               /*
-               Chat.WriteLine("Missions");
-               foreach (Mission mission in Mission.List)
-               {
-                   Chat.WriteLine($"   {mission.Identity.ToString()}");
-                   Chat.WriteLine($"       Source: {mission.Source.ToString()}");
-                   Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
-                   Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
-               }
-               */
+                //DevExtras.Test();
 
-               /*
-               List<Item> characterItems = Inventory.Items;
+                /*
+                MovementController movementController = new MovementController(true);
 
-               foreach(Item item in characterItems)
-               {
-                   Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
-               }
+                List<Vector3> testPath = new List<Vector3> {
+                    new Vector3(438.6, 8.0f, 524.4f),
+                    new Vector3(446.8f, 8.0f, 503.7f),
+                    new Vector3(460.8, 15.1f, 414.0f) 
+                };
 
-               Chat.WriteLine("Backpacks:");
+                movementController.RunPath(testPath);
+                */
 
-               List<Container> backpacks = Inventory.Backpacks;
-               foreach(Container backpack in backpacks)
-               {
-                   Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
-               }        
-               */
+                /*
+                Chat.WriteLine("Missions");
+                foreach (Mission mission in Mission.List)
+                {
+                    Chat.WriteLine($"   {mission.Identity.ToString()}");
+                    Chat.WriteLine($"       Source: {mission.Source.ToString()}");
+                    Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
+                    Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
+                }
+                */
 
-               /*
-               Item noviRing;
-               if (Inventory.Find(226307, out noviRing))
-               {
-                   //noviRing.Equip(EquipSlot.Cloth_RightFinger);
+                /*
+                List<Item> characterItems = Inventory.Items;
 
-                   Container openBag = Inventory.Backpacks.FirstOrDefault(x => x.IsOpen);
-                   if(openBag != null)
-                   {
-                       noviRing.MoveToContainer(openBag);
-                   }
-               }
-               */
+                foreach(Item item in characterItems)
+                {
+                    Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
+                }
 
-               //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+                Chat.WriteLine("Backpacks:");
 
-               _menu = new Menu("TestPlugin", "TestPlugin");
+                List<Container> backpacks = Inventory.Backpacks;
+                foreach(Container backpack in backpacks)
+                {
+                    Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
+                }        
+                */
+
+                /*
+                Item noviRing;
+                if (Inventory.Find(226307, out noviRing))
+                {
+                    //noviRing.Equip(EquipSlot.Cloth_RightFinger);
+
+                    Container openBag = Inventory.Backpacks.FirstOrDefault(x => x.IsOpen);
+                    if(openBag != null)
+                    {
+                        noviRing.MoveToContainer(openBag);
+                    }
+                }
+                */
+
+                //DynelManager.LocalPlayer.CastNano(new Identity(IdentityType.NanoProgram, 223372), DynelManager.LocalPlayer);
+
+                _menu = new Menu("TestPlugin", "TestPlugin");
                 _menu.AddItem(new MenuBool("DrawingTest", "Drawing Test", false));
                 //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
@@ -225,9 +313,31 @@ c
             }
         }
 
+        private void EffectCallback(string arg1, string[] arg2, ChatWindow arg3)
+        {
+            switch (arg2[0])
+            {
+                case "start":
+                    effectsEnabled = true;
+                    break;
+                case "stop":
+                    effectsEnabled = false;
+                    break;
+                case "next":
+                    if (currentEffect == effects.Length - 1)
+                        currentEffect = 0;
+                    else
+                        currentEffect++;
+                    break;
+                case "run":
+                    IntPtr pEffectHandler = _EffectHandler_t.GetInstance();
+                    _EffectHandler_t.CreateEffect2(pEffectHandler, 43652, DynelManager.LocalPlayer.Pointer, 0);
+                    break;
+            }
+        }
+
         private void GroupMessageReceived(object sender, GroupMessageEventArgs e)
         {
-            e.Cancel = true;
             Chat.WriteLine($"[{e.Message.SenderId}] {e.Message.SenderName} just sent a message in [{e.Message.ChannelType}:{e.Message.ChannelIdMaybe}]");
         }
 
@@ -250,7 +360,12 @@ c
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
             {
                 TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
-                Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
+                string name = "NoName";
+                Dynel user = DynelManager.GetDynel(new Identity((IdentityType)ayy.Unknown3, ayy.Unknown4));
+                if (user != null)
+                    name = user.Name;
+
+                Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{name}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
             }
 
             /*
@@ -321,6 +436,25 @@ c
 
         private void OnUpdate(object s, float deltaTime)
         {
+            if (effectsEnabled)
+            {
+                double currentTime = Time.NormalTime;
+
+                if (currentTime > nextEffect)
+                {
+                    nextEffect = currentTime + effectDelay;
+
+                    IntPtr pEffectHandler = _EffectHandler_t.GetInstance();
+                    if (pEffectHandler != IntPtr.Zero)
+                    {
+                        Chat.WriteLine($"Effect {effects[currentEffect]}");
+                        _EffectHandler_t.CreateEffect2(pEffectHandler, effects[currentEffect],
+                            (DynelManager.LocalPlayer.FightingTarget != null
+                                ? DynelManager.LocalPlayer.FightingTarget.Pointer
+                                : DynelManager.LocalPlayer.Pointer), 0);
+                    }
+                }
+            }
             if (_menu.GetBool("DrawingTest"))
             {
                 foreach (Dynel player in DynelManager.Players)

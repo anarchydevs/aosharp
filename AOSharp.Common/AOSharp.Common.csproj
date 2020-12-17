@@ -249,6 +249,7 @@
     <Compile Include="Unmanaged\DataTypes\StdStructVector.cs" />
     <Compile Include="Unmanaged\DataTypes\Variant.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
+    <Compile Include="Unmanaged\Imports\DatabaseController\ResourceDatabase_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\DummyItem_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
@@ -258,6 +259,8 @@
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\BrowserModule_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\BrowserWindow_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\GUIUnk.cs" />
     <Compile Include="Unmanaged\Imports\GUI\RadioButtonGroup_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\RadioButton_c.cs" />
