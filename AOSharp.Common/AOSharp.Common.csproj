@@ -120,6 +120,9 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\DropTemplateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PickUpMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharSecSpecAttackMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MarketSendMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommand.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommandMessage.cs" />

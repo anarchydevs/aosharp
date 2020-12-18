@@ -49,7 +49,7 @@ namespace AOSharp.Core.Inventory
             if (pEngine == IntPtr.Zero)
                 return items;
 
-            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, &container);
+            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, ref container);
 
             if (pItems == IntPtr.Zero)
                 return items;
@@ -114,7 +114,7 @@ namespace AOSharp.Core.Inventory
             if (pInvList == IntPtr.Zero)
                 return items;
 
-            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, &identity);
+            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, ref identity);
 
             if (pItems == IntPtr.Zero)
                 return items;

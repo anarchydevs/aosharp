@@ -102,7 +102,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetInventoryVec
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetInventoryVec@n3EngineClientAnarchy_t@@QAEPBV?$vector@PAVNewInventoryEntry_t@@V?$allocator@PAVNewInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr GetInventoryVec(IntPtr pThis, Identity* identity);
+        public static extern IntPtr GetInventoryVec(IntPtr pThis, ref Identity identity);
 
         //IsInTeam
         [return: MarshalAs(UnmanagedType.U1)]

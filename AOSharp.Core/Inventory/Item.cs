@@ -93,6 +93,16 @@ namespace AOSharp.Core.Inventory
             });
         }
 
+        public void Drop(Vector3 position)
+        {
+            Network.Send(new DropTemplateMessage()
+            {
+                Item = Slot,
+                Position = position
+            });
+        }
+
+
         internal static void Update()
         {
             try

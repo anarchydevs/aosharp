@@ -58,6 +58,7 @@
         DoorFullUpdate = 0x365A5071,
         CityAdvantages = 0x365E555B,
         HealthDamage = 0x3710256C,
+        PickUp = 0x37136C6B,
         FightModeUpdate = 0x371D0542,
         Buff = 0x39343C68,
         KnubotTrade = 0x3A1B2C0C,

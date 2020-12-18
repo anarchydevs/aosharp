@@ -27,6 +27,7 @@ namespace TestPlugin
     public class Main : IAOPluginEntry
     {
         private IPCChannel _ipcChannel;
+        private MovementController mc;
         private Menu _menu;
         private int i = 0;
         public void Run(string pluginDir)
@@ -55,6 +56,9 @@ namespace TestPlugin
                 Chat.WriteLine($"\tIsInTeam: {Team.IsInTeam}");
                 Chat.WriteLine($"\tIsLeader: {Team.IsLeader}");
                 Chat.WriteLine($"\tIsRaid: {Team.IsRaid}");
+
+                mc = new MovementController(drawPath: true);
+
 
                 foreach (TeamMember teamMember in Team.Members)
                 {
@@ -228,6 +232,15 @@ namespace TestPlugin
                     else
                         Chat.WriteLine(Targeting.TargetChar.Identity);
                     */
+                    Identity identity = Targeting.TargetChar.Identity;
+                    foreach (Stat stat in Enum.GetValues(typeof(Stat)))
+                    {
+                        Network.Send(new CharSecSpecAttackMessage()
+                        {
+                            Target = identity,
+                            Stat = stat
+                        });
+                    }
 
                     if (Spell.Find(85872, out Spell spell))
                     {
@@ -286,13 +299,14 @@ namespace TestPlugin
                 //Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
                 //Network.PacketReceived += Network_PacketReceived;
+                Network.PacketSent += Network_PacketSent;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 //DynelManager.DynelSpawned += DynelSpawned;
-                DynelManager.CharInPlay += CharInPlay;
+                //DynelManager.CharInPlay += CharInPlay;
             }
             catch (Exception e)
             {
@@ -305,10 +319,16 @@ namespace TestPlugin
             Chat.WriteLine($"{e.Nano}, {e.Target}");
         }
 
+        private void Network_PacketSent(object s, byte[] packet)
+        {
+            //if (msgType == N3MessageType.)
+            //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+        }
+
         private void Network_PacketReceived(object s, byte[] packet)
         {
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
-            Chat.WriteLine($"{msgType}");
+            //Chat.WriteLine($"{msgType}");
 
             if (msgType == N3MessageType.FollowTarget)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
@@ -428,7 +448,7 @@ namespace TestPlugin
 
         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
-            Chat.WriteLine($"{n3Msg.N3MessageType}");
+            //Chat.WriteLine($"{n3Msg.N3MessageType}");
 
             
             if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)
@@ -509,6 +529,7 @@ namespace TestPlugin
         private void Item_ItemUsed(object s, ItemUsedEventArgs e)
         {
             Chat.WriteLine($"Item {e.Item.Name} used by {e.OwnerIdentity}");
+            //mc.SetDestination(new Vector3(620, 66.8f, 687));
         }
 
         double lastTrigger = Time.NormalTime;
@@ -579,7 +600,7 @@ namespace TestPlugin
                     //if (testPerk.IsAvailable)
                     //   testPerk.Use();
                 }*/
-                
+
                 //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
                 //Targeting.SetTarget(randomTarget);
 
@@ -590,7 +611,7 @@ namespace TestPlugin
                     Leet = 1337
                 });
                 */
-                     
+
                 lastTrigger = Time.NormalTime;
             }
         }

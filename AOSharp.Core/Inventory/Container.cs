@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Core.Inventory
 {
-    public unsafe class Container
+    public unsafe class Container : ItemHolder
     {
-        public List<Item> Items => Inventory.GetContainerItems(Identity);
+        public override List<Item> Items => Inventory.GetContainerItems(Identity);
         public bool IsOpen => GetIsOpen();
         public readonly Identity Identity;
         public readonly Identity Slot;
@@ -31,7 +31,7 @@ namespace AOSharp.Core.Inventory
                 return false;
 
             Identity identity = Identity;
-            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, &identity);
+            IntPtr pItems = N3EngineClientAnarchy_t.GetInventoryVec(pEngine, ref identity);
 
             return pItems != IntPtr.Zero;
         }
