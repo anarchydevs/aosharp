@@ -25,5 +25,8 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("Gamecode.dll", EntryPoint = "?GetEffectByID@_EffectHandler_t@@QAEPAV_GfxControl_t@@I@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetEffectByID(IntPtr pThis, uint effectId);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?SetDuration@_EffectHandler_t@@QAEXIM@Z")]
+        public static extern void SetDuration(IntPtr pThis, uint hEffect, float duration);
     }
 }

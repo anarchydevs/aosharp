@@ -216,6 +216,12 @@ namespace AOSharp.Core
                         case UseCriteriaOperator.IsPerkUnlocked:
                             metReq = true;
                             break;
+                        case UseCriteriaOperator.HasRunningNanoLine:
+                            metReq = skillCheckChar.Buffs.Contains((Nanoline)param2);
+                            break;
+                        case UseCriteriaOperator.HasNotRunningNanoLine:
+                            metReq = !skillCheckChar.Buffs.Contains((Nanoline) param2);
+                            break;
                         case UseCriteriaOperator.HasNcuFor:
                             //TODO: check against actual nano program NCU cost
                             metReq = skillCheckChar.GetStat(Stat.MaxNCU) - skillCheckChar.GetStat(Stat.CurrentNCU) > 0;

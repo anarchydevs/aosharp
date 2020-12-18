@@ -78,6 +78,9 @@
     <Compile Include="RoomDependencies.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\AOSharp.Bootstrap\AOSharp.Bootstrap.csproj">
       <Project>{56164cdc-83a1-4d13-91cf-3b1aa3f289b1}</Project>
       <Name>AOSharp.Bootstrap</Name>
@@ -90,9 +93,6 @@
       <Project>{77516561-fa9c-47cd-8c2d-fc8a8b67876b}</Project>
       <Name>AOSharp.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

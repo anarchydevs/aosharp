@@ -49,6 +49,8 @@ namespace AOSharp.Core
 
         public bool IsAlive => Health > 0;
 
+        public bool IsInLineOfSight => GamecodeUnk.IsInLineOfSight(DynelManager.LocalPlayer.Pointer, Pointer);
+
         public SimpleChar FightingTarget => GetFightingTarget();
 
         public Buff[] Buffs => GetBuffs();
@@ -88,11 +90,6 @@ namespace AOSharp.Core
             return ourPhysicalDist - hisRadius - myRadius;
         }
 
-        public bool IsInLightOfSight()
-        {
-            return GamecodeUnk.IsInLineOfSight(DynelManager.LocalPlayer.Pointer, Pointer);
-        }
-        
         public bool IsFacing(SimpleChar target)
         {
             return Vector3.Angle(Rotation.Forward, target.Position - Position) <= 90f;

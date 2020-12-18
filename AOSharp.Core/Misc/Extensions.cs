@@ -28,6 +28,11 @@ namespace AOSharp.Core
             return (buff = buffs.FirstOrDefault(x => (Nanoline)x.GetStat(Stat.NanoStrain) == nanoline)) != null;
         }
 
+        public static bool Find(this Buff[] buffs, int[] ids, out Buff buff)
+        {
+            return (buff = buffs.FirstOrDefault(b => ids.Contains(b.Identity.Instance))) != null;
+        }
+
         public static bool Contains(this Buff[] buffs, int id)
         {
             return Contains(buffs, new[] { id });
