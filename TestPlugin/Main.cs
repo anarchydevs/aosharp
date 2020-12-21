@@ -24,12 +24,12 @@ using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 
 namespace TestPlugin
 {
-    public class Main : IAOPluginEntry
+    public class Main : AOPluginEntry
     {
         private IPCChannel _ipcChannel;
         private Menu _menu;
         private int i = 0;
-        public void Run(string pluginDir)
+        public override void Run(string pluginDir)
         {
             try
             {
