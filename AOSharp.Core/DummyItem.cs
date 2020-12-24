@@ -87,7 +87,7 @@ namespace AOSharp.Core
             if (pCriteria == IntPtr.Zero)
                 return true;
 
-            bool[] unk = new bool[8];
+            bool[] unk = new bool[12];
             byte prevReqsMet = 0;
             SimpleChar skillCheckChar = DynelManager.LocalPlayer;
             CriteriaSource criteriaSource = CriteriaSource.Self;
@@ -108,7 +108,8 @@ namespace AOSharp.Core
                     criteriaSource = CriteriaSource.User;
                     skillCheckChar = DynelManager.LocalPlayer;
                     continue;
-                } else if (op == UseCriteriaOperator.OnTarget)
+                }
+                else if (op == UseCriteriaOperator.OnTarget)
                 {
                     criteriaSource = CriteriaSource.Target;
                     skillCheckChar = target;
@@ -134,8 +135,8 @@ namespace AOSharp.Core
                                     bool isFacing = fightingTarget.IsFacing(DynelManager.LocalPlayer);
                                     metReq = (param2 == 1) ? !isFacing : isFacing;
                                 }
-                            } 
-                            else if((Stat)param1 == Stat.MonsterData) // Ignore this check because something funky is going on with it.
+                            }
+                            else if ((Stat)param1 == Stat.MonsterData) // Ignore this check because something funky is going on with it.
                             {
                                 metReq = true;
                             }
@@ -196,9 +197,9 @@ namespace AOSharp.Core
                             break;
                         case UseCriteriaOperator.HasWornItem:
                             metReq = Inventory.Inventory.Find(param2, out Item item) &&
-                                     (item.Slot.Type == IdentityType.ArmorPage ||
-                                      item.Slot.Type == IdentityType.ImplantPage ||
-                                      item.Slot.Type == IdentityType.WeaponPage);
+                                        (item.Slot.Type == IdentityType.ArmorPage ||
+                                        item.Slot.Type == IdentityType.ImplantPage ||
+                                        item.Slot.Type == IdentityType.WeaponPage);
                             break;
                         case UseCriteriaOperator.IsNpc:
                             if (param2 == 3)
@@ -220,7 +221,7 @@ namespace AOSharp.Core
                             metReq = skillCheckChar.Buffs.Contains((Nanoline)param2);
                             break;
                         case UseCriteriaOperator.HasNotRunningNanoLine:
-                            metReq = !skillCheckChar.Buffs.Contains((Nanoline) param2);
+                            metReq = !skillCheckChar.Buffs.Contains((Nanoline)param2);
                             break;
                         case UseCriteriaOperator.HasNcuFor:
                             //TODO: check against actual nano program NCU cost
@@ -256,18 +257,34 @@ namespace AOSharp.Core
                                 metReq = Inventory.Inventory.Items.Any(i =>
                                     (i.LowId == param2 || i.HighId == param2) &&
                                     (i.Slot.Instance >= (int)EquipSlot.Weap_Hud1 &&
-                                     i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
+                                        i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
                             }
                             break;
                         case UseCriteriaOperator.IsSameAs:
                             //Not sure what these parmas correlate to but I don't know any other item that uses this operator either.
-                            if(param1 == 1 && param2 == 3)
+                            if (param1 == 1 && param2 == 3)
                             {
                                 if (target == null)
                                     metReq = false;
                                 else
                                     metReq = target.Identity == DynelManager.LocalPlayer.Identity;
                             }
+                            break;
+                        case UseCriteriaOperator.AlliesNotInCombat:
+                            if (Team.Members.Contains(skillCheckChar.Identity))
+                            {
+                                Identity[] teamMembers = Team.Members.Select(x => x.Identity).ToArray();
+                                metReq = !DynelManager.Characters.Any(x => x.FightingTarget != null && teamMembers.Contains(x.FightingTarget.Identity));
+                            }
+                            else
+                            {
+                                metReq = !DynelManager.Characters.Any(x => x.FightingTarget != null && (x.FightingTarget.Identity == skillCheckChar.Identity || x.FightingTarget.Identity == DynelManager.LocalPlayer.Identity));
+                            }
+
+                            break;
+                        case UseCriteriaOperator.IsOwnPet:
+                            metReq = DynelManager.LocalPlayer.Pets.Contains(skillCheckChar.Identity);
+
                             break;
                         default:
                             //Chat.WriteLine($"Unknown Criteria -- Param1: {param1} - Param2: {param2} - Op: {op}");

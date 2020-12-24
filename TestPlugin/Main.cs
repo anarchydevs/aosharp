@@ -215,7 +215,14 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    //Window.CreateFromXml("Test", @"C:\Users\tagyo\Desktop\Test.xml").Show(true);
+                    if(Inventory.Find(297274, out Item sitKit))
+                    {
+                        Chat.WriteLine(sitKit.MeetsUseReqs(Targeting.TargetChar));
+                    }
+
+
+                    //DevExtras.Test();
+                    //Window.CreateFromXml("Test", @"D:\2020Backup\Desktop\Test.xml").Show(true);
                     //DevExtras.Test(chatWindow);
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
@@ -232,15 +239,6 @@ namespace TestPlugin
                     else
                         Chat.WriteLine(Targeting.TargetChar.Identity);
                     */
-                    Identity identity = Targeting.TargetChar.Identity;
-                    foreach (Stat stat in Enum.GetValues(typeof(Stat)))
-                    {
-                        Network.Send(new CharSecSpecAttackMessage()
-                        {
-                            Target = identity,
-                            Stat = stat
-                        });
-                    }
 
                     if (Spell.Find(85872, out Spell spell))
                     {
@@ -299,7 +297,7 @@ namespace TestPlugin
                 //Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
                 //Network.PacketReceived += Network_PacketReceived;
-                Network.PacketSent += Network_PacketSent;
+                //Network.PacketSent += Network_PacketSent;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
@@ -328,7 +326,7 @@ namespace TestPlugin
         private void Network_PacketReceived(object s, byte[] packet)
         {
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
-            //Chat.WriteLine($"{msgType}");
+            Chat.WriteLine($"{msgType}");
 
             if (msgType == N3MessageType.FollowTarget)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));

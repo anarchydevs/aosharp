@@ -121,6 +121,10 @@ namespace AOSharp.Core
         private static unsafe List<TeamMember> GetMemberList()
         {
             List<TeamMember> teamMembers = new List<TeamMember>();
+
+            if (!IsInTeam)
+                return teamMembers;
+
             IntPtr pEngine = N3Engine_t.GetInstance();
 
             if (pEngine == IntPtr.Zero)

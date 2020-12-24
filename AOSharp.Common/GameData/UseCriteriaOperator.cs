@@ -106,7 +106,9 @@
         NotBitAnd = 107,
         ObtainedItem = 108,
         OnUnknown = 110,
+        IsOwnPet = 118,
         HasNcuFor = 127,
+        AlliesNotInCombat = 136,
         Blank = 255,
     }
 }

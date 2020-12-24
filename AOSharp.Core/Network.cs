@@ -175,6 +175,10 @@ namespace AOSharp.Core
                 //case CharacterActionType.TeamKick:
                 //    Team.OnMemberLeft(charActionMessage.Target);
                 //    break;
+
+                //default:
+                //    Chat.WriteLine($"UnhandledCharAction::{charActionMessage.Action}");
+                //    break;
             }
         }
 

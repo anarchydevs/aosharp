@@ -57,5 +57,15 @@ namespace AOSharp.Core
         {
             return spells.Select(x => x.Identity.Instance).ToArray();
         }
+
+        public static bool Contains(this List<TeamMember> teamMembers, Identity identity)
+        {
+            return teamMembers.Select(x => x.Identity).Contains(identity);
+        }
+
+        public static bool Contains(this Pet[] pets, Identity identity)
+        {
+            return pets.Select(x => x.Identity).Contains(identity);
+        }
     }
 }
