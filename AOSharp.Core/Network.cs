@@ -170,7 +170,7 @@ namespace AOSharp.Core
                     Team.OnMemberLeft(charActionMessage.Target);
                     break;
                 case CharacterActionType.QueuePerk:
-                    Perk.OnPerkQueued();
+                    PerkAction.OnPerkQueued();
                     break;
                 //case CharacterActionType.TeamKick:
                 //    Team.OnMemberLeft(charActionMessage.Target);
@@ -192,7 +192,7 @@ namespace AOSharp.Core
                     Item.OnItemUsed(templateActionMessage.ItemLowId, templateActionMessage.ItemHighId, templateActionMessage.Quality, templateActionMessage.Identity);
                     break;
                 case 32:
-                    Perk.OnPerkFinished(templateActionMessage.ItemLowId, templateActionMessage.ItemHighId, templateActionMessage.Quality, templateActionMessage.Identity);
+                    PerkAction.OnPerkFinished(templateActionMessage.ItemLowId, templateActionMessage.ItemHighId, templateActionMessage.Quality, templateActionMessage.Identity);
                     break;
             }
         }
