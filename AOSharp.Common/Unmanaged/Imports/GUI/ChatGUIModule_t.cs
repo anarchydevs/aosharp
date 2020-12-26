@@ -10,7 +10,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern IntPtr GetInstance();
 
         [DllImport("GUI.dll", EntryPoint = "?ExpandChatTextArgs@ChatGUIModule_c@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern StdString* ExpandChatTextArgs(IntPtr pOut, IntPtr pMsg);
+        public static unsafe extern IntPtr ExpandChatTextArgs(IntPtr pOut, IntPtr pMsg);
 
         //HandleGroupMessage
         [DllImport("GUI.dll", EntryPoint = "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z", CallingConvention = CallingConvention.ThisCall)]

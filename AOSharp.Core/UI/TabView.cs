@@ -25,9 +25,8 @@ namespace AOSharp.Core.UI
 
         public void AppendTab(string name, IntPtr pView)
         {
-            IntPtr pName = StdString.Create(name);
-            TabView_c.AppendTab(_pointer, pName, pView);
-            StdString.Dispose(pName);
+            StdString nameStr = StdString.Create(name);
+            TabView_c.AppendTab(_pointer, nameStr.Pointer, pView);
         }
 
         public override void Dispose()

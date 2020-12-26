@@ -13,26 +13,13 @@ namespace AOSharp.Core
 {
     public static class DevExtras
     {
-        [DllImport("Utils.dll", EntryPoint = "?AddVariable@DistributedValue_c@@SAXABVString@@ABVVariant@@_N2@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void AddVariable(IntPtr pPathStr, IntPtr pVariant, bool unk1, bool unk2);
-
-        [DllImport("Utils.dll", EntryPoint = "?ObserveAll@DistributedValue_c@@QAEXXZ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Observe(IntPtr pThis, IntPtr pPathStr);
-
-        [DllImport("Utils.dll", EntryPoint = "?GetInstance@IndependentPrefs_t@@SAPAV1@XZ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr IndependentPrefs__GetInstance();
-
-        [DllImport("Utils.dll", EntryPoint = "?ObserveAll@DistributedValue_c@@QAEXXZ", CallingConvention = CallingConvention.ThisCall)]
-        public static extern bool IndependentPrefs__Load(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string message, int type);
-
         //Packed with random tests. Don't invoke unless you want weird stuff to execute.
         public static void Test()
         {
-            IntPtr pName = StdString.Create("Well_this_is_op");
-            IntPtr pVariant = Variant.Create(1).Pointer;
-            AddVariable(pName, pVariant, false, false);
-            Observe(pVariant, pName);
-
+            DistributedValue.Create("Well_this_is_op", 1337);
+            Window.CreateFromXml("Test", @"D:\2020Backup\Desktop\Test.xml").Show(true);
+            //DistributedValue.LoadConfig(@"C:\Users\tagyo\AppData\Local\Funcom\Anarchy Online\cd94ae4f\Anarchy Online\Prefs\melatonin220\Char1108641443\Prefs.xml", 3, true);
+            //DistributedValue.SaveConfig(@"C:\Users\tagyo\Desktop\test3.xml", 3);
             /*
             IntPtr pPrefs = IndependentPrefs__GetInstance();
 
@@ -52,7 +39,7 @@ namespace AOSharp.Core
         //Maps message keys to string. Not very reliable as it seems most aren't mapped by the func.
         public static unsafe string KeyToString(int key)
         {
-            return (*N3InfoItemRemote_t.KeyToString(key)).ToString();
+            return StdString.FromPointer(N3InfoItemRemote_t.KeyToString(key)).ToString();
         }
     }
 }

@@ -236,21 +236,20 @@ namespace AOSharp.Bootstrap
             return bytesRead;
         }
 
-        public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, StdString* commandText)
+        public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
         {
-            IntPtr tokenized = StdString.Create();
-            ChatGUIModule_t.ExpandChatTextArgs(tokenized, StdString.Create(commandText->ToString()));
-            _lastChatInput = ((StdString*)tokenized)->ToString();
+            StdString tokenized = StdString.Create();
+            ChatGUIModule_t.ExpandChatTextArgs(tokenized.Pointer, pCmdText);
+            _lastChatInput = tokenized.ToString();
             _lastChatInputWindowPtr = pWindow;
-            StdString.Dispose(tokenized);
 
-            return CommandInterpreter_c.ProcessChatInput(pThis, pWindow, commandText);
+            return CommandInterpreter_c.ProcessChatInput(pThis, pWindow, pCmdText);
         }
 
-        public unsafe IntPtr GetCommand_Hook(IntPtr pThis, StdString* commandText, bool unk)
+        public unsafe IntPtr GetCommand_Hook(IntPtr pThis, IntPtr pCmdText, bool unk)
         {
             IntPtr result;
-            if ((result = CommandInterpreter_c.GetCommand(pThis, commandText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
+            if ((result = CommandInterpreter_c.GetCommand(pThis, pCmdText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
                 _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;

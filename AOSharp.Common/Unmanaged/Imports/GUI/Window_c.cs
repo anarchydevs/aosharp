@@ -37,14 +37,10 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         public static unsafe IntPtr Create(Rect rect, string string1, string string2, WindowStyle style, WindowFlags flags)
         {
-            IntPtr pNew = MSVCR100.New(0xAC);
-            IntPtr pString1 = StdString.Create(string1);
-            IntPtr pString2 = StdString.Create(string2);
+            StdString str1 = StdString.Create(string1);
+            StdString str2 = StdString.Create(string2);
 
-            IntPtr pWindow = Constructor(pNew, &rect, pString1, pString2, style, flags);
-
-            StdString.Dispose(pString1);
-            StdString.Dispose(pString2);
+            IntPtr pWindow = Constructor(MSVCR100.New(0xAC), &rect, str1.Pointer, str2.Pointer, style, flags);
 
             return pWindow;
         }

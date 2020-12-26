@@ -206,7 +206,7 @@ namespace AOSharp.Core
             public bool IsInPlay;
 
             [FieldOffset(0x154)]
-            public StdString Name;
+            public IntPtr Name;
 
             [FieldOffset(0x1D4)]
             public WeaponHolder* WeaponHolder;

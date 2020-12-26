@@ -19,12 +19,8 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         public static unsafe IntPtr Create(Rect rect, string name, int unk1, int unk2)
         {
-            IntPtr pNew = MSVCR100.New(0x1A8);
-            IntPtr pName = StdString.Create(name);
-
-            IntPtr pView = Constructor(pNew, &rect, pName, unk1, unk2);
-
-            StdString.Dispose(pName);
+            StdString nameStr = StdString.Create(name);
+            IntPtr pView = Constructor(MSVCR100.New(0x1A8), &rect, nameStr.Pointer, unk1, unk2);
 
             return pView;
         }

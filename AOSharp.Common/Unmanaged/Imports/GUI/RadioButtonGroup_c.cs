@@ -18,10 +18,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static IntPtr Create(string name, int unk1, uint unk2, uint unk3)
         {
             IntPtr pNew = MSVCR100.New(0x250);
-            IntPtr pName = StdString.Create(name);
-            IntPtr pView = Constructor(pNew, pName, unk1, (uint)pNew, (uint)pNew);
-
-            StdString.Dispose(pName);
+            StdString nameStr = StdString.Create(name);
+            IntPtr pView = Constructor(pNew, nameStr.Pointer, unk1, (uint)pNew, (uint)pNew);
 
             return pView;
         }

@@ -20,14 +20,9 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         public static IntPtr Create(string name, string labelText, int unk1, uint unk2, uint unk3)
         {
-            IntPtr pNew = MSVCR100.New(0x168);
-            IntPtr pName = StdString.Create(name);
-            IntPtr pLabel = StdString.Create(labelText);
-
-            IntPtr pView = Constructor(pNew, pName, pLabel, unk1, unk2, unk3);
-
-            StdString.Dispose(pName);
-            StdString.Dispose(pLabel);
+            StdString nameStr = StdString.Create(name);
+            StdString labelStr = StdString.Create(labelText);
+            IntPtr pView = Constructor(MSVCR100.New(0x168), nameStr.Pointer, labelStr.Pointer, unk1, unk2, unk3);
 
             return pView;
         }

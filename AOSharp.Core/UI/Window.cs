@@ -41,7 +41,7 @@ namespace AOSharp.Core.UI
 
             Window window = Create(new Rect(50, 50, 300, 300), name, name, WindowStyle.Default, WindowFlags.AutoScale);
 
-            if (!GUIUnk.LoadViewFromXml(out IntPtr pView, StdString.Create(path), StdString.Create()))
+            if (!GUIUnk.LoadViewFromXml(out IntPtr pView, StdString.Create(path).Pointer, StdString.Create().Pointer))
                 return null;
 
             window.AppendTab(name, new View(pView, false));
@@ -76,16 +76,14 @@ namespace AOSharp.Core.UI
 
         public void SetTitle(string name)
         {
-            IntPtr pName = StdString.Create(name);
-            Window_c.SetTitle(_pointer, pName);
-            StdString.Dispose(pName);
+            StdString nameStr = StdString.Create(name);
+            Window_c.SetTitle(_pointer, nameStr.Pointer);
         }
 
         public void AppendTab(string name, View view)
         {
-            IntPtr pName = StdString.Create(name);
-            Window_c.AppendTab(_pointer, pName, view.Pointer);
-            StdString.Dispose(pName);
+            StdString nameStr = StdString.Create(name);
+            Window_c.AppendTab(_pointer, nameStr.Pointer, view.Pointer);
             Views.Add(view);
         }
 

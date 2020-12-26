@@ -56,10 +56,11 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetName
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetName@n3EngineClientAnarchy_t@@QBEPBDABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr GetName(IntPtr pThis, Identity* identity, Identity* identityUnk);
-
-        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetName@n3EngineClientAnarchy_t@@QBEPBDABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe IntPtr GetName(IntPtr pThis, ref Identity identity, ref Identity identityUnk);
+
+        //GetPerkName
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetPerkName@n3EngineClientAnarchy_t@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I_N@Z", CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe IntPtr GetPerkName(IntPtr pThis, int perkId, bool unk);
 
         //IsFormulaReady
         [return: MarshalAs(UnmanagedType.U1)]

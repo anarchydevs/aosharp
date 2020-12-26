@@ -37,7 +37,7 @@ namespace AOSharp.Common.GameData
             public uint SenderId;
 
             [FieldOffset(0xC)]
-            public StdString SenderName;
+            public IntPtr SenderName;
         }
     }
 }

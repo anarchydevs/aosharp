@@ -27,9 +27,7 @@ namespace AOSharp.Core.UI
         {
             if (_pointer != IntPtr.Zero)
             {
-                IntPtr pMsg = StdString.Create(text);
-                ChatWindowNode_t.AppendText(_pointer, pMsg, color);
-                StdString.Dispose(pMsg);
+                ChatWindowNode_t.AppendText(_pointer, StdString.Create(text).Pointer, color);
             }
             else
             {

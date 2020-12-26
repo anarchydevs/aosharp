@@ -13,13 +13,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static IntPtr Create(string string1, string string2)
         {
             IntPtr pNew = MSVCR100.New(0x74);
-            IntPtr pString1 = StdString.Create(string1);
-            IntPtr pString2 = StdString.Create(string2);
+            StdString str1 = StdString.Create(string1);
+            StdString str2 = StdString.Create(string2);
 
-            IntPtr pToolTip = Constructor(pNew, pString1, pString2);
-
-            StdString.Dispose(pString1);
-            StdString.Dispose(pString2);
+            IntPtr pToolTip = Constructor(pNew, str1.Pointer, str2.Pointer);
 
             return pToolTip;
         }

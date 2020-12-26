@@ -21,6 +21,7 @@ using AOSharp.Common.Unmanaged.DataTypes;
 using Zoltu.IO;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
+using System.Runtime.InteropServices;
 
 namespace TestPlugin
 {
@@ -215,16 +216,7 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    if(Inventory.Find(297274, out Item sitKit))
-                    {
-                        Chat.WriteLine(sitKit.MeetsUseReqs(Targeting.TargetChar));
-                    }
-
-
-                    //DevExtras.Test();
-                    //Window.CreateFromXml("Test", @"D:\2020Backup\Desktop\Test.xml").Show(true);
-                    //DevExtras.Test(chatWindow);
-
+                    DevExtras.Test();
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
 
                     /*
@@ -436,7 +428,9 @@ namespace TestPlugin
         private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
         {
             if (chatMessage.PacketType == ChatMessageType.PrivateMessage)
+            {
                 Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
+            }
         }
 
         private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)

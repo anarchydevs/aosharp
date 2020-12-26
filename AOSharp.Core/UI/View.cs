@@ -25,7 +25,8 @@ namespace AOSharp.Core.UI
         {
             _pointer = pointer;
             Handle = *(int*)(_pointer + 0x44);
-            Name = (*(StdString*)(_pointer + 0x20)).ToString();
+            Name = "idk";
+            //Name = StdString.FromPointer(*(IntPtr*)(_pointer + 0x20)).ToString();
 
             if (register)
                 UIController.RegisterView(this);

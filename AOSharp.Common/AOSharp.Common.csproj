@@ -266,6 +266,7 @@
     <Compile Include="Unmanaged\DataTypes\StdObjVector.cs" />
     <Compile Include="Unmanaged\DataTypes\StdString.cs" />
     <Compile Include="Unmanaged\DataTypes\StdStructVector.cs" />
+    <Compile Include="Unmanaged\DataTypes\DistributedValue.cs" />
     <Compile Include="Unmanaged\DataTypes\Variant.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Unmanaged\Imports\Randy31\Debugger_t.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\String_c.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
   </ItemGroup>

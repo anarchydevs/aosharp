@@ -21,7 +21,7 @@ namespace AOSharp.Core.UI.Options
         {
             //RadioButtonGroup radioGroup = RadioButtonGroup.Create(Name);
 
-            IntPtr pView = XMLObject_c.LoadXMLObject(StdString.Create(@"C:\Users\tagyo\Desktop\Test.xml"), StdString.Create());
+            IntPtr pView = XMLObject_c.LoadXMLObject(StdString.Create(@"C:\Users\tagyo\Desktop\Test.xml").Pointer, StdString.Create().Pointer);
 
             return new View(pView);
         }

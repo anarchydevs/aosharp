@@ -19,13 +19,9 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         public static unsafe IntPtr Create(Rect rect, string name, int scrollBarModeH, int scrollBarModeV, int unk1, int unk2, int unk3)
         {
-            IntPtr pNew = MSVCR100.New(0x1B0);
-            IntPtr pName = StdString.Create(name);
-
-            IntPtr pView = Constructor(pNew, &rect, pName, scrollBarModeH, scrollBarModeV, unk1, unk2, unk3);
-
-            StdString.Dispose(pName);
-
+            StdString nameStr = StdString.Create(name);
+            IntPtr pView = Constructor(MSVCR100.New(0x1B0), &rect, nameStr.Pointer, scrollBarModeH, scrollBarModeV, unk1, unk2, unk3);
+  
             return pView;
         }
     }
