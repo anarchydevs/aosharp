@@ -5,7 +5,7 @@ using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Common.Unmanaged.DataTypes
 {
-    public class StdString// : IDisposable
+    public class StdString : IDisposable
     {
         public readonly IntPtr Pointer;
         public unsafe int Length => ((StdStringStruct*)Pointer)->Length;
@@ -84,7 +84,6 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return !(str1 == str2);
         }
 
-        /*
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -103,7 +102,7 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
-        }*/
+        }
     }
 
     [StructLayout(LayoutKind.Explicit, Pack=0)]
