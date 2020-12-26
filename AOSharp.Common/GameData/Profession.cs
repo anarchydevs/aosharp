@@ -1,4 +1,7 @@
-﻿namespace AOSharp.Common.GameData
+﻿using System;
+using AOSharp.Common.Helpers;
+
+namespace AOSharp.Common.GameData
 {
     public enum Profession : byte
     {
@@ -18,5 +21,25 @@
         Monster = 13,
         Keeper = 14,
         Shade = 15
+    }
+
+    [Flags]
+    public enum ProfessionFlag : uint
+    {
+        None = BitFlag.None,
+        Soldier = BitFlag.Bit1,
+        MartialArtist = BitFlag.Bit2,
+        Engineer = BitFlag.Bit3,
+        Fixer = BitFlag.Bit4,
+        Agent = BitFlag.Bit5,
+        Adventurer = BitFlag.Bit6,
+        Trader = BitFlag.Bit7,
+        Bureaucrat = BitFlag.Bit8,
+        Enforcer = BitFlag.Bit9,
+        Doctor = BitFlag.Bit10,
+        NanoTechnician = BitFlag.Bit11,
+        MetaPhysicist = BitFlag.Bit12,
+        Keeper = BitFlag.Bit14,
+        Shade = BitFlag.Bit15
     }
 }

@@ -19,6 +19,8 @@ namespace AOSharp.Core
         public float AttackDelay => GetStat(Stat.AttackDelay) / 100;
 
         public virtual float AttackRange => GetStat(Stat.AttackRange);
+        public virtual CanFlags CanFlags => (CanFlags)GetStat(Stat.Can);
+
 
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
@@ -218,10 +220,10 @@ namespace AOSharp.Core
                             metReq = true;
                             break;
                         case UseCriteriaOperator.HasRunningNanoLine:
-                            metReq = skillCheckChar.Buffs.Contains((Nanoline)param2);
+                            metReq = skillCheckChar.Buffs.Contains((NanoLine)param2);
                             break;
                         case UseCriteriaOperator.HasNotRunningNanoLine:
-                            metReq = !skillCheckChar.Buffs.Contains((Nanoline)param2);
+                            metReq = !skillCheckChar.Buffs.Contains((NanoLine) param2);
                             break;
                         case UseCriteriaOperator.HasNcuFor:
                             //TODO: check against actual nano program NCU cost

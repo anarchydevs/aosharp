@@ -53,6 +53,7 @@
     <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\GroupMessage.cs" />
+    <Compile Include="GameData\PerkLine.cs" />
     <Compile Include="GameData\PetType.cs" />
     <Compile Include="GameData\SpecialActionState.cs" />
     <Compile Include="GameData\Side.cs" />
@@ -69,17 +70,18 @@
     <Compile Include="GameData\MissionDirection.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />
-    <Compile Include="GameData\Nanoline.cs" />
+    <Compile Include="GameData\NanoLine.cs" />
     <Compile Include="GameData\Profession.cs" />
     <Compile Include="GameData\Quaternion.cs" />
     <Compile Include="GameData\Rect.cs" />
-    <Compile Include="GameData\SpecialAttackFlags.cs" />
+    <Compile Include="GameData\CanFlags.cs" />
     <Compile Include="GameData\Stat.cs" />
     <Compile Include="GameData\TradeAction.cs" />
     <Compile Include="GameData\Vector2.cs" />
     <Compile Include="GameData\Vector3.cs" />
     <Compile Include="GameData\WindowFlags.cs" />
     <Compile Include="GameData\WindowStyle.cs" />
+    <Compile Include="Helpers\BitFlag.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Exceptions\ContractIdCollisionException.cs" />
@@ -328,6 +330,7 @@
     <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
+    <Compile Include="Unmanaged\Interfaces\N3EngineClientAnarchy.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

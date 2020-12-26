@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Common.GameData
 {
-    public enum Nanoline
+    public enum NanoLine
     {
         NOSTACKING = 0,
         DamageShields = 1,

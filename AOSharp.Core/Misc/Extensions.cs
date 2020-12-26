@@ -23,9 +23,9 @@ namespace AOSharp.Core
             return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;
         }
 
-        public static bool Find(this Buff[] buffs, Nanoline nanoline, out Buff buff)
+        public static bool Find(this Buff[] buffs, NanoLine nanoline, out Buff buff)
         {
-            return (buff = buffs.FirstOrDefault(x => (Nanoline)x.GetStat(Stat.NanoStrain) == nanoline)) != null;
+            return (buff = buffs.FirstOrDefault(x => (NanoLine)x.GetStat(Stat.NanoStrain) == nanoline)) != null;
         }
 
         public static bool Find(this Buff[] buffs, int[] ids, out Buff buff)
@@ -43,9 +43,9 @@ namespace AOSharp.Core
             return buffs.Any(b => ids.Contains(b.Identity.Instance));
         }
 
-        public static bool Contains(this Buff[] buffs, Nanoline nanoline)
+        public static bool Contains(this Buff[] buffs, NanoLine nanoline)
         {
-            return buffs.Any(b => (Nanoline) b.GetStat(Stat.NanoStrain) == nanoline);
+            return buffs.Any(b => (NanoLine) b.GetStat(Stat.NanoStrain) == nanoline);
         }
 
         public static IEnumerable<Spell> OrderByStackingOrder(this IEnumerable<Spell> spells)
