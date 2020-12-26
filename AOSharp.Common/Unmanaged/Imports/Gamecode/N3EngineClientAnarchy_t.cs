@@ -132,7 +132,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetFullPerkMap
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetFullPerkMap@n3EngineClientAnarchy_t@@QBEABV?$vector@VPerk_t@@V?$allocator@VPerk_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
-        public static extern IntPtr GetFullPerkMap(IntPtr pThis);
+        public static extern unsafe StdStructVector* GetFullPerkMap(IntPtr pThis);
 
         //IsTeamLeader
         [return: MarshalAs(UnmanagedType.U1)]

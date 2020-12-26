@@ -22,7 +22,7 @@ namespace AOSharp.Core.Combat
         private List<SpellRule> _spellRules = new List<SpellRule>();
 
         protected delegate bool ItemConditionProcessor(Item item, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
-        protected delegate bool PerkConditionProcessor(Perk perk, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
+        protected delegate bool PerkConditionProcessor(PerkAction perkAction, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
         protected delegate bool SpellConditionProcessor(Spell spell, SimpleChar fightingTarget, ref (SimpleChar Target, bool ShouldSetTarget) actionTarget);
 
         public static CombatHandler Instance { get; private set; }
@@ -79,7 +79,7 @@ namespace AOSharp.Core.Combat
                         continue;
 
                     //Chat.WriteLine($"Queueing item {item.Name} -- actionQ.Count = {_actionQueue.Count}");
-                    float queueOffset = _actionQueue.Where(x => x.CombatAction is Perk).Sum(x => ((Perk)x.CombatAction).AttackDelay);
+                    float queueOffset = _actionQueue.Where(x => x.CombatAction is PerkAction).Sum(x => ((PerkAction)x.CombatAction).AttackDelay);
                     double timeoutOffset = item.AttackDelay + ACTION_TIMEOUT + queueOffset;
                     _actionQueue.Enqueue(new CombatActionQueueItem(item, actionTarget.Target, actionTarget.ShouldSetTarget, timeoutOffset));
                 }
@@ -90,16 +90,16 @@ namespace AOSharp.Core.Combat
             {
                 foreach (var perkRule in _perkRules.OrderBy(p => (int)p.Priority))
                 {
-                    if (_actionQueue.Count(x => x.CombatAction is Perk) >= MAX_CONCURRENT_PERKS)
+                    if (_actionQueue.Count(x => x.CombatAction is PerkAction) >= MAX_CONCURRENT_PERKS)
                         break;
 
-                    if (!Perk.Find(perkRule.PerkHash, out Perk perk))
+                    if (!PerkAction.Find(perkRule.PerkHash, out PerkAction perk))
                         continue;
 
                     if (perk.IsPending || perk.IsExecuting || !perk.IsAvailable)
                         continue;
 
-                    if (_actionQueue.Any(x => x.CombatAction is Perk action && action == perk))
+                    if (_actionQueue.Any(x => x.CombatAction is PerkAction action && action == perk))
                         continue;
 
                     (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
@@ -173,7 +173,7 @@ namespace AOSharp.Core.Combat
                         if (Item.HasPendingUse)
                             continue;
 
-                        if (_actionQueue.Any(x => x.CombatAction is Perk))
+                        if (_actionQueue.Any(x => x.CombatAction is PerkAction))
                             continue;
 
                         //I have no real way of checking if a use action is valid so we'll just send it off and pray
@@ -181,7 +181,7 @@ namespace AOSharp.Core.Combat
                         actionItem.Used = true;
                         actionItem.Timeout = Time.NormalTime + ACTION_TIMEOUT;
                     }
-                    else if (actionItem.CombatAction is Perk perk)
+                    else if (actionItem.CombatAction is PerkAction perk)
                     {
                         if (!perk.Use(actionItem.Target, actionItem.ShouldSetTarget))
                         {
@@ -223,6 +223,11 @@ namespace AOSharp.Core.Combat
             }
         }
 
+        protected bool HasPerkProcessor(PerkHash perkHash)
+        {
+            return _perkRules.Any(rule => rule.PerkHash == perkHash);
+        }
+        
         protected void RegisterItemProcessor(int lowId, int highId, ItemConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
             _itemRules.Add(new ItemRule(lowId, highId, conditionProcessor, priority));
@@ -274,18 +279,18 @@ namespace AOSharp.Core.Combat
         internal void OnPerkExecuted(DummyItem perkDummyItem)
         {
             //Drop the queued action
-            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Perk action && action.Name == perkDummyItem.Name)));
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is PerkAction action && action.Name == perkDummyItem.Name)));
         }
 
-        internal void OnPerkLanded(Perk perk, double timeout)
+        internal void OnPerkLanded(PerkAction perkAction, double timeout)
         {
             //Update the queued perk's timeout to match the internal perk queue's
             foreach(CombatActionQueueItem queueItem in _actionQueue)
             {
-                if (!(queueItem.CombatAction is Perk))
+                if (!(queueItem.CombatAction is PerkAction))
                     return;
 
-                if ((Perk)queueItem.CombatAction == perk)
+                if ((PerkAction)queueItem.CombatAction == perkAction)
                 {
                     //Chat.WriteLine($"Perk {perk.Name} landed. Time: {Time.NormalTime}\tOldTimeout: {queueItem.Timeout}\tNewTimeout: {timeout}");
                     queueItem.Timeout = timeout;
@@ -319,8 +324,8 @@ namespace AOSharp.Core.Combat
 
                 switch (CombatAction)
                 {
-                    case Perk perk:
-                        return perk == ((Perk)other.CombatAction);
+                    case PerkAction perk:
+                        return perk == ((PerkAction)other.CombatAction);
                     case Item item:
                         Item item1 = item;
                         Item item2 = (Item)other.CombatAction;

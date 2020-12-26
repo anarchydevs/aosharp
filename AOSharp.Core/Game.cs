@@ -85,7 +85,7 @@ namespace AOSharp.Core
             UIController.UpdateViews();
 
             Item.Update();
-            Perk.Update();
+            PerkAction.Update();
             Spell.Update();
 
             MovementController.Instance?.Update();

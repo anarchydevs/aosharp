@@ -31,30 +31,30 @@ namespace AOSharp.Core
         private HashSet<SpecialAttack> GetSpecialAttacks()
         {
             HashSet<SpecialAttack> specials = new HashSet<SpecialAttack>();
-            SpecialAttackFlags canFlags = (SpecialAttackFlags)GetStat(Stat.Can);
+            CanFlags canFlags = (CanFlags)GetStat(Stat.Can);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.AimedShot))
+            if (canFlags.HasFlag(CanFlags.AimedShot))
                 specials.Add(SpecialAttack.AimedShot);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.Brawl))
+            if (canFlags.HasFlag(CanFlags.Brawl))
                 specials.Add(SpecialAttack.Brawl);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.Burst))
+            if (canFlags.HasFlag(CanFlags.Burst))
                 specials.Add(SpecialAttack.Burst);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.Dimach))
+            if (canFlags.HasFlag(CanFlags.Dimach))
                 specials.Add(SpecialAttack.Dimach);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.FastAttack))
+            if (canFlags.HasFlag(CanFlags.FastAttack))
                 specials.Add(SpecialAttack.FastAttack);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.FlingShot))
+            if (canFlags.HasFlag(CanFlags.FlingShot))
                 specials.Add(SpecialAttack.FlingShot);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.FullAuto))
+            if (canFlags.HasFlag(CanFlags.FullAuto))
                 specials.Add(SpecialAttack.FullAuto);
 
-            if (canFlags.HasFlag(SpecialAttackFlags.SneakAttack))
+            if (canFlags.HasFlag(CanFlags.SneakAttack))
                 specials.Add(SpecialAttack.SneakAttack);
 
             return specials;

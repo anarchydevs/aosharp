@@ -9,9 +9,9 @@ using AOSharp.Core.UI;
 
 namespace MissionHelper
 {
-    public class Main : IAOPluginEntry
+    public class Main : AOPluginEntry
     {
-        public void Run(string pluginDir)
+        public override void Run(string pluginDir)
         {
             Chat.WriteLine("MissionHelper loaded");
             Game.OnUpdate += Game_OnUpdate;
@@ -29,6 +29,9 @@ namespace MissionHelper
 
             Mission mission = Mission.List.FirstOrDefault(x => x.Playfield == Playfield.ModelIdentity);
 
+            if (mission == null)
+                return;
+            
             foreach(MissionAction action in mission.Actions)
             {
                 switch (action.Type)

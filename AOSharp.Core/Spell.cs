@@ -18,7 +18,7 @@ namespace AOSharp.Core
         private const float CAST_TIMEOUT = 0.5f;
 
         public readonly Identity Identity;
-        public readonly Nanoline Nanoline;
+        public readonly NanoLine Nanoline;
         public readonly int NCU;
         public readonly int StackingOrder;
         public int Cost => GetCost();
@@ -33,7 +33,7 @@ namespace AOSharp.Core
         internal Spell(Identity identity) : base(identity)
         {
             Identity = identity;
-            Nanoline = (Nanoline)GetStat(Stat.NanoStrain);
+            Nanoline = (NanoLine)GetStat(Stat.NanoStrain);
             StackingOrder = GetStat(Stat.StackingOrder);
             NCU = GetStat(Stat.Level);
         }
@@ -96,7 +96,7 @@ namespace AOSharp.Core
             }
         }
 
-        public static Spell[] GetSpellsForNanoline(Nanoline nanoline)
+        public static Spell[] GetSpellsForNanoline(NanoLine nanoline)
         {
             return List.Where(x => x.Nanoline == nanoline).ToArray();
         }

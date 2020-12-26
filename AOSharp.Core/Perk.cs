@@ -2,244 +2,150 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading.Tasks;
 using AOSharp.Common.GameData;
-using AOSharp.Core.Combat;
+using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.Imports;
-using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using AOSharp.Core.UI;
-using SmokeLounge.AOtomation.Messaging.GameData;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core
 {
-    public class Perk : DummyItem, ICombatAction, IEquatable<Perk>
+    public class Perk
     {
-        private const float PERK_TIMEOUT = 1;
+        public int Instance;
+        public int TemplateInstance;
+        public int PrerequisitePerkInstance;
+        public PerkType PerkType;
+        public ProfessionFlag AllowedProfessions;
+        public int ActionInstance;
+        public int RequiredExperience;
 
-        public unsafe bool IsAvailable => GetIsAvailable();
-        public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
-        public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
-        public readonly Identity Identity;
-        public readonly PerkHash Hash;
+        public int Level { get; private set; }
+        public string Name { get; private set; }
+        public PerkLine PerkLine { get; private set; }
 
-        public static List<Perk> List => GetPerks();
-        private static Queue<QueueItem> _pendingQueue = new Queue<QueueItem>();
-        private static Queue<QueueItem> _executingQueue = new Queue<QueueItem>();
-
-        private Perk(Identity identity, int hashInt) : base(identity)
+        private Perk(int instance, int templateInstance, int prerequisitePerkInstance, int perkType,
+            int allowedProfessions, int actionInstance, int requiredExperience)
         {
-            Identity = identity;
-            Hash = (PerkHash)hashInt;
+            Instance = instance;
+            TemplateInstance = templateInstance;
+            PrerequisitePerkInstance = prerequisitePerkInstance;
+            PerkType = (PerkType)perkType;
+            AllowedProfessions = (ProfessionFlag)allowedProfessions;
+            ActionInstance = actionInstance;
+            RequiredExperience = requiredExperience;
+
+            //Remaining is not returned by GetFullPerkMap
+            Name = N3EngineClientAnarchy.GetName(new Identity(IdentityType.None, TemplateInstance));
+            string sanitizedName = Name.Replace(" ", "").Replace("-", "").Replace("'", "");
+            PerkLine = (PerkLine)Enum.Parse(typeof(PerkLine), sanitizedName);
         }
 
-        public bool Use(bool packetOnly = false)
+        public static Perk GetByInstance(int instance)
         {
-            return Use(DynelManager.LocalPlayer, packetOnly);
+            return GetFullPerkMap().FirstOrDefault(p => p.Instance == instance);
+        }
+        
+        public static Dictionary<PerkLine, int> GetPerkLineLevels(bool includeAllPerkLines = false)
+        {
+            return GetFullPerkMap()
+                .Where(p => includeAllPerkLines || p.IsTrained())
+                .GroupBy(p => p.PerkLine)
+                .ToDictionary(g => g.Key, g => g
+                    .Where(p => p.IsTrained())
+                    .Max(p => (int?) p.Level) ?? 0);
+        }
+        
+        public static int GetPerkLineLevel(PerkLine perkLine)
+        {
+            List<Perk> trainedPerksInLine = GetFullPerkMap()
+                .Where(p => p.PerkLine == perkLine)
+                .Where(p => p.IsTrained())
+                .OrderBy(p => p.Instance)
+                .ToList();
+                
+            if (trainedPerksInLine.Count == 0)
+                return 0;
+
+            return trainedPerksInLine.Max(p => p.Level);
+        }
+        
+        public static bool IsTrained(PerkLine perkLine, int level)
+        {
+            return GetFullPerkMap()
+                .Any(p => p.PerkLine == perkLine && p.Level == level && p.IsTrained());
         }
 
-        public unsafe bool Use(SimpleChar target, bool setTarget = false, bool packetOnly = false)
+        public bool IsTrained()
         {
-            if (target == null)
-                target = DynelManager.LocalPlayer;
-
-            if (setTarget)
-                target.Target();
-
-            if (packetOnly)
-            {
-                Network.Send(new CharacterActionMessage()
-                {
-                    Action = CharacterActionType.UsePerk,
-                    Target = target.Identity,
-                    Parameter1 = Identity.Instance,
-                    Parameter2 = (int)Hash
-                });
-
-                EnqueuePendingPerk(this);
-
-                return true;
-            } else
-            {
-                IntPtr pEngine = N3Engine_t.GetInstance();
-
-                if (pEngine == IntPtr.Zero)
-                    return false;
-
-                Identity identity = Identity;
-                return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, ref identity);
-            }
+            return N3EngineClientAnarchy.HasPerk(Instance);
         }
-
-        private bool GetIsAvailable()
-        {
-            IntPtr pEngine = N3Engine_t.GetInstance();
-
-            if (pEngine == IntPtr.Zero)
-                return false;
-
-            Identity identity = Identity;
-            return N3EngineClientAnarchy_t.GetSpecialActionState(pEngine, ref identity) == SpecialActionState.Ready;
-        }
-
-        public static bool Find(int id, out Perk perk)
-        {
-            return (perk = List.FirstOrDefault(x => x.Identity.Instance == id)) != null;
-        }
-
-        public static bool Find(string name, out Perk perk)
-        {
-            return (perk = List.FirstOrDefault(x => x.Name == name)) != null;
-        }
-
-        public static bool Find(PerkHash hash, out Perk perk)
-        {
-            return (perk = List.FirstOrDefault(x => x.Hash == hash)) != null;
-        }
-
-        private static void EnqueuePendingPerk(Perk perk)
-        {
-            _pendingQueue.Enqueue(new QueueItem
-            {
-                Identity = perk.Identity,
-                AttackTime = perk.AttackDelay,
-                Timeout = Time.NormalTime + PERK_TIMEOUT
-            });
-        }
-
-        private static unsafe List<Perk> GetPerks()
+        
+        private static unsafe List<Perk> GetFullPerkMap()
         {
             List<Perk> perks = new List<Perk>();
-            IntPtr pEngine = N3Engine_t.GetInstance();
 
+            IntPtr pEngine = N3Engine_t.GetInstance();
+            
             if (pEngine == IntPtr.Zero)
                 return perks;
-
-            foreach (IntPtr pAction in N3EngineClientAnarchy_t.GetSpecialActionList(pEngine)->ToList())
+            
+            foreach (PerkMemStruct perkMemStruct in N3EngineClientAnarchy_t.GetFullPerkMap(pEngine)->ToList<PerkMemStruct>())
             {
-                SpecialActionMemStruct specialAction = *(SpecialActionMemStruct*)pAction;
+                Perk perk = new Perk(perkMemStruct.Instance, perkMemStruct.TemplateInstance,
+                    perkMemStruct.PrerequisitePerkInstance, perkMemStruct.PerkType, perkMemStruct.AllowedProfessions,
+                    perkMemStruct.ActionInstance, perkMemStruct.RequiredExperience);
 
-                if (specialAction.Identity.Type != IdentityType.PerkHash)
-                    continue;
+                perks.Add(perk);
+            }
 
-                perks.Add(new Perk(specialAction.TemplateIdentity, specialAction.Identity.Instance));
+            // I'm not doing the following in the Perk constructor because we need the full perk 
+            // map to do it and querying the entire perk map again in the constructor is too expensive
+
+            string currentName = "NoName";
+            int currentLevel = 1;
+            
+            foreach (Perk perk in perks.OrderBy(perk => perk.Instance))
+            {
+                if (perk.Name != currentName)
+                {
+                    currentName = perk.Name;
+                    currentLevel = 1;
+                }
+
+                perk.Level = currentLevel;
+                
+                currentLevel++;
             }
 
             return perks;
         }
-
-        internal static void Update()
+        
+        public struct PerkMemStruct
         {
-            try
-            {
-                while(_pendingQueue.Count > 0 && _pendingQueue.Peek().Timeout <= Time.NormalTime)
-                    _pendingQueue.Dequeue();
-
-                while (_executingQueue.Count > 0 && _executingQueue.Peek().Timeout <= Time.NormalTime)
-                    _executingQueue.Dequeue();
-            }
-            catch (Exception e)
-            {
-                Chat.WriteLine($"This shouldn't happen pls report (Perk): {e.Message}");
-            }
-        }
-
-        internal static void OnPerkFinished(int lowId, int highId, int ql, Identity owner)
-        {
-            //Will have to implement this some other way
-            /*
-            PerkExecuted?.Invoke(null, new PerkExecutedEventArgs
-            {
-                OwnerIdentity = owner,
-                Owner = DynelManager.GetDynel(owner)?.Cast<SimpleChar>(),
-                Perk = perk
-            });
-            */
-
-            if (owner != DynelManager.LocalPlayer.Identity)
-                return;
-
-            DummyItem perkDummyItem = new DummyItem(lowId, highId, ql);
-
-            _executingQueue.Dequeue();
-
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnPerkExecuted(perkDummyItem);
-        }
-
-        internal static void OnPerkQueued()
-        {
-            Perk perk;
-            if (_pendingQueue.Count == 0 || !Find(_pendingQueue.Dequeue().Identity.Instance, out perk))
-                return;
-
-            //Calc time offset of perks before this one in queue.
-            float queueOffset = _executingQueue.Sum(x => x.AttackTime);
-            double nextTimeout = Time.NormalTime + perk.AttackDelay + PERK_TIMEOUT + queueOffset;
-
-            _executingQueue.Enqueue(new QueueItem
-            {
-                Identity = perk.Identity,
-                AttackTime = perk.AttackDelay,
-                Timeout = nextTimeout
-            });
-
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnPerkLanded(perk, nextTimeout);
-        }
-
-        private static void OnClientPerformedSpecialAction(Identity identity)
-        {
-            Perk perk;
-            if (!Find(identity.Instance, out perk))
-                return;
-
-            EnqueuePendingPerk(perk);
-        }
-
-        public bool Equals(Perk other)
-        {
-            if (object.ReferenceEquals(other, null))
-                return false;
-
-            return Identity == other.Identity;
-        }
-
-        public static bool operator ==(Perk a, Perk b)
-        {
-            if (object.ReferenceEquals(a, null))
-                return object.ReferenceEquals(b, null);
-
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(Perk a, Perk b) => !(a == b);
-
-        [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        private struct SpecialActionMemStruct
-        {
-            [FieldOffset(0x8)]
-            public Identity TemplateIdentity;
-
-            [FieldOffset(0x10)]
-            public Identity Identity;
-
-            [FieldOffset(0x24)]
-            public bool IsOnCooldown;
-        }
-
-        private class QueueItem
-        {
-            public Identity Identity;
-            public float AttackTime;
-            public double Timeout;
+            public int Instance;
+            public int TemplateInstance;
+            public int PrerequisitePerkInstance;
+            public int PerkType;
+            public int AllowedProfessions;
+            public int ActionInstance;
+            public int RequiredExperience;
         }
     }
 
-    public class PerkExecutedEventArgs : EventArgs
+    [Flags]
+    public enum PerkType : uint
     {
-        public SimpleChar Owner { get; set; }
-        public Identity OwnerIdentity { get; set; }
-        public Perk Perk { get; set; }
+        Shadowlands = BitFlag.None,
+        ShadowBreed = BitFlag.Bit0,
+        AlienInvasion = BitFlag.Bit1,
+        BreedSolitus = BitFlag.Bit2,
+        BreedOpifex = BitFlag.Bit3,
+        BreedNanomage = BitFlag.Bit4,
+        BreedAtrox = BitFlag.Bit5,
+        PersonalResearch = BitFlag.Bit6,
+        GlobalResearch1 = BitFlag.Bit7,
+        GlobalResearch2 = BitFlag.Bit8,
     }
 }
