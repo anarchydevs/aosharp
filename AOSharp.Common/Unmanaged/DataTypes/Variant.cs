@@ -40,6 +40,13 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return str.ToString();
         }
 
+        public static Variant LoadFromString(string value)
+        {
+            Variant variant = Variant.Create(0);
+            Variant_c.LoadFromString(variant.Pointer, value);
+            return variant;
+        }
+
         public void Dispose() => Variant_c.Deconstructor(Pointer);
 
         public int AsInt32() => Variant_c.AsInt32(Pointer);
@@ -47,6 +54,8 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public float AsFloat() => Variant_c.AsFloat(Pointer);
 
         public bool AsBool() => Variant_c.AsBool(Pointer);
+
+        public void SetBool(bool value) => Variant_c.SetBool(Pointer, value);
 
         public static implicit operator Variant(int v) => Variant.Create(v);
         public static implicit operator Variant(float v) => Variant.Create(v);

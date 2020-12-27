@@ -280,6 +280,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\Preferences_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PetWindowModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\InputConfig_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\GUIUnk.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
+    <Compile Include="Unmanaged\Interfaces\Preferences.cs" />
     <Compile Include="Unmanaged\Interfaces\N3EngineClientAnarchy.cs" />
   </ItemGroup>
   <ItemGroup />

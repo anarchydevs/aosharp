@@ -216,9 +216,15 @@ namespace TestPlugin
                         item.Split(int.Parse(param[1]));
                 });
 
+                Chat.RegisterCommand("savesettings", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    Settings.Save();
+                });
+
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     Settings["DrawStuff"] = true;
+
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
 
                     /*
@@ -284,9 +290,9 @@ namespace TestPlugin
 
                 Settings = new Settings("TestPlugin");
                 Settings.AddVariable("DrawStuff", false);
+                Settings.AddVariable("AnotherVariable", 1911);
 
                 Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml").Show(true);
-                Chat.WriteLine($"{pluginDir}\\TestWindow.xml");
 
                 Game.OnUpdate += OnUpdate;
                 Game.TeleportStarted += Game_OnTeleportStarted;

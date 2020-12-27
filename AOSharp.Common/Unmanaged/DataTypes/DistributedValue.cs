@@ -37,7 +37,7 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public static void SetDValue(string name, Variant value)
         {
             StdString nameStr = StdString.Create(name);
-            DistributedValue_c.SetDValue(nameStr.Pointer, ref value);
+            DistributedValue_c.SetDValue(nameStr.Pointer, value.Pointer);
         }
 
         public static void LoadConfig(string path, int category, bool addVariables)
