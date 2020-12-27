@@ -14,6 +14,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Utils.dll", EntryPoint = "?AsBool@Variant@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         internal static extern bool AsBool(IntPtr pThis);
 
+        [DllImport("Utils.dll", EntryPoint = "?SaveToString@Variant@@QAE_NAAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern bool SaveToString(IntPtr pThis, IntPtr pStr);
+
         [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@H@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern IntPtr Constructor(IntPtr pThis, int value);
 

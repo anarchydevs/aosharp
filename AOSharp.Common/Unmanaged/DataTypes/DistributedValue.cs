@@ -26,6 +26,20 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             DistributedValue_c.AddVariable(nameStr.Pointer, value.Pointer, false, false);
         }
 
+        public static Variant GetDValue(string name, bool unk)
+        {
+            StdString nameStr = StdString.Create(name);
+            IntPtr dval = DistributedValue_c.GetDValue(MSVCR100.New(Variant.SizeOf), nameStr.Pointer, unk);
+
+            return dval == IntPtr.Zero ? null : Variant.FromPointer(dval);
+        }
+
+        public static void SetDValue(string name, Variant value)
+        {
+            StdString nameStr = StdString.Create(name);
+            DistributedValue_c.SetDValue(nameStr.Pointer, ref value);
+        }
+
         public static void LoadConfig(string path, int category, bool addVariables)
         {
             StdString pathStr = StdString.Create(path);

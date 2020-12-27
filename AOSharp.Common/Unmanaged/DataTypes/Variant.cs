@@ -5,9 +5,10 @@ namespace AOSharp.Common.Unmanaged.DataTypes
 { 
     public class Variant
     {
+        public const int SizeOf = 0x10;
         public readonly IntPtr Pointer;
 
-        public Variant(IntPtr pointer)
+        private Variant(IntPtr pointer)
         {
             Pointer = pointer;
         }
@@ -27,6 +28,18 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return new Variant(Variant_c.Constructor(MSVCR100.New(0x10), value));
         }
 
+        public static Variant FromPointer(IntPtr pointer)
+        {
+            return new Variant(pointer);
+        }
+
+        public override string ToString()
+        {
+            StdString str = StdString.Create();
+            Variant_c.SaveToString(Pointer, str.Pointer);
+            return str.ToString();
+        }
+
         public void Dispose() => Variant_c.Deconstructor(Pointer);
 
         public int AsInt32() => Variant_c.AsInt32(Pointer);
@@ -34,5 +47,9 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public float AsFloat() => Variant_c.AsFloat(Pointer);
 
         public bool AsBool() => Variant_c.AsBool(Pointer);
+
+        public static implicit operator Variant(int v) => Variant.Create(v);
+        public static implicit operator Variant(float v) => Variant.Create(v);
+        public static implicit operator Variant(bool v) => Variant.Create(v);
     }
 }

@@ -48,7 +48,7 @@ namespace AOSharp.Core.UI
         {
             Variant pOutput = Variant.Create(0);
             IntPtr what = CheckBox_c.GetValue(_pointer, pOutput.Pointer);
-            bool result = new Variant(what).AsInt32() == 1;
+            bool result = Variant.FromPointer(what).AsInt32() == 1;
             pOutput.Dispose();
 
             return result;

@@ -9,6 +9,12 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Utils.dll", EntryPoint = "?AddVariable@DistributedValue_c@@SAXABVString@@ABVVariant@@_N2@Z", CallingConvention = CallingConvention.Cdecl)]
         internal static extern void AddVariable(IntPtr pName, IntPtr pVariant, bool unk1, bool unk2);
 
+        [DllImport("Utils.dll", EntryPoint = "?GetDValue@DistributedValue_c@@SA?AVVariant@@ABVString@@_N@Z", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr GetDValue(IntPtr pVariant, IntPtr pName, bool unk);
+
+        [DllImport("Utils.dll", EntryPoint = "?SetDValue@DistributedValue_c@@SAXABVString@@ABVVariant@@@Z", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void SetDValue(IntPtr pName, ref Variant value);
+
         [DllImport("Utils.dll", EntryPoint = "?SaveConfig@DistributedValue_c@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4DValueCategory_e@@@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SaveConfig(IntPtr path, int category);
 
