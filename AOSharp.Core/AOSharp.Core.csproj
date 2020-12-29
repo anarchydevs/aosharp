@@ -35,6 +35,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -69,6 +72,7 @@
     <Compile Include="Perk.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="Playfield\Room.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="Playfield\Zone.cs" />
@@ -132,6 +136,9 @@
       <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
       <Name>AOSharp.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

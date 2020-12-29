@@ -27,10 +27,12 @@ namespace TestPlugin
 {
     public class Main : AOPluginEntry
     {
+        public Settings Settings;
         private IPCChannel _ipcChannel;
         private MovementController mc;
         private Menu _menu;
         private int i = 0;
+
         public override void Run(string pluginDir)
         {
             try
@@ -214,9 +216,15 @@ namespace TestPlugin
                         item.Split(int.Parse(param[1]));
                 });
 
+                Chat.RegisterCommand("savesettings", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    Settings.Save();
+                });
+
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    DevExtras.Test();
+                    Settings["DrawStuff"] = true;
+
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
 
                     /*
@@ -279,6 +287,12 @@ namespace TestPlugin
                 {
                     Chat.WriteLine($"EmptyMessage");
                 });
+
+                Settings = new Settings("TestPlugin");
+                Settings.AddVariable("DrawStuff", false);
+                Settings.AddVariable("AnotherVariable", 1911);
+
+                Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml").Show(true);
 
                 Game.OnUpdate += OnUpdate;
                 Game.TeleportStarted += Game_OnTeleportStarted;
@@ -528,7 +542,7 @@ namespace TestPlugin
 
         private void OnUpdate(object s, float deltaTime)
         {
-            if (_menu.GetBool("DrawingTest"))
+            if (Settings["DrawStuff"].AsBool())
             {
                 foreach (Dynel player in DynelManager.Players)
                 {
