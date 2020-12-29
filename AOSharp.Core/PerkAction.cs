@@ -128,7 +128,7 @@ namespace AOSharp.Core
                 perks.Add(new PerkAction(specialAction.TemplateIdentity, specialAction.Identity.Instance));
             }
 
-            return perks;
+            return perks.OrderBy(perk => perk.Identity.Instance).ToList();
         }
 
         internal static void Update()

@@ -35,6 +35,7 @@
         PerkHash = 0xC78E,
         Playfield1 = 0xC79C,
         Playfield = 0xC79D,
+        PlayfieldDistrictInfo = 0xF424E,
         ACGBuildingGeneratorData = 0x0000C79F,
         NanoProgram = 0xCF1B,
         GfxEffect = 0xCF26,

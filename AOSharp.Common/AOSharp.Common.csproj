@@ -270,7 +270,10 @@
     <Compile Include="Unmanaged\DataTypes\StdStructVector.cs" />
     <Compile Include="Unmanaged\DataTypes\DistributedValue.cs" />
     <Compile Include="Unmanaged\DataTypes\Variant.cs" />
+    <Compile Include="Unmanaged\DbObjects\DbObject.cs" />
+    <Compile Include="Unmanaged\DbObjects\PlayfieldDistrictInfo.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
+    <Compile Include="Unmanaged\Imports\DatabaseController\ResourceDatabase_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\DummyItem_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
@@ -280,6 +283,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
+    <Compile Include="Unmanaged\Imports\GameData\PlayfieldDistrictInfo_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PetWindowModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\InputConfig_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\GUIUnk.cs" />
@@ -311,6 +315,7 @@
     <Compile Include="Unmanaged\Imports\Interfaces\N3InterfaceModule_t.cs" />
     <Compile Include="Unmanaged\Imports\LDB\LDBFace.cs" />
     <Compile Include="Unmanaged\Imports\MessageProtocol\MessageProtocol.cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3DatabaseHandler.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3Dynel_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3EngineClient_t .cs" />
     <Compile Include="Unmanaged\Imports\N3\N3Engine_t.cs" />
@@ -331,6 +336,7 @@
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
     <Compile Include="Unmanaged\Interfaces\N3EngineClientAnarchy.cs" />
+    <Compile Include="Unmanaged\Interfaces\ResourceDatabase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
