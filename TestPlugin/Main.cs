@@ -223,6 +223,15 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
+                    Spell testSpell;
+                    if (Spell.Find("Self Illumination", out testSpell))
+                    {
+                        Chat.WriteLine($"Self Illumination Attack Range {testSpell.AttackRange}");
+                        Chat.WriteLine($"NanoRange {DynelManager.LocalPlayer.GetStat(Stat.NanoRange)}");
+                        Chat.WriteLine($"NanoRange Modifier{(1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f)}");
+                        Chat.WriteLine($"LogicalRangeToTarget {DynelManager.LocalPlayer.GetLogicalRangeToTarget(Targeting.TargetChar)}");
+                    }
+
                     Settings["DrawStuff"] = true;
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
@@ -334,7 +343,7 @@ namespace TestPlugin
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
             Chat.WriteLine($"{msgType}");
 
-            if (msgType == N3MessageType.FollowTarget)
+            if (msgType == N3MessageType.QuestAlternative)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)

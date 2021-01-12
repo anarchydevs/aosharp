@@ -117,7 +117,6 @@ namespace AOSharp.Core
             public Identity Playfield;
         }
 
-
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         private struct MissionActionMemStruct
         {
