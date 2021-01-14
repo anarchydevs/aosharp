@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core
 {
@@ -85,6 +86,11 @@ namespace AOSharp.Core
             Identity unk = new Identity();
 
             return Marshal.PtrToStringAnsi(N3EngineClientAnarchy_t.GetName(pEngine, ref identity, ref unk));
+        }
+
+        public void Use()
+        {
+            N3EngineClientAnarchy.UseItem(Identity);
         }
 
         public float DistanceFrom(Dynel dynel)

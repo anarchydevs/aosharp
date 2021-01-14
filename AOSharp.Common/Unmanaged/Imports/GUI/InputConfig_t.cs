@@ -11,5 +11,14 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?GetCurrentTarget@InputConfig_t@@QBE?AVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetCurrentTarget(IntPtr pThis, ref Identity identity);
+
+        /*
+        [DllImport("GUI.dll", EntryPoint = "?GetMouseWorldPosition@InputConfig_t@@QBE?AVVector3_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern unsafe Vector3* GetMouseWorldPosition(IntPtr pThis);
+        */
+        
+        [DllImport("GUI.dll", EntryPoint = "?GetMouseWorldPosition@InputConfig_t@@QBE?AVVector3_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetMouseWorldPosition(IntPtr pThis, ref Vector3 pos);
+
     }
 }

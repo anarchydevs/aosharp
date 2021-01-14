@@ -123,7 +123,7 @@ namespace AOSharp.Core
             if (pPlayfield == IntPtr.Zero)
                 return false;
 
-            return N3PlayfieldAnarchy_t.AreVehiclesAllowed(pPlayfield);
+            return PlayfieldAnarchy_t.AreVehiclesAllowed(pPlayfield);
         }
 
         private static bool IsShadowlandPF()
@@ -133,7 +133,7 @@ namespace AOSharp.Core
             if (pPlayfield == IntPtr.Zero)
                 return false;
 
-            return N3PlayfieldAnarchy_t.IsShadowlandPF(pPlayfield);
+            return PlayfieldAnarchy_t.IsShadowlandPF(pPlayfield);
         }
         public static bool Raycast(Vector3 pos1, Vector3 pos2, out Vector3 hitPos, out Vector3 hitNormal)
         {

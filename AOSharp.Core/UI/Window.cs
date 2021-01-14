@@ -16,6 +16,7 @@ namespace AOSharp.Core.UI
     public class Window
     {
         public List<View> Views = new List<View>();
+        public bool IsVisible => Window_c.IsVisible(_pointer);
 
         private readonly IntPtr _pointer;
 
@@ -26,6 +27,10 @@ namespace AOSharp.Core.UI
 
         public static Window Create(Rect rect, string string1, string string2, WindowStyle style, WindowFlags flags)
         {
+            IntPtr pExistingWindow = Window_c.FindWindowName(string1);
+            if (pExistingWindow != IntPtr.Zero)
+                return new Window(pExistingWindow);
+            
             IntPtr pWindow = Window_c.Create(rect, string1, string2, style, flags);
 
             if (pWindow == IntPtr.Zero)
@@ -36,6 +41,12 @@ namespace AOSharp.Core.UI
 
         public static Window CreateFromXml(string name, string path)
         {
+            IntPtr pExistingWindow = Window_c.FindWindowName(name);
+            if (pExistingWindow != IntPtr.Zero)
+            {
+                return new Window(pExistingWindow);
+            }
+
             if (!File.Exists(path))
                 return null;
 
@@ -53,7 +64,8 @@ namespace AOSharp.Core.UI
 
         public void Show(bool visible)
         {
-            Window_c.Show(_pointer, visible);
+            if(!IsVisible)
+                Window_c.Show(_pointer, visible);
         }
 
         public unsafe Rect GetBounds()

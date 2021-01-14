@@ -23,7 +23,7 @@ namespace AOSharp.Core
 
         public static List<Mission> List => GetMissions();
 
-        protected readonly IntPtr Pointer;
+        public readonly IntPtr Pointer;
 
         internal Mission(IntPtr pointer)
         {

@@ -52,6 +52,7 @@
     <Compile Include="GameData\DoorState.cs" />
     <Compile Include="GameData\DynelFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
+    <Compile Include="GameData\FightMode.cs" />
     <Compile Include="GameData\GroupMessage.cs" />
     <Compile Include="GameData\PerkLine.cs" />
     <Compile Include="GameData\PetType.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\DropTemplateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MissedAttackInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PickUpMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CharSecSpecAttackMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MarketSendMessage.cs" />
@@ -271,7 +273,10 @@
     <Compile Include="Unmanaged\DataTypes\DistributedValue.cs" />
     <Compile Include="Unmanaged\DataTypes\Variant.cs" />
     <Compile Include="Unmanaged\DbObjects\DbObject.cs" />
+    <Compile Include="Unmanaged\DbObjects\DistrictData.cs" />
+    <Compile Include="Unmanaged\DbObjects\LandControlMap.cs" />
     <Compile Include="Unmanaged\DbObjects\PlayfieldDistrictInfo.cs" />
+    <Compile Include="Unmanaged\DbObjects\RDBPlayfield.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
     <Compile Include="Unmanaged\Imports\DatabaseController\ResourceDatabase_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
@@ -279,10 +284,12 @@
     <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\GameTime_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\N3EngineClientAnarchy_t.cs" />
-    <Compile Include="Unmanaged\Imports\Gamecode\N3PlayfieldAnarchy_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\PlayfieldAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
+    <Compile Include="Unmanaged\Imports\GameData\DistrictData_t.cs" />
+    <Compile Include="Unmanaged\Imports\GameData\LandControlMap_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Preferences_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\PlayfieldDistrictInfo_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PetWindowModule_c.cs" />
@@ -336,6 +343,7 @@
     <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
+    <Compile Include="Unmanaged\Interfaces\PlayfieldAnarchy.cs" />
     <Compile Include="Unmanaged\Interfaces\Preferences.cs" />
     <Compile Include="Unmanaged\Interfaces\N3EngineClientAnarchy.cs" />
     <Compile Include="Unmanaged\Interfaces\ResourceDatabase.cs" />

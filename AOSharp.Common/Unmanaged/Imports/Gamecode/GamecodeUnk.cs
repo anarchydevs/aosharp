@@ -14,5 +14,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         public unsafe delegate bool IsInLineOfSightDelegate(IntPtr pThis, IntPtr pTarget);
         public static IsInLineOfSightDelegate IsInLineOfSight;
+
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+        public delegate void FollowTargetDelegate(IntPtr pVehicle_t, IntPtr pDynel, float distance, IntPtr waypoints);
+        public static FollowTargetDelegate FollowTarget;
     }
 }

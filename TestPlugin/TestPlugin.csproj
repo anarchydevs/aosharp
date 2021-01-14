@@ -35,6 +35,18 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AOSharp.Bootstrap, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AOSharp.Bootstrap\bin\Debug\AOSharp.Bootstrap.dll</HintPath>
+    </Reference>
+    <Reference Include="AOSharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AOSharp.Common\bin\Debug\AOSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="AOSharp.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AOSharp.Core\bin\Debug\AOSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -79,20 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AOSharp.Bootstrap\AOSharp.Bootstrap.csproj">
-      <Project>{56164cdc-83a1-4d13-91cf-3b1aa3f289b1}</Project>
-      <Name>AOSharp.Bootstrap</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">
-      <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
-      <Name>AOSharp.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AOSharp.Core\AOSharp.Core.csproj">
-      <Project>{77516561-fa9c-47cd-8c2d-fc8a8b67876b}</Project>
-      <Name>AOSharp.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestWindow.xml">

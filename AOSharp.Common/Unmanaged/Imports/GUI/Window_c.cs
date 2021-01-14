@@ -34,6 +34,14 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?SetTitle@Window@@QAEXABVString@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetTitle(IntPtr pThis, IntPtr pTitle);
+        
+        [DllImport("GUI.dll", EntryPoint = "?FindWindowName@Window@@SAPAV1@PBD@Z", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr FindWindowName([MarshalAs(UnmanagedType.LPStr)] string windowName);
+
+        [return: MarshalAs(UnmanagedType.U1)]
+
+        [DllImport("GUI.dll", EntryPoint = "?IsVisible@Window@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool IsVisible(IntPtr pThis);
 
         public static unsafe IntPtr Create(Rect rect, string string1, string string2, WindowStyle style, WindowFlags flags)
         {

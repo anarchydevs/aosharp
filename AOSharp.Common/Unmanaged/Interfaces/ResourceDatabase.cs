@@ -19,9 +19,13 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
 
             if (typeof(T) == typeof(PlayfieldDistrictInfo))
-            {
                 return (T)(object) new PlayfieldDistrictInfo(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
-            }
+
+            if (typeof(T) == typeof(LandControlMap))
+                return (T) (object) new LandControlMap(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
+
+            if (typeof(T) == typeof(RDBPlayfield))
+                return (T) (object) new RDBPlayfield(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
 
             throw new ArgumentException();
         }

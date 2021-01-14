@@ -33,7 +33,7 @@
         ProxyInstance = 0x0000C77D,
         DummyItem = 0xC788,
         PerkHash = 0xC78E,
-        Playfield1 = 0xC79C,
+        PlayfieldProxy = 0xC79C,
         Playfield = 0xC79D,
         PlayfieldDistrictInfo = 0xF424E,
         ACGBuildingGeneratorData = 0x0000C79F,
@@ -48,5 +48,7 @@
         SpecialAction = 0xDEB0,
         MobHash = 0x111D3,
         Playfield3 = 0x186A1,
+        LandControlMap = 0xF4248,
+        RDBPlayfield = 0xF4241
     }
 }

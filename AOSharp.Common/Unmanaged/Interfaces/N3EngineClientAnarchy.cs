@@ -28,5 +28,15 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
             return N3EngineClientAnarchy_t.HasPerk(pEngine, perkId);
         }
+        
+        public static void UseItem(Identity identity, bool unknown = false)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.UseItem(pEngine, ref identity, unknown);
+            }
+        }
     }
 }
