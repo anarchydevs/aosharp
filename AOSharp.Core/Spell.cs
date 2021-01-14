@@ -23,7 +23,7 @@ namespace AOSharp.Core
         public readonly int StackingOrder;
         public int Cost => GetCost();
 
-        public override float AttackRange => base.AttackRange * (1 + GetStat(Stat.NanoRange) / 100);
+        public override float AttackRange => Math.Min(base.AttackRange * (1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f), 40f);
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
@@ -47,7 +47,6 @@ namespace AOSharp.Core
         {
             return (spell = List.FirstOrDefault(x => x.Name == name)) != null;
         }
-
         public void Cast(bool setTarget = false)
         {
             Cast(DynelManager.LocalPlayer, setTarget);

@@ -35,7 +35,6 @@
         PerkHash = 0xC78E,
         PlayfieldProxy = 0xC79C,
         Playfield = 0xC79D,
-        PlayfieldDistrictInfo = 0xF424E,
         ACGBuildingGeneratorData = 0x0000C79F,
         NanoProgram = 0xCF1B,
         GfxEffect = 0xCF26,
@@ -50,5 +49,9 @@
         Playfield3 = 0x186A1,
         LandControlMap = 0xF4248,
         RDBPlayfield = 0xF4241
+
+        //DbTypes
+        Mesh = 1010001,
+        PlayfieldDistrictInfo = 1000014,
     }
 }
