@@ -155,7 +155,7 @@ namespace AOSharp.Core
             switch (genericCmdMessage.Action)
             {
                 case GenericCmdAction.Use:
-                    Item.OnUsingItem(genericCmdMessage.Source);
+                    Item.OnUsingItem(genericCmdMessage.Target);
                     break;
             }
         }
