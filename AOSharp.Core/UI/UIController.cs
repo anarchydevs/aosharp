@@ -8,11 +8,22 @@ namespace AOSharp.Core.UI
 {
     internal class UIController
     {
-        private static Dictionary<int, View> _views = new Dictionary<int, View>(); 
+        private static Dictionary<int, View> _views = new Dictionary<int, View>();
+        private static List<Window> _windows = new List<Window>();
 
         internal static void RegisterView(View view)
         {
             _views.Add(view.Handle, view);
+        }
+
+        internal static void AddWindow(Window window)
+        {
+            _windows.Add(window);
+        }
+
+        internal static bool FindWindow(string name, out Window window)
+        {
+            return (window = _windows.FirstOrDefault(x => x.Name == name)) != null;
         }
 
         internal static void UpdateViews()
@@ -38,6 +49,17 @@ namespace AOSharp.Core.UI
                 return;
 
             _views.Remove(view.Handle);
+        }
+
+        private static void OnWindowDeleted(IntPtr pWindow)
+        {
+            Window window = _windows.FirstOrDefault(x => x.Pointer == pWindow);
+
+            if (window == null)
+                return;
+
+            window.IsValid = false;
+            _windows.Remove(window);
         }
     }
 }

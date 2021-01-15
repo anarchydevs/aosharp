@@ -155,6 +155,10 @@ namespace AOSharp.Bootstrap
                         "?ViewDeleted@WindowController_c@@QAEXPAVView@@@Z",
                         new WindowController_c.DViewDeleted(WindowController_ViewDeleted_Hook));
 
+            CreateHook("GUI.dll",
+                        "?RemoveWindow@WindowController_c@@QAEXPAVWindow@@@Z",
+                        new WindowController_c.DRemoveWindow(WindowController_RemoveWindow_Hook));
+
             CreateHook("MessageProtocol.dll",
                         "?DataBlockToMessage@@YAPAVMessage_t@@IPAX@Z",
                         new MessageProtocol.DDataBlockToMessage(DataBlockToMessage_Hook));
@@ -310,6 +314,21 @@ namespace AOSharp.Bootstrap
 
             WindowController_c.ViewDeleted(pThis, pView);
         }
+
+        private void WindowController_RemoveWindow_Hook(IntPtr pThis, IntPtr pWindow)
+        {
+            try
+            {
+                if (_pluginProxy != null)
+                {
+                    _pluginProxy.WindowDeleted(pWindow);
+                }
+            }
+            catch (Exception) { }
+
+            WindowController_c.RemoveWindow(pThis, pWindow);
+        }
+
 
         private unsafe void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, IntPtr identity, IntPtr pName)
         {

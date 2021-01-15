@@ -16,22 +16,25 @@ namespace AOSharp.Core.UI
     public class Window
     {
         public List<View> Views = new List<View>();
-        public bool IsVisible => Window_c.IsVisible(_pointer);
+        public bool IsVisible => Window_c.IsVisible(Pointer);
+        public bool IsValid = true;
+        public readonly string Name;
 
-        private readonly IntPtr _pointer;
+        public readonly IntPtr Pointer;
 
-        public Window(IntPtr pointer)
+        private Window(IntPtr pointer)
         {
-            _pointer = pointer;
+            Pointer = pointer;
+            Name = GetName();
+            UIController.AddWindow(this);
         }
 
-        public static Window Create(Rect rect, string string1, string string2, WindowStyle style, WindowFlags flags)
+        public static Window Create(Rect rect, string name, string name2, WindowStyle style, WindowFlags flags)
         {
-            IntPtr pExistingWindow = Window_c.FindWindowName(string1);
-            if (pExistingWindow != IntPtr.Zero)
-                return new Window(pExistingWindow);
+            if (UIController.FindWindow(name, out Window existingWindow))
+                return existingWindow;
             
-            IntPtr pWindow = Window_c.Create(rect, string1, string2, style, flags);
+            IntPtr pWindow = Window_c.Create(rect, name, name2, style, flags);
 
             if (pWindow == IntPtr.Zero)
                 return null;
@@ -41,11 +44,8 @@ namespace AOSharp.Core.UI
 
         public static Window CreateFromXml(string name, string path)
         {
-            IntPtr pExistingWindow = Window_c.FindWindowName(name);
-            if (pExistingWindow != IntPtr.Zero)
-            {
-                return new Window(pExistingWindow);
-            }
+            if (UIController.FindWindow(name, out Window existingWindow))
+                return existingWindow;
 
             if (!File.Exists(path))
                 return null;
@@ -65,13 +65,20 @@ namespace AOSharp.Core.UI
         public void Show(bool visible)
         {
             if(!IsVisible)
-                Window_c.Show(_pointer, visible);
+                Window_c.Show(Pointer, visible);
+        }
+
+        public string GetName()
+        {
+            StdString name = StdString.Create();
+            Looper.GetName(Pointer, name.Pointer);
+            return name.ToString();
         }
 
         public unsafe Rect GetBounds()
         {
             IntPtr pRect = Rect_c.Create();
-            Rect unmanagedRect = *(Rect*)Window_c.GetBounds(_pointer, pRect);
+            Rect unmanagedRect = *(Rect*)Window_c.GetBounds(Pointer, pRect);
 
             Rect rect = new Rect()
             {
@@ -89,29 +96,29 @@ namespace AOSharp.Core.UI
         public void SetTitle(string name)
         {
             StdString nameStr = StdString.Create(name);
-            Window_c.SetTitle(_pointer, nameStr.Pointer);
+            Window_c.SetTitle(Pointer, nameStr.Pointer);
         }
 
         public void AppendTab(string name, View view)
         {
             StdString nameStr = StdString.Create(name);
-            Window_c.AppendTab(_pointer, nameStr.Pointer, view.Pointer);
+            Window_c.AppendTab(Pointer, nameStr.Pointer, view.Pointer);
             Views.Add(view);
         }
 
         public void AppendChild(View view, bool unk)
         {
-            Window_c.AppendChild(_pointer, view.Pointer, unk);
+            Window_c.AppendChild(Pointer, view.Pointer, unk);
         }
 
         public void MoveToCenter()
         {
-            Window_c.MoveToCenter(_pointer);
+            Window_c.MoveToCenter(Pointer);
         }
 
         public TabView GetTabView()
         {
-            IntPtr pTabView = Window_c.GetTabView(_pointer);
+            IntPtr pTabView = Window_c.GetTabView(Pointer);
 
             if (pTabView == IntPtr.Zero)
                 return null;

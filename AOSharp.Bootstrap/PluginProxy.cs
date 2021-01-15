@@ -40,6 +40,8 @@ namespace AOSharp.Bootstrap
         public OptionPanelActivatedDelegate OptionPanelActivated;
         public delegate void ViewDeletedDelegate(IntPtr pView);
         public ViewDeletedDelegate ViewDeleted;
+        public delegate void WindowDeletedDelegate(IntPtr pWindow);
+        public WindowDeletedDelegate WindowDeleted;
         public delegate void AttemptingSpellCastDelegate(AttemptingSpellCastEventArgs args);
         public AttemptingSpellCastDelegate AttemptingSpellCast;
         public delegate void UnknownCommandDelegate(IntPtr pWindow, string command);
@@ -135,6 +137,11 @@ namespace AOSharp.Bootstrap
             _coreDelegates?.ViewDeleted?.Invoke(pView);
         }
 
+        public void WindowDeleted(IntPtr pWindow)
+        {
+            _coreDelegates?.WindowDeleted?.Invoke(pWindow);
+        }
+
         public bool HandleGroupMessage(IntPtr pGroupMessage)
         {
             GroupMessageEventArgs eventArgs = new GroupMessageEventArgs(new GroupMessage(pGroupMessage));
@@ -181,6 +188,7 @@ namespace AOSharp.Bootstrap
                 PlayfieldInit = CreateDelegate<CoreDelegates.PlayfieldInitDelegate>(assembly, "AOSharp.Core.Game", "OnPlayfieldInit"),
                 OptionPanelActivated = CreateDelegate<CoreDelegates.OptionPanelActivatedDelegate>(assembly, "AOSharp.Core.UI.Options.OptionPanel", "OnOptionPanelActivated"),
                 ViewDeleted = CreateDelegate<CoreDelegates.ViewDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnViewDeleted"),
+                WindowDeleted = CreateDelegate<CoreDelegates.WindowDeletedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnWindowDeleted"),
                 DataBlockToMessage = CreateDelegate<CoreDelegates.DataBlockToMessageDelegate>(assembly, "AOSharp.Core.Network", "OnInboundMessage"),
                 ChatRecv = CreateDelegate<CoreDelegates.ChatRecvDelegate>(assembly, "AOSharp.Core.Network", "OnChatMessage"),
                 SentPacket = CreateDelegate<CoreDelegates.SentPacketDelegate>(assembly, "AOSharp.Core.Network", "OnOutboundMessage"),

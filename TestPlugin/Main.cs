@@ -216,22 +216,21 @@ namespace TestPlugin
                         item.Split(int.Parse(param[1]));
                 });
 
+                Chat.RegisterCommand("opensettings", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    Window testSettingWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
+                    testSettingWindow.Show(true);
+                    chatWindow.WriteLine($"Window.Pointer: {testSettingWindow.Pointer.ToString("X4")}");
+                    chatWindow.WriteLine($"Window.Name: {testSettingWindow.Name}");
+                });
+
                 Chat.RegisterCommand("savesettings", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     Settings.Save();
                 });
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
-                {
-                    Spell testSpell;
-                    if (Spell.Find("Self Illumination", out testSpell))
-                    {
-                        Chat.WriteLine($"Self Illumination Attack Range {testSpell.AttackRange}");
-                        Chat.WriteLine($"NanoRange {DynelManager.LocalPlayer.GetStat(Stat.NanoRange)}");
-                        Chat.WriteLine($"NanoRange Modifier{(1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f)}");
-                        Chat.WriteLine($"LogicalRangeToTarget {DynelManager.LocalPlayer.GetLogicalRangeToTarget(Targeting.TargetChar)}");
-                    }
-
+                {         
                     Settings["DrawStuff"] = true;
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
@@ -300,8 +299,6 @@ namespace TestPlugin
                 Settings = new Settings("TestPlugin");
                 Settings.AddVariable("DrawStuff", false);
                 Settings.AddVariable("AnotherVariable", 1911);
-
-                Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml").Show(true);
 
                 Game.OnUpdate += OnUpdate;
                 Game.TeleportStarted += Game_OnTeleportStarted;

@@ -338,6 +338,7 @@
     <Compile Include="Unmanaged\Imports\Native\MSVCR100.cs" />
     <Compile Include="Unmanaged\Imports\Native\Psapi.cs" />
     <Compile Include="Unmanaged\Imports\Randy31\Debugger_t.cs" />
+    <Compile Include="Unmanaged\Imports\Utils\Looper.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\String_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
