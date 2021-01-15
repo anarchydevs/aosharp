@@ -49,8 +49,11 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Identity User { get; set; }
 
         [AoMember(5)]
+        public Identity Source { get; set; }
+        
+        [AoMember(6)]
         public Identity Target { get; set; }
-
+        
         #endregion
     }
 }

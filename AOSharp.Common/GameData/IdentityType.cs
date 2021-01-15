@@ -48,7 +48,7 @@
         MobHash = 0x111D3,
         Playfield3 = 0x186A1,
         LandControlMap = 0xF4248,
-        RDBPlayfield = 0xF4241
+        RDBPlayfield = 0xF4241,
 
         //DbTypes
         Mesh = 1010001,
