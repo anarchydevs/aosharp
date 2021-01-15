@@ -223,12 +223,15 @@ namespace TestPlugin
                     testSettingWindow.Show(true);
                     chatWindow.WriteLine($"Window.Pointer: {testSettingWindow.Pointer.ToString("X4")}");
                     chatWindow.WriteLine($"Window.Name: {testSettingWindow.Name}");
-                    if(testSettingWindow.FindView("testTextView", out TextView testView))
+                    if (testSettingWindow.IsValid)
                     {
-                        Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
-                        Chat.WriteLine($"testTextView.Text: {testView.Text}");
-                        testView.Text = "1337";
-                        Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
+                        if (testSettingWindow.FindView("testTextView", out TextView testView))
+                        {
+                            Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
+                            Chat.WriteLine($"testTextView.Text: {testView.Text}");
+                            testView.Text = "1337";
+                            Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
+                        }
                     }
                 });
 
