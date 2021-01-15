@@ -64,11 +64,22 @@ namespace AOSharp.Core.UI
 
         public void Show(bool visible)
         {
+            if (!IsValid)
+                return;
+
             if(!IsVisible)
                 Window_c.Show(Pointer, visible);
         }
 
-        public string GetName()
+        public void Close()
+        {
+            if (!IsValid)
+                return;
+
+            Window_c.Close(Pointer);
+        }
+
+        private string GetName()
         {
             StdString name = StdString.Create();
             Looper.GetName(Pointer, name.Pointer);

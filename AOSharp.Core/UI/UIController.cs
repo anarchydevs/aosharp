@@ -41,6 +41,12 @@ namespace AOSharp.Core.UI
             }
         }
 
+        internal static void Cleanup()
+        {
+            foreach(Window window in _windows)
+                window.Close();
+        }
+
         private static void OnViewDeleted(IntPtr pView)
         {
             View view = new View(pView, false);

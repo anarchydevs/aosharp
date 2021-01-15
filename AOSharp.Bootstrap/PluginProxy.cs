@@ -10,6 +10,8 @@ namespace AOSharp.Bootstrap
     {
         public delegate void InitDelegate();
         public InitDelegate Init;
+        public delegate void TeardownDelegate();
+        public TeardownDelegate Teardown;
         public delegate void OnPluginLoadedDelegate(Assembly assembly);
         public OnPluginLoadedDelegate OnPluginLoaded;
         public delegate void DynelSpawnedDelegate(IntPtr pDynel);
@@ -54,6 +56,11 @@ namespace AOSharp.Bootstrap
     {
         private static CoreDelegates _coreDelegates;
         public Queue<PluginInitialization> _pendingInitializationQueue = new Queue<PluginInitialization>();
+
+        public void Teardown()
+        {
+            _coreDelegates?.Teardown?.Invoke();
+        }
 
         public void UnknownChatCommand(IntPtr pWindow, string command)
         {
@@ -178,6 +185,7 @@ namespace AOSharp.Bootstrap
             _coreDelegates = new CoreDelegates()
             {
                 Init = CreateDelegate<CoreDelegates.InitDelegate>(assembly, "AOSharp.Core.Game", "Init"),
+                Teardown = CreateDelegate<CoreDelegates.TeardownDelegate>(assembly, "AOSharp.Core.Game", "Teardown"),
                 OnPluginLoaded = CreateDelegate<CoreDelegates.OnPluginLoadedDelegate>(assembly, "AOSharp.Core.Game", "OnPluginLoaded"),
                 Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
                 EarlyUpdate = CreateDelegate<CoreDelegates.EarlyUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnEarlyUpdateInternal"),

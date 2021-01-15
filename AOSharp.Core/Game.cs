@@ -53,6 +53,14 @@ namespace AOSharp.Core
             MovementController.Instance = new MovementController();
         }
 
+        private static void Teardown()
+        {
+            UIController.Cleanup();
+
+            if (MovementController.Instance != null && MovementController.Instance.IsNavigating)
+                MovementController.Instance.Halt();
+        }
+
         private static void OnPluginLoaded(Assembly assembly)
         {
             try

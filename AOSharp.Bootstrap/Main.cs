@@ -65,13 +65,13 @@ namespace AOSharp.Bootstrap
             _connectEvent.Set();
 
             SetupHooks();
-            //ProcessChatInputPatcher.Patch(this, Test);
         }
 
         private void OnIPCClientDisconnected(IPCServer pipe)
         {
             UnhookAll();
-            //ProcessChatInputPatcher.Unpatch();
+
+            _pluginProxy.Teardown();
 
             _ipcPipe.Close();
 
