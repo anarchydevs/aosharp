@@ -280,7 +280,6 @@
     <Compile Include="Unmanaged\DbObjects\RDBPlayfield.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
     <Compile Include="Unmanaged\Imports\DatabaseController\ResourceDatabase_t.cs" />
-    <Compile Include="Unmanaged\Imports\DisplaySystem\DisplaySystem_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\DummyItem_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
@@ -312,6 +311,7 @@
     <Compile Include="Unmanaged\Imports\GUI\OptionPanelModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ScrollView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\StringListViewItem_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\TextView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TabView.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TargetingModule_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TeamViewModule_c.cs" />
@@ -339,7 +339,6 @@
     <Compile Include="Unmanaged\Imports\Native\Kernel32.cs" />
     <Compile Include="Unmanaged\Imports\Native\MSVCR100.cs" />
     <Compile Include="Unmanaged\Imports\Native\Psapi.cs" />
-    <Compile Include="Unmanaged\Imports\Randy31\RViewPort_t.cs" />
     <Compile Include="Unmanaged\Imports\Randy31\Debugger_t.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Looper.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />

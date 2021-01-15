@@ -22,6 +22,7 @@ using Zoltu.IO;
 using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace TestPlugin
 {
@@ -222,6 +223,13 @@ namespace TestPlugin
                     testSettingWindow.Show(true);
                     chatWindow.WriteLine($"Window.Pointer: {testSettingWindow.Pointer.ToString("X4")}");
                     chatWindow.WriteLine($"Window.Name: {testSettingWindow.Name}");
+                    if(testSettingWindow.FindView("testTextView", out TextView testView))
+                    {
+                        Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
+                        Chat.WriteLine($"testTextView.Text: {testView.Text}");
+                        testView.Text = "1337";
+                        Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
+                    }
                 });
 
                 Chat.RegisterCommand("savesettings", (string command, string[] param, ChatWindow chatWindow) =>
@@ -301,7 +309,6 @@ namespace TestPlugin
                 Settings.AddVariable("AnotherVariable", 1911);
 
                 Game.OnUpdate += OnUpdate;
-                //Game.EndScene += EndScene;
                 Game.TeleportStarted += Game_OnTeleportStarted;
                 Game.TeleportEnded += Game_OnTeleportEnded;
                 Game.TeleportFailed += Game_OnTeleportFailed;
@@ -334,11 +341,6 @@ namespace TestPlugin
         {
             //if (msgType == N3MessageType.)
             //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
-        }
-
-        private void EndScene(object s, EventArgs e)
-        {
-            Chat.WriteLine($"EndScene {i}");
         }
 
         private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
@@ -444,8 +446,6 @@ namespace TestPlugin
 
         private void OnUpdate(object s, float deltaTime)
         {
-            //Chat.WriteLine($"Update {i++}");
-
             if (Settings["DrawStuff"].AsBool())
             {
                 foreach (Dynel player in DynelManager.Players)

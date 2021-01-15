@@ -13,6 +13,11 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             Pointer = pointer;
         }
 
+        public static Variant Create()
+        {
+            return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf)));
+        }
+
         public static Variant Create(int value)
         {
             return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf), value));
@@ -54,6 +59,13 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public float AsFloat() => Variant_c.AsFloat(Pointer);
 
         public bool AsBool() => Variant_c.AsBool(Pointer);
+
+        public string AsString()
+        {
+            StdString str = StdString.Create();
+            Variant_c.AsString(Pointer, str.Pointer);
+            return str.ToString();
+        }
 
         public void SetBool(bool value) => Variant_c.SetBool(Pointer, value);
 

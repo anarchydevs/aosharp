@@ -2,5 +2,6 @@
 <root>
 	<View>
 		<OptionCheckBox label="Draw Stuff" opt_category="AOSharp" opt_type="variant" opt_variable="TestPlugin__DrawStuff"/>
+    <TextView name="testTextView" value="Desu" layout_borders="Rect(5,5,5,0)" />
 	</View>
 </root>
