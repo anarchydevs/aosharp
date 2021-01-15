@@ -10,6 +10,7 @@ using AOSharp.Common.Unmanaged.DataTypes;
 using System.IO;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.Imports;
+using System.Reflection;
 
 namespace AOSharp.Core.UI
 {
@@ -60,6 +61,18 @@ namespace AOSharp.Core.UI
             window.MoveToCenter();
 
             return window;
+        }
+
+        public bool FindView<T>(string name, out T view) where T : View
+        {
+            view = null;
+            IntPtr pView = Window_c.FindView(Pointer, StdString.Create(name).Pointer);
+
+            if (pView == IntPtr.Zero)
+                return false;
+
+            view = Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pView }, null) as T;
+            return true;
         }
 
         public void Show(bool visible)

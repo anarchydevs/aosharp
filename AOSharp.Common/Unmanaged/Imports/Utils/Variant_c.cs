@@ -15,6 +15,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Utils.dll", EntryPoint = "?AsBool@Variant@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
         internal static extern bool AsBool(IntPtr pThis);
 
+        [DllImport("Utils.dll", EntryPoint = "?AsString@Variant@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern IntPtr AsString(IntPtr pThis, IntPtr pStr);
+
         [DllImport("Utils.dll", EntryPoint = "?SetBool@Variant@@QAEX_N@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern void SetBool(IntPtr pThis, bool value);
 
@@ -25,6 +28,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Utils.dll", EntryPoint = "?LoadFromString@Variant@@QAE_NPBD@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern bool LoadFromString(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string value);
+
+        [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@XZ", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern IntPtr Constructor(IntPtr pThis);
 
         [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@H@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern IntPtr Constructor(IntPtr pThis, int value);

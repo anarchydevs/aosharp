@@ -187,9 +187,9 @@ namespace AOSharp.Bootstrap
                         "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z",
                         new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
 
-            CreateHook("DisplaySystem.dll",
-                        "?Commit@DisplaySystem_t@@QAEXXZ",
-                        new DisplaySystem_t.DCommit(DisplaySystem_Commit_Hook));
+            CreateHook("Gamecode.dll",
+                        "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z",
+                        new N3EngineClientAnarchy_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
 
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
@@ -242,17 +242,6 @@ namespace AOSharp.Bootstrap
             }
 
             return bytesRead;
-        }
-
-        public unsafe void DisplaySystem_Commit_Hook(IntPtr pThis)
-        {
-            try
-            {
-                _pluginProxy?.RenderCommit();
-            }
-            catch (Exception) { }
-
-            DisplaySystem_t.Commit(pThis);
         }
 
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
@@ -387,6 +376,11 @@ namespace AOSharp.Bootstrap
             catch (Exception) { }
 
             return specialActionResult;
+        }
+
+        private unsafe bool N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, ref Identity identity, ref Identity identity2)
+        {
+            return N3EngineClientAnarchy_t.CastNanoSpell(pThis, ref identity, ref identity2);
         }
 
         public void OptionPanelModule_ModuleActivated_Hook(IntPtr pThis, bool unk)

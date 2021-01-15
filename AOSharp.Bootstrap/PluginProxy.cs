@@ -12,8 +12,6 @@ namespace AOSharp.Bootstrap
         public InitDelegate Init;
         public delegate void TeardownDelegate();
         public TeardownDelegate Teardown;
-        public delegate void RenderCommitDelegate();
-        public RenderCommitDelegate RenderCommit;
         public delegate void OnPluginLoadedDelegate(Assembly assembly);
         public OnPluginLoadedDelegate OnPluginLoaded;
         public delegate void DynelSpawnedDelegate(IntPtr pDynel);
@@ -62,10 +60,6 @@ namespace AOSharp.Bootstrap
         public void Teardown()
         {
             _coreDelegates?.Teardown?.Invoke();
-        }
-        public void RenderCommit()
-        {
-            _coreDelegates?.RenderCommit?.Invoke();
         }
 
         public void UnknownChatCommand(IntPtr pWindow, string command)
@@ -194,7 +188,6 @@ namespace AOSharp.Bootstrap
                 Teardown = CreateDelegate<CoreDelegates.TeardownDelegate>(assembly, "AOSharp.Core.Game", "Teardown"),
                 OnPluginLoaded = CreateDelegate<CoreDelegates.OnPluginLoadedDelegate>(assembly, "AOSharp.Core.Game", "OnPluginLoaded"),
                 Update = CreateDelegate<CoreDelegates.UpdateDelegate>(assembly, "AOSharp.Core.Game", "OnUpdateInternal"),
-                RenderCommit = CreateDelegate<CoreDelegates.RenderCommitDelegate>(assembly, "AOSharp.Core.Game", "OnRenderCommit"),
                 EarlyUpdate = CreateDelegate<CoreDelegates.EarlyUpdateDelegate>(assembly, "AOSharp.Core.Game", "OnEarlyUpdateInternal"),
                 DynelSpawned = CreateDelegate<CoreDelegates.DynelSpawnedDelegate>(assembly, "AOSharp.Core.DynelManager", "OnDynelSpawned"),
                 TeleportStarted = CreateDelegate<CoreDelegates.TeleportStartedDelegate>(assembly, "AOSharp.Core.Game", "OnTeleportStarted"),

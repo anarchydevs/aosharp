@@ -39,9 +39,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern float GetAttackRange(IntPtr pThis);
 
         //CastNanoSpell
+        [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe void CastNanoSpell(IntPtr pThis, Identity* nano, Identity* target);
-        public unsafe delegate void DCastNanoSpell(IntPtr pThis, Identity* nanoIdentity, Identity targetIdentity);
+        public static extern unsafe bool CastNanoSpell(IntPtr pThis, ref Identity nano, ref Identity target);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
+        public unsafe delegate bool DCastNanoSpell(IntPtr pThis, ref Identity nanoIdentity, ref Identity targetIdentity);
 
         //GetCorrectActionId
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetCorrectActionID@n3EngineClientAnarchy_t@@QBEXAAVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
