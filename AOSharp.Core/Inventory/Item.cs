@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core.Inventory
 {
@@ -66,6 +67,18 @@ namespace AOSharp.Core.Inventory
             });
 
             _pendingUse = (Slot, Time.NormalTime + USE_TIMEOUT);
+        }
+
+        public void UseOn(Identity target)
+        {
+            if (target.Type == IdentityType.SimpleChar)
+            {
+                N3EngineClientAnarchy.UseItemOnCharacter(Slot, target);
+            }
+            else
+            {
+                N3EngineClientAnarchy.UseItemOnItem(Slot, target);
+            }
         }
 
         public void MoveToInventory(int targetSlot = 0x6F)

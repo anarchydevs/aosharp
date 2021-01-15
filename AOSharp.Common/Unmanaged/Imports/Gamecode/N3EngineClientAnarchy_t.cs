@@ -204,5 +204,12 @@ namespace AOSharp.Common.Unmanaged.Imports
         
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_UseItem@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void UseItem(IntPtr pThis, ref Identity identity, bool unknown);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_UseItemOnItem@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void UseItemOnItem(IntPtr pThis, ref Identity source, ref Identity target);
+        
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_UseItemOnCharacter@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void UseItemOnCharacter(IntPtr pThis, ref Identity source, ref Identity target);
+        
     }
 }

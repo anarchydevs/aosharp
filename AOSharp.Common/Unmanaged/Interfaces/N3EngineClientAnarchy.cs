@@ -38,5 +38,25 @@ namespace AOSharp.Common.Unmanaged.Interfaces
                 N3EngineClientAnarchy_t.UseItem(pEngine, ref identity, unknown);
             }
         }
+        
+        public static void UseItemOnItem(Identity source, Identity target)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.UseItemOnItem(pEngine, ref source, ref target);
+            }
+        }
+        
+        public static void UseItemOnCharacter(Identity source, Identity target)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.UseItemOnCharacter(pEngine, ref source, ref target);
+            }
+        }
     }
 }
