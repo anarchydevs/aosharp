@@ -24,6 +24,7 @@ namespace AOSharp.Core
 
         public static EventHandler<float> OnEarlyUpdate;
         public static EventHandler<float> OnUpdate;
+        public static EventHandler EndScene;
         public static EventHandler TeleportStarted;
         public static EventHandler TeleportEnded;
         public static EventHandler TeleportFailed; 
@@ -110,6 +111,11 @@ namespace AOSharp.Core
             }
 
             Chat.Update();
+        }
+
+        private static void OnRenderCommit()
+        {
+            EndScene?.Invoke(null, null);
         }
 
         private static void OnTeleportStarted()

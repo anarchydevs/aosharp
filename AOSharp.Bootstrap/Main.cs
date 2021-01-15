@@ -187,6 +187,10 @@ namespace AOSharp.Bootstrap
                         "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z",
                         new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
 
+            CreateHook("DisplaySystem.dll",
+                        "?Commit@DisplaySystem_t@@QAEXXZ",
+                        new DisplaySystem_t.DCommit(DisplaySystem_Commit_Hook));
+
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
@@ -240,6 +244,17 @@ namespace AOSharp.Bootstrap
             return bytesRead;
         }
 
+        public unsafe void DisplaySystem_Commit_Hook(IntPtr pThis)
+        {
+            try
+            {
+                _pluginProxy?.RenderCommit();
+            }
+            catch (Exception) { }
+
+            DisplaySystem_t.Commit(pThis);
+        }
+
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
         {
             StdString tokenized = StdString.Create();
@@ -254,7 +269,7 @@ namespace AOSharp.Bootstrap
         {
             IntPtr result;
             if ((result = CommandInterpreter_c.GetCommand(pThis, pCmdText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
-                _pluginProxy.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
+                _pluginProxy?.UnknownChatCommand(_lastChatInputWindowPtr, _lastChatInput);
 
             return result;
         }

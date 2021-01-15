@@ -301,6 +301,7 @@ namespace TestPlugin
                 Settings.AddVariable("AnotherVariable", 1911);
 
                 Game.OnUpdate += OnUpdate;
+                //Game.EndScene += EndScene;
                 Game.TeleportStarted += Game_OnTeleportStarted;
                 Game.TeleportEnded += Game_OnTeleportEnded;
                 Game.TeleportFailed += Game_OnTeleportFailed;
@@ -333,6 +334,211 @@ namespace TestPlugin
         {
             //if (msgType == N3MessageType.)
             //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+        }
+
+        private void EndScene(object s, EventArgs e)
+        {
+            Chat.WriteLine($"EndScene {i}");
+        }
+
+        private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
+        {
+            if (chatMessage.PacketType == ChatMessageType.PrivateMessage)
+            {
+                Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
+            }
+        }
+
+        private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+        {
+            //Chat.WriteLine($"{n3Msg.N3MessageType}");
+        }
+
+        private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+        {
+            //Chat.WriteLine($"{n3Msg.N3MessageType}");
+
+            
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)
+            {
+                PlayfieldAnarchyFMessage ayy = (PlayfieldAnarchyFMessage)n3Msg;
+                //Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
+            }
+
+            //if (n3Msg.N3MessageType == N3MessageType.CharDCMove)
+            //    Chat.WriteLine($"MoveType: {((CharDCMoveMessage)n3Msg).MoveType}");
+
+            /*
+            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
+            {
+                TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
+                Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
+            }
+            */
+            /*
+            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
+            {
+                FeedbackMessage ayy = (FeedbackMessage)n3Msg;
+                Chat.WriteLine($"Feedback: {ayy.MessageId.ToString()}\t{ayy.CategoryId.ToString()}\t{ayy.Unknown1.ToString()}");
+            }
+
+            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.CharacterAction)
+            {
+                CharacterActionMessage charActionMessage = (CharacterActionMessage)n3Msg;
+                Chat.WriteLine($"CharacterAction {charActionMessage.Action}\t{charActionMessage.Identity}\t{charActionMessage.Target}\t{charActionMessage.Parameter1}\t{charActionMessage.Parameter2}\t{charActionMessage.Unknown1}\t{charActionMessage.Unknown2}");
+            }*/
+        }
+
+        private void Team_TeamRequest(object s, TeamRequestEventArgs e)
+        {
+            e.Accept();
+        }
+
+        private void Team_MemberLeft(object s, Identity leaver)
+        {
+            Chat.WriteLine($"Player {leaver} left the team.");
+        }
+
+        private void NpcDialog_AnswerListChanged(object s, Dictionary<int, string> options)
+        {
+            /*
+            Identity target = (Identity)s;
+
+            foreach(KeyValuePair<int, string> option in options)
+            {
+                if (option.Value == "Is there anything I can help you with?" ||
+                    option.Value == "I will defend against the creatures of the brink!" ||
+                    option.Value == "I will deal with only the weakest aversaries")
+                    NpcDialog.SelectAnswer(target, option.Key);
+            }
+            */
+        }
+
+        private void Game_OnTeleportStarted(object s, EventArgs e)
+        {
+            Chat.WriteLine("Teleport Started!");
+        }
+
+        private void Game_PlayfieldInit(object s, uint id)
+        {
+            Chat.WriteLine($"PlayfieldInit: {id}");
+        }
+
+        private void Game_OnTeleportFailed(object s, EventArgs e)
+        {
+            Chat.WriteLine("Teleport Failed!");
+        }
+
+        private void Game_OnTeleportEnded(object s, EventArgs e)
+        {
+            Chat.WriteLine($"Teleport Ended!");
+        }
+
+        private void Item_ItemUsed(object s, ItemUsedEventArgs e)
+        {
+            Chat.WriteLine($"Item {e.Item.Name} used by {e.OwnerIdentity}");
+            //mc.SetDestination(new Vector3(620, 66.8f, 687));
+        }
+
+        double lastTrigger = Time.NormalTime;
+
+        private void OnUpdate(object s, float deltaTime)
+        {
+            //Chat.WriteLine($"Update {i++}");
+
+            if (Settings["DrawStuff"].AsBool())
+            {
+                foreach (Dynel player in DynelManager.Players)
+                {
+                    Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
+                    Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
+                }
+            }
+
+            if(DynelManager.LocalPlayer.FightingTarget != null)
+            {              
+                if (SpecialAttack.FastAttack.IsInRange(DynelManager.LocalPlayer.FightingTarget) && SpecialAttack.FastAttack.IsAvailable())
+                    SpecialAttack.FastAttack.UseOn(DynelManager.LocalPlayer.FightingTarget);
+            }
+
+            foreach(SimpleChar character in DynelManager.Characters)
+            {
+                if (character.IsPathing)
+                {
+                    Debug.DrawLine(character.Position, character.PathingDestination, DebuggingColor.LightBlue);
+                    Debug.DrawSphere(character.PathingDestination, 0.2f, DebuggingColor.LightBlue);
+                }
+            }
+
+            Vector3 rayOrigin = DynelManager.LocalPlayer.Position;
+            Vector3 rayTarget = DynelManager.LocalPlayer.Position;
+            rayTarget.Y = 0;
+
+            if (Playfield.Raycast(rayOrigin, rayTarget, out Vector3 hitPos, out Vector3 hitNormal))
+            {
+                Debug.DrawLine(rayOrigin, rayTarget, DebuggingColor.White);
+                Debug.DrawLine(hitPos, hitPos+hitNormal, DebuggingColor.Yellow);
+                Debug.DrawSphere(hitPos, 0.2f, DebuggingColor.White);
+                Debug.DrawSphere(hitPos + hitNormal, 0.2f, DebuggingColor.Yellow);
+            }
+
+            /*
+            if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
+            {
+                derp.Use();
+            }*/
+
+            if (Time.NormalTime > lastTrigger + 0.2)
+            {
+                //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
+                //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
+
+                /*
+                Spell testSpell;
+                if(Spell.Find("Matrix of Ka", out testSpell))
+                {
+                    if (testSpell.IsReady && testSpell.MeetsUseReqs())
+                        testSpell.Cast();
+                }
+                */
+
+                /*
+                Perk testPerk;
+                if(Perk.Find("Bot Confinement", out testPerk))
+                {
+                    Chat.WriteLine($"Bot Confinement IsAvailable: {testPerk.IsAvailable}");
+                    //if (testPerk.IsAvailable)
+                    //   testPerk.Use();
+                }*/
+
+                //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+                //Targeting.SetTarget(randomTarget);
+
+                /*
+                _ipcChannel.Broadcast(new TestMessage()
+                {
+                    Position = DynelManager.LocalPlayer.Position,
+                    Leet = 1337
+                });
+                */
+
+                lastTrigger = Time.NormalTime;
+            }
+        }
+
+        private void DynelSpawned(object s, Dynel dynel)
+        {
+            if (dynel.Identity.Type == IdentityType.SimpleChar)
+            {
+                SimpleChar c = dynel.Cast<SimpleChar>();
+
+                Chat.WriteLine($"SimpleChar Spawned(TestPlugin): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health} -- IsInPlay: {c.IsInPlay}");
+            }
+        }
+
+        private void CharInPlay(object s, SimpleChar character)
+        {
+            Chat.WriteLine($"{character.Name} is now in play.");
         }
 
         private void Network_PacketReceived(object s, byte[] packet)
@@ -443,204 +649,6 @@ namespace TestPlugin
                 foreach (RoomInstance room in PlayfieldAcgInfo.Rooms)
                     Chat.WriteLine($"{room.RoomId}\t{room.Floor}\t{room.X}\t{room.Y}\t{room.Rotation}");
             }
-        }
-
-        private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
-        {
-            if (chatMessage.PacketType == ChatMessageType.PrivateMessage)
-            {
-                Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
-            }
-        }
-
-        private void Network_N3MessageSent(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
-        {
-            //Chat.WriteLine($"{n3Msg.N3MessageType}");
-        }
-
-        private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
-        {
-            //Chat.WriteLine($"{n3Msg.N3MessageType}");
-
-            
-            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)
-            {
-                PlayfieldAnarchyFMessage ayy = (PlayfieldAnarchyFMessage)n3Msg;
-                //Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
-            }
-
-            //if (n3Msg.N3MessageType == N3MessageType.CharDCMove)
-            //    Chat.WriteLine($"MoveType: {((CharDCMoveMessage)n3Msg).MoveType}");
-
-            /*
-            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.TemplateAction)
-            {
-                TemplateActionMessage ayy = (TemplateActionMessage)n3Msg;
-                Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
-            }
-            */
-            /*
-            if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
-            {
-                FeedbackMessage ayy = (FeedbackMessage)n3Msg;
-                Chat.WriteLine($"Feedback: {ayy.MessageId.ToString()}\t{ayy.CategoryId.ToString()}\t{ayy.Unknown1.ToString()}");
-            }
-
-            if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.CharacterAction)
-            {
-                CharacterActionMessage charActionMessage = (CharacterActionMessage)n3Msg;
-                Chat.WriteLine($"CharacterAction {charActionMessage.Action}\t{charActionMessage.Identity}\t{charActionMessage.Target}\t{charActionMessage.Parameter1}\t{charActionMessage.Parameter2}\t{charActionMessage.Unknown1}\t{charActionMessage.Unknown2}");
-            }*/
-        }
-
-        private void Team_TeamRequest(object s, TeamRequestEventArgs e)
-        {
-            e.Accept();
-        }
-
-        private void Team_MemberLeft(object s, Identity leaver)
-        {
-            Chat.WriteLine($"Player {leaver} left the team.");
-        }
-
-        private void NpcDialog_AnswerListChanged(object s, Dictionary<int, string> options)
-        {
-            /*
-            Identity target = (Identity)s;
-
-            foreach(KeyValuePair<int, string> option in options)
-            {
-                if (option.Value == "Is there anything I can help you with?" ||
-                    option.Value == "I will defend against the creatures of the brink!" ||
-                    option.Value == "I will deal with only the weakest aversaries")
-                    NpcDialog.SelectAnswer(target, option.Key);
-            }
-            */
-        }
-
-        private void Game_OnTeleportStarted(object s, EventArgs e)
-        {
-            Chat.WriteLine("Teleport Started!");
-        }
-
-        private void Game_PlayfieldInit(object s, uint id)
-        {
-            Chat.WriteLine($"PlayfieldInit: {id}");
-        }
-
-        private void Game_OnTeleportFailed(object s, EventArgs e)
-        {
-            Chat.WriteLine("Teleport Failed!");
-        }
-
-        private void Game_OnTeleportEnded(object s, EventArgs e)
-        {
-            Chat.WriteLine($"Teleport Ended!");
-        }
-
-        private void Item_ItemUsed(object s, ItemUsedEventArgs e)
-        {
-            Chat.WriteLine($"Item {e.Item.Name} used by {e.OwnerIdentity}");
-            //mc.SetDestination(new Vector3(620, 66.8f, 687));
-        }
-
-        double lastTrigger = Time.NormalTime;
-
-        private void OnUpdate(object s, float deltaTime)
-        {
-            if (Settings["DrawStuff"].AsBool())
-            {
-                foreach (Dynel player in DynelManager.Players)
-                {
-                    Debug.DrawSphere(player.Position, 1, DebuggingColor.LightBlue);
-                    Debug.DrawLine(DynelManager.LocalPlayer.Position, player.Position, DebuggingColor.LightBlue);
-                }
-            }
-
-            if(DynelManager.LocalPlayer.FightingTarget != null)
-            {              
-                if (SpecialAttack.FastAttack.IsInRange(DynelManager.LocalPlayer.FightingTarget) && SpecialAttack.FastAttack.IsAvailable())
-                    SpecialAttack.FastAttack.UseOn(DynelManager.LocalPlayer.FightingTarget);
-            }
-
-            foreach(SimpleChar character in DynelManager.Characters)
-            {
-                if (character.IsPathing)
-                {
-                    Debug.DrawLine(character.Position, character.PathingDestination, DebuggingColor.LightBlue);
-                    Debug.DrawSphere(character.PathingDestination, 0.2f, DebuggingColor.LightBlue);
-                }
-            }
-
-            Vector3 rayOrigin = DynelManager.LocalPlayer.Position;
-            Vector3 rayTarget = DynelManager.LocalPlayer.Position;
-            rayTarget.Y = 0;
-
-            if (Playfield.Raycast(rayOrigin, rayTarget, out Vector3 hitPos, out Vector3 hitNormal))
-            {
-                Debug.DrawLine(rayOrigin, rayTarget, DebuggingColor.White);
-                Debug.DrawLine(hitPos, hitPos+hitNormal, DebuggingColor.Yellow);
-                Debug.DrawSphere(hitPos, 0.2f, DebuggingColor.White);
-                Debug.DrawSphere(hitPos + hitNormal, 0.2f, DebuggingColor.Yellow);
-            }
-
-            /*
-            if (!Item.HasPendingUse && Inventory.Find(285509, out Item derp))
-            {
-                derp.Use();
-            }*/
-
-            if (Time.NormalTime > lastTrigger + 0.2)
-            {
-                //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
-                //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
-
-                /*
-                Spell testSpell;
-                if(Spell.Find("Matrix of Ka", out testSpell))
-                {
-                    if (testSpell.IsReady && testSpell.MeetsUseReqs())
-                        testSpell.Cast();
-                }
-                */
-
-                /*
-                Perk testPerk;
-                if(Perk.Find("Bot Confinement", out testPerk))
-                {
-                    Chat.WriteLine($"Bot Confinement IsAvailable: {testPerk.IsAvailable}");
-                    //if (testPerk.IsAvailable)
-                    //   testPerk.Use();
-                }*/
-
-                //SimpleChar randomTarget = DynelManager.Characters.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-                //Targeting.SetTarget(randomTarget);
-
-                /*
-                _ipcChannel.Broadcast(new TestMessage()
-                {
-                    Position = DynelManager.LocalPlayer.Position,
-                    Leet = 1337
-                });
-                */
-
-                lastTrigger = Time.NormalTime;
-            }
-        }
-
-        private void DynelSpawned(object s, Dynel dynel)
-        {
-            if (dynel.Identity.Type == IdentityType.SimpleChar)
-            {
-                SimpleChar c = dynel.Cast<SimpleChar>();
-
-                Chat.WriteLine($"SimpleChar Spawned(TestPlugin): {c.Identity} -- {c.Name} -- {c.Position} -- {c.Health} -- IsInPlay: {c.IsInPlay}");
-            }
-        }
-
-        private void CharInPlay(object s, SimpleChar character)
-        {
-            Chat.WriteLine($"{character.Name} is now in play.");
         }
     }
 }

@@ -280,6 +280,7 @@
     <Compile Include="Unmanaged\DbObjects\RDBPlayfield.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />
     <Compile Include="Unmanaged\Imports\DatabaseController\ResourceDatabase_t.cs" />
+    <Compile Include="Unmanaged\Imports\DisplaySystem\DisplaySystem_t.cs" />
     <Compile Include="Unmanaged\Imports\DisplaySystem\VisualEnvFX_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\DummyItem_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\GamecodeUnk.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="Unmanaged\Imports\Native\Kernel32.cs" />
     <Compile Include="Unmanaged\Imports\Native\MSVCR100.cs" />
     <Compile Include="Unmanaged\Imports\Native\Psapi.cs" />
+    <Compile Include="Unmanaged\Imports\Randy31\RViewPort_t.cs" />
     <Compile Include="Unmanaged\Imports\Randy31\Debugger_t.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Looper.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Rect_c.cs" />
