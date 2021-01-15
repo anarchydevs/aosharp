@@ -32,22 +32,29 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 Type = (IdentityType) streamReader.ReadInt32(),
                 Instance = streamReader.ReadInt32()
             };
-            genericCmdMessage.Source = new Identity
-            {
-                Type = (IdentityType)streamReader.ReadInt32(),
-                Instance = streamReader.ReadInt32()
-            };
-
+            
             if (genericCmdMessage.Action == GenericCmdAction.UseItemOnItem)
             {
+                genericCmdMessage.Source = new Identity
+                {
+                    Type = (IdentityType)streamReader.ReadInt32(),
+                    Instance = streamReader.ReadInt32()
+                };
+                
                 genericCmdMessage.Target = new Identity
                 {
                     Type = (IdentityType)streamReader.ReadInt32(),
                     Instance = streamReader.ReadInt32()
                 };
-            } else
+            }
+            else
             {
-                genericCmdMessage.Target = Identity.None;
+                genericCmdMessage.Source = Identity.None;
+                genericCmdMessage.Target = new Identity
+                {
+                    Type = (IdentityType)streamReader.ReadInt32(),
+                    Instance = streamReader.ReadInt32()
+                };
             }
 
             return genericCmdMessage;
@@ -91,11 +98,13 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             streamWriter.WriteInt32(genericCmd.Temp4);
             streamWriter.WriteInt32((int)genericCmd.User.Type);
             streamWriter.WriteInt32(genericCmd.User.Instance);
-            streamWriter.WriteInt32((int)genericCmd.Source.Type);
-            streamWriter.WriteInt32(genericCmd.Source.Instance);
 
-            if (genericCmd.Action != GenericCmdAction.UseItemOnItem) return;
-            
+            if (genericCmd.Action == GenericCmdAction.UseItemOnItem)
+            {
+                streamWriter.WriteInt32((int)genericCmd.Source.Type);
+                streamWriter.WriteInt32(genericCmd.Source.Instance);
+            }
+
             streamWriter.WriteInt32((int)genericCmd.Target.Type);
             streamWriter.WriteInt32(genericCmd.Target.Instance);
         }

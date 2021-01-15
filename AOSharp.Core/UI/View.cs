@@ -41,6 +41,14 @@ namespace AOSharp.Core.UI
 
             return new View(pView);
         }
+        
+        public static View CreateFromXml(string filePath)
+        {
+            IntPtr pFilePath = StdString.Create(filePath).Pointer;
+            IntPtr pUnknown = StdString.Create().Pointer;
+
+            return GUIUnk.LoadViewFromXml(out var pView, pFilePath, pUnknown) ? new View(pView, false) : null;
+        }
 
         public virtual void Dispose()
         {
