@@ -21,7 +21,7 @@ namespace AOSharp.Core.UI
             }
         }
 
-        internal unsafe View(IntPtr pointer, bool register = false)
+        internal unsafe View(IntPtr pointer, bool register = true)
         {
             _pointer = pointer;
             Handle = *(int*)(_pointer + 0x44);

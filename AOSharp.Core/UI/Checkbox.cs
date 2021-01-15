@@ -18,11 +18,6 @@ namespace AOSharp.Core.UI
             _prevValue = IsChecked;
         }
 
-        internal Checkbox(IntPtr pointer, bool track) : base(pointer, track)
-        {
-            _prevValue = IsChecked;
-        }
-
         public static Checkbox Create(string name, string text, bool defaultValue, bool horizontalSpacer = false)
         {
             IntPtr pView = CheckBox_c.Create(name, text, defaultValue, horizontalSpacer);

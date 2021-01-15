@@ -311,6 +311,7 @@
     <Compile Include="Unmanaged\Imports\GUI\OptionPanelModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ScrollView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\StringListViewItem_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\PowerBarView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TextView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TabView.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TargetingModule_t.cs" />

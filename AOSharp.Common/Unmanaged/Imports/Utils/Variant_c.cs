@@ -9,7 +9,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         internal static extern int AsInt32(IntPtr pThis);
 
         [DllImport("Utils.dll", EntryPoint = "?AsFloat@Variant@@QBEMXZ", CallingConvention = CallingConvention.ThisCall)]
-        internal static extern int AsFloat(IntPtr pThis);
+        internal static extern float AsFloat(IntPtr pThis);
+
+        [DllImport("Utils.dll", EntryPoint = "?AsDouble@Variant@@QBENXZ", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern double AsDouble(IntPtr pThis);
 
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Utils.dll", EntryPoint = "?AsBool@Variant@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -37,6 +40,9 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@M@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern IntPtr Constructor(IntPtr pThis, float value);
+
+        [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@N@Z", CallingConvention = CallingConvention.ThisCall)]
+        internal static extern IntPtr Constructor(IntPtr pThis, double value);
 
         [DllImport("Utils.dll", EntryPoint = "??0Variant@@QAE@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         internal static extern IntPtr Constructor(IntPtr pThis, bool value);

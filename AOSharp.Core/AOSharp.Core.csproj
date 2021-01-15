@@ -120,6 +120,7 @@
     <Compile Include="UI\StringListViewItem.cs" />
     <Compile Include="UI\ListViewBase.cs" />
     <Compile Include="UI\HLayoutNode.cs" />
+    <Compile Include="UI\PowerBarView.cs" />
     <Compile Include="UI\TextView.cs" />
     <Compile Include="UI\UIController.cs" />
     <Compile Include="UI\VLayoutNode.cs" />

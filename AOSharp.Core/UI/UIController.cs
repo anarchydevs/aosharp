@@ -13,6 +13,9 @@ namespace AOSharp.Core.UI
 
         internal static void RegisterView(View view)
         {
+            if (_views.ContainsKey(view.Handle))
+                return;
+
             _views.Add(view.Handle, view);
         }
 

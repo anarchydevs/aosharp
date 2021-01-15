@@ -28,6 +28,11 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf), value));
         }
 
+        public static Variant Create(double value)
+        {
+            return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf), value));
+        }
+
         public static Variant Create(bool value)
         {
             return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf), value));
@@ -57,6 +62,8 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public int AsInt32() => Variant_c.AsInt32(Pointer);
 
         public float AsFloat() => Variant_c.AsFloat(Pointer);
+
+        public double AsDouble() => Variant_c.AsDouble(Pointer);
 
         public bool AsBool() => Variant_c.AsBool(Pointer);
 

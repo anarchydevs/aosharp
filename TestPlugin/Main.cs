@@ -31,6 +31,7 @@ namespace TestPlugin
         public Settings Settings;
         private IPCChannel _ipcChannel;
         private MovementController mc;
+        Window testWindow;
         private Menu _menu;
         private int i = 0;
 
@@ -217,20 +218,27 @@ namespace TestPlugin
                         item.Split(int.Parse(param[1]));
                 });
 
-                Chat.RegisterCommand("opensettings", (string command, string[] param, ChatWindow chatWindow) =>
+                Chat.RegisterCommand("openwindow", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    Window testSettingWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
-                    testSettingWindow.Show(true);
-                    chatWindow.WriteLine($"Window.Pointer: {testSettingWindow.Pointer.ToString("X4")}");
-                    chatWindow.WriteLine($"Window.Name: {testSettingWindow.Name}");
-                    if (testSettingWindow.IsValid)
+                    testWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
+                    testWindow.Show(true);
+                    chatWindow.WriteLine($"Window.Pointer: {testWindow.Pointer.ToString("X4")}");
+                    chatWindow.WriteLine($"Window.Name: {testWindow.Name}");
+                    if (testWindow.IsValid)
                     {
-                        if (testSettingWindow.FindView("testTextView", out TextView testView))
+                        if (testWindow.FindView("testTextView", out TextView testView))
                         {
                             Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
                             Chat.WriteLine($"testTextView.Text: {testView.Text}");
                             testView.Text = "1337";
                             Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
+                        }
+
+                        if (testWindow.FindView("testPowerBar", out PowerBarView testPowerBar))
+                        {
+                            Chat.WriteLine($"testPowerBar.Pointer: {testPowerBar.Pointer.ToString("X4")}");
+                            Chat.WriteLine($"testPowerBar.Value: {testPowerBar.Value}");
+                            testPowerBar.Value = 0.1f;
                         }
                     }
                 });
@@ -449,6 +457,25 @@ namespace TestPlugin
 
         private void OnUpdate(object s, float deltaTime)
         {
+            if (testWindow != null && testWindow.IsValid)
+            {
+                if (testWindow.FindView("testTextView", out TextView testView))
+                    testView.Text = Targeting.TargetChar == null ? "<No Target>" : Targeting.TargetChar.Position.ToString();
+
+                if (testWindow.FindView("testPowerBar", out PowerBarView testPowerBar))
+                {
+                    if (Targeting.TargetChar == null)
+                    {
+                        testPowerBar.Value = 0;
+                    }
+                    else
+                    {
+                        float dist = DynelManager.LocalPlayer.GetLogicalRangeToTarget(Targeting.TargetChar);
+                        testPowerBar.Value = Math.Min(1f, dist / 20f);
+                    }
+                }
+            }
+
             if (Settings["DrawStuff"].AsBool())
             {
                 foreach (Dynel player in DynelManager.Players)
