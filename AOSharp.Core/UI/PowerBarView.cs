@@ -26,6 +26,21 @@ namespace AOSharp.Core.UI
         {
             PowerBarView_c.SetValue(Pointer, Variant.Create(value).Pointer, false);
         }
+        
+        public void SetLabel(string text)
+        {
+            PowerBarView_c.SetLabel(Pointer, StdString.Create(text).Pointer);
+        }
+        
+        public void SetLabels(string leftLabel, string rightLabel)
+        {
+            PowerBarView_c.SetLabels(Pointer, StdString.Create(leftLabel).Pointer, StdString.Create(rightLabel).Pointer);
+        }
+        
+        public void SetBarColor(uint color)
+        {
+            PowerBarView_c.SetBarColor(Pointer, color);
+        }
 
         private float GetValue()
         {
