@@ -43,7 +43,13 @@ namespace AOSharp.Core.UI
             return new Window(pWindow);
         }
 
-        public static Window CreateFromXml(string name, string path)
+        public static Window CreateFromXml(string name, string path, WindowStyle windowStyle = WindowStyle.Default,
+            WindowFlags windowFlags = WindowFlags.None)
+        {
+            return CreateFromXml(name, path, new Rect(50, 50, 300, 300), windowStyle, windowFlags);
+        }
+        
+        public static Window CreateFromXml(string name, string path, Rect windowSize, WindowStyle windowStyle = WindowStyle.Default, WindowFlags windowFlags = WindowFlags.None)
         {
             if (UIController.FindWindow(name, out Window existingWindow))
                 return existingWindow;
@@ -51,7 +57,7 @@ namespace AOSharp.Core.UI
             if (!File.Exists(path))
                 return null;
 
-            Window window = Create(new Rect(50, 50, 300, 300), name, name, WindowStyle.Default, WindowFlags.AutoScale);
+            Window window = Create(windowSize, name, name, windowStyle, windowFlags);
 
             if (!GUIUnk.LoadViewFromXml(out IntPtr pView, StdString.Create(path).Pointer, StdString.Create().Pointer))
                 return null;
