@@ -483,6 +483,9 @@
         UnhallowedWrath = 0x554e5752,
         SpectatorWrath = 0x53435752,
         RighteousFury = 0x52494655,
-        UnhallowedFury = 0x554e4655
+        UnhallowedFury = 0x554e4655,
+        
+        //Collector kick
+        GravityShift = 0x454e4752
     }
 }
