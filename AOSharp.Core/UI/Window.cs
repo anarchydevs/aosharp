@@ -43,6 +43,12 @@ namespace AOSharp.Core.UI
             return new Window(pWindow);
         }
 
+        public static Window GetWindowByName(string name)
+        {
+            IntPtr pWindow = Window_c.FindWindowName(name);
+            return pWindow != IntPtr.Zero ? new Window(pWindow) : null;
+        }
+
         public static Window CreateFromXml(string name, string path, WindowStyle windowStyle = WindowStyle.Default,
             WindowFlags windowFlags = WindowFlags.None)
         {
