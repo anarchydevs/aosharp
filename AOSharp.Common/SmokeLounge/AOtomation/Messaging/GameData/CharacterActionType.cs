@@ -6,7 +6,7 @@
         CastNano = 0x00000013,
         TeamRequestReply = 0x0000001C,
         TeamKickMember = 0x00000016,
-        LeaveTeam = 0x00000020,
+        LeaveTeam = 0x00000018,
         AcceptTeamRequest = 0x00000023,
         RemoveFriendlyNano = 0x00000041,
         UseItemOnItem = 0x00000051,
