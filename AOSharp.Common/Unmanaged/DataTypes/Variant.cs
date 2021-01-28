@@ -3,10 +3,11 @@ using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Common.Unmanaged.DataTypes
 { 
-    public class Variant
+    public class Variant : IDisposable
     {
         public const int SizeOf = 0x10;
         public readonly IntPtr Pointer;
+        private bool disposedValue;
 
         private Variant(IntPtr pointer)
         {
@@ -57,8 +58,6 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return variant;
         }
 
-        public void Dispose() => Variant_c.Deconstructor(Pointer);
-
         public int AsInt32() => Variant_c.AsInt32(Pointer);
 
         public float AsFloat() => Variant_c.AsFloat(Pointer);
@@ -79,5 +78,25 @@ namespace AOSharp.Common.Unmanaged.DataTypes
         public static implicit operator Variant(int v) => Variant.Create(v);
         public static implicit operator Variant(float v) => Variant.Create(v);
         public static implicit operator Variant(bool v) => Variant.Create(v);
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                Variant_c.Deconstructor(Pointer);
+                disposedValue = true;
+            }
+        }
+
+        ~Variant()
+        {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
