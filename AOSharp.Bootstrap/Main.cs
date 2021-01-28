@@ -27,6 +27,7 @@ namespace AOSharp.Bootstrap
         private static List<LocalHook> _hooks = new List<LocalHook>();
         private PluginProxy _pluginProxy;
         private ChatSocketListener _chatSocketListener;
+        private bool _exiting = false;
 
         private string _lastChatInput;
         private IntPtr _lastChatInputWindowPtr;
@@ -69,20 +70,8 @@ namespace AOSharp.Bootstrap
 
         private void OnIPCClientDisconnected(IPCServer pipe)
         {
-            UnhookAll();
-
-            _pluginProxy.Teardown();
-
+            _exiting = true;
             _ipcPipe.Close();
-
-            if (_pluginAppDomain != null)
-            {
-                AppDomain.Unload(_pluginAppDomain);
-                _pluginAppDomain = null;
-            }
-
-            //Notify the main thread that it is time to unload the dll.
-            _unloadEvent.Set();
         }
 
         private void OnAssembliesChanged(object pipe, IPCMessage message)
@@ -453,9 +442,29 @@ namespace AOSharp.Bootstrap
         {
             try
             {
-                if (_pluginProxy != null)
+                if(_exiting)
                 {
-                    _pluginProxy.RunPendingPluginInitializations();
+                    UnhookAll();
+
+                    _pluginProxy?.Teardown();
+
+                    N3EngineClientAnarchy_t.RunEngine(pThis, deltaTime);
+
+                    _pluginProxy?.Update(deltaTime);
+
+                    if (_pluginAppDomain != null)
+                    {
+                        AppDomain.Unload(_pluginAppDomain);
+                        _pluginAppDomain = null;
+                    }
+
+                    //Notify the main thread that it is time to unload the dll.
+                    _unloadEvent.Set();
+                    _exiting = false;
+                } 
+                else if (_pluginProxy != null)
+                {
+                    _pluginProxy.RunPluginInitializations();
 
                     _pluginProxy.EarlyUpdate(deltaTime);
 

@@ -31,8 +31,8 @@ namespace MissionHelper
 
             if (mission == null)
                 return;
-            
-            foreach(MissionAction action in mission.Actions)
+
+            foreach (MissionAction action in mission.Actions)
             {
                 switch (action.Type)
                 {
@@ -83,6 +83,10 @@ namespace MissionHelper
                         break;
                 }
             }
+        }
+
+        public override void Teardown()
+        {
         }
     }
 }
