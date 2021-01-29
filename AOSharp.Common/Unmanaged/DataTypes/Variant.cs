@@ -84,6 +84,7 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             if (!disposedValue)
             {
                 Variant_c.Deconstructor(Pointer);
+                MSVCR100.Delete(Pointer);
                 disposedValue = true;
             }
         }
