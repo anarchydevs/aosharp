@@ -273,16 +273,14 @@ namespace AOSharp.Core
                             }
                             break;
                         case UseCriteriaOperator.AlliesNotInCombat:
-                            if (Team.Members.Contains(skillCheckChar.Identity))
+                            if (Team.IsInTeam && Team.Members.Contains(skillCheckChar.Identity))
                             {
-                                Identity[] teamMembers = Team.Members.Select(x => x.Identity).ToArray();
-                                metReq = !DynelManager.Characters.Any(x => x.FightingTarget != null && teamMembers.Contains(x.FightingTarget.Identity));
+                                metReq = !Team.IsInCombat;
                             }
                             else
                             {
-                                metReq = !DynelManager.Characters.Any(x => x.FightingTarget != null && (x.FightingTarget.Identity == skillCheckChar.Identity || x.FightingTarget.Identity == DynelManager.LocalPlayer.Identity));
+                                metReq = !skillCheckChar.IsAttacking && !DynelManager.Characters.Any(x => x.FightingTarget != null && (x.FightingTarget.Identity == skillCheckChar.Identity || x.FightingTarget.Identity == DynelManager.LocalPlayer.Identity));
                             }
-
                             break;
                         case UseCriteriaOperator.IsOwnPet:
                             metReq = DynelManager.LocalPlayer.Pets.Contains(skillCheckChar.Identity);

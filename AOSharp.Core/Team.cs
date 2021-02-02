@@ -15,6 +15,8 @@ namespace AOSharp.Core
         public static bool IsInTeam => GetIsInTeam();
         public static bool IsLeader => GetIsTeamLeader();
         public static bool IsRaid => GetIsRaid();
+        public static bool IsInCombat => GetIsInCombat();
+        
         public static List<TeamMember> Members => GetMemberList();
 
         public static EventHandler<TeamRequestEventArgs> TeamRequest;
@@ -86,6 +88,17 @@ namespace AOSharp.Core
             {
                 CommandType = RaidCmdType.CreateRaid
             });
+        }
+
+        private static bool GetIsInCombat()
+        {
+            // someone in the team is attacking something
+            if (Members.Any(x => x.Character != null && x.Character.IsAttacking))
+                return true;
+            
+            // someone in the team is being attacked
+            return DynelManager.Characters
+                .Any(c => c.FightingTarget != null && Members.Select(m => m.Identity).Contains(c.FightingTarget.Identity));
         }
 
         private static bool GetIsTeamLeader()
