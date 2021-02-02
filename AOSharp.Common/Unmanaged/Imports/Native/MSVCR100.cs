@@ -7,5 +7,8 @@ namespace AOSharp.Common.Unmanaged.Imports
     {
         [DllImport("MSVCR100.dll", EntryPoint = "??2@YAPAXI@Z", CharSet = CharSet.Auto)]
         public static extern IntPtr New(int size);
+
+        [DllImport("MSVCR100.dll", EntryPoint = "??3@YAXPAX@Z", CharSet = CharSet.Auto)]
+        public static extern void Delete(IntPtr pointer);
     }
 }

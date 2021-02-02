@@ -226,6 +226,11 @@ namespace TestPlugin
                     chatWindow.WriteLine($"Window.Name: {testWindow.Name}");
                     if (testWindow.IsValid)
                     {
+                        if (testWindow.FindView("textOptionCheckbox", out View textOptionCheckboxView))
+                        {
+                            Chat.WriteLine($"textOptionCheckboxView.Pointer: {textOptionCheckboxView.Pointer.ToString("X4")}");
+                        }
+
                         if (testWindow.FindView("testTextView", out TextView testView))
                         {
                             Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
@@ -327,7 +332,7 @@ namespace TestPlugin
                 MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
                 //Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
-                //Network.PacketReceived += Network_PacketReceived;
+                Network.PacketReceived += Network_PacketReceived;
                 //Network.PacketSent += Network_PacketSent;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
@@ -576,7 +581,7 @@ namespace TestPlugin
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
             Chat.WriteLine($"{msgType}");
 
-            if (msgType == N3MessageType.QuestAlternative)
+            if (msgType == N3MessageType.CorpseFullUpdate)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)
@@ -679,6 +684,11 @@ namespace TestPlugin
                 foreach (RoomInstance room in PlayfieldAcgInfo.Rooms)
                     Chat.WriteLine($"{room.RoomId}\t{room.Floor}\t{room.X}\t{room.Y}\t{room.Rotation}");
             }
+        }
+
+        public override void Teardown()
+        {
+            Chat.WriteLine("Teardown time!");
         }
     }
 }

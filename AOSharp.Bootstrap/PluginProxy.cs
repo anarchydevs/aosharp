@@ -55,12 +55,7 @@ namespace AOSharp.Bootstrap
     public class PluginProxy : MarshalByRefObject
     {
         private static CoreDelegates _coreDelegates;
-        public Queue<PluginInitialization> _pendingInitializationQueue = new Queue<PluginInitialization>();
-
-        public void Teardown()
-        {
-            _coreDelegates?.Teardown?.Invoke();
-        }
+        private List<Plugin> _plugins = new List<Plugin>();
 
         public void UnknownChatCommand(IntPtr pWindow, string command)
         {
@@ -242,9 +237,14 @@ namespace AOSharp.Bootstrap
                     if (type.GetInterface("AOSharp.Core.IAOPluginEntry") == null)
                         continue;
 
-                    MethodInfo method = type.GetMethod("Run", BindingFlags.Public | BindingFlags.Instance);
+                    MethodInfo runMethod = type.GetMethod("Run", BindingFlags.Public | BindingFlags.Instance);
 
-                    if (method == null) //Notify of plugin error somewhere?
+                    if (runMethod == null)
+                        continue;
+
+                    MethodInfo teardownMethod = type.GetMethod("Teardown", BindingFlags.Public | BindingFlags.Instance);
+
+                    if (teardownMethod == null)
                         continue;
 
                     ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
@@ -259,8 +259,7 @@ namespace AOSharp.Bootstrap
                     if (instance == null) //Is this even possible?
                         continue;
 
-                    PluginInitialization pii = new PluginInitialization(instance, method, Path.GetDirectoryName(assemblyPath));
-                    _pendingInitializationQueue.Enqueue(pii);
+                    _plugins.Add(new Plugin(instance, runMethod, teardownMethod, Path.GetDirectoryName(assemblyPath)));
                 }
             }
             catch (Exception ex)
@@ -268,31 +267,60 @@ namespace AOSharp.Bootstrap
             }
         }
 
-        public void RunPendingPluginInitializations()
+        public void RunPluginInitializations()
         {
-            while (_pendingInitializationQueue.Count > 0)
-                _pendingInitializationQueue.Dequeue().Invoke();
+            foreach (Plugin plugin in _plugins)
+            {
+                if (plugin.Initialized)
+                    continue;
+                
+                plugin.Initialize();
+            }
+        }
+
+        public void Teardown()
+        {
+            _coreDelegates?.Teardown?.Invoke();
+
+            foreach (Plugin plugin in _plugins)
+                plugin.Teardown();
         }
     }
 
-    public class PluginInitialization
+    public class Plugin
     {
+        public bool Initialized;
+
         private object _instance;
-        private MethodInfo _method;
+        private MethodInfo _runMethod;
+        private MethodInfo _teardownMethod;
         private string _assemblyDir;
 
-        public PluginInitialization(object instance, MethodInfo method, string assemblyDir)
+        public Plugin(object instance, MethodInfo runMethod, MethodInfo teardownMethod, string assemblyDir)
         {
+            Initialized = false;
             _instance = instance;
-            _method = method;
+            _runMethod = runMethod;
+            _teardownMethod = teardownMethod;
             _assemblyDir = assemblyDir;
         }
 
-        public void Invoke()
+        public void Initialize()
         {
             try
             {
-                _method.Invoke(_instance, new object[] { _assemblyDir });
+                _runMethod.Invoke(_instance, new object[] { _assemblyDir });
+            }
+            catch { }
+
+            Initialized = true;
+        }
+
+        public void Teardown()
+        {
+            try
+            {
+                _teardownMethod.Invoke(_instance, null);
             }
             catch { }
         }
