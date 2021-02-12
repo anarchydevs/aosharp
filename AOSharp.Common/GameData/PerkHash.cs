@@ -1,4 +1,4 @@
-﻿namespace AOSharp.Common.GameData
+namespace AOSharp.Common.GameData
 {
     public enum PerkHash
     {
@@ -337,6 +337,9 @@
         LEProcAgentIntenseMetabolism = 0x49494657,
         LEProcAgentPlasteelPiercingRounds = 0x4c4d534f,
         LEProcAgentBrokenAnkle = 0x58534352,
+        LEProcAgentNoEscape = 0x45495348,
+        LEProcAgentNotumChargedRounds = 0x4755534f,
+        LEProcAgentNanoEnhancedTargeting = 0x414c504d,
         LEProcBureaucratFormsInTriplicate = 0x464f4954,
         LEProcBureaucratWrongWindow = 0x5752574e,
         LEProcBureaucratTaxAudit = 0x54584149,
@@ -396,6 +399,7 @@
         LEProcFixerUndergroundSutures = 0x41485441,
         LEProcFixerFightingChance = 0x424e5448,
         LEProcFixerBackyardBandages = 0x5349544d,
+        LEProcFixerLucksCalamity = 0x47555452,
         LEProcKeeperVirtuousReaper = 0x46485245,
         LEProcKeeperSymbioticBypass = 0x5249534d,
         LEProcKeeperAmbientPurification = 0x46454955,
@@ -430,6 +434,7 @@
         LEProcMetaPhysicistNanobotContingentArrest = 0x46455748,
         LEProcMetaPhysicistSowDespair = 0x504e5447,
         LEProcMetaPhysicistThoughtfulMeans = 0x45565049,
+        LEProcMetaPhysicistSuperEgoStrike = 0x52454643,
         LEProcNanoTechnicianLoopingService = 0x55534c49,
         LEProcNanoTechnicianThermalReprieve = 0x50575355,
         LEProcNanoTechnicianHarvestEnergy = 0x43494c4f,
