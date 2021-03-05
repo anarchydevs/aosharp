@@ -57,6 +57,7 @@
     <Compile Include="Combat\CombatHandler.cs" />
     <Compile Include="Dynel\Corpse.cs" />
     <Compile Include="Dynel\NpcHolder.cs" />
+    <Compile Include="Inventory\Backpack.cs" />
     <Compile Include="Inventory\ItemHolder.cs" />
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\Container.cs" />

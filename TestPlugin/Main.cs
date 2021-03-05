@@ -170,8 +170,9 @@ namespace TestPlugin
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
 
-                /*
+                
                 List<Item> characterItems = Inventory.Items;
+                /*
                 //List<Item> characterItems = Inventory.Items;
 
                 foreach (Item item in characterItems)
@@ -179,15 +180,20 @@ namespace TestPlugin
                     Chat.WriteLine($"{item.Slot} - {item.LowId} - {item.Name} - {item.QualityLevel} - {item.UniqueIdentity}");
                 }
                 */
-                /*
+                
                 Chat.WriteLine("Backpacks:");
 
-                List<Container> backpacks = Inventory.Backpacks;
-                foreach(Container backpack in backpacks)
+                List<Backpack> backpacks = Inventory.Backpacks;
+                foreach(Backpack backpack in backpacks)
                 {
-                    Chat.WriteLine($"{backpack.Identity} - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
+                    Chat.WriteLine($"{backpack.Identity} ({backpack.Name}) - IsOpen:{backpack.IsOpen}{((backpack.IsOpen) ? $" - Items:{backpack.Items.Count}" : "")}");
                 }        
-                */
+
+                if (Inventory.FindContainer("loli", out Backpack bp))
+                {
+                    Chat.WriteLine("Found BP by handle!");
+                }
+                
                 /*
                 Item noviRing;
                 if (Inventory.Find(226307, out noviRing))

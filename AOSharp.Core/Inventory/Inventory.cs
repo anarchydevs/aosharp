@@ -12,7 +12,7 @@ namespace AOSharp.Core.Inventory
     {
         public static List<Item> Items => GetItems(DynelManager.LocalPlayer.Identity);
 
-        public static List<Container> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Container(x.UniqueIdentity, x.Slot)).ToList();
+        public static List<Backpack> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Backpack(x.UniqueIdentity, x.Slot)).ToList();
 
         public static bool Find(Identity slot, out Item item)
         {
@@ -37,6 +37,11 @@ namespace AOSharp.Core.Inventory
         public static List<Item> FindAll(int lowId, int highId)
         {
             return Items.Where(x => x.LowId == lowId && x.HighId == highId).ToList();
+        }
+
+        public static bool FindContainer(string name, out Backpack backpack)
+        {
+            return (backpack = Backpacks.FirstOrDefault(x => x.Name == name)) != null;
         }
 
         //This will likely be made internal once I provide a way of accessing the inventory of all types of containers.
