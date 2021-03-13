@@ -144,7 +144,7 @@ namespace AOSharp.Core
                             }
                             else if ((Stat)param1 == Stat.SelectedTargetType)
                             {
-                                metReq = Targeting.TargetChar != null ? Targeting.TargetChar.IsPlayer : true;
+                                metReq = target != null ? target.IsPlayer : true;
                             }
                             else
                             {
