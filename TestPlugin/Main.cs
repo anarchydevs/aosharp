@@ -99,8 +99,14 @@ namespace TestPlugin
                 }
                 */
 
-                
-                foreach(PerkAction perkAction in PerkAction.List)
+                Chat.WriteLine("Dynels:");
+                foreach (SimpleChar c in DynelManager.Characters)
+                {
+                    Chat.WriteLine($"\t{c.Name}\t{((int)c.Flags).ToString("X4")}");
+                }
+
+
+                foreach (PerkAction perkAction in PerkAction.List)
                 {
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perkAction.Name} = 0x{((uint)perkAction.Hash).ToString("X4")},");
@@ -170,9 +176,10 @@ namespace TestPlugin
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
 
-                
-                List<Item> characterItems = Inventory.Items;
+                Inventory.GetContainerItems(new Identity(IdentityType.Bank, Game.ClientInst));
+
                 /*
+                List<Item> characterItems = Inventory.Items;
                 //List<Item> characterItems = Inventory.Items;
 
                 foreach (Item item in characterItems)
@@ -181,6 +188,7 @@ namespace TestPlugin
                 }
                 */
                 
+                /*
                 Chat.WriteLine("Backpacks:");
 
                 List<Backpack> backpacks = Inventory.Backpacks;
@@ -193,7 +201,7 @@ namespace TestPlugin
                 {
                     Chat.WriteLine("Found BP by handle!");
                 }
-                
+                */
                 /*
                 Item noviRing;
                 if (Inventory.Find(226307, out noviRing))

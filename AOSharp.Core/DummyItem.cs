@@ -142,6 +142,10 @@ namespace AOSharp.Core
                             {
                                 metReq = true;
                             }
+                            else if ((Stat)param1 == Stat.SelectedTargetType)
+                            {
+                                metReq = Targeting.TargetChar != null ? Targeting.TargetChar.IsPlayer : true;
+                            }
                             else
                             {
                                 int stat = skillCheckChar.GetStat((Stat)param1);
