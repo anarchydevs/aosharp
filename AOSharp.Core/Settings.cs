@@ -1,9 +1,10 @@
-﻿using AOSharp.Common.Unmanaged.DataTypes;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Interfaces;
 using AOSharp.Core.UI;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 
 namespace AOSharp.Core
 {
@@ -79,6 +80,9 @@ namespace AOSharp.Core
             try
             {
                 _storedValues = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(_savePath));
+
+                if(_storedValues == null)
+                    throw new Exception("JSON Object is null. Likely due to corrupt config file.");
             } 
             catch 
             {
