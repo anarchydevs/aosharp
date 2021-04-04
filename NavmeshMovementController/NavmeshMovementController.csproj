@@ -69,24 +69,6 @@
     <Content Include="CritterAi\cai-util.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NavMeshes\4321.navmesh" />
-    <None Include="NavMeshes\4368.navmesh" />
-    <None Include="NavMeshes\4605.navmesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="NavMeshes\281941.navmesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="NavMeshes\4365.navmesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="NavMeshes\4367.navmesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="NavMeshes\4696.navmesh" />
-    <None Include="NavMeshes\6011.navmesh" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">
       <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
       <Name>AOSharp.Common</Name>
