@@ -386,7 +386,7 @@ namespace TestPlugin
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
         }
 
-        private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
+         private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
             //Chat.WriteLine($"{n3Msg.N3MessageType}");
 

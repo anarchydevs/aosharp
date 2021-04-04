@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextMessage.cs" company="SmokeLounge">
+// <copyright file="PrivateMessage.cs" company="SmokeLounge">
 //   Copyright © 2013 SmokeLounge.
 //   This program is free software. It comes without any warranty, to
 //   the extent permitted by applicable law. You can redistribute it
@@ -8,49 +8,40 @@
 //   http://www.wtfpl.net/ for more details.
 // </copyright>
 // <summary>
-//   Defines the TextMessage type.
+//   Defines the PrivateMessage type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SmokeLounge.AOtomation.Messaging.Messages
+namespace SmokeLounge.AOtomation.Messaging.Messages.ChatMessages
 {
-    using AOSharp.Common.GameData;
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
-    [AoContract((int)PacketType.TextMessage)]
-    public class TextMessage : MessageBody
+    [AoContract((int)ChatMessageType.VicinityMessage)]
+    public class VicinityMessage : ChatMessageBody
     {
-        #region AoMember Properties
-
-        [AoMember(0)]
-        public TextMessageType TextMessageType { get; set; }
-
-        [AoMember(1)]
-        public Identity Unk { get; set; }
-
-        [AoMember(2)]
-        public int PayloadSize { get; set; }
-
-        [AoMember(3, SerializeSize = ArraySizeType.Int16)]
-        public string Text { get; set; }
-
-        [AoMember(4)]
-        public TextMessageRange Range { get; set; }
-
-        #endregion
-
         #region Public Properties
 
-        public override PacketType PacketType
+        public override ChatMessageType PacketType
         {
             get
             {
-                return PacketType.TextMessage;
+                return ChatMessageType.PrivateMessage;
             }
         }
 
         #endregion
+
+        [AoMember(0)]
+        public uint Sender { get; set; }
+
+        [AoMember(1, SerializeSize = ArraySizeType.Int16)]
+        public string Text { get; set; }
+
+        [AoMember(2)]
+        public short Unk1 { get; set; }
+
+        [AoMember(3)]
+        public byte Unk2 { get; set; }
     }
 }

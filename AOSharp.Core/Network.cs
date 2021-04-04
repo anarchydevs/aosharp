@@ -37,7 +37,7 @@ namespace AOSharp.Core
             { N3MessageType.CharInPlay, OnCharInPlay }
         };
 
-        public static void Send(N3Message message)
+        public static void Send(MessageBody message)
         {
             byte[] packet = PacketFactory.Create(message);
 

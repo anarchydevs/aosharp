@@ -112,6 +112,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MarketSendSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\VendingMachineSlot.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\VicinityMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessages\ZoneRedirectionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessageRange.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamRequestResponseAction.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\ArraySizeType.cs" />

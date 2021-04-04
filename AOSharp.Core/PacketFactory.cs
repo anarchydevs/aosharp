@@ -11,7 +11,7 @@ namespace AOSharp.Core
     {
         private static MessageSerializer _serializer = new MessageSerializer();
 
-        public static byte[] Create(N3Message messageBody)
+        public static byte[] Create(MessageBody messageBody)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
 
@@ -20,7 +20,10 @@ namespace AOSharp.Core
 
             int localDynelInstance = N3EngineClient_t.GetClientInst(pEngine);
 
-            messageBody.Identity = new Identity(IdentityType.SimpleChar, localDynelInstance);
+            if(messageBody is N3Message n3Message)
+                n3Message.Identity = new Identity(IdentityType.SimpleChar, localDynelInstance);
+            else if (messageBody is TextMessage textMessage)
+                textMessage.PayloadSize = textMessage.Text.Length + 3;
 
             var message = new Message
             {

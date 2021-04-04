@@ -14,12 +14,11 @@
 
 namespace SmokeLounge.AOtomation.Messaging.Messages
 {
-    public enum TextMessageRange
+    public enum TextMessageRange : byte
     {
-        Whisper = 0x00000002, 
-
-        Say = 0x00000003, 
-
-        Shout = 0x00000004
+        Vicinity = 0,
+        Whisper = 1,
+        Shout = 2,
+        RP = 3
     }
 }

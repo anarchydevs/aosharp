@@ -6,6 +6,7 @@ using AOSharp.Common.GameData;
 using System.Linq;
 using AOSharp.Bootstrap;
 using AOSharp.Core.UI;
+using SmokeLounge.AOtomation.Messaging.Messages;
 
 namespace AOSharp.Core.UI
 {
@@ -58,5 +59,28 @@ namespace AOSharp.Core.UI
         {
             _messageQueue.Enqueue((text, color));
         }
+
+        public static void SendVicinityMessage(string text, VicinityMessageType messageType = VicinityMessageType.Vicinity)
+        {
+            //Tbh I don't really understand the difference here but w/e we get our result.
+            TextMessageType type = messageType == VicinityMessageType.Vicinity || messageType == VicinityMessageType.Me ? 
+                TextMessageType.Say : messageType == VicinityMessageType.Shout ? TextMessageType.Shout : TextMessageType.Whisper;
+
+
+            Network.Send(new TextMessage()
+            {
+                TextMessageType = type,
+                Text = text,
+                Range = (TextMessageRange)messageType
+            });
+        }
+    }
+
+    public enum VicinityMessageType
+    {
+        Vicinity = 0,
+        Whisper = 1,
+        Shout = 2,
+        Me = 3
     }
 }
