@@ -144,25 +144,25 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetItemByTemplate
         [DllImport("Gamecode.dll", EntryPoint = "?GetItemByTemplate@n3EngineClientAnarchy_t@@ABEPAVDummyItemBase_t@@VIdentity_t@@ABV3@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr GetItemByTemplate(IntPtr pThis, Identity template, Identity* unk);
+        public static extern unsafe IntPtr GetItemByTemplate(IntPtr pThis, Identity template, ref Identity unk);
 
         //GetBuffCurrentTime
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffCurrentTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe int GetBuffCurrentTime(IntPtr pThis, Identity* identity, Identity* unk);
+        public static extern unsafe int GetBuffCurrentTime(IntPtr pThis, ref Identity identity, ref Identity unk);
 
         //GetBuffTotalTime
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetBuffTotalTime@n3EngineClientAnarchy_t@@QAEHABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe int GetBuffTotalTime(IntPtr pThis, Identity* identity, Identity* unk);
+        public static extern int GetBuffTotalTime(IntPtr pThis, ref Identity  identity, ref Identity unk);
 
         //RemoveBuff
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_RemoveBuff@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool RemoveBuff(IntPtr pThis, ref Identity identity);
+        public static extern bool RemoveBuff(IntPtr pThis, ref Identity identity);
 
         //CreateDummyItemID
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CreateDummyItemID@n3EngineClientAnarchy_t@@QBE_NAAVIdentity_t@@ABVACGItem_t@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool CreateDummyItemID(IntPtr pThis, Identity* template, ACGItem* acgItem);
+        public static extern bool CreateDummyItemID(IntPtr pThis, ref Identity template, ref ACGItem acgItem);
 
         //TextCommand
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TextCommand@n3EngineClientAnarchy_t@@QAE_NHPBDABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]

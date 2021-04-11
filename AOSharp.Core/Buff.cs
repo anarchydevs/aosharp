@@ -36,10 +36,9 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            fixed (Identity* pIdentity = &Identity)
-                fixed (Identity* pOwner = &Owner) {
-                return N3EngineClientAnarchy_t.GetBuffCurrentTime(pEngine, pIdentity, pOwner) / 100;
-            }
+            Identity identity = Identity;
+            Identity owner = Owner;
+            return N3EngineClientAnarchy_t.GetBuffCurrentTime(pEngine, ref identity, ref owner) / 100;
         }
 
         private unsafe float GetTotalTime()
@@ -49,10 +48,9 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            fixed (Identity* pIdentity = &Identity)
-                fixed (Identity* pOwner = &Owner) {
-                return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, pIdentity, pOwner) / 100f;
-            }
+            Identity identity = Identity;
+            Identity owner = Owner;
+            return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, ref identity, ref owner) / 100f;
         }
 
         public bool Remove()

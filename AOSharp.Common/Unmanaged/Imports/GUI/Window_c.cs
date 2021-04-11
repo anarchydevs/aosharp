@@ -38,6 +38,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?SetTitle@Window@@QAEXABVString@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetTitle(IntPtr pThis, IntPtr pTitle);
 
+        [DllImport("GUI.dll", EntryPoint = "?SetSizeLimits@Window@@QAEXABVPoint@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetSizeLimits(IntPtr pThis, ref Vector2 minSize, ref Vector2 maxSize);
+
         [DllImport("GUI.dll", EntryPoint = "?FindView@Window@@QBEPAVView@@ABVString@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr FindView(IntPtr pThis, IntPtr viewName);
 

@@ -87,6 +87,14 @@ namespace AOSharp.Core.UI
             return true;
         }
 
+        public void SetSizeLimits(Vector2 minSize, Vector2 maxSize)
+        {
+            if (!IsValid)
+                return;
+
+            Window_c.SetSizeLimits(Pointer, ref minSize, ref maxSize);
+        }
+
         public void Show(bool visible)
         {
             if (!IsValid)

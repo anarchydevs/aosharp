@@ -235,6 +235,7 @@ namespace TestPlugin
                 Chat.RegisterCommand("openwindow", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     testWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
+                    testWindow.SetSizeLimits(new Vector2(50, 50), new Vector2(50, 200));
                     testWindow.Show(true);
                     chatWindow.WriteLine($"Window.Pointer: {testWindow.Pointer.ToString("X4")}");
                     chatWindow.WriteLine($"Window.Name: {testWindow.Name}");
@@ -593,9 +594,9 @@ namespace TestPlugin
         private void Network_PacketReceived(object s, byte[] packet)
         {
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
-            Chat.WriteLine($"{msgType}");
+            //Chat.WriteLine($"{msgType}");
 
-            if (msgType == N3MessageType.CorpseFullUpdate)
+            if (msgType == N3MessageType.GridDestinationSelect)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)

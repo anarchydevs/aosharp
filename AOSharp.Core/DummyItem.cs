@@ -30,7 +30,7 @@ namespace AOSharp.Core
             if (!CreateDummyItemID(lowId, highId, ql, out Identity dummyItemId))
                 throw new Exception($"Failed to create dummy item. LowId: {lowId}\tLowId: {highId}\tLowId: {ql}");
 
-            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, dummyItemId, &none);
+            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, dummyItemId, ref none);
 
             if (pItem == IntPtr.Zero)
                 throw new Exception($"DummyItem::DummyItem - Unable to locate item. LowId: {lowId}\tLowId: {highId}\tLowId: {ql}");
@@ -44,7 +44,7 @@ namespace AOSharp.Core
         {
             Identity none = Identity.None;
             IntPtr pEngine = N3Engine_t.GetInstance();
-            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, identity, &none);
+            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, identity, ref none);
 
             if (pItem == IntPtr.Zero)
                 throw new Exception($"DummyItem::DummyItem - Unable to locate item {identity}");
@@ -54,7 +54,7 @@ namespace AOSharp.Core
             Name = Utils.UnsafePointerToString((*(MemStruct*)pItem).Name);
         }
 
-        public static unsafe bool CreateDummyItemID(int lowId, int highId, int ql, out Identity dummyItemId)
+        public static bool CreateDummyItemID(int lowId, int highId, int ql, out Identity dummyItemId)
         {
             ACGItem itemInfo = new ACGItem
             {
@@ -65,10 +65,10 @@ namespace AOSharp.Core
 
             IntPtr pEngine = N3Engine_t.GetInstance();
 
-            fixed (Identity* pDummyItemId = &dummyItemId)
-            {
-                return N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, pDummyItemId, &itemInfo);
-            }
+            Identity templateId = Identity.None;
+            bool result =  N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, ref templateId, ref itemInfo);
+            dummyItemId = templateId;
+            return result;
         }
 
         //TODO: Make this ignore target checks
