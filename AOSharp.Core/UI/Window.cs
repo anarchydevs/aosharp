@@ -27,7 +27,6 @@ namespace AOSharp.Core.UI
         {
             Pointer = pointer;
             Name = GetName();
-            UIController.AddWindow(this);
         }
 
         public static Window Create(Rect rect, string name, string name2, WindowStyle style, WindowFlags flags)
@@ -40,13 +39,22 @@ namespace AOSharp.Core.UI
             if (pWindow == IntPtr.Zero)
                 return null;
 
-            return new Window(pWindow);
+            Window newWindow = new Window(pWindow);
+            UIController.AddWindow(newWindow);
+
+            return newWindow;
         }
 
         public static Window GetWindowByName(string name)
         {
             IntPtr pWindow = Window_c.FindWindowName(name);
             return pWindow != IntPtr.Zero ? new Window(pWindow) : null;
+        }
+
+        public static Window GetActiveWindow()
+        {
+            IntPtr activeWindow = WindowController_c.GetActiveWindow(WindowController_c.GetInstance());
+            return activeWindow != IntPtr.Zero ? new Window(activeWindow) : null;
         }
 
         public static Window CreateFromXml(string name, string path, WindowStyle windowStyle = WindowStyle.Default,
@@ -86,6 +94,12 @@ namespace AOSharp.Core.UI
             view = Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pView }, null) as T;
             return true;
         }
+
+        public void ResizeTo(Vector2 size)
+        {
+            Window_c.ResizeTo(Pointer, ref size);
+        }
+
 
         public void SetSizeLimits(Vector2 minSize, Vector2 maxSize)
         {

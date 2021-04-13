@@ -18,5 +18,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern void RemoveWindow(IntPtr pThis, IntPtr pWindow);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
         public delegate void DRemoveWindow(IntPtr pThis, IntPtr pWindow);
+
+
+        [DllImport("GUI.dll", EntryPoint = "?GetActiveWindow@WindowController_c@@QAEPAVWindow@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetActiveWindow(IntPtr pThis);
     }
 }

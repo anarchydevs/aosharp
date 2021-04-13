@@ -19,6 +19,8 @@ namespace AOSharp.Common.GameData
             Y = y;
         }
 
+        public static readonly Vector2 Zero = new Vector2(0, 0);
+
         public static Vector2 AngleToVector(float angle, float mag = 1f)
         {
             float rads = (float)(Math.PI * angle / 180);

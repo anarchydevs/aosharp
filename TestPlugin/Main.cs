@@ -232,6 +232,11 @@ namespace TestPlugin
                         item.Split(int.Parse(param[1]));
                 });
 
+                Chat.RegisterCommand("testui", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    Chat.WriteLine(Window.GetActiveWindow().Name);
+                });
+
                 Chat.RegisterCommand("openwindow", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     testWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
@@ -538,8 +543,9 @@ namespace TestPlugin
                 derp.Use();
             }*/
 
-            if (Time.NormalTime > lastTrigger + 0.2)
+            if (Time.NormalTime > lastTrigger + 2)
             {
+                Chat.WriteLine(Window.GetActiveWindow().Name);
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
 

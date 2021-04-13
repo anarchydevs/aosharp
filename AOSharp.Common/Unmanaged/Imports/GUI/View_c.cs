@@ -17,11 +17,26 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?AddChild@View@@UAEXPAV1@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void AddChild(IntPtr pThis, IntPtr pView, bool unk);
 
+        [DllImport("GUI.dll", EntryPoint = "?RemoveChild@View@@QAEXPAV1@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void RemoveChild(IntPtr pThis, IntPtr pView);
+
+        [DllImport("GUI.dll", EntryPoint = "?FindChild@View@@QAEPAV1@PBD_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr FindChild(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string name, bool unk);
+
         [DllImport("GUI.dll", EntryPoint = "?SetBorders@View@@QAEXMMMM@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetBorders(IntPtr pThis, float minX, float minY, float maxX, float maxY);
 
+        [DllImport("GUI.dll", EntryPoint = "?GetPreferredSize@View@@UBE?AVPoint@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetPreferredSize(IntPtr pThis, ref Vector2 preferredSize, bool unk);
+
+        [DllImport("GUI.dll", EntryPoint = "?CalculatePreferredSize@View@@UBE?AVPoint@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr CalculatePreferredSize(IntPtr pThis, ref Vector2 preferredSize, bool unk);
+
+        [DllImport("GUI.dll", EntryPoint = "?ResizeTo@View@@UAEXABVPoint@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void ResizeTo(IntPtr pThis, ref Vector2 size);
+
         [DllImport("GUI.dll", EntryPoint = "?LimitMaxSize@View@@QAEXABVPoint@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe void LimitMaxSize(IntPtr pThis, Vector2* maxSize);
+        public static extern void LimitMaxSize(IntPtr pThis, ref Vector2 size);
 
         [DllImport("GUI.dll", EntryPoint = "?SetFrame@View@@UAEXABVRect@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe void SetFrame(IntPtr pThis, Rect* rect, bool unk);

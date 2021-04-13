@@ -1,8 +1,8 @@
-﻿using System;
-using AOSharp.Common.GameData;
-using AOSharp.Core.GameData;
-using AOSharp.Common.Unmanaged.Imports;
+﻿using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Imports;
+using System;
+using System.Reflection;
 
 namespace AOSharp.Core.UI
 {
@@ -75,6 +75,52 @@ namespace AOSharp.Core.UI
             View_c.AddChild(_pointer, view.Pointer, unk);
         }
 
+        public void RemoveChild(View view)
+        {
+            View_c.RemoveChild(_pointer, view.Pointer);
+        }
+
+        public bool FindChild<T>(string name, out T view, bool recursive = true) where T : View
+        {
+            view = null;
+            IntPtr pView = View_c.FindChild(Pointer, name, recursive);
+
+            if (pView == IntPtr.Zero)
+                return false;
+
+            view = Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pView }, null) as T;
+            return true;
+        }
+
+        public void FitToContents()
+        {
+            LimitMaxSize(CalculatePreferredSize());
+        }
+
+        public Vector2 CalculatePreferredSize(bool unk = false)
+        {
+            Vector2 preferredSize = new Vector2();
+            View_c.CalculatePreferredSize(_pointer, ref preferredSize, unk);
+            return preferredSize;
+        }
+
+        public Vector2 GetPreferredSize(bool unk = false)
+        {
+            Vector2 preferredSize = new Vector2();
+            View_c.GetPreferredSize(_pointer, ref preferredSize, unk);
+            return preferredSize;
+        }
+
+        public void ResizeTo(Vector2 size)
+        {
+            View_c.ResizeTo(_pointer, ref size);
+        }
+
+        public void LimitMaxSize(Vector2 size)
+        {
+            View_c.LimitMaxSize(_pointer, ref size);
+        }
+
         public void SetBorders(float x1, float y1, float x2, float y2)
         {
             View_c.SetBorders(_pointer, x1, y1, x2, y2);
@@ -83,11 +129,6 @@ namespace AOSharp.Core.UI
         public unsafe void SetFrame(Rect rect, bool unk)
         {
             View_c.SetFrame(_pointer, &rect, unk);
-        }
-
-        public unsafe void LimitMaxSize(Vector2 maxSize)
-        {
-            View_c.LimitMaxSize(_pointer, &maxSize);
         }
 
         public void SetLayoutNode(LayoutNode layoutNode)
