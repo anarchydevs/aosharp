@@ -265,6 +265,11 @@ namespace TestPlugin
                             Chat.WriteLine($"testPowerBar.Value: {testPowerBar.Value}");
                             testPowerBar.Value = 0.1f;
                         }
+
+                        if (testWindow.FindView("testCheck", out Checkbox testCheckbox))
+                        {
+                            Chat.WriteLine($"testCheckbox");
+                        }
                     }
                 });
 
@@ -545,7 +550,6 @@ namespace TestPlugin
 
             if (Time.NormalTime > lastTrigger + 2)
             {
-                Chat.WriteLine(Window.GetActiveWindow().Name);
                 //Chat.WriteLine($"IsChecked: {((Checkbox)window.Views[0]).IsChecked}");
                 //IntPtr tooltip = AOSharp.Common.Unmanaged.Imports.ToolTip_c.Create("LOLITA", "COMPLEX");
 

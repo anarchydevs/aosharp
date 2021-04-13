@@ -46,9 +46,9 @@ namespace AOSharp.Core.UI
 
         private unsafe bool GetIsChecked()
         {
-            Variant pOutput = Variant.Create(0);
-            IntPtr what = CheckBox_c.GetValue(_pointer, pOutput.Pointer);
-            bool result = Variant.FromPointer(what).AsInt32() == 1;
+            Variant pOutput = Variant.Create(false);
+            CheckBox_c.GetValue(_pointer, pOutput.Pointer);
+            bool result = pOutput.AsBool();
             pOutput.Dispose();
 
             return result;

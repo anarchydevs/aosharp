@@ -150,7 +150,7 @@ namespace AOSharp.Core.IPC
                 writer.WriteUInt16(PacketPrefix);
                 writer.WriteInt16(0);
                 writer.WriteByte(_channelId);
-                writer.WriteInt32(DynelManager.LocalPlayer.Identity.Instance);
+                writer.WriteInt32(Game.ClientInst);
                 writer.WriteInt16(msg.Opcode);
                 serializer.Serialize(writer, serializationContext, msg);
                 long length = writer.Position;
