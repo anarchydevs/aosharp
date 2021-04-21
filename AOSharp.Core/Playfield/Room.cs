@@ -31,7 +31,7 @@ namespace AOSharp.Core
         private Rect GetRect()
         {
             Rect rect;
-            N3Room_t.GetRoomRect(Pointer, out rect.MinX, out rect.MinY, out rect.MaxX, out rect.MaxY);
+            N3Room_t.GetRoomRect(Pointer, out rect.MinX, out rect.MaxX, out rect.MinY, out rect.MaxY);
             return rect;
         }
 
