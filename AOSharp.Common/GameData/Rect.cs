@@ -28,5 +28,10 @@ namespace AOSharp.Common.GameData
             MaxX = maxX;
             MaxY = maxY;
         }
+
+        public bool Contains(Vector3 Pos)
+        {
+            return Pos.X > MinX && Pos.X < MaxX && Pos.Z > MinY && Pos.Z < MaxY;
+        }
     }
 }

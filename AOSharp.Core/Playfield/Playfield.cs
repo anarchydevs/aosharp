@@ -55,6 +55,8 @@ namespace AOSharp.Core
         ///</summary>
         public static List<Room> Rooms => GetRooms();
 
+        public static IEnumerable<Door> Doors => DynelManager.Doors;
+
         //TODO: Convert to use n3Playfield_t::GetPlayfieldDynels() to remove dependencies on hard-coded offsets
         internal static unsafe List<IntPtr> GetPlayfieldDynels()
         {
@@ -145,7 +147,8 @@ namespace AOSharp.Core
             if (pSurface == IntPtr.Zero)
                 return false;
 
-            return TilemapSurface_t.GetLineIntersection(pSurface, ref pos1, ref pos2, ref hitPos, ref hitNormal, 1, IntPtr.Zero);
+            return IsDungeon ? RoomSurface_t.GetLineIntersection(pSurface, ref pos1, ref pos2, ref hitPos, ref hitNormal, 1, IntPtr.Zero)
+                                : TilemapSurface_t.GetLineIntersection(pSurface, ref pos1, ref pos2, ref hitPos, ref hitNormal, 1, IntPtr.Zero);
         }
 
         public static bool LineOfSight(Vector3 pos1, Vector3 pos2, int zoneCell = 1, bool unknown = false)
@@ -186,6 +189,12 @@ namespace AOSharp.Core
                 return IntPtr.Zero;
 
             return N3Playfield_t.GetSurface(pPlayfield);
+        }
+
+        internal static bool IsDoorOpenBetweenRooms(short roomInst1, short roomInst2)
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+            return pPlayfield != IntPtr.Zero && N3Playfield_t.IsDoorOpenBetweenRooms(pPlayfield, roomInst1, roomInst2);
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

@@ -41,5 +41,9 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetZones@n3Playfield_t@@QBEABV?$vector@PAVn3Zone_t@@V?$allocator@PAVn3Zone_t@@@std@@@std@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe StdObjVector* GetZones(IntPtr pThis);
+
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("N3.dll", EntryPoint = "?IsDoorOpenBetweenRooms@n3Playfield_t@@QBE_NFF@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool IsDoorOpenBetweenRooms(IntPtr pThis, short roomId1, short roomId2);
     }
 }

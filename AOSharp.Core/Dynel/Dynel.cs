@@ -48,6 +48,7 @@ namespace AOSharp.Core
         protected unsafe Vector3 PathingDestination => (*(MemStruct*)Pointer).Vehicle->PathingDestination;
 
         public virtual string Name => GetName();
+        public Room Room => Playfield.IsDungeon ? new Room(N3Dynel_t.GetZone(Pointer)) : null;
 
         public bool IsValid => DynelManager.IsValid(this);
 

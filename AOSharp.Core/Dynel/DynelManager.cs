@@ -16,6 +16,7 @@ namespace AOSharp.Core
 
         public static List<Dynel> AllDynels => GetDynels();
 
+        internal static IEnumerable<Door> Doors => GetDynels().Where(x => x.Identity.Type == IdentityType.Door).Select(x => new Door(x));
         public static IEnumerable<SimpleChar> Characters => GetDynels().Where(x => x.Identity.Type == IdentityType.SimpleChar).Select(x => new SimpleChar(x));
         public static IEnumerable<Corpse> Corpses => GetDynels().Where(x => x.Identity.Type == IdentityType.Corpse).Select(x => new Corpse(x));
         public static IEnumerable<SimpleChar> NPCs => Characters.Where(x => x.IsNpc && !x.IsPet);

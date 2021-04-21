@@ -20,10 +20,19 @@ namespace AOSharp.Core
         public unsafe float YOffset => (*(MemStruct*)Pointer).YOffset;
         public int NumDoors => N3Room_t.GetNumDoors(Pointer);
         public int Floor => N3Room_t.GetFloor(Pointer);
+        public Rect Rect => GetRect();
         public unsafe Rect LocalRect => new Rect((*(MemStruct*)Pointer).TileX1, (*(MemStruct*)Pointer).TileY1, (*(MemStruct*)Pointer).TileX2, (*(MemStruct*)Pointer).TileY2);
+        public IEnumerable<Door> Doors => Playfield.Doors.Where(x => x.RoomLink1 == this || x.RoomLink2 == this);
 
         public Room(IntPtr pointer) : base(pointer)
         {
+        }
+
+        private Rect GetRect()
+        {
+            Rect rect;
+            N3Room_t.GetRoomRect(Pointer, out rect.MinX, out rect.MinY, out rect.MaxX, out rect.MaxY);
+            return rect;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
