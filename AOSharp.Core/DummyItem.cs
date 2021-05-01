@@ -117,8 +117,18 @@ namespace AOSharp.Core
                     skillCheckChar = target;
                     continue;
                 }
+                else if (op == UseCriteriaOperator.OnFightingTarget)
+                {
+                    criteriaSource = CriteriaSource.FightingTarget;
+                    skillCheckChar = DynelManager.LocalPlayer.FightingTarget;
+                    continue;
+                }
 
-                if (target != null || criteriaSource != CriteriaSource.Target)
+                if(skillCheckChar == null)
+                {
+                    return false;
+                }
+                else if (target != null || criteriaSource != CriteriaSource.Target)
                 {
                     bool result;
                     bool lastResult;
@@ -332,6 +342,7 @@ namespace AOSharp.Core
 
         private enum CriteriaSource
         {
+            FightingTarget,
             Target,
             Self,
             User

@@ -280,7 +280,7 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {         
-                    Settings["DrawStuff"] = true;
+                    //Settings["DrawStuff"] = true;
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
 
@@ -297,11 +297,18 @@ namespace TestPlugin
                         Chat.WriteLine(Targeting.TargetChar.Identity);
                     */
 
+                    /*
                     if (Spell.Find(85872, out Spell spell))
                     {
                         Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs()}");
                         Chat.WriteLine($"Drain Self Self: {spell.MeetsSelfUseReqs()}");
                         Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
+                    }
+                    */
+
+                    if(PerkAction.Find("Double Shot", out PerkAction perk))
+                    {
+                        Chat.WriteLine(perk.MeetsUseReqs());
                     }
 
                     /*

@@ -122,7 +122,7 @@ namespace AOSharp.Core
             return perks;
         }
         
-        public struct PerkMemStruct
+        private struct PerkMemStruct
         {
             public int Instance;
             public int TemplateInstance;
