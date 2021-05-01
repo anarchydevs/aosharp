@@ -292,7 +292,7 @@ namespace AOSharp.Core.Combat
 
                 if ((PerkAction)queueItem.CombatAction == perkAction)
                 {
-                    //Chat.WriteLine($"Perk {perk.Name} landed. Time: {Time.NormalTime}\tOldTimeout: {queueItem.Timeout}\tNewTimeout: {timeout}");
+                    //Chat.WriteLine($"Perk {perkAction.Name} landed. Time: {Time.NormalTime}\tOldTimeout: {queueItem.Timeout}\tNewTimeout: {timeout}");
                     queueItem.Timeout = timeout;
                 }
             }
