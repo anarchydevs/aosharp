@@ -312,7 +312,7 @@ namespace TestPlugin
                     Backpack backpack = Inventory.Backpacks.FirstOrDefault();
 
                     if(backpack != null)
-                        backpack.SetBackpackName("Randoseru");
+                        backpack.SetName("Randoseru");
 
                     if(PerkAction.Find("Double Shot", out PerkAction perk))
                     {

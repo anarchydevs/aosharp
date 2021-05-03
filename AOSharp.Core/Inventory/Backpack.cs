@@ -11,7 +11,7 @@ namespace AOSharp.Core.Inventory
         {
         }
 
-        public void SetBackpackName(string name)
+        public void SetName(string name)
         {
             InventoryGUIModule.SetBackpackName(Identity, name);
         }
