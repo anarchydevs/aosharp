@@ -115,6 +115,10 @@ namespace AOSharp.Core.Inventory
             });
         }
 
+        public void Delete()
+        {
+            Delete(Slot);
+        }
 
         internal static void Update()
         {
@@ -194,6 +198,15 @@ namespace AOSharp.Core.Inventory
                 Action = GenericCmdAction.Use,
                 User = DynelManager.LocalPlayer.Identity,
                 Target = slot
+            });
+        }
+
+        public static void Delete(Identity slot)
+        {
+            Network.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.DeleteItem,
+                Target = slot,
             });
         }
 

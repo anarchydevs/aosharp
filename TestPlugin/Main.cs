@@ -279,7 +279,7 @@ namespace TestPlugin
                 });
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
-                {         
+                {
                     //Settings["DrawStuff"] = true;
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
@@ -305,6 +305,9 @@ namespace TestPlugin
                         Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
                     }
                     */
+
+                    if (Inventory.Find(285445, out Item item))
+                        item.Delete();
 
                     if(PerkAction.Find("Double Shot", out PerkAction perk))
                     {
