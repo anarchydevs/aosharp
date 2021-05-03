@@ -309,6 +309,11 @@ namespace TestPlugin
                     if (Inventory.Find(285445, out Item item))
                         item.Delete();
 
+                    Backpack backpack = Inventory.Backpacks.FirstOrDefault();
+
+                    if(backpack != null)
+                        backpack.SetBackpackName("Randoseru");
+
                     if(PerkAction.Find("Double Shot", out PerkAction perk))
                     {
                         Chat.WriteLine(perk.MeetsUseReqs());

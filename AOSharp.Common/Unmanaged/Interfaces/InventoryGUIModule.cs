@@ -19,5 +19,15 @@ namespace AOSharp.Common.Unmanaged.Interfaces
             InventoryGUIModule_c.GetBackpackName(pInvGUIModule, name.Pointer, ref identity, true);
             return name.ToString();
         }
+
+        public static int SetBackpackName(Identity identity, string name)
+        {
+            IntPtr pInvGUIModule = InventoryGUIModule_c.GetInstance();
+
+            if (pInvGUIModule == IntPtr.Zero)
+                return -1;
+
+            return InventoryGUIModule_c.SetBackpackName(pInvGUIModule, ref identity, StdString.Create(name).Pointer, true);
+        }
     }
 }

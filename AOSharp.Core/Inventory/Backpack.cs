@@ -10,5 +10,10 @@ namespace AOSharp.Core.Inventory
         internal Backpack(Identity identity, Identity slot) : base(identity, slot)
         {
         }
+
+        public void SetBackpackName(string name)
+        {
+            InventoryGUIModule.SetBackpackName(Identity, name);
+        }
     }
 }

@@ -11,5 +11,8 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?GetBackpackName@InventoryGUIModule_c@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetBackpackName(IntPtr pThis, IntPtr pStr, ref Identity identity, bool unk);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetBackpackName@InventoryGUIModule_c@@QAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern int SetBackpackName(IntPtr pThis, ref Identity identity, IntPtr pStr, bool unk);
     }
 }
