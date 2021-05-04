@@ -50,6 +50,8 @@ namespace AOSharp.Bootstrap
         public UnknownCommandDelegate UnknownChatCommand;
         public delegate void HandleGroupMessageDelegate(GroupMessageEventArgs args);
         public HandleGroupMessageDelegate HandleGroupMessage;
+        public delegate void ContainerOpenedDelegate(Identity identity);
+        public ContainerOpenedDelegate ContainerOpened;
     }
 
     public class PluginProxy : MarshalByRefObject
@@ -57,91 +59,45 @@ namespace AOSharp.Bootstrap
         private static CoreDelegates _coreDelegates;
         private List<Plugin> _plugins = new List<Plugin>();
 
-        public void UnknownChatCommand(IntPtr pWindow, string command)
-        {
-            _coreDelegates?.UnknownChatCommand?.Invoke(pWindow, command);
-        }
+        public void UnknownChatCommand(IntPtr pWindow, string command) => _coreDelegates?.UnknownChatCommand?.Invoke(pWindow, command);
 
-        public void DataBlockToMessage(byte[] datablock)
-        {
-            _coreDelegates?.DataBlockToMessage?.Invoke(datablock);
-        }
+        public void DataBlockToMessage(byte[] datablock) => _coreDelegates?.DataBlockToMessage?.Invoke(datablock);
 
-        public void ChatRecv(byte[] packet)
-        {
-            _coreDelegates?.ChatRecv?.Invoke(packet);
-        }
+        public void ChatRecv(byte[] packet) => _coreDelegates?.ChatRecv?.Invoke(packet);
 
-        public void SentPacket(byte[] datablock)
-        {
-            _coreDelegates?.SentPacket?.Invoke(datablock);
-        }
+        public void SentPacket(byte[] datablock) => _coreDelegates?.SentPacket?.Invoke(datablock);
 
-        public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName)
-        {
-            _coreDelegates?.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
-        }
+        public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName) => _coreDelegates?.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
+
+        public unsafe void ClientPerformedSpecialAction(IntPtr identity) => _coreDelegates?.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
+
+        public void DynelSpawned(IntPtr pDynel) => _coreDelegates?.DynelSpawned?.Invoke(pDynel);
+
+        public void Update(float deltaTime) => _coreDelegates?.Update?.Invoke(deltaTime);
+
+        public void EarlyUpdate(float deltaTime) => _coreDelegates?.EarlyUpdate?.Invoke(deltaTime);
+
+        public void TeleportStarted() => _coreDelegates?.TeleportStarted?.Invoke();
+
+        public void TeleportEnded() => _coreDelegates?.TeleportEnded?.Invoke();
+
+        public void TeleportFailed() => _coreDelegates?.TeleportFailed?.Invoke();
+
+        public void PlayfieldInit(uint id) => _coreDelegates?.PlayfieldInit?.Invoke(id);
+
+        public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk) => _coreDelegates?.OptionPanelActivated?.Invoke(pOptionPanelModule, unk);
+
+        public void ViewDeleted(IntPtr pView) => _coreDelegates?.ViewDeleted?.Invoke(pView);
+
+        public void WindowDeleted(IntPtr pWindow) => _coreDelegates?.WindowDeleted?.Invoke(pWindow);
+
+        public void ContainerOpened(int type, int id) => _coreDelegates?.ContainerOpened?.Invoke(new Identity((IdentityType)type, id));
 
         public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
         {
             AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*)nanoIdentity, *(Identity*)targetIdentity);
             _coreDelegates?.AttemptingSpellCast?.Invoke(eventArgs);
             return eventArgs.Blocked;
-        }
-
-        public unsafe void ClientPerformedSpecialAction(IntPtr identity)
-        {
-            _coreDelegates?.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
-        }
-
-        public void DynelSpawned(IntPtr pDynel)
-        {
-            _coreDelegates?.DynelSpawned?.Invoke(pDynel);
-        }
-
-        public void Update(float deltaTime)
-        {
-            _coreDelegates?.Update?.Invoke(deltaTime);
-        }
-
-        public void EarlyUpdate(float deltaTime)
-        {
-            _coreDelegates?.EarlyUpdate?.Invoke(deltaTime);
-        }
-
-        public void TeleportStarted()
-        {
-            _coreDelegates?.TeleportStarted?.Invoke();
-        }
-
-        public unsafe void TeleportEnded()
-        {
-            _coreDelegates?.TeleportEnded?.Invoke();
-        }
-
-        public void TeleportFailed()
-        {
-            _coreDelegates?.TeleportFailed?.Invoke();
-        }
-
-        public void PlayfieldInit(uint id)
-        {
-            _coreDelegates?.PlayfieldInit?.Invoke(id);
-        }
-
-        public void OptionPanelActivated(IntPtr pOptionPanelModule, bool unk)
-        {
-            _coreDelegates?.OptionPanelActivated?.Invoke(pOptionPanelModule, unk);
-        }
-
-        public void ViewDeleted(IntPtr pView)
-        {
-            _coreDelegates?.ViewDeleted?.Invoke(pView);
-        }
-
-        public void WindowDeleted(IntPtr pWindow)
-        {
-            _coreDelegates?.WindowDeleted?.Invoke(pWindow);
         }
 
         public bool HandleGroupMessage(IntPtr pGroupMessage)
@@ -199,7 +155,8 @@ namespace AOSharp.Bootstrap
                 ClientPerformedSpecialAction = CreateDelegate<CoreDelegates.ClientPerformedSpecialActionDelegate>(assembly, "AOSharp.Core.PerkAction", "OnClientPerformedSpecialAction"),
                 AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
                 UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand"),
-                HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage")
+                HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage"),
+                ContainerOpened = CreateDelegate<CoreDelegates.ContainerOpenedDelegate>(assembly, "AOSharp.Core.Inventory.Inventory", "OnContainerOpened")
             };
 
             _coreDelegates.Init();

@@ -379,6 +379,7 @@ namespace TestPlugin
                 Team.MemberLeft += Team_MemberLeft;
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
+                Inventory.ContainerOpened += OnContainerOpened;
                 //DynelManager.DynelSpawned += DynelSpawned;
                 //DynelManager.CharInPlay += CharInPlay;
             }
@@ -386,6 +387,13 @@ namespace TestPlugin
             {
                 Chat.WriteLine(e.Message);
             }
+        }
+
+        private void OnContainerOpened(object sender, Container container)
+        {
+            Chat.WriteLine($"Container {container.Identity} opened.");
+            foreach (Item item in container.Items)
+                Chat.WriteLine($"\t{item.Name} @ {item.Slot}");
         }
 
         private void AttemptingSpellCast(object sender, AttemptingSpellCastEventArgs e)

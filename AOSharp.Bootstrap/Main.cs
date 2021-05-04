@@ -1,19 +1,14 @@
 ﻿using AOSharp.Bootstrap.IPC;
-using EasyHook;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using AOSharp.Common.Unmanaged.Imports;
-using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
-using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.DataTypes;
-using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+using AOSharp.Common.Unmanaged.Imports;
+using EasyHook;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace AOSharp.Bootstrap
 {
@@ -174,11 +169,15 @@ namespace AOSharp.Bootstrap
 
             CreateHook("GUI.dll",
                         "?HandleGroupMessage@ChatGUIModule_c@@AAEXPBUGroupMessage_t@Client_c@ppj@@@Z",
-                        new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessageHook));
+                        new ChatGUIModule_t.DHandleGroupAction(HandleGroupMessage_Hook));
 
             CreateHook("Gamecode.dll",
                         "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z",
                         new N3EngineClientAnarchy_t.DCastNanoSpell(N3EngineClientAnarchy_CastNanoSpell_Hook));
+
+            CreateHook("GUI.dll",
+                        "?SlotContainerOpened@InventoryGUIModule_c@@AAEXABVIdentity_t@@_N1@Z",
+                        new InventoryGUIModule_c.DContainerOpened(ContainerOpened_Hook));
 
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
@@ -233,6 +232,12 @@ namespace AOSharp.Bootstrap
             return bytesRead;
         }
 
+        public unsafe void ContainerOpened_Hook(IntPtr pThis, ref Identity identity, bool unk, bool unk2)
+        {
+            _pluginProxy?.ContainerOpened((int)identity.Type, identity.Instance);
+            InventoryGUIModule_c.ContainerOpened(pThis, ref identity, unk, unk2);
+        }
+
         public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
         {
             StdString tokenized = StdString.Create();
@@ -252,7 +257,7 @@ namespace AOSharp.Bootstrap
             return result;
         }
 
-        public unsafe void HandleGroupMessageHook(IntPtr pThis, IntPtr pGroupMessage)
+        public unsafe void HandleGroupMessage_Hook(IntPtr pThis, IntPtr pGroupMessage)
         {
             bool cancel = false;
             

@@ -14,6 +14,8 @@ namespace AOSharp.Core.Inventory
 
         public static List<Backpack> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Backpack(x.UniqueIdentity, x.Slot)).ToList();
 
+        public static EventHandler<Container> ContainerOpened;
+
         public static bool Find(Identity slot, out Item item)
         {
             return (item = Items.FirstOrDefault(x => x.Slot == slot)) != null;
@@ -42,6 +44,11 @@ namespace AOSharp.Core.Inventory
         public static bool FindContainer(string name, out Backpack backpack)
         {
             return (backpack = Backpacks.FirstOrDefault(x => x.Name == name)) != null;
+        }
+
+        private static void OnContainerOpened(Identity identity)
+        {
+            ContainerOpened?.Invoke(null, new Container(identity, Identity.None));
         }
 
         //This will likely be made internal once I provide a way of accessing the inventory of all types of containers.

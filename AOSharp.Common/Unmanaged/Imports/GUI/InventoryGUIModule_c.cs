@@ -14,5 +14,10 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?SetBackpackName@InventoryGUIModule_c@@QAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern int SetBackpackName(IntPtr pThis, ref Identity identity, IntPtr pStr, bool unk);
+
+        [DllImport("GUI.dll", EntryPoint = "?SlotContainerOpened@InventoryGUIModule_c@@AAEXABVIdentity_t@@_N1@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void ContainerOpened(IntPtr pThis, ref Identity identity, bool unk, bool unk2);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        public delegate void DContainerOpened(IntPtr pThis, ref Identity identity, bool unk, bool unk2);
     }
 }
