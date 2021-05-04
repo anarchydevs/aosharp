@@ -18,7 +18,7 @@ namespace AOSharp.Core.UI
             set { SetValue(value); }
         }
 
-        internal PowerBarView(IntPtr pointer) : base(pointer)
+        internal PowerBarView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 

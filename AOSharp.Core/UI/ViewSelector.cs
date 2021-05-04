@@ -6,13 +6,13 @@ namespace AOSharp.Core.UI
 {
     public class ViewSelector : View
     {
-        internal ViewSelector(IntPtr pointer, bool register) : base(pointer, register)
+        internal ViewSelector(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
-        public static ViewSelector FromPointer(IntPtr pointer, bool register)
+        public static ViewSelector FromPointer(IntPtr pointer, bool track)
         {
-            return new ViewSelector(pointer, register);
+            return new ViewSelector(pointer, track);
         }
 
         public static ViewSelector Create(Rect rect, string name)
@@ -37,7 +37,7 @@ namespace AOSharp.Core.UI
 
         public ListViewBase GetListView()
         {
-            return ListViewBase.FromPointer(ViewSelector_c.GetListView(_pointer), false);
+            return ListViewBase.FromPointer(ViewSelector_c.GetListView(_pointer), true);
         }
 
         public void AppendView(View view)

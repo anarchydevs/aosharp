@@ -5,13 +5,13 @@ namespace AOSharp.Core.UI
 {
     public class ListViewBase : View
     {
-        internal ListViewBase(IntPtr pointer, bool register) : base(pointer, register)
+        internal ListViewBase(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
-        public static ListViewBase FromPointer(IntPtr pointer, bool register)
+        public static ListViewBase FromPointer(IntPtr pointer, bool track)
         {
-            return new ListViewBase(pointer, register);
+            return new ListViewBase(pointer, track);
         }
 
         public static ListViewBase Create(Rect rect, string name)

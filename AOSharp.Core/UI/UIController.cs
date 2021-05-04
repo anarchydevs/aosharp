@@ -9,15 +9,15 @@ namespace AOSharp.Core.UI
 {
     internal class UIController
     {
-        private static Dictionary<int, View> _views = new Dictionary<int, View>();
+        private static Dictionary<int, View> _trackedViews = new Dictionary<int, View>();
         private static List<Window> _windows = new List<Window>();
 
         internal static void RegisterView(View view)
         {
-            if (_views.ContainsKey(view.Handle))
+            if (_trackedViews.ContainsKey(view.Handle))
                 return;
 
-            _views.Add(view.Handle, view);
+            _trackedViews.Add(view.Handle, view);
         }
 
         internal static void AddWindow(Window window)
@@ -30,11 +30,16 @@ namespace AOSharp.Core.UI
             return (window = _windows.FirstOrDefault(x => x.Name == name)) != null;
         }
 
+        internal static bool FindViewByPointer<T>(IntPtr pointer, out T view) where T : View
+        {
+            return (view = _trackedViews.Values.FirstOrDefault(x => x.Pointer == pointer) as T) != null;
+        }
+
         internal static void UpdateViews()
         {
             try
             {
-                foreach(View view in _views.Values)
+                foreach(View view in _trackedViews.Values)
                 {
                     view.Update();
                 }
@@ -51,14 +56,24 @@ namespace AOSharp.Core.UI
                 window.Close();
         }
 
+        private static void OnButtonPressed(IntPtr pButton)
+        {
+            ButtonBase button = _trackedViews.Values.FirstOrDefault(x => x is ButtonBase && x.Pointer == pButton) as ButtonBase;
+
+            if (button == null)
+                return;
+
+            button.Clicked?.Invoke(null, button);
+        }
+
         private static void OnViewDeleted(IntPtr pView)
         {
             View view = new View(pView, false);
 
-            if (!_views.ContainsKey(view.Handle))
+            if (!_trackedViews.ContainsKey(view.Handle))
                 return;
 
-            _views.Remove(view.Handle);
+            _trackedViews.Remove(view.Handle);
         }
 
         private static void OnWindowDeleted(IntPtr pWindow)

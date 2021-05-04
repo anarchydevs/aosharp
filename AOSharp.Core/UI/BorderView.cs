@@ -6,7 +6,7 @@ namespace AOSharp.Core.UI
 {
     public class BorderView : View
     {
-        protected BorderView(IntPtr pointer) : base(pointer)
+        protected BorderView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 

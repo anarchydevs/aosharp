@@ -13,7 +13,7 @@ namespace AOSharp.Core.UI
 
         private bool _prevValue;
 
-        internal Checkbox(IntPtr pointer) : base(pointer)
+        internal Checkbox(IntPtr pointer, bool track = false) : base(pointer, track)
         {
             _prevValue = IsChecked;
         }

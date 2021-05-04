@@ -9,7 +9,7 @@ namespace AOSharp.Core.UI
     {
         public bool IsSelected => false;
 
-        internal RadioButton(IntPtr pointer) : base(pointer)
+        internal RadioButton(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
@@ -20,7 +20,7 @@ namespace AOSharp.Core.UI
             if (pView == IntPtr.Zero)
                 return null;
 
-            return new RadioButton(pView);
+            return new RadioButton(pView, true);
         }
 
         public override void Dispose()

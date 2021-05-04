@@ -10,18 +10,18 @@ namespace AOSharp.Core.UI
 {
     public class ScrollView : View
     {
-        protected ScrollView(IntPtr pointer) : base(pointer)
+        protected ScrollView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
-        public new static ScrollView Create(Rect rect, string name)
+        public static ScrollView Create(Rect rect, string name)
         {
             IntPtr pView = ScrollView_c.Create(rect, name, 0, 3, -1, 0, 0);
 
             if (pView == IntPtr.Zero)
                 return null;
 
-            return new ScrollView(pView);
+            return new ScrollView(pView, true);
         }
 
         public override void Dispose()

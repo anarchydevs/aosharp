@@ -10,16 +10,16 @@ namespace AOSharp.Common.Unmanaged.Imports
         //SecondarySpecialAttack
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SecondarySpecialAttack@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@W4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool SecondarySpecialAttack(IntPtr pThis, Identity* target, Stat stat);
+        public static extern bool SecondarySpecialAttack(IntPtr pThis, ref Identity target, Stat stat);
 
         //DefaultAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DefaultAttack@n3EngineClientAnarchy_t@@QBEXABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe void DefaultAttack(IntPtr pThis, Identity* target, bool unk);
+        public static extern void DefaultAttack(IntPtr pThis, ref Identity target, bool unk);
 
         //TeamJoinRequest
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TeamJoinRequest@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool TeamJoinRequest(IntPtr pThis, ref Identity identity, bool force);
+        public static extern bool TeamJoinRequest(IntPtr pThis, ref Identity identity, bool force);
 
         //StopAttack
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_StopAttack@n3EngineClientAnarchy_t@@QBEXXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -41,33 +41,33 @@ namespace AOSharp.Common.Unmanaged.Imports
         //CastNanoSpell
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CastNanoSpell@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool CastNanoSpell(IntPtr pThis, ref Identity nano, ref Identity target);
+        public static extern bool CastNanoSpell(IntPtr pThis, ref Identity nano, ref Identity target);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
         public unsafe delegate bool DCastNanoSpell(IntPtr pThis, ref Identity nanoIdentity, ref Identity targetIdentity);
 
         //GetCorrectActionId
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetCorrectActionID@n3EngineClientAnarchy_t@@QBEXAAVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe void GetCorrectActionId(IntPtr pThis, Identity* id);
+        public static extern void GetCorrectActionId(IntPtr pThis, ref Identity identity);
 
         //PerformSpecialAction
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PerformSpecialAction@n3EngineClientAnarchy_t@@QAE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool PerformSpecialAction(IntPtr pThis, ref Identity action);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
-        public delegate bool DPerformSpecialAction(IntPtr pThis, IntPtr identity);
+        public delegate bool DPerformSpecialAction(IntPtr pThis, ref Identity identity);
 
         //GetName
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetName@n3EngineClientAnarchy_t@@QBEPBDABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr GetName(IntPtr pThis, ref Identity identity, ref Identity identityUnk);
+        public static extern IntPtr GetName(IntPtr pThis, ref Identity identity, ref Identity identityUnk);
 
         //GetPerkName
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetPerkName@n3EngineClientAnarchy_t@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I_N@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe IntPtr GetPerkName(IntPtr pThis, int perkId, bool unk);
+        public static extern IntPtr GetPerkName(IntPtr pThis, int perkId, bool unk);
 
         //IsFormulaReady
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsFormulaReady@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe bool IsFormulaReady(IntPtr pThis, Identity* identity);
+        public static extern bool IsFormulaReady(IntPtr pThis, ref Identity identity);
 
         //HasPerk
         [return: MarshalAs(UnmanagedType.U1)]

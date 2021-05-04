@@ -21,11 +21,6 @@ namespace AOSharp.Core.UI
             }
         }
 
-        internal unsafe View(IntPtr pointer) : this(pointer, false)
-        {
-
-        }
-
         internal unsafe View(IntPtr pointer, bool register = true)
         {
             _pointer = pointer;

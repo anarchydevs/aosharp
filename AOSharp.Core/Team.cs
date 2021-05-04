@@ -172,7 +172,7 @@ namespace AOSharp.Core
                 if (pTeamViewModule == IntPtr.Zero)
                     return;
 
-                TeamViewModule_c.SlotJoinTeamRequest(pTeamViewModule, &identity, pName);
+                TeamViewModule_c.SlotJoinTeamRequest(pTeamViewModule, ref identity, pName);
             }
         }
 

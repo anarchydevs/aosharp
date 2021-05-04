@@ -18,7 +18,7 @@ namespace AOSharp.Core.UI
             set { SetText(value); }
         }
 
-        internal TextView(IntPtr pointer) : base(pointer)
+        internal TextView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 

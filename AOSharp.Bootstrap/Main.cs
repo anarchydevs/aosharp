@@ -179,6 +179,10 @@ namespace AOSharp.Bootstrap
                         "?SlotContainerOpened@InventoryGUIModule_c@@AAEXABVIdentity_t@@_N1@Z",
                         new InventoryGUIModule_c.DContainerOpened(ContainerOpened_Hook));
 
+            CreateHook("GUI.dll",
+                        "?SetValue@ButtonBase_c@@UAEXABVVariant@@_N@Z",
+                        new ButtonBase_c.DSetValue(ButtonBase_SetValue_Hook));
+
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
@@ -232,13 +236,21 @@ namespace AOSharp.Bootstrap
             return bytesRead;
         }
 
-        public unsafe void ContainerOpened_Hook(IntPtr pThis, ref Identity identity, bool unk, bool unk2)
+        public void ButtonBase_SetValue_Hook(IntPtr pThis, IntPtr pVariant, bool unk)
+        {
+            if(!Variant_c.AsBool(pVariant))
+                _pluginProxy?.ButtonPressed(pThis);
+
+            ButtonBase_c.SetValue(pThis, pVariant, unk);
+        }
+
+        public void ContainerOpened_Hook(IntPtr pThis, ref Identity identity, bool unk, bool unk2)
         {
             _pluginProxy?.ContainerOpened((int)identity.Type, identity.Instance);
             InventoryGUIModule_c.ContainerOpened(pThis, ref identity, unk, unk2);
         }
 
-        public unsafe byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
+        public byte ProcessChatInput_Hook(IntPtr pThis, IntPtr pWindow, IntPtr pCmdText)
         {
             StdString tokenized = StdString.Create();
             ChatGUIModule_t.ExpandChatTextArgs(tokenized.Pointer, pCmdText);
@@ -248,7 +260,7 @@ namespace AOSharp.Bootstrap
             return CommandInterpreter_c.ProcessChatInput(pThis, pWindow, pCmdText);
         }
 
-        public unsafe IntPtr GetCommand_Hook(IntPtr pThis, IntPtr pCmdText, bool unk)
+        public IntPtr GetCommand_Hook(IntPtr pThis, IntPtr pCmdText, bool unk)
         {
             IntPtr result;
             if ((result = CommandInterpreter_c.GetCommand(pThis, pCmdText, unk)) == IntPtr.Zero && unk && _pluginProxy != null)
@@ -257,7 +269,7 @@ namespace AOSharp.Bootstrap
             return result;
         }
 
-        public unsafe void HandleGroupMessage_Hook(IntPtr pThis, IntPtr pGroupMessage)
+        public void HandleGroupMessage_Hook(IntPtr pThis, IntPtr pGroupMessage)
         {
             bool cancel = false;
             
@@ -328,19 +340,19 @@ namespace AOSharp.Bootstrap
         }
 
 
-        private unsafe void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, IntPtr identity, IntPtr pName)
+        private void TeamViewModule_SlotJoinTeamRequest_Hook(IntPtr pThis, ref Identity identity, IntPtr pName)
         {
             try
             {
                 if (_pluginProxy != null)
                 {
-                    _pluginProxy.JoinTeamRequest(identity, pName);
+                    _pluginProxy.JoinTeamRequest((int)identity.Type, identity.Instance, pName);
                 }
             }
             catch (Exception) { }
         }
 
-        private unsafe void TeamViewModule_SlotJoinTeamRequestFailed_Hook(IntPtr pThis, ref Identity identity)
+        private void TeamViewModule_SlotJoinTeamRequestFailed_Hook(IntPtr pThis, ref Identity identity)
         {
             try
             {
@@ -354,16 +366,16 @@ namespace AOSharp.Bootstrap
             catch (Exception) { }
         }
 
-        private unsafe bool N3EngineClientAnarchy_PerformSpecialAction_Hook(IntPtr pThis, IntPtr identity)
+        private bool N3EngineClientAnarchy_PerformSpecialAction_Hook(IntPtr pThis, ref Identity identity)
         {
-            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, ref *(Identity*)identity);
+            bool specialActionResult = N3EngineClientAnarchy_t.PerformSpecialAction(pThis, ref identity);
 
             try
             {
                 if (_pluginProxy != null)
                 {
                     if (specialActionResult)
-                        _pluginProxy.ClientPerformedSpecialAction(identity);
+                        _pluginProxy.ClientPerformedSpecialAction((int)identity.Type, identity.Instance);
                 }
                     
             }

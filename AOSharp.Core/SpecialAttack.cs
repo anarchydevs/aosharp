@@ -85,7 +85,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return false;
 
-            bool successful = N3EngineClientAnarchy_t.SecondarySpecialAttack(pEngine, &target, _stat);
+            bool successful = N3EngineClientAnarchy_t.SecondarySpecialAttack(pEngine, ref target, _stat);
 
             if (successful)
                 _nextAttack = Time.NormalTime + ATTACK_DELAY_BUFFER;

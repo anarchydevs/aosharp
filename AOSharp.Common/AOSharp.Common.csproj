@@ -293,6 +293,8 @@
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\DistrictData_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\LandControlMap_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\Button_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\ButtonBase_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Preferences_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\PlayfieldDistrictInfo_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PetWindowModule_c.cs" />

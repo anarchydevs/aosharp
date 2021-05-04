@@ -270,6 +270,11 @@ namespace TestPlugin
                         {
                             Chat.WriteLine($"testCheckbox");
                         }
+
+                        if (testWindow.FindView("testButton", out Button testButton))
+                        {
+                            testButton.Clicked += OnTestButtonClicked;
+                        }
                     }
                 });
 
@@ -387,6 +392,11 @@ namespace TestPlugin
             {
                 Chat.WriteLine(e.Message);
             }
+        }
+
+        private void OnTestButtonClicked(object s, ButtonBase button)
+        {
+            Chat.WriteLine($"TestButton Clicked! {((Button)button).Label}");
         }
 
         private void OnContainerOpened(object sender, Container container)

@@ -7,7 +7,7 @@ namespace AOSharp.Core.UI
 {
     public class RadioButtonGroup : View
     {
-        internal RadioButtonGroup(IntPtr pointer) : base(pointer)
+        internal RadioButtonGroup(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
@@ -17,7 +17,7 @@ namespace AOSharp.Core.UI
             if (pView == IntPtr.Zero)
                 return null;
 
-            return new RadioButtonGroup(pView);
+            return new RadioButtonGroup(pView, true);
         }
 
         public override void Dispose()

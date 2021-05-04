@@ -7,11 +7,13 @@ namespace AOSharp.Common.Unmanaged.DataTypes
     {
         public const int SizeOf = 0x10;
         public readonly IntPtr Pointer;
-        private bool disposedValue;
+        private bool _disposedValue;
+        private bool _shouldDispose;
 
-        private Variant(IntPtr pointer)
+        private Variant(IntPtr pointer, bool shouldDispose = true)
         {
             Pointer = pointer;
+            _shouldDispose = shouldDispose;
         }
 
         public static Variant Create()
@@ -39,9 +41,9 @@ namespace AOSharp.Common.Unmanaged.DataTypes
             return new Variant(Variant_c.Constructor(MSVCR100.New(SizeOf), value));
         }
 
-        public static Variant FromPointer(IntPtr pointer)
+        public static Variant FromPointer(IntPtr pointer, bool shouldDispose = true)
         {
-            return new Variant(pointer);
+            return new Variant(pointer, shouldDispose);
         }
 
         public override string ToString()
@@ -81,21 +83,25 @@ namespace AOSharp.Common.Unmanaged.DataTypes
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 Variant_c.Deconstructor(Pointer);
                 MSVCR100.Delete(Pointer);
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
         ~Variant()
         {
-            Dispose(disposing: false);
+            if(_shouldDispose)
+                Dispose(disposing: false);
         }
 
         public void Dispose()
         {
+            if (!_shouldDispose)
+                return;
+
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

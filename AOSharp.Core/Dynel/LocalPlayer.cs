@@ -55,7 +55,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return;
 
-            N3EngineClientAnarchy_t.DefaultAttack(pEngine, &target, true);
+            N3EngineClientAnarchy_t.DefaultAttack(pEngine, ref target, true);
 
             _nextAttack = Time.NormalTime + AttackAttemptDelay;
         }

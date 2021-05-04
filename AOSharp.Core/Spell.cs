@@ -79,7 +79,7 @@ namespace AOSharp.Core
                 return false;
 
             Identity identity = Identity;
-            return N3EngineClientAnarchy_t.IsFormulaReady(pEngine, &identity);
+            return N3EngineClientAnarchy_t.IsFormulaReady(pEngine, ref identity);
         }
 
         internal static void Update()

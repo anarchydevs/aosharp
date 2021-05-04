@@ -9,16 +9,18 @@ namespace AOSharp.Common.Unmanaged.DataTypes
     {
         public readonly IntPtr Pointer;
         public unsafe int Length => ((StdStringStruct*)Pointer)->Length;
-        private bool disposedValue;
+        private bool _disposedValue;
+        private bool _shouldDispose;
 
-        internal StdString(IntPtr pointer)
+        internal StdString(IntPtr pointer, bool shouldDispose = true)
         {
             Pointer = pointer;
+            _shouldDispose = shouldDispose;
         }
 
-        public static StdString FromPointer(IntPtr pointer)
+        public static StdString FromPointer(IntPtr pointer, bool shouldDispose = true)
         {
-            return new StdString(pointer);
+            return new StdString(pointer, shouldDispose);
         }
 
         public static StdString Create()
@@ -86,21 +88,25 @@ namespace AOSharp.Common.Unmanaged.DataTypes
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 String_c.Deconstructor(Pointer);
                 MSVCR100.Delete(Pointer);
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
         ~StdString()
         {
-            Dispose(disposing: false);
+            if(_shouldDispose)
+                Dispose(disposing: false);
         }
 
         public void Dispose()
         {
+            if (!_shouldDispose)
+                return;
+
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

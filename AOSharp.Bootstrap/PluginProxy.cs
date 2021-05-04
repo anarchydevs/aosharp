@@ -52,6 +52,8 @@ namespace AOSharp.Bootstrap
         public HandleGroupMessageDelegate HandleGroupMessage;
         public delegate void ContainerOpenedDelegate(Identity identity);
         public ContainerOpenedDelegate ContainerOpened;
+        public delegate void ButtonPressedDelegate(IntPtr pButton);
+        public ButtonPressedDelegate ButtonPressed;
     }
 
     public class PluginProxy : MarshalByRefObject
@@ -67,9 +69,9 @@ namespace AOSharp.Bootstrap
 
         public void SentPacket(byte[] datablock) => _coreDelegates?.SentPacket?.Invoke(datablock);
 
-        public unsafe void JoinTeamRequest(IntPtr identity, IntPtr pName) => _coreDelegates?.JoinTeamRequest?.Invoke(*(Identity*)identity, pName);
+        public unsafe void JoinTeamRequest(int type, int id, IntPtr pName) => _coreDelegates?.JoinTeamRequest?.Invoke(new Identity((IdentityType)type, id), pName);
 
-        public unsafe void ClientPerformedSpecialAction(IntPtr identity) => _coreDelegates?.ClientPerformedSpecialAction?.Invoke(*(Identity*)identity);
+        public unsafe void ClientPerformedSpecialAction(int type, int id) => _coreDelegates?.ClientPerformedSpecialAction?.Invoke(new Identity((IdentityType)type, id));
 
         public void DynelSpawned(IntPtr pDynel) => _coreDelegates?.DynelSpawned?.Invoke(pDynel);
 
@@ -92,6 +94,8 @@ namespace AOSharp.Bootstrap
         public void WindowDeleted(IntPtr pWindow) => _coreDelegates?.WindowDeleted?.Invoke(pWindow);
 
         public void ContainerOpened(int type, int id) => _coreDelegates?.ContainerOpened?.Invoke(new Identity((IdentityType)type, id));
+
+        public void ButtonPressed(IntPtr pButton) => _coreDelegates?.ButtonPressed?.Invoke(pButton);
 
         public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
         {
@@ -156,7 +160,8 @@ namespace AOSharp.Bootstrap
                 AttemptingSpellCast = CreateDelegate<CoreDelegates.AttemptingSpellCastDelegate>(assembly, "AOSharp.Core.MiscClientEvents", "OnAttemptingSpellCast"),
                 UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand"),
                 HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage"),
-                ContainerOpened = CreateDelegate<CoreDelegates.ContainerOpenedDelegate>(assembly, "AOSharp.Core.Inventory.Inventory", "OnContainerOpened")
+                ContainerOpened = CreateDelegate<CoreDelegates.ContainerOpenedDelegate>(assembly, "AOSharp.Core.Inventory.Inventory", "OnContainerOpened"),
+                ButtonPressed = CreateDelegate<CoreDelegates.ButtonPressedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnButtonPressed")
             };
 
             _coreDelegates.Init();

@@ -14,7 +14,7 @@ namespace AOSharp.Core.UI
     {
         public int TabCount => GetTabCount();
 
-        internal TabView(IntPtr pointer) : base(pointer)
+        internal TabView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 

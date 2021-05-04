@@ -16,11 +16,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern byte IsInTeam(IntPtr pThis);
 
         [DllImport("GUI.dll", EntryPoint = "?SlotJoinTeamRequest@TeamViewModule_c@@AAEXABVIdentity_t@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe void SlotJoinTeamRequest(IntPtr pThis, Identity* identity, IntPtr pName);
+        public static extern void SlotJoinTeamRequest(IntPtr pThis, ref Identity identity, IntPtr pName);
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
-        public unsafe delegate void DSlotJoinTeamRequest(IntPtr pThis, IntPtr identity, IntPtr pName);
+        public delegate void DSlotJoinTeamRequest(IntPtr pThis, ref Identity identity, IntPtr pName);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
-        public unsafe delegate void DSlotJoinTeamRequestFailed(IntPtr pThis, ref Identity identity);
+        public delegate void DSlotJoinTeamRequestFailed(IntPtr pThis, ref Identity identity);
     }
 }
