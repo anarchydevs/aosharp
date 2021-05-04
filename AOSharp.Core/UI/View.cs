@@ -83,7 +83,11 @@ namespace AOSharp.Core.UI
             if (pView == IntPtr.Zero)
                 return false;
 
-            view = Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pView }, null) as T;
+            //Try to return the view from cache.
+            if (UIController.FindViewByPointer(pView, out view))
+                return true;
+
+            view = Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pView, true }, null) as T;
             return true;
         }
 

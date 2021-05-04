@@ -240,7 +240,6 @@ namespace TestPlugin
                 Chat.RegisterCommand("openwindow", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     testWindow = Window.CreateFromXml("Test", $"{pluginDir}\\TestWindow.xml");
-                    testWindow.SetSizeLimits(new Vector2(50, 50), new Vector2(50, 200));
                     testWindow.Show(true);
                     chatWindow.WriteLine($"Window.Pointer: {testWindow.Pointer.ToString("X4")}");
                     chatWindow.WriteLine($"Window.Name: {testWindow.Name}");
@@ -274,6 +273,14 @@ namespace TestPlugin
                         if (testWindow.FindView("testButton", out Button testButton))
                         {
                             testButton.Clicked += OnTestButtonClicked;
+                        }
+
+                        if (testWindow.FindView("testComboBox", out ComboBox testComboBox))
+                        {
+                            Chat.WriteLine($"ComboBox.Pointer: {testComboBox.Pointer.ToString("X4")}");
+
+                            for(int i = 0; i < 10; i++)
+                                testComboBox.AppendItem(i, $"loli {i}");
                         }
                     }
                 });
