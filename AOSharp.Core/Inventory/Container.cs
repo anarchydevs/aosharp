@@ -15,12 +15,10 @@ namespace AOSharp.Core.Inventory
         public override List<Item> Items => Inventory.GetContainerItems(Identity);
         public bool IsOpen => GetIsOpen();
         public readonly Identity Identity;
-        public readonly Identity Slot;
 
-        internal Container(Identity identity, Identity slot)
+        internal Container(Identity identity)
         {
             Identity = identity;
-            Slot = slot;
         }
 
         private bool GetIsOpen()

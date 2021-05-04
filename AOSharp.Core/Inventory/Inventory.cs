@@ -48,7 +48,7 @@ namespace AOSharp.Core.Inventory
 
         private static void OnContainerOpened(Identity identity)
         {
-            ContainerOpened?.Invoke(null, new Container(identity, Identity.None));
+            ContainerOpened?.Invoke(null, new Container(identity));
         }
 
         //This will likely be made internal once I provide a way of accessing the inventory of all types of containers.

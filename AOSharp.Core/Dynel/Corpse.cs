@@ -17,7 +17,7 @@ namespace AOSharp.Core
 
         public Corpse(IntPtr pointer) : base(pointer)
         {
-            Container = new Container(Identity, Identity.None);
+            Container = new Container(Identity);
         }
         
         public Corpse(Dynel dynel) : this(dynel.Pointer)
