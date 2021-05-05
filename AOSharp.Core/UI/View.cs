@@ -10,6 +10,7 @@ namespace AOSharp.Core.UI
     {
         public readonly string Name;
         public readonly int Handle;
+        public object Tag;
 
         protected readonly IntPtr _pointer;
 
