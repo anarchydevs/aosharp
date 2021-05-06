@@ -60,6 +60,7 @@
     <Compile Include="GameData\Side.cs" />
     <Compile Include="GameData\ACGItem.cs" />
     <Compile Include="GameData\PerkHash.cs" />
+    <Compile Include="GameData\UI\UIEnums.cs" />
     <Compile Include="GameData\UseCriteriaOperator.cs" />
     <Compile Include="GameData\ItemAction.cs" />
     <Compile Include="GameData\Fatness.cs" />
@@ -80,8 +81,6 @@
     <Compile Include="GameData\TradeAction.cs" />
     <Compile Include="GameData\Vector2.cs" />
     <Compile Include="GameData\Vector3.cs" />
-    <Compile Include="GameData\WindowFlags.cs" />
-    <Compile Include="GameData\WindowStyle.cs" />
     <Compile Include="Helpers\BitFlag.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -296,6 +295,7 @@
     <Compile Include="Unmanaged\Imports\GUI\Button_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ButtonBase_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ComboBox_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\MultiListView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Preferences_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\PlayfieldDistrictInfo_t.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PetWindowModule_c.cs" />

@@ -7,6 +7,7 @@ using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.GameData.UI;
 
 namespace AOSharp.Core.UI
 {
@@ -31,6 +32,11 @@ namespace AOSharp.Core.UI
                 return string.Empty;
 
             return StdString.FromPointer(pStr, false).ToString();
+        }
+
+        public void SetGfx(ButtonState state, int gfxId)
+        {
+            Button_c.SetGfx(Pointer, state, gfxId);
         }
 
         public override void Dispose()

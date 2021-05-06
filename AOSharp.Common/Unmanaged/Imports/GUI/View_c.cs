@@ -15,7 +15,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern int Deconstructor(IntPtr pThis);
 
         [DllImport("GUI.dll", EntryPoint = "?AddChild@View@@UAEXPAV1@_N@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern void AddChild(IntPtr pThis, IntPtr pView, bool unk);
+        public static extern void AddChild(IntPtr pThis, IntPtr pView, bool assignTabOrder);
 
         [DllImport("GUI.dll", EntryPoint = "?RemoveChild@View@@QAEXPAV1@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void RemoveChild(IntPtr pThis, IntPtr pView);

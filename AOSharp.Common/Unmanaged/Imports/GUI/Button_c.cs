@@ -3,6 +3,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.GameData;
+using AOSharp.Common.GameData.UI;
 
 namespace AOSharp.Common.Unmanaged.Imports
 {
@@ -13,5 +14,8 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?SetLabel@Button_c@@QAEXABVString@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetLabel(IntPtr pThis, IntPtr pStr);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetGfx@Button_c@@QAEXW4StateID_e@1@H@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetGfx(IntPtr pThis, ButtonState buttonState, int gfxId);
     }
 }

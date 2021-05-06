@@ -123,6 +123,7 @@
     <Compile Include="UI\Options\Menu.cs" />
     <Compile Include="UI\Options\MenuItem.cs" />
     <Compile Include="UI\Options\OptionsPanel.cs" />
+    <Compile Include="UI\MultiListView.cs" />
     <Compile Include="UI\StringListViewItem.cs" />
     <Compile Include="UI\ListViewBase.cs" />
     <Compile Include="UI\HLayoutNode.cs" />

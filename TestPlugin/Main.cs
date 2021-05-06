@@ -275,6 +275,11 @@ namespace TestPlugin
                             testButton.Clicked += OnTestButtonClicked;
                         }
 
+                        if (testWindow.FindView("testButton2", out ButtonBase testButton2))
+                        {
+                            testButton2.Clicked += OnTestButtonClicked;
+                        }
+
                         if (testWindow.FindView("testComboBox", out ComboBox testComboBox))
                         {
                             Chat.WriteLine($"ComboBox.Pointer: {testComboBox.Pointer.ToString("X4")}");
@@ -403,7 +408,7 @@ namespace TestPlugin
 
         private void OnTestButtonClicked(object s, ButtonBase button)
         {
-            Chat.WriteLine($"TestButton Clicked! {((Button)button).Label}");
+            Chat.WriteLine($"TestButton Clicked! {button.Pointer.ToString("X4")}");
         }
 
         private void OnContainerOpened(object sender, Container container)

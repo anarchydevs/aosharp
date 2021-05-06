@@ -66,9 +66,9 @@ namespace AOSharp.Core.UI
             return "";
         }
 
-        public void AddChild(View view, bool unk)
+        public void AddChild(View view, bool assignTabOrder)
         {
-            View_c.AddChild(_pointer, view.Pointer, unk);
+            View_c.AddChild(_pointer, view.Pointer, assignTabOrder);
         }
 
         public void RemoveChild(View view)
@@ -92,9 +92,9 @@ namespace AOSharp.Core.UI
             return true;
         }
 
-        public void FitToContents()
+        public void FitToContents(bool unk = false)
         {
-            LimitMaxSize(CalculatePreferredSize());
+            LimitMaxSize(CalculatePreferredSize(unk));
         }
 
         public Vector2 CalculatePreferredSize(bool unk = false)

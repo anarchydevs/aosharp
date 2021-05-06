@@ -11,6 +11,7 @@ using System.IO;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.Unmanaged.Imports;
 using System.Reflection;
+using AOSharp.Common.GameData.UI;
 
 namespace AOSharp.Core.UI
 {

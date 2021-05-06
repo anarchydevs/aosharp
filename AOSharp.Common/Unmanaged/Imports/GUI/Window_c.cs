@@ -3,13 +3,14 @@ using System.Text;
 using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.GameData.UI;
 
 namespace AOSharp.Common.Unmanaged.Imports
 {
     public class Window_c
     {
         [DllImport("GUI.dll", EntryPoint = "??0Window@@QAE@ABVRect@@ABVString@@1W4WindowStyle_e@@I@Z", CallingConvention = CallingConvention.ThisCall)]
-        internal static extern unsafe IntPtr Constructor(IntPtr pThis, Rect* rect, IntPtr string1, IntPtr string2, WindowStyle windowStyle, WindowFlags flags);
+        internal static extern IntPtr Constructor(IntPtr pThis, ref Rect rect, IntPtr pNameStr, IntPtr pTitleStr, WindowStyle windowStyle, WindowFlags flags);
 
         [DllImport("GUI.dll", EntryPoint = "??1Window@@UAE@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern int Deconstructor(IntPtr pThis);
@@ -60,7 +61,7 @@ namespace AOSharp.Common.Unmanaged.Imports
             StdString str1 = StdString.Create(string1);
             StdString str2 = StdString.Create(string2);
 
-            IntPtr pWindow = Constructor(MSVCR100.New(0xAC), &rect, str1.Pointer, str2.Pointer, style, flags);
+            IntPtr pWindow = Constructor(MSVCR100.New(0xAC), ref rect, str1.Pointer, str2.Pointer, style, flags);
 
             return pWindow;
         }
