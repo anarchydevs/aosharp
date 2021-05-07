@@ -210,12 +210,27 @@ namespace AOSharp.Core.Inventory
             });
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Item);
+        }
+
         public bool Equals(Item other)
         {
             if (object.ReferenceEquals(other, null))
                 return false;
 
             return LowId == other.LowId && HighId == other.HighId && QualityLevel == other.QualityLevel && Slot == other.Slot;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 1039555169;
+            hashCode = hashCode * -1521134295 + LowId.GetHashCode();
+            hashCode = hashCode * -1521134295 + HighId.GetHashCode();
+            hashCode = hashCode * -1521134295 + QualityLevel.GetHashCode();
+            hashCode = hashCode * -1521134295 + Slot.GetHashCode();
+            return hashCode;
         }
 
         public static bool operator ==(Item a, Item b)

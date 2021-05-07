@@ -133,12 +133,22 @@ namespace AOSharp.Core
             return (int)(baseCost * ((double)costModifier / 100));
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Spell);
+        }
+
         public bool Equals(Spell other)
         {
             if (object.ReferenceEquals(other, null))
                 return false;
 
             return Identity == other.Identity;
+        }
+
+        public override int GetHashCode()
+        {
+            return 91194611 + Identity.GetHashCode();
         }
 
         public static bool operator ==(Spell a, Spell b)

@@ -323,8 +323,13 @@ namespace TestPlugin
                     }
                     */
 
-                    if (Inventory.Find(285445, out Item item))
-                        item.Delete();
+                    if (Inventory.Find(294010, out Item item1) && Inventory.Find(294010, out Item item2))
+                    {
+                        Dictionary<Item, int> testDict = new Dictionary<Item, int>();
+                        testDict.Add(item1, 1337);
+
+                        Chat.WriteLine(testDict.ContainsKey(item2));
+                    }
 
                     Backpack backpack = Inventory.Backpacks.FirstOrDefault();
 
