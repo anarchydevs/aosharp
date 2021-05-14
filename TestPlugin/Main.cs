@@ -287,6 +287,11 @@ namespace TestPlugin
                             for(int i = 0; i < 10; i++)
                                 testComboBox.AppendItem(i, $"loli {i}");
                         }
+
+                        if (testWindow.FindView("testBitmapView", out BitmapView testBitmapView))
+                        {
+                            testBitmapView.SetBitmap("GFX_GUI_SHORT_HOR_BAR_EMPTY");
+                        }
                     }
                 });
 
