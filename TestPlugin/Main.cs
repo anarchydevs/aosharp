@@ -23,7 +23,6 @@ using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 using System.Runtime.InteropServices;
 using System.Drawing;
-using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace TestPlugin
 {
@@ -288,11 +287,6 @@ namespace TestPlugin
                             for(int i = 0; i < 10; i++)
                                 testComboBox.AppendItem(i, $"loli {i}");
                         }
-
-                        if (testWindow.FindView("testBitmapView", out BitmapView testBitmapView))
-                        {
-                            testBitmapView.SetBitmap("GFX_GUI_SHORT_HOR_BAR_EMPTY");
-                        }
                     }
                 });
 
@@ -328,10 +322,6 @@ namespace TestPlugin
                         Chat.WriteLine($"Drain Self No Target: {spell.MeetsUseReqs(Targeting.TargetChar)}");
                     }
                     */
-
-                    int gfxId = DynamicID.GetID("GFX_GUI_SHORT_HOR_BAR_EMPTY", true);
-                    Chat.WriteLine($"GFXID: {gfxId}");
-
 
                     if (Inventory.Find(294010, out Item item1) && Inventory.Find(294010, out Item item2))
                     {
