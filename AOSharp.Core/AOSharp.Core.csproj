@@ -111,6 +111,8 @@
     <Compile Include="Playfield\Playfield.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ChatWindow.cs" />
+    <Compile Include="UI\ItemListViewBase.cs" />
+    <Compile Include="UI\InventoryListViewItem.cs" />
     <Compile Include="UI\Options\MenuTest.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\RadioButtonGroup.cs" />

@@ -234,7 +234,9 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("testui", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    Chat.WriteLine(Window.GetActiveWindow().Name);
+                    //Chat.WriteLine(Window.GetActiveWindow().Name);
+                    Chat.WriteLine($"{ItemListViewBase_c.Create(new Rect(999999, 999999, -999999,-999999),0,0,0, Identity.None).ToString("X4")}");
+
                 });
 
                 Chat.RegisterCommand("openwindow", (string command, string[] param, ChatWindow chatWindow) =>
