@@ -115,6 +115,7 @@
     <Compile Include="UI\InventoryListViewItem.cs" />
     <Compile Include="UI\Options\MenuTest.cs" />
     <Compile Include="UI\Button.cs" />
+    <Compile Include="UI\TextInputView.cs" />
     <Compile Include="UI\RadioButtonGroup.cs" />
     <Compile Include="UI\RadioButton.cs" />
     <Compile Include="UI\Checkbox.cs" />

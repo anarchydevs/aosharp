@@ -10,6 +10,7 @@ using AOSharp.Core.UI;
 using AOSharp.Core.Inventory;
 using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
+using AOSharp.Common.GameData.UI;
 using AOSharp.Core.GameData;
 using AOSharp.Core.UI.Options;
 using AOSharp.Core.IPC;
@@ -256,6 +257,8 @@ namespace TestPlugin
                         {
                             Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
                             Chat.WriteLine($"testTextView.Text: {testView.Text}");
+                            testView.SetDefaultColor(16711912);
+
                             testView.Text = "1337";
                             Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
                         }
@@ -275,6 +278,8 @@ namespace TestPlugin
                         if (testWindow.FindView("testButton", out Button testButton))
                         {
                             testButton.Clicked += OnTestButtonClicked;
+                            testButton.SetLabelColor(16711680);
+                            testButton.SetGfx(ButtonState.Pressed, "GFX_GUI_BS_REDSTAR");
                         }
 
                         if (testWindow.FindView("testButton2", out ButtonBase testButton2))
@@ -289,7 +294,11 @@ namespace TestPlugin
                             for(int i = 0; i < 10; i++)
                                 testComboBox.AppendItem(i, $"loli {i}");
                         }
-
+                        if (testWindow.FindView("testTextInput", out TextInputView testTextInput))
+                        {
+                            testTextInput.SetAlpha((float)0.7);
+                            testTextInput.Text = "head pats";
+                        }
                         if (testWindow.FindView("testBitmapView", out BitmapView testBitmapView))
                         {
                             testBitmapView.SetBitmap("GFX_GUI_SHORT_HOR_BAR_EMPTY");
