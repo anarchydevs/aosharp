@@ -17,5 +17,14 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?SetGfx@Button_c@@QAEXW4StateID_e@1@H@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetGfx(IntPtr pThis, ButtonState buttonState, int gfxId);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetBackgroundIcon@Button_c@@QAEXH_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetBackgroundIcon(IntPtr pThis, int id, bool state);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetColorOverride@Button_c@@QAEXI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetColorOverride(IntPtr pThis, uint unk);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetLabelColor@Button_c@@QAEXI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetLabelColor(IntPtr pThis, uint unk);
     }
 }

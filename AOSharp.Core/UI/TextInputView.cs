@@ -10,7 +10,7 @@ using AOSharp.Common.Unmanaged.DataTypes;
 
 namespace AOSharp.Core.UI
 {
-    public class TextView : View
+    public class TextInputView : View
     {
         public string Text
         {
@@ -18,26 +18,23 @@ namespace AOSharp.Core.UI
             set { SetText(value); }
         }
 
-        internal TextView(IntPtr pointer, bool track = false) : base(pointer, track)
+        internal TextInputView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
 
         private void SetText(string text)
         {
-            TextView_c.SetText(Pointer, StdString.Create(text).Pointer);
+            TextInputView_c.SetText(Pointer, StdString.Create(text).Pointer);
         }
-
         private string GetText()
         {
-            Variant value = Variant.Create();
-            TextView_c.GetValue(Pointer, value.Pointer);
-            return value.AsString();
-        }
-        public void SetDefaultColor(uint unk)
-        {
-            TextView_c.SetDefaultColor(Pointer, unk);
-        }
+            IntPtr pStr = TextInputView_c.GetText(Pointer);
 
+            if (pStr == IntPtr.Zero)
+                return string.Empty;
+
+            return StdString.FromPointer(pStr, false).ToString();
+        }
         public override void Dispose()
         {
             throw new NotImplementedException();

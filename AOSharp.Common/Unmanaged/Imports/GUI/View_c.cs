@@ -47,6 +47,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?SetLayoutNode@View@@QAEXPAVLayoutNode@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetLayoutNode(IntPtr pThis, IntPtr pLayoutNode);
 
+        [DllImport("GUI.dll", EntryPoint = "?SetAlpha@View@@QAEXM@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetAlpha(IntPtr pThis, float unk);
 
         public static unsafe IntPtr Create(Rect rect, string name, int unk1, int unk2)
         {

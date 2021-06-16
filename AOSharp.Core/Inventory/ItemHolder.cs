@@ -29,6 +29,11 @@ namespace AOSharp.Core.Inventory
             return (item = Items.FirstOrDefault(x => x.LowId == lowId && x.HighId == highId)) != null;
         }
 
+        public bool Find(int lowId, int highId, int ql, out Item item)
+        {
+            return (item = Items.FirstOrDefault(x => x.LowId == lowId && x.HighId == highId && x.QualityLevel == ql)) != null;
+        }
+
         public List<Item> FindAll(int id)
         {
             return Items.Where(x => x.LowId == id || x.HighId == id).ToList();

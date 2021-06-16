@@ -8,6 +8,7 @@ using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.GameData.UI;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core.UI
 {
@@ -37,6 +38,31 @@ namespace AOSharp.Core.UI
         public void SetGfx(ButtonState state, int gfxId)
         {
             Button_c.SetGfx(Pointer, state, gfxId);
+        }
+
+        public void SetGfx(ButtonState state, string gfxName)
+        {
+            SetGfx(state, DynamicID.GetID(gfxName, true));
+        }
+
+        public void SetBackgroundIcon(int gfxId, bool state)
+        {
+            Button_c.SetBackgroundIcon(Pointer, gfxId, state);
+        }
+
+        public void SetBackgroundIcon(string gfxName, bool state)
+        {
+            Button_c.SetBackgroundIcon(Pointer, DynamicID.GetID(gfxName, true), state);
+        }
+
+        public void SetColorOverride(uint unk)
+        {
+            Button_c.SetColorOverride(Pointer, unk);
+        }
+
+        public void SetLabelColor(uint unk)
+        {
+            Button_c.SetLabelColor(Pointer, unk);
         }
 
         public override void Dispose()

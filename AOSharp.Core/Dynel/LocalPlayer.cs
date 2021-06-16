@@ -73,6 +73,16 @@ namespace AOSharp.Core
                 Pets.Follow();
         }
 
+        public unsafe int GetSkillMax(Stat stat)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return 0;
+
+            return N3EngineClientAnarchy_t.GetSkillMax(pEngine, stat);
+        }
+
         public float GetAttackRange()
         {
             IntPtr pEngine = N3Engine_t.GetInstance();
