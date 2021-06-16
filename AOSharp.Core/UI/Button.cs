@@ -45,10 +45,21 @@ namespace AOSharp.Core.UI
             SetGfx(state, DynamicID.GetID(gfxName, true));
         }
 
+        public void SetBackgroundIcon(int gfxId, bool state)
+        {
+            Button_c.SetBackgroundIcon(Pointer, gfxId, state);
+        }
+
+        public void SetBackgroundIcon(string gfxName, bool state)
+        {
+            Button_c.SetBackgroundIcon(Pointer, DynamicID.GetID(gfxName, true), state);
+        }
+
         public void SetColorOverride(uint unk)
         {
             Button_c.SetColorOverride(Pointer, unk);
         }
+
         public void SetLabelColor(uint unk)
         {
             Button_c.SetLabelColor(Pointer, unk);

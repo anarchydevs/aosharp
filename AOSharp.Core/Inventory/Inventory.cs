@@ -20,6 +20,10 @@ namespace AOSharp.Core.Inventory
         {
             return (item = Items.FirstOrDefault(x => x.Slot == slot)) != null;
         }
+        public static bool Find(string name, out Item item)
+        {
+            return (item = Items.FirstOrDefault(x => x.Name == name)) != null;
+        }
 
         public static bool Find(int id, out Item item)
         {
