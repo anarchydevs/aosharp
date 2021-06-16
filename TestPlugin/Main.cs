@@ -257,7 +257,7 @@ namespace TestPlugin
                         {
                             Chat.WriteLine($"testTextView.Pointer: {testView.Pointer.ToString("X4")}");
                             Chat.WriteLine($"testTextView.Text: {testView.Text}");
-                            testView.SetDefaultColor(16711912);
+                            testView.SetDefaultColor(0xFF00E8);
 
                             testView.Text = "1337";
                             Chat.WriteLine($"testTextView.Text(New): {testView.Text}");
@@ -278,7 +278,7 @@ namespace TestPlugin
                         if (testWindow.FindView("testButton", out Button testButton))
                         {
                             testButton.Clicked += OnTestButtonClicked;
-                            testButton.SetLabelColor(0xFF00E8);
+                            testButton.SetLabelColor(0xFF0000);
                             testButton.SetGfx(ButtonState.Pressed, "GFX_GUI_BS_REDSTAR");
                         }
 
