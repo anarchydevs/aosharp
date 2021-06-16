@@ -15,5 +15,8 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?GetValue@TextView_c@@UBE?AVVariant@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetValue(IntPtr pThis, IntPtr pVariant);
+
+        [DllImport("GUI.dll", EntryPoint = "?SetDefaultColor@TextView_c@@QAEXI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetDefaultColor(IntPtr pThis, uint unk);
     }
 }

@@ -29,6 +29,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkill@n3EngineClientAnarchy_t@@QBEHABVIdentity_t@@W4Stat_e@GameData@@H0@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern int GetSkill(IntPtr pThis, ref Identity dynel, Stat stat, int detail, ref Identity unk);
 
+        //GetSkillMax
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkillMax@n3EngineClientAnarchy_t@@QAEHW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern int GetSkillMax(IntPtr pThis, Stat stat);
+
         //IsSecondarySpecialAttackAvailable
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsSecondarySpecialAttackAvailable@n3EngineClientAnarchy_t@@QBE_NW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]

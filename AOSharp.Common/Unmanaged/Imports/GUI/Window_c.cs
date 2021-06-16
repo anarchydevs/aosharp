@@ -51,6 +51,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?FindWindowName@Window@@SAPAV1@PBD@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr FindWindowName([MarshalAs(UnmanagedType.LPStr)] string windowName);
 
+        [DllImport("GUI.dll", EntryPoint = "?SetAlpha@Window@@QAEXM@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetAlpha(IntPtr pThis, float num);
+
         [return: MarshalAs(UnmanagedType.U1)]
 
         [DllImport("GUI.dll", EntryPoint = "?IsVisible@Window@@QBE_NXZ", CallingConvention = CallingConvention.ThisCall)]
