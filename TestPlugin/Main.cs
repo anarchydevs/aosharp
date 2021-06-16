@@ -278,7 +278,7 @@ namespace TestPlugin
                         if (testWindow.FindView("testButton", out Button testButton))
                         {
                             testButton.Clicked += OnTestButtonClicked;
-                            testButton.SetLabelColor(16711680);
+                            testButton.SetLabelColor(0xFF00E8);
                             testButton.SetGfx(ButtonState.Pressed, "GFX_GUI_BS_REDSTAR");
                         }
 
