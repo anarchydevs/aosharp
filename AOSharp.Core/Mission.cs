@@ -6,6 +6,7 @@ using AOSharp.Common.GameData;
 using AOSharp.Common.Helpers;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System.Linq;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core
 {
@@ -17,7 +18,7 @@ namespace AOSharp.Core
 
         public Identity Source => (*(MissionMemStruct*)Pointer).Source;
 
-        public Identity Playfield => (*(MissionMemStruct*)Pointer).Playfield;
+        public MissionLocation Location => N3EngineClientAnarchy.GetQuestWorldPos(Identity, out Identity pf, out Vector3 uniPos, out Vector3 pos) ? new MissionLocation(pf, uniPos, pos) : null;
 
         public List<MissionAction> Actions => GetActions();
 
@@ -29,7 +30,6 @@ namespace AOSharp.Core
         {
             Pointer = pointer;
         }
-
 
         public static bool Find(string displayName, out Mission mission)
         {
@@ -137,6 +137,20 @@ namespace AOSharp.Core
 
             [FieldOffset(0x20)]
             public Identity MobHash;
+        }
+    }
+
+    public class MissionLocation
+    {
+        public readonly Identity Playfield;
+        public readonly Vector3 UniversePos;
+        public readonly Vector3 Pos;
+
+        internal MissionLocation (Identity playfield, Vector3 uniPos, Vector3 pos)
+        {
+            Playfield = playfield;
+            UniversePos = uniPos;
+            Pos = pos;
         }
     }
 

@@ -170,9 +170,10 @@ namespace TestPlugin
                 Chat.WriteLine($"Missions ({Mission.List.Count})");
                 foreach (Mission mission in Mission.List)
                 {
-                    Chat.WriteLine($"   {mission.Identity.ToString()}");
-                    Chat.WriteLine($"       Source: {mission.Source.ToString()}");
-                    Chat.WriteLine($"       Playfield: {mission.Playfield.ToString()}");
+                    Chat.WriteLine($"   {mission.Identity}");
+                    Chat.WriteLine($"       Source: {mission.Source}");
+                    Chat.WriteLine($"       Playfield: {(mission.Location != null ? mission.Location.Playfield.ToString() : "NULL")}");
+                    Chat.WriteLine($"       WorldPos: {(mission.Location != null ? mission.Location.Pos.ToString() : "NULL")}");
                     Chat.WriteLine($"       DisplayName: {mission.DisplayName}");
                 }
 
@@ -355,6 +356,7 @@ namespace TestPlugin
                         Chat.WriteLine(pet.Type);
                     }
                     */
+
 
                     //DevExtras.Test();
 

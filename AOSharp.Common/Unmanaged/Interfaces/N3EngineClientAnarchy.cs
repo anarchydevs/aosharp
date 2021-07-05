@@ -58,5 +58,18 @@ namespace AOSharp.Common.Unmanaged.Interfaces
                 N3EngineClientAnarchy_t.UseItemOnCharacter(pEngine, ref source, ref target);
             }
         }
+
+        public static bool GetQuestWorldPos(Identity mission, out Identity playfield, out Vector3 universePos, out Vector3 zonePos)
+        {
+            playfield = Identity.None;
+            universePos = Vector3.Zero;
+            zonePos = Vector3.Zero;
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return false;
+
+            return N3EngineClientAnarchy_t.GetQuestWorldPos(pEngine, ref mission, ref playfield, ref universePos, ref zonePos);
+        }
     }
 }
