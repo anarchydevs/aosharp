@@ -17,6 +17,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?GetValue@CheckBox_c@@UBE?AVVariant@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetValue(IntPtr pThis, IntPtr unk);
 
+        [DllImport("GUI.dll", EntryPoint = "?SetValue@CheckBox_c@@UAEXABVVariant@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetValue(IntPtr pThis, IntPtr pVariant, bool unk);
+
         public static IntPtr Create(string name, string text, bool defaultValue, bool horizontalSpacer)
         {
             IntPtr pNew = MSVCR100.New(0x158);

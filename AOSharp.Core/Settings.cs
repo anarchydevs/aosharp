@@ -64,6 +64,11 @@ namespace AOSharp.Core
             AddVariable(name);
         }
 
+        public void DeleteVariable(string name)
+        {
+            _variables.Remove(name);
+        }
+
         public void Save()
         {
             Dictionary<string, string> values = new Dictionary<string, string>();

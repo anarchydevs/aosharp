@@ -179,6 +179,11 @@ namespace AOSharp.Core.UI
             Window_c.MoveToCenter(Pointer);
         }
 
+        public void SetAlpha(float num)
+        {
+            Window_c.SetAlpha(Pointer, num);
+        }
+
         public TabView GetTabView()
         {
             IntPtr pTabView = Window_c.GetTabView(Pointer);

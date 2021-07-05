@@ -33,6 +33,11 @@ namespace AOSharp.Core.UI
             CheckBox_c.Deconstructor(_pointer);
         }
 
+        public void SetValue(bool value)
+        {
+            CheckBox_c.SetValue(Pointer, Variant.Create(value).Pointer, value);
+        }
+
         public override void Update()
         {
             bool currentValue = IsChecked;
