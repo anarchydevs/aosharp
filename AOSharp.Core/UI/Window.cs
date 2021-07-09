@@ -150,10 +150,35 @@ namespace AOSharp.Core.UI
                 MaxX = unmanagedRect.MaxX,
                 MaxY = unmanagedRect.MaxY
             };
-
             Rect_c.Deconstructor(pRect);
-
             return rect;
+        }
+        public unsafe Rect GetFrame()
+        {
+            IntPtr pRect = Rect_c.Create();
+            Rect unmanagedRect = *(Rect*)Window_c.GetFrame(Pointer, pRect);
+
+            Rect rect = new Rect()
+            {
+                MinX = unmanagedRect.MinX,
+                MinY = unmanagedRect.MinY,
+                MaxX = unmanagedRect.MaxX,
+                MaxY = unmanagedRect.MaxY
+            };
+            Rect_c.Deconstructor(pRect);
+            return rect;
+        }   
+        public Vector2 GetMousePos()
+        {
+            Vector2 preferredSize = new Vector2();
+            Window_c.GetMousePos(Pointer, ref preferredSize);
+            return preferredSize;
+        }
+        public Vector2 GetScreenSize()
+        {
+            Vector2 preferredSize = new Vector2();
+            Window_c.GetScreenSize(Pointer, ref preferredSize);
+            return preferredSize;
         }
 
         public void SetTitle(string name)
@@ -179,6 +204,19 @@ namespace AOSharp.Core.UI
             Window_c.MoveToCenter(Pointer);
         }
 
+        public void MoveTo(float x, float y)
+        {
+            Window_c.MoveTo(Pointer, x, y);
+        }
+        //public string GetWindowBorder()
+        //{
+        //    IntPtr pStr = Window_c.GetWindowBorder(Pointer);
+
+        //    if (pStr == IntPtr.Zero)
+        //        return string.Empty;
+
+        //    return StdString.FromPointer(pStr, false).ToString();
+        //}
         public void SetAlpha(float num)
         {
             Window_c.SetAlpha(Pointer, num);

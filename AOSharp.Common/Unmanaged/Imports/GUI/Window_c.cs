@@ -24,6 +24,18 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?MoveToCenter@Window@@QAEXXZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern void MoveToCenter(IntPtr pThis);
 
+        [DllImport("GUI.dll", EntryPoint = "?MoveTo@Window@@QAEXMM@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void MoveTo(IntPtr pThis, float x, float y);
+
+        [DllImport("GUI.dll", EntryPoint = "?GetMousePosition@Window@@QBE?AVPoint@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetMousePos(IntPtr pThis, ref Vector2 refPos);
+
+        [DllImport("GUI.dll", EntryPoint = "?GetFrame@Window@@QBE?AVRect@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetFrame(IntPtr pThis, IntPtr pRect);
+
+        [DllImport("GUI.dll", EntryPoint = "?GetScreenSize@Window@@SA?AVPoint@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetScreenSize(IntPtr pThis, ref Vector2 refPos);
+
         [DllImport("GUI.dll", EntryPoint = "?GetTabView@Window@@QBEPAVTabView@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetTabView(IntPtr pThis);
 
