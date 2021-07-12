@@ -42,6 +42,8 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         [AoMember(2)]
         public int Decline { get; set; }
 
+        [AoMember(3)]
+        public int Amount { get; set; }
         #endregion
     }
 }

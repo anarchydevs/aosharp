@@ -136,9 +136,9 @@ namespace AOSharp.Core.UI
             View_c.SetLayoutNode(_pointer, layoutNode.Pointer);
         }
 
-        public void SetAlpha(float unk)
+        public void SetAlpha(float value)
         {
-            View_c.SetAlpha(_pointer, unk);
+            View_c.SetAlpha(_pointer, value);
         }
 
         public void Show(bool visible, bool unk)
