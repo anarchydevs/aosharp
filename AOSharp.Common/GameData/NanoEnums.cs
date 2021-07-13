@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Common.GameData
 {
+    public enum NanoSchool
+    {
+        None = 0,
+        Combat = 1,
+        Medical = 2,
+        Protection = 3,
+        Psi = 4,
+        Space = 5
+    }
+
     public enum NanoLine
     {
         NOSTACKING = 0,
@@ -930,7 +940,7 @@ namespace AOSharp.Common.GameData
         GeneralPerceptionBuff = 949,
         SingleTargetHealing = 951,
         TeamHealing = 952,
-        KyrOzchGenePool=956,
+        KyrOzchGenePool = 956,
         AlienParasite = 957,
         MindControl = 958,
         ExperienceConstructs_XPBonus = 959,

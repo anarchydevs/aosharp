@@ -18,9 +18,11 @@ namespace AOSharp.Core
         private const float CAST_TIMEOUT = 0.5f;
 
         public readonly Identity Identity;
-        public readonly NanoLine Nanoline;
-        public readonly int NCU;
-        public readonly int StackingOrder;
+        public NanoLine Nanoline => (NanoLine)GetStat(Stat.NanoStrain);
+        public int NCU => GetStat(Stat.Level);
+        public int StackingOrder => GetStat(Stat.StackingOrder);
+        public NanoSchool NanoSchool => (NanoSchool)GetStat(Stat.School);
+
         public int Cost => GetCost();
 
         public override float AttackRange => Math.Min(base.AttackRange * (1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f), 40f);
@@ -33,9 +35,6 @@ namespace AOSharp.Core
         internal Spell(Identity identity) : base(identity)
         {
             Identity = identity;
-            Nanoline = (NanoLine)GetStat(Stat.NanoStrain);
-            StackingOrder = GetStat(Stat.StackingOrder);
-            NCU = GetStat(Stat.Level);
         }
 
         public static bool Find(int id, out Spell spell)

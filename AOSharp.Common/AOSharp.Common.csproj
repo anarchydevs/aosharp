@@ -73,7 +73,7 @@
     <Compile Include="GameData\MissionDirection.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />
-    <Compile Include="GameData\NanoLine.cs" />
+    <Compile Include="GameData\NanoEnums.cs" />
     <Compile Include="GameData\Profession.cs" />
     <Compile Include="GameData\Quaternion.cs" />
     <Compile Include="GameData\Rect.cs" />
