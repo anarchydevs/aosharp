@@ -340,6 +340,8 @@ namespace TestPlugin
                     }
                     */
 
+                    Chat.WriteLine($"Number Of Free Inventory Slots: {Inventory.NumFreeSlots}");
+
                     if (Inventory.Find(281267, out Item item1))
                     {
                         Chat.WriteLine("Equip Slots:");

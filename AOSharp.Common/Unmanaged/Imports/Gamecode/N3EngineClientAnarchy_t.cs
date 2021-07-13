@@ -108,6 +108,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_MovementChanged@n3EngineClientAnarchy_t@@QAEXW4MovementAction_e@Movement_n@@MM_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void MovementChanged(IntPtr pThis, MovementAction action, float unk1, float unk2, bool unk3);
 
+        //GetNumberOfFreeInventorySlots
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetNumberOfFreeInventorySlots@n3EngineClientAnarchy_t@@QAEHXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern int GetNumberOfFreeInventorySlots(IntPtr pThis);
+
         //GetContainerInventoryList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetContainerInventoryList@n3EngineClientAnarchy_t@@QBEPBV?$list@VInventoryEntry_t@@V?$allocator@VInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe IntPtr GetContainerInventoryList(IntPtr pThis, Identity* identity);

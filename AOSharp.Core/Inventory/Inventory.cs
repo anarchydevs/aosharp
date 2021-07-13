@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core.Inventory
 {
@@ -13,6 +14,8 @@ namespace AOSharp.Core.Inventory
         public static List<Item> Items => GetItems(DynelManager.LocalPlayer.Identity);
 
         public static List<Backpack> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Backpack(x.UniqueIdentity, x.Slot)).ToList();
+
+        public static int NumFreeSlots => N3EngineClientAnarchy.GetNumberOfFreeInventorySlots();
 
         public static EventHandler<Container> ContainerOpened;
 

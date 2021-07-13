@@ -71,5 +71,15 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
             return N3EngineClientAnarchy_t.GetQuestWorldPos(pEngine, ref mission, ref playfield, ref universePos, ref zonePos);
         }
+
+        public static int GetNumberOfFreeInventorySlots()
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return 0;
+
+            return N3EngineClientAnarchy_t.GetNumberOfFreeInventorySlots(pEngine);
+        }
     }
 }
