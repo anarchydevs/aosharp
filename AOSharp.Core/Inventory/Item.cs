@@ -22,6 +22,7 @@ namespace AOSharp.Core.Inventory
         public readonly int QualityLevel;
         public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
+        public List<EquipSlot> EquipSlots => GetEquipSlots();
 
         public static EventHandler<ItemUsedEventArgs> ItemUsed;
 
@@ -131,7 +132,46 @@ namespace AOSharp.Core.Inventory
             {
                 Chat.WriteLine($"This shouldn't happen pls report (Item): {e.Message}");
             }
-}
+        }
+
+        //What a meme
+        internal List<EquipSlot> GetEquipSlots()
+        {
+            List<EquipSlot> equipSlots = new List<EquipSlot>();
+            ItemClass itemClass = (ItemClass)GetStat(Stat.ItemClass);
+
+            if (itemClass == ItemClass.None)
+                return equipSlots;
+
+            int slotStat = GetStat(Stat.Slot, 3);
+
+            string itemClassName;
+
+            if (itemClass == ItemClass.Weapon)
+                itemClassName = "Weap";
+            else if (itemClass == ItemClass.Armor)
+                itemClassName = "Cloth";
+            else if (itemClass == ItemClass.Implant)
+                itemClassName = "Imp";
+            else
+                return equipSlots;
+
+            foreach (EquipSlot equipSlot in Enum.GetValues(typeof(EquipSlot)))
+            {
+                if (equipSlot == EquipSlot.Social_Neck)
+                    break;
+
+                if (!equipSlot.ToString().StartsWith(itemClassName))
+                    continue;
+
+                int relativeSlotFlag = (1 << ((int)equipSlot - ((int)itemClass - 1) * 0x10));
+
+                if ((slotStat & relativeSlotFlag) == relativeSlotFlag)
+                    equipSlots.Add(equipSlot);
+            }
+
+            return equipSlots;
+        }
 
         internal static void OnUsingItem(Identity slot)
         {

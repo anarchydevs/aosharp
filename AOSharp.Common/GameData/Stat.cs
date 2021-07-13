@@ -75,7 +75,7 @@
         RepairDifficulty = 0x49,
         Value = 0x4A,
         NanoStrain = 0x4B,
-        EquipmentPage = 0x4C,
+        ItemClass = 0x4C,
         RepairSkill = 0x4D,
         CurrentMass = 0x4E,
         Icon = 0x4F,

@@ -340,12 +340,11 @@ namespace TestPlugin
                     }
                     */
 
-                    if (Inventory.Find(294010, out Item item1) && Inventory.Find(294010, out Item item2))
+                    if (Inventory.Find(281267, out Item item1))
                     {
-                        Dictionary<Item, int> testDict = new Dictionary<Item, int>();
-                        testDict.Add(item1, 1337);
-
-                        Chat.WriteLine(testDict.ContainsKey(item2));
+                        Chat.WriteLine("Equip Slots:");
+                        foreach(EquipSlot slot in item1.EquipSlots)
+                            Chat.WriteLine($"\t{slot}");
                     }
 
                     Backpack backpack = Inventory.Backpacks.FirstOrDefault();

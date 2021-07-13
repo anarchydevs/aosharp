@@ -54,6 +54,7 @@
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\FightMode.cs" />
     <Compile Include="GameData\GroupMessage.cs" />
+    <Compile Include="GameData\ItemEnums.cs" />
     <Compile Include="GameData\PerkLine.cs" />
     <Compile Include="GameData\PetType.cs" />
     <Compile Include="GameData\SpecialActionState.cs" />
