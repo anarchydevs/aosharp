@@ -5,7 +5,7 @@ using AOSharp.Core.GameData;
 
 namespace AOSharp.Core.UI
 {
-    public class InventoryListViewItem : ListViewBaseItem
+    public class InventoryListViewItem : MultiListViewItem
     {
         protected InventoryListViewItem(IntPtr pointer) : base(pointer)
         {

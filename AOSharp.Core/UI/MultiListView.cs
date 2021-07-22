@@ -78,5 +78,18 @@ namespace AOSharp.Core.UI
             MultiListView_c.GetFirstFreePos(_pointer, ref pos);
             return pos;
         }
+
+        public bool GetSelectedItem<T>(out T listViewItem) where T : MultiListViewItem
+        {
+            listViewItem = null;
+            IntPtr pSelectedItem = MultiListView_c.GetSelectedItem(_pointer);
+
+            if (pSelectedItem == IntPtr.Zero)
+                return false;
+
+            listViewItem = (T)Activator.CreateInstance(typeof(T), pSelectedItem);
+
+            return true;
+        }
     }
 }

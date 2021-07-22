@@ -299,6 +299,7 @@
     <Compile Include="Unmanaged\Imports\GUI\ButtonBase_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ComboBox_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ItemListViewBase_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\MultiListViewItem_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\MultiListView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Preferences_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\PlayfieldDistrictInfo_t.cs" />
