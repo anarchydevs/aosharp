@@ -67,7 +67,7 @@ namespace AOSharp.Core.UI
             MultiListView_c.SetViewCellCounts(_pointer, ref unk1, ref unk2);
         }
 
-        public bool AddItem(Vector2 slot, ListViewBaseItem listViewItem, bool unk)
+        public bool AddItem(Vector2 slot, MultiListViewItem listViewItem, bool unk)
         {
             return MultiListView_c.AddItem(_pointer, ref slot, listViewItem.Pointer, unk);
         }
