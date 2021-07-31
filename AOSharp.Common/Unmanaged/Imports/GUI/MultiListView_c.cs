@@ -43,6 +43,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?GetSelectedItem@MultiListView_c@@QBEPAVMultiListViewItem_c@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetSelectedItem(IntPtr pThis);
 
+
+        [DllImport("GUI.dll", EntryPoint = "?RemoveItem@MultiListView_c@@QAEXPAVMultiListViewItem_c@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void RemoveItem(IntPtr pThis, IntPtr pListViewItem);
+
         public static IntPtr Create(Rect rect, int flags, int unk1, int unk2)
         {
             return Constructor(MSVCR100.New(0x2D8), ref rect, flags, unk1, unk2);

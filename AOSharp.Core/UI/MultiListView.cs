@@ -72,6 +72,11 @@ namespace AOSharp.Core.UI
             return MultiListView_c.AddItem(_pointer, ref slot, listViewItem.Pointer, unk);
         }
 
+        public void RemoveItem(MultiListViewItem listViewItem)
+        {
+            MultiListView_c.RemoveItem(_pointer, listViewItem.Pointer);
+        }
+
         public Vector2 GetFirstFreePos()
         {
             Vector2 pos = Vector2.Zero;

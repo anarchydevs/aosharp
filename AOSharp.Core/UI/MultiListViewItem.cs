@@ -22,10 +22,6 @@ namespace AOSharp.Core.UI
             _pointer = pointer;
         }
 
-        public virtual void Dispose()
-        {
-        }
-
         public Variant GetID()
         {
             IntPtr pId = MultiListViewItem_c.GetID(_pointer);
@@ -34,6 +30,11 @@ namespace AOSharp.Core.UI
                 return null;
 
             return Variant.FromPointer(pId, false);
+        }
+
+        public void Select(bool selected, bool unk = false)
+        {
+            MultiListViewItem_c.Select(_pointer, selected, unk);
         }
     }
 }

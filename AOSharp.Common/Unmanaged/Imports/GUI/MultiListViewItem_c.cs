@@ -11,5 +11,9 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("GUI.dll", EntryPoint = "?GetID@MultiListViewItem_c@@QBEABVVariant@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetID(IntPtr pThis);
+
+
+        [DllImport("GUI.dll", EntryPoint = "?Select@MultiListViewItem_c@@QAEX_N0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void Select(IntPtr pThis, bool selected, bool unk);
     }
 }

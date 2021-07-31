@@ -69,8 +69,7 @@
     <Compile Include="GameData\Identity.cs" />
     <Compile Include="GameData\IdentityType.cs" />
     <Compile Include="GameData\Mesh3D.cs" />
-    <Compile Include="GameData\MissionActionType.cs" />
-    <Compile Include="GameData\MissionDirection.cs" />
+    <Compile Include="GameData\MissionEnums.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />
     <Compile Include="GameData\NanoEnums.cs" />
@@ -115,6 +114,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\VicinityMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\CreateQuestMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\InitiateCompressionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessage.cs" />
@@ -131,6 +131,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MarketSendMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommand.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommandMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAlternativeMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\StopFightMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\BankMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AttackMessage.cs" />
@@ -320,6 +321,7 @@
     <Compile Include="Unmanaged\Imports\GUI\ListViewBase_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\OptionPanelModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ScrollView_c.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\SliderView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\TextInputView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\StringListViewItem_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\PowerBarView_c.cs" />

@@ -172,6 +172,7 @@ namespace TestPlugin
                 foreach (Mission mission in Mission.List)
                 {
                     Chat.WriteLine($"   {mission.Identity}");
+                    Chat.WriteLine($"       Ptr: {mission.Pointer.ToString("X4")}");
                     Chat.WriteLine($"       Source: {mission.Source}");
                     Chat.WriteLine($"       Playfield: {(mission.Location != null ? mission.Location.Playfield.ToString() : "NULL")}");
                     Chat.WriteLine($"       WorldPos: {(mission.Location != null ? mission.Location.Pos.ToString() : "NULL")}");

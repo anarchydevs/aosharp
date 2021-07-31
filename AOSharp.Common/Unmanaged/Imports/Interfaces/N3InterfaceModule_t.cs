@@ -12,6 +12,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Interfaces.dll", EntryPoint = "?GetClientInst@N3InterfaceModule_t@@QBEIXZ", CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetClientInst();
 
+        [DllImport("Interfaces.dll", EntryPoint = "?N3Msg_GetPFName@N3InterfaceModule_t@@QBEPBDI@Z", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GetPFName(int pfId);
+
         [DllImport("Interfaces.dll", EntryPoint = "?N3Msg_CastNanoSpell@N3InterfaceModule_t@@QBEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
         public unsafe static extern void CastNanoSpell(IntPtr pThis, Identity* nano, Identity target);
 
