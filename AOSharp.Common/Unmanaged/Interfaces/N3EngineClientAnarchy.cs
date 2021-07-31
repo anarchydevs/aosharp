@@ -81,5 +81,13 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
             return N3EngineClientAnarchy_t.GetNumberOfFreeInventorySlots(pEngine);
         }
+
+        public static void SetStat(Stat stat, int value)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+                N3EngineClientAnarchy_t.SetStat(pEngine, value, stat);
+        }
     }
 }

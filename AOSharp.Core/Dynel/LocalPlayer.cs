@@ -6,6 +6,7 @@ using AOSharp.Common.GameData;
 using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core
 {
@@ -91,6 +92,11 @@ namespace AOSharp.Core
                 return 0f;
 
             return N3EngineClientAnarchy_t.GetAttackRange(pEngine);
+        }
+
+        public void SetStat(Stat stat, int value)
+        {
+            N3EngineClientAnarchy.SetStat(stat, value);
         }
 
         private Dictionary<Stat, Cooldown> GetCooldowns()
