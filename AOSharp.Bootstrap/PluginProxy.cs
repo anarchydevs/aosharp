@@ -1,4 +1,5 @@
 ﻿using AOSharp.Common.GameData;
+using AOSharp.Common.SharedEventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -97,9 +98,9 @@ namespace AOSharp.Bootstrap
 
         public void ButtonPressed(IntPtr pButton) => _coreDelegates?.ButtonPressed?.Invoke(pButton);
 
-        public unsafe bool AttemptingSpellCast(IntPtr nanoIdentity, IntPtr targetIdentity)
+        public unsafe bool AttemptingSpellCast(int targetType, int targetId, int spellType, int spellId)
         {
-            AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(*(Identity*)nanoIdentity, *(Identity*)targetIdentity);
+            AttemptingSpellCastEventArgs eventArgs = new AttemptingSpellCastEventArgs(new Identity((IdentityType)targetType, targetId), new Identity((IdentityType)spellType, spellId));
             _coreDelegates?.AttemptingSpellCast?.Invoke(eventArgs);
             return eventArgs.Blocked;
         }

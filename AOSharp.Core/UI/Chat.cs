@@ -4,9 +4,8 @@ using System.Collections.Concurrent;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.GameData;
 using System.Linq;
-using AOSharp.Bootstrap;
-using AOSharp.Core.UI;
 using SmokeLounge.AOtomation.Messaging.Messages;
+using AOSharp.Common.SharedEventArgs;
 
 namespace AOSharp.Core.UI
 {

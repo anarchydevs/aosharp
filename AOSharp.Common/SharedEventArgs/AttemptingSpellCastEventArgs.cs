@@ -1,7 +1,7 @@
 ﻿using System;
 using AOSharp.Common.GameData;
 
-namespace AOSharp.Bootstrap
+namespace AOSharp.Common.SharedEventArgs
 {
     public class AttemptingSpellCastEventArgs : EventArgs
     {

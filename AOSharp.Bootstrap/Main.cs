@@ -384,9 +384,15 @@ namespace AOSharp.Bootstrap
             return specialActionResult;
         }
 
-        private unsafe bool N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, ref Identity identity, ref Identity identity2)
+        private unsafe bool N3EngineClientAnarchy_CastNanoSpell_Hook(IntPtr pThis, ref Identity target, ref Identity spell)
         {
-            return N3EngineClientAnarchy_t.CastNanoSpell(pThis, ref identity, ref identity2);
+            if (_pluginProxy != null)
+            {
+                if(_pluginProxy.AttemptingSpellCast((int)target.Type, target.Instance, (int)spell.Type, spell.Instance))
+                    return false;
+            }
+
+            return N3EngineClientAnarchy_t.CastNanoSpell(pThis, ref target, ref spell);
         }
 
         public void OptionPanelModule_ModuleActivated_Hook(IntPtr pThis, bool unk)

@@ -24,6 +24,7 @@ using SmokeLounge.AOtomation.Messaging.Messages;
 using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using AOSharp.Common.SharedEventArgs;
 
 namespace TestPlugin
 {
@@ -448,6 +449,7 @@ namespace TestPlugin
         private void AttemptingSpellCast(object sender, AttemptingSpellCastEventArgs e)
         {
             Chat.WriteLine($"{e.Nano}, {e.Target}");
+            e.Block();
         }
 
         private void Network_PacketSent(object s, byte[] packet)

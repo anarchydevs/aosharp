@@ -1,5 +1,5 @@
-﻿using System;
-using AOSharp.Bootstrap;
+﻿using AOSharp.Common.SharedEventArgs;
+using System;
 
 namespace AOSharp.Core
 {
