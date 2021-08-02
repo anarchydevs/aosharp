@@ -103,6 +103,7 @@
         HasNotRunningNano = 101,
         HasNotRunningNanoLine = 102,
         HasNotPerk = 103,
+        HasFreeSlots = 106,
         NotBitAnd = 107,
         ObtainedItem = 108,
         OnFightingTarget = 110,

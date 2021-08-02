@@ -147,6 +147,10 @@ namespace AOSharp.Core
                         //TODO: check against actual nano program NCU cost
                         metReq = _criteriaSource.Char.GetStat(Stat.MaxNCU) - _criteriaSource.Char.GetStat(Stat.CurrentNCU) > 0;
                         break;
+                    case UseCriteriaOperator.HasFreeSlots:
+                        //Param2 is amount of slots
+                        metReq = Inventory.Inventory.NumFreeSlots >= criterion.Param2;
+                        break;
                     case UseCriteriaOperator.TestNumPets:
                         Pet[] pets = DynelManager.LocalPlayer.Pets;
                         if (pets.Any(x => x.Type == PetType.Unknown))
