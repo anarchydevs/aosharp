@@ -18,6 +18,8 @@ namespace AOSharp.Core.IPC
 {
     public class IPCChannel
     {
+        private static List<byte> _usedChannels = new List<byte>();
+
         private static IPAddress MulticastIP = IPAddress.Parse("224.0.0.111");
         private static IPEndPoint _localEndPoint = new IPEndPoint(IPAddress.Any, Port);
         private static IPEndPoint _remoteEndPoint = new IPEndPoint(MulticastIP, Port);
@@ -174,6 +176,15 @@ namespace AOSharp.Core.IPC
         internal static void LoadMessages(Assembly assembly)
         {
             _typeInfo.InitializeSubTypesForAssembly(assembly);
+        }
+
+        public bool SetChannelId(byte channelId)
+        {
+            if (_ipcChannels.Any(x => x._channelId == channelId))
+                return false;
+
+            _channelId = channelId;
+            return true;
         }
     }
 }

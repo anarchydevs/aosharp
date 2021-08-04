@@ -391,19 +391,33 @@ namespace TestPlugin
                     }*/
                 });
 
-                _ipcChannel = new IPCChannel(1);
-
-                _ipcChannel.RegisterCallback((int)IPCOpcode.Test, (sender, msg) =>
+                try
                 {
-                    TestMessage testMsg = (TestMessage)msg;
+                    IPCChannel testChannel1 = new IPCChannel(225);
+                    IPCChannel testChannel2 = new IPCChannel(226);
+                    IPCChannel testChannel3 = new IPCChannel(227);
+                    IPCChannel testChannel4 = new IPCChannel(228);
+                    IPCChannel testChannel5 = new IPCChannel(229);
 
-                    Chat.WriteLine($"TestMessage: {testMsg.Leet} - {testMsg.Position}");
-                });
+                    _ipcChannel = new IPCChannel(1);
 
-                _ipcChannel.RegisterCallback((int)IPCOpcode.Empty, (sender, msg) =>
+                    _ipcChannel.RegisterCallback((int)IPCOpcode.Test, (sender, msg) =>
+                    {
+                        TestMessage testMsg = (TestMessage)msg;
+
+                        Chat.WriteLine($"TestMessage: {testMsg.Leet} - {testMsg.Position}");
+                    });
+
+                    _ipcChannel.RegisterCallback((int)IPCOpcode.Empty, (sender, msg) =>
+                    {
+                        Chat.WriteLine($"EmptyMessage");
+                    });
+
+                } 
+                catch (Exception e)
                 {
-                    Chat.WriteLine($"EmptyMessage");
-                });
+                    Chat.WriteLine(e.Message);
+                }
 
                 Settings = new Settings("TestPlugin");
                 Settings.AddVariable("DrawStuff", false);
