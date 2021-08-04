@@ -18,11 +18,9 @@ namespace AOSharp.Core.IPC
 {
     public class IPCChannel
     {
-        private static List<byte> _usedChannels = new List<byte>();
-
         private static IPAddress MulticastIP = IPAddress.Parse("224.0.0.111");
-        private static IPEndPoint _localEndPoint = new IPEndPoint(IPAddress.Any, Port);
-        private static IPEndPoint _remoteEndPoint = new IPEndPoint(MulticastIP, Port);
+        private IPEndPoint _localEndPoint = new IPEndPoint(IPAddress.Any, Port);
+        private IPEndPoint _remoteEndPoint = new IPEndPoint(MulticastIP, Port);
         private const int Port = 1911;
         private const ushort PacketPrefix = 0xFFFF;
 
