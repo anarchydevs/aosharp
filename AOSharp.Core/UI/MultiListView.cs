@@ -8,6 +8,7 @@ using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Interfaces;
+using System.Reflection;
 
 namespace AOSharp.Core.UI
 {
@@ -92,7 +93,7 @@ namespace AOSharp.Core.UI
             if (pSelectedItem == IntPtr.Zero)
                 return false;
 
-            listViewItem = (T)Activator.CreateInstance(typeof(T), pSelectedItem);
+            listViewItem = (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pSelectedItem }, null);
 
             return true;
         }
