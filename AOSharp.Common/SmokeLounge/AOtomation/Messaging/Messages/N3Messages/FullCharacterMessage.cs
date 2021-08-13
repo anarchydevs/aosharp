@@ -14,6 +14,7 @@
 
 namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 {
+    using AOSharp.Common.GameData;
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
@@ -34,7 +35,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         #region AoMember Properties
 
         [AoMember(0)]
-        public int Unknown1 { get; set; }
+        public int Version { get; set; }
 
         [AoMember(1, SerializeSize = ArraySizeType.X3F1)]
         public InventorySlot[] InventorySlots { get; set; }
@@ -43,25 +44,25 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public int[] UploadedNanoIds { get; set; }
 
         [AoMember(3, SerializeSize = ArraySizeType.X3F1)]
-        public object[] Unknown2 { get; set; }
+        public UnknownDataType1[] Unknown2 { get; set; }
 
         [AoMember(4)]
         public int Unknown3 { get; set; }
 
-        [AoMember(5)]
-        public int Unknown4 { get; set; }
+        [AoMember(5, SerializeSize = ArraySizeType.Int32)]
+        public UnknownDataType2[] Unknown4 { get; set; }
 
         [AoMember(6)]
         public int Unknown5 { get; set; }
 
-        [AoMember(7)]
-        public int Unknown6 { get; set; }
+        [AoMember(7, SerializeSize = ArraySizeType.Int32)]
+        public UnknownDataType2[] Unknown6 { get; set; }
 
         [AoMember(8)]
         public int Unknown7 { get; set; }
 
-        [AoMember(9)]
-        public int Unknown8 { get; set; }
+        [AoMember(9, SerializeSize = ArraySizeType.Int32)]
+        public UnknownDataType2[] Unknown8 { get; set; }
 
         [AoMember(10, SerializeSize = ArraySizeType.X3F1)]
         public GameTuple<int, uint>[] Stats1 { get; set; }
@@ -81,15 +82,57 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         [AoMember(15)]
         public int Unknown10 { get; set; }
 
-        [AoMember(16, SerializeSize = ArraySizeType.X3F1)]
-        public object[] Unknown11 { get; set; }
+        [AoMember(16)]
+        public int Unknown11 { get; set; } // Empty 3F1 Array
 
-        [AoMember(17, SerializeSize = ArraySizeType.X3F1)]
-        public object[] Unknown12 { get; set; }
+        [AoMember(17)]
+        public int Unknown12 { get; set; } // Empty 3F1 Array
 
         [AoMember(18, SerializeSize = ArraySizeType.X3F1)]
-        public object[] Unknown13 { get; set; }
+        public Perk[] Perks { get; set; }
 
         #endregion
+
+        public class UnknownDataType1
+        {
+            [AoMember(0)]
+            public byte Unknown1 { get; set; }
+
+            [AoMember(1)]
+            public byte Unknown2 { get; set; }
+
+            [AoMember(2)]
+            public byte Unknown3 { get; set; }
+        }
+
+        public class UnknownDataType2
+        {
+            [AoMember(0)]
+            public int Unknown1 { get; set; }
+
+            [AoMember(1)]
+            public Identity Unknown2 { get; set; }
+
+            [AoMember(2)]
+            public int Unknown3 { get; set; }
+
+            [AoMember(3)]
+            public int Unknown4 { get; set; }
+        }
+
+        public class Perk
+        {
+            [AoMember(0)]
+            public int SkillId { get; set; }
+
+            [AoMember(1)]
+            public int Unknown1 { get; set; }
+
+            [AoMember(2)]
+            public int Unknown2 { get; set; }
+
+            [AoMember(3)]
+            public int Unknown3 { get; set; }
+        }
     }
 }

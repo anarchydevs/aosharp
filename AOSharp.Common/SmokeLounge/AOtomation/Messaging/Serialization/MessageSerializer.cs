@@ -111,7 +111,14 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             var writer = new StreamWriter(stream) { Position = 0 };
             this.headerSerializer.Serialize(writer, serializationContext, message.Header);
             serializer.Serialize(writer, serializationContext, message.Body);
-            var length = writer.Position;
+
+            int length = (int)writer.Position;
+            int padding = length % 4 == 0 ? 0 : 4 - length % 4;
+
+            //Padding
+            for (int i = 0; i < padding; i++)
+                writer.WriteByte(0);
+
             writer.Position = 6;
             writer.WriteInt16((short)length);
         }

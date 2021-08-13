@@ -22,7 +22,7 @@ namespace AOSharp.Core
         {
             Name = Utils.UnsafePointerToString(pointer);
             Identity = (*(MemStruct*)pointer).Identity;
-            Profession = (*(MemStruct*)pointer).Profession;
+            Profession = (Profession)(*(MemStruct*)pointer).Profession;
             Level = (*(MemStruct*)pointer).Level;
             TeamIndex = teamIndex;
         }
@@ -51,7 +51,7 @@ namespace AOSharp.Core
             public short Level;
 
             [FieldOffset(0x2C)]
-            public Profession Profession;
+            public byte Profession;
         }
     }
 }

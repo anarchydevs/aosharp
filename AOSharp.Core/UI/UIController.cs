@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Core.UI
 {
-    internal class UIController
+    public class UIController
     {
+        public static EventHandler<View> ViewDeleted;
+        public static EventHandler<Window> WindowDeleted;
         private static Dictionary<int, View> _trackedViews = new Dictionary<int, View>();
         private static List<Window> _windows = new List<Window>();
 
@@ -18,6 +20,11 @@ namespace AOSharp.Core.UI
                 return;
 
             _trackedViews.Add(view.Handle, view);
+        }
+
+        internal static void UnregisterView(View view)
+        {
+            _trackedViews.Remove(view.Handle);
         }
 
         internal static void AddWindow(Window window)
@@ -73,6 +80,7 @@ namespace AOSharp.Core.UI
             if (!_trackedViews.ContainsKey(view.Handle))
                 return;
 
+            ViewDeleted?.Invoke(null, view);
             _trackedViews.Remove(view.Handle);
         }
 
@@ -83,6 +91,7 @@ namespace AOSharp.Core.UI
             if (window == null)
                 return;
 
+            WindowDeleted?.Invoke(null, window);
             window.IsValid = false;
             _windows.Remove(window);
         }

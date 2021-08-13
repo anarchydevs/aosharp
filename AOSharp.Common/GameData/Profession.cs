@@ -3,7 +3,7 @@ using AOSharp.Common.Helpers;
 
 namespace AOSharp.Common.GameData
 {
-    public enum Profession : byte
+    public enum Profession : uint
     {
         Unknown = 0,
         Soldier = 1,

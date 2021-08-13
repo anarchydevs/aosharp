@@ -33,6 +33,12 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.SystemMessages
         [AoMember(0)]
         public int CharacterId { get; set; }
 
+        [AoMember(1)]
+        public uint Cookie1 { get; set; }
+
+        [AoMember(2)]
+        public uint Cookie2 { get; set; }
+
         #endregion
     }
 }

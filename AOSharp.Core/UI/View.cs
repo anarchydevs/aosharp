@@ -53,6 +53,7 @@ namespace AOSharp.Core.UI
 
         public virtual void Dispose()
         {
+            UIController.UnregisterView(this);
             View_c.Deconstructor(_pointer);
         }
 
