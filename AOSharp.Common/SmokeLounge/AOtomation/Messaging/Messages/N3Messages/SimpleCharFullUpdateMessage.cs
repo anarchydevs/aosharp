@@ -19,6 +19,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
+    using System;
 
     [AoContract((int)N3MessageType.SimpleCharFullUpdate)]
     public class SimpleCharFullUpdateMessage : N3Message
@@ -48,10 +49,10 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Identity? FightingTarget { get; set; }
 
         [AoMember(4)]
-        public Vector3 Coordinates { get; set; }
+        public Vector3 Position { get; set; }
 
         [AoMember(5)]
-        public Quaternion? Heading { get; set; }
+        public Quaternion Heading { get; set; }
 
         [AoMember(6)]
         public Appearance Appearance { get; set; }
@@ -60,7 +61,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public string Name { get; set; }
 
         [AoMember(8)]
-        public DynelFlags CharacterFlags { get; set; }
+        public CharacterFlags CharacterFlags { get; set; }
 
         [AoMember(9)]
         public short AccountFlags { get; set; }
@@ -69,13 +70,13 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public short Expansions { get; set; }
 
         [AoMember(11)]
-        public SimpleCharacterInfo CharacterInfo { get; set; }
+        public SimpleCharInfo CharacterInfo { get; set; }
 
         [AoMember(12)]
         public short Level { get; set; }
 
         [AoMember(13)]
-        public uint Health { get; set; }
+        public int Health { get; set; }
 
         [AoMember(14)]
         public int HealthDamage { get; set; }
@@ -93,16 +94,16 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public byte VisibleTitle { get; set; }
 
         [AoMember(19, SerializeSize = ArraySizeType.Int32)]
-        public byte[] Unknown1 { get; set; }
+        public byte[] ScfuUnk1 { get; set; }
 
         [AoMember(20)]
-        public uint? HeadMesh { get; set; }
+        public int? HeadMesh { get; set; }
 
         [AoMember(21)]
         public short RunSpeedBase { get; set; }
 
         [AoMember(22, SerializeSize = ArraySizeType.X3F1)]
-        public ActiveNano[] ActiveNanos { get; set; }
+        public SimpleCharInfo.ActiveNano[] ActiveNanos { get; set; }
 
         [AoMember(23, SerializeSize = ArraySizeType.X3F1)]
         public Texture[] Textures { get; set; }
@@ -111,11 +112,39 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Mesh[] Meshes { get; set; }
 
         [AoMember(25)]
-        public int Flags2 { get; set; }
+        public ScfuFlags2 Flags2 { get; set; }
 
         [AoMember(26)]
-        public byte Unknown2 { get; set; }
+        public SimpleCharInfo.SpecialAttackData[] SpecialAttacks { get; set; }
+
+        [AoMember(27)]
+        public byte ScfuUnk2 { get; set; }
+
+
+        [AoMember(28)]
+        public float ScfuUnk3 { get; set; }
+
+
+        [AoMember(29)]
+        public byte ScfuUnk4 { get; set; }
+
+
+        [AoMember(26)]
+        public SimpleCharInfo.TextureOverride[] TextureOverrides { get; set; }
 
         #endregion
     }
+
+    [Flags]
+    public enum ScfuFlags2
+    {
+        Unknown1 = 0x2,
+        Unknown2 = 0x4,
+        Unknown3 = 0x40,
+        Unknown4 = 0x80,
+        Unknown5 = 0x100,
+        Unknown6 = 0x200,
+        Unknown7 = 0x400,
+        Unknown8 = 0x800,
+    };
 }

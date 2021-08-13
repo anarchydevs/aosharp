@@ -33,7 +33,7 @@ namespace AOSharp.Core
 
         public bool IsNpc => (*(MemStruct*)Pointer).IsNPC && !IsPet;
 
-        public bool IsPet => Flags.HasFlag(DynelFlags.Pet);
+        public bool IsPet => Flags.HasFlag(CharacterFlags.Pet);
 
         public Profession Profession => (Profession)GetStat(Stat.Profession);
 

@@ -51,7 +51,7 @@
     <Compile Include="GameData\CharacterStatus.cs" />
     <Compile Include="GameData\ChatMessageType.cs" />
     <Compile Include="GameData\DoorState.cs" />
-    <Compile Include="GameData\DynelFlags.cs" />
+    <Compile Include="GameData\CharacterFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\FightMode.cs" />
     <Compile Include="GameData\GroupMessage.cs" />
@@ -87,7 +87,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedEventArgs\GroupMessageEventArgs.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Exceptions\ContractIdCollisionException.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\ActiveNano.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Appearance.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\BankSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\CharacterActionType.cs" />
@@ -103,9 +102,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MonsterInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\NanoEffect.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\PlayfieldVendorInfo.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\SimpleCharacterInfo.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\SimpleNpcInfo.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\SimplePcInfo.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\SimpleCharInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\SpecialAttackInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Texture.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Tower.cs" />

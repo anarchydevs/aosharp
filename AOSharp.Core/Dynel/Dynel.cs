@@ -12,7 +12,7 @@ namespace AOSharp.Core
 
         public unsafe Identity Identity => (*(MemStruct*)Pointer).Identity;
 
-        public DynelFlags Flags => (DynelFlags)GetStat(Stat.Flags);
+        public CharacterFlags Flags => (CharacterFlags)GetStat(Stat.Flags);
 
         public unsafe IntPtr VehiclePointer => new IntPtr((*(MemStruct*)Pointer).Vehicle);
 

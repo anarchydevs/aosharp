@@ -17,9 +17,11 @@ using AOSharp.Common.GameData;
 namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     // TODO: Check the client side of this message for the possibly missing parts.
@@ -59,7 +61,192 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             SerializationContext serializationContext, 
             PropertyMetaData propertyMetaData = null)
         {
-            return new SimpleCharFullUpdateMessage();
+            SimpleCharFullUpdateMessage scfu = new SimpleCharFullUpdateMessage();
+            scfu.N3MessageType = (N3MessageType)streamReader.ReadInt32();
+            scfu.Identity = new Identity
+            {
+                Type = (IdentityType)streamReader.ReadInt32(),
+                Instance = streamReader.ReadInt32()
+            };
+            scfu.Unknown = streamReader.ReadByte();
+            scfu.Version = streamReader.ReadByte();
+            scfu.Flags = (SimpleCharFullUpdateFlags)streamReader.ReadInt32();
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasPlayfieldId))
+                scfu.PlayfieldId = streamReader.ReadInt32();
+
+            scfu.Position = new Vector3(streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle());
+            scfu.Heading = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasHeading) ? new Quaternion(streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle()) : Quaternion.Identity;
+
+            scfu.Appearance = new Appearance() { Value = streamReader.ReadUInt32() };
+            scfu.Name = streamReader.ReadString(streamReader.ReadByte());
+            scfu.CharacterFlags = (CharacterFlags)streamReader.ReadInt32();
+            scfu.AccountFlags = streamReader.ReadInt16();
+            scfu.Expansions = streamReader.ReadInt16();
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.IsNpc))
+            {
+                scfu.CharacterInfo = new SimpleCharInfo.NPCInfo();
+                var snpc = scfu.CharacterInfo as SimpleCharInfo.NPCInfo;
+
+                snpc.Family = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasSmallNpcFamily) ? streamReader.ReadByte() : streamReader.ReadInt16();
+                snpc.LosHeight = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasSmallNpcLosHeight) ? streamReader.ReadByte() : streamReader.ReadInt16();
+
+                if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.UnknownDataFlag))
+                {
+                    streamReader.ReadByte();
+                    streamReader.ReadInt16();
+                }
+            }
+            else
+            {
+                scfu.CharacterInfo = new SimpleCharInfo.PlayerInfo();
+                var spc = scfu.CharacterInfo as SimpleCharInfo.PlayerInfo;
+
+                spc.CurrentNano = streamReader.ReadUInt32();
+                spc.Team = streamReader.ReadInt32();
+                spc.Swim = streamReader.ReadInt16();
+                spc.StrengthBase = streamReader.ReadInt16();
+                spc.AgilityBase = streamReader.ReadInt16();
+                spc.StaminaBase = streamReader.ReadInt16();
+                spc.IntelligenceBase = streamReader.ReadInt16();
+                spc.SenseBase = streamReader.ReadInt16();
+                spc.PsychicBase = streamReader.ReadInt16();
+
+                if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasOrgName))
+                {
+                    streamReader.ReadInt32();
+                    streamReader.ReadByte();
+                }
+
+                if (scfu.CharacterFlags.HasFlag(CharacterFlags.HasVisibleName))
+                {
+                    spc.FirstName = streamReader.ReadString(streamReader.ReadByte());
+                    spc.LastName = streamReader.ReadString(streamReader.ReadByte());
+                }
+
+                if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasOrgName))
+                    spc.OrgName = streamReader.ReadString(streamReader.ReadByte());
+            }
+
+            scfu.Level = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasExtendedLevel) ? streamReader.ReadInt16() : streamReader.ReadByte();
+            scfu.Health = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasSmallHealth) ? streamReader.ReadInt16() : streamReader.ReadInt32();
+            scfu.HealthDamage = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasSmallHealthDamage) ? streamReader.ReadByte() : scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasSmallHealth) ? streamReader.ReadInt16() : streamReader.ReadInt32();
+
+            scfu.MonsterData = streamReader.ReadUInt32();
+            scfu.MonsterScale = streamReader.ReadInt16();
+            scfu.VisualFlags = streamReader.ReadInt16();
+            scfu.VisibleTitle = streamReader.ReadByte();
+
+            scfu.ScfuUnk1 = streamReader.ReadBytes(streamReader.ReadInt32());
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasHeadMesh))
+                scfu.HeadMesh = streamReader.ReadInt32();
+
+            scfu.RunSpeedBase = scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasExtendedRunSpeed) ? streamReader.ReadInt16() : streamReader.ReadByte();
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.IsUnderAttack))
+                scfu.FightingTarget = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32());
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasExtendedTextures))
+            {
+                var len = streamReader.ReadInt32() / 1009 - 1;
+                scfu.TextureOverrides = new SimpleCharInfo.TextureOverride[len];
+                for (var i = 0; i < len; i++)
+                {
+                    var item = new SimpleCharInfo.TextureOverride();
+                    item.Name = System.Text.Encoding.ASCII.GetString(streamReader.ReadBytes(32));
+                    item.TextureId = streamReader.ReadInt32();
+                    item.Unknown1 = streamReader.ReadInt32();
+                    item.Unknown2 = streamReader.ReadInt32();
+                    scfu.TextureOverrides[i] = item;
+                }
+            }
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.IsImmune))
+            {
+                var unk3Byte = streamReader.ReadByte();
+            }
+
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.UnknownFlag3))
+            {
+                var unk3Byte = streamReader.ReadByte();
+            }
+
+            int activeNanoCount = (streamReader.ReadInt32() / 0x3F1) - 1;
+            scfu.ActiveNanos = new SimpleCharInfo.ActiveNano[activeNanoCount];
+            for (var i = 0; i < activeNanoCount; i++)
+            {
+                scfu.ActiveNanos[i] = new SimpleCharInfo.ActiveNano
+                {
+                    Identity = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
+                    NanoInstance = streamReader.ReadInt32(),
+                    Time1 = streamReader.ReadInt32(),
+                    Time2 = streamReader.ReadInt32()
+                };
+            }
+
+            int texturesCount = (streamReader.ReadInt32() / 0x3F1) - 1;
+            var texes = new List<Texture>();
+            for (var i = 0; i < texturesCount; i++)
+            {
+                texes.Add(new Texture()
+                {
+                    Place = streamReader.ReadInt32(),
+                    Id = streamReader.ReadInt32(),
+                    Unknown = streamReader.ReadInt32()
+                });
+            }
+            scfu.Textures = texes.ToArray();
+
+            int meshesCount = (streamReader.ReadInt32() / 0x3F1) - 1;
+            var meshes = new List<Mesh>();
+            for (var i = 0; i < meshesCount; i++)
+            {
+                meshes.Add(new Mesh()
+                {
+                    Position = streamReader.ReadByte(),
+                    Id = streamReader.ReadUInt32(),
+                    OverrideTextureId = streamReader.ReadInt32(),
+                    Layer = streamReader.ReadByte()
+                });
+            }
+            scfu.Meshes = meshes.ToArray();
+
+            scfu.Flags2 = (ScfuFlags2)streamReader.ReadInt32();
+            scfu.ScfuUnk2 = streamReader.ReadByte();
+
+            // We don't know which flag this belongs too. So we match what we know
+            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown3) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown4) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown5) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown6) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown7) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown8))
+            {
+                var count = streamReader.ReadByte();
+                scfu.SpecialAttacks = new SimpleCharInfo.SpecialAttackData[count];
+                for (int i = 0; i < count; i++)
+                {
+                    scfu.SpecialAttacks[i] = new SimpleCharInfo.SpecialAttackData()
+                    {
+                        Unknown1 = streamReader.ReadInt16(),
+                        Unknown2 = streamReader.ReadInt16(),
+                        Unknown3 = streamReader.ReadInt16(),
+                        Unknown4 = streamReader.ReadInt16(),
+                        Unknown5 = streamReader.ReadInt16(),
+                        Name = streamReader.ReadString(4),
+                        Unknown6 = streamReader.ReadInt16(),
+                    };
+                }
+            }
+
+            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown2))
+            {
+                scfu.ScfuUnk3 = streamReader.ReadSingle();
+            }
+
+            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown1))
+            {
+                scfu.ScfuUnk4 = streamReader.ReadByte();
+            }
+
+            return scfu;
         }
 
         public Expression DeserializerExpression(
@@ -94,6 +281,8 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             object value, 
             PropertyMetaData propertyMetaData = null)
         {
+            //Unused but leaving this here for reference if anyone needs.
+            /*
             var scfu = (SimpleCharFullUpdateMessage)value;
 
             // N3Message
@@ -121,9 +310,9 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 streamWriter.WriteInt32(scfu.Identity.Instance);
             }
 
-            streamWriter.WriteSingle(scfu.Coordinates.X);
-            streamWriter.WriteSingle(scfu.Coordinates.Y);
-            streamWriter.WriteSingle(scfu.Coordinates.Z);
+            streamWriter.WriteSingle(scfu.Position.X);
+            streamWriter.WriteSingle(scfu.Position.Y);
+            streamWriter.WriteSingle(scfu.Position.Z);
 
             if (scfu.Heading.HasValue)
             {
@@ -143,32 +332,33 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             streamWriter.WriteInt16(scfu.AccountFlags);
             streamWriter.WriteInt16(scfu.Expansions);
 
-            var snpc = scfu.CharacterInfo as SimpleNpcInfo;
+            var snpc = scfu.CharacterInfo as SimpleCharInfo.NPCInfo;
             if (snpc != null)
             {
                 flags |= SimpleCharFullUpdateFlags.IsNpc;
                 if (snpc.Family > byte.MaxValue)
                 {
-                    flags |= SimpleCharFullUpdateFlags.HasExtendedNpcFamily;
+                    flags |= SimpleCharFullUpdateFlags.HasSmallNpcFamily;
+                    streamWriter.WriteByte((byte)snpc.Family);
                     streamWriter.WriteInt16(snpc.Family);
                 }
                 else
                 {
-                    streamWriter.WriteByte((byte)snpc.Family);
+                    streamWriter.WriteInt16(snpc.Family);
                 }
 
                 if (snpc.LosHeight > byte.MaxValue)
                 {
-                    flags |= SimpleCharFullUpdateFlags.HasExtendedNpcLosHeight;
-                    streamWriter.WriteInt16(snpc.Family);
+                    flags |= SimpleCharFullUpdateFlags.HasSmallNpcLosHeight;
+                    streamWriter.WriteByte((byte)snpc.LosHeight);
                 }
                 else
                 {
-                    streamWriter.WriteByte((byte)snpc.LosHeight);
+                    streamWriter.WriteInt16(snpc.Family);
                 }
             }
 
-            var spc = scfu.CharacterInfo as SimplePcInfo;
+            var spc = scfu.CharacterInfo as SimpleCharInfo.PlayerInfo;
             if (spc != null)
             {
                 streamWriter.WriteUInt32(spc.CurrentNano);
@@ -182,7 +372,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 streamWriter.WriteInt16(spc.SenseBase);
                 streamWriter.WriteInt16(spc.PsychicBase);
 
-                if (scfu.CharacterFlags.HasFlag(DynelFlags.HasVisibleName))
+                if (scfu.CharacterFlags.HasFlag(CharacterFlags.HasVisibleName))
                 {
                     streamWriter.WriteInt16((short)spc.FirstName.Length);
                     streamWriter.WriteString(spc.FirstName);
@@ -240,8 +430,8 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             streamWriter.WriteInt16(scfu.VisualFlags);
             streamWriter.WriteByte(scfu.VisibleTitle);
 
-            streamWriter.WriteInt32(scfu.Unknown1.Length);
-            streamWriter.WriteBytes(scfu.Unknown1);
+            streamWriter.WriteInt32(scfu.ScfuUnk1.Length);
+            streamWriter.WriteBytes(scfu.ScfuUnk1);
 
             if (scfu.HeadMesh.HasValue)
             {
@@ -262,7 +452,8 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             streamWriter.WriteInt32((scfu.ActiveNanos.Length + 1) * 0x3F1);
             foreach (var activeNano in scfu.ActiveNanos)
             {
-                streamWriter.WriteInt32(activeNano.NanoId);
+                streamWriter.WriteInt32((int)activeNano.Identity.Type);
+                streamWriter.WriteInt32(activeNano.Identity.Instance);
                 streamWriter.WriteInt32(activeNano.NanoInstance);
                 streamWriter.WriteInt32(activeNano.Time1);
                 streamWriter.WriteInt32(activeNano.Time2);
@@ -285,13 +476,14 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 streamWriter.WriteByte(mesh.Layer);
             }
 
-            streamWriter.WriteInt32(scfu.Flags2);
-            streamWriter.WriteByte(scfu.Unknown2);
+            streamWriter.WriteInt32((int)scfu.Flags2);
+            streamWriter.WriteByte(scfu.ScfuUnk2);
 
             var pos = streamWriter.Position;
             streamWriter.Position = 30;
             streamWriter.WriteInt32((int)flags);
             streamWriter.Position = pos;
+            */
         }
 
         public Expression SerializerExpression(
