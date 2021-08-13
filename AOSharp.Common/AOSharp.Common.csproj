@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\TowerClass.cs" />
     <Compile Include="SharedEventArgs\AttemptingSpellCastEventArgs.cs" />
     <Compile Include="GameData\ChatColor.cs" />
     <Compile Include="GameData\Breed.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Exceptions\ContractIdCollisionException.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Appearance.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\BankSlot.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\DummyTower.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\CharacterActionType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\CharacterInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\ChatMessage.cs" />
@@ -123,6 +125,8 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldTowerUpdateClient.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldAllTowersMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\DropTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MissedAttackInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PickUpMessage.cs" />
@@ -249,6 +253,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ArraySizeSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ByteSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\BoolSerializer.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\PlayfieldTowerUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\GenericCmdSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldVendorInfoSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\SimpleCharFullUpdateSerializer.cs" />
