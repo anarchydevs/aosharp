@@ -217,6 +217,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessages\ZoneInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessages\ZoneLoginMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessages\ZoneRedirectionMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\PingMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\SystemMessageType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\TextMessageType.cs" />

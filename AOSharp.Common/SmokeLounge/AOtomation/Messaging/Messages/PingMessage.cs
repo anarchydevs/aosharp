@@ -30,5 +30,27 @@ namespace SmokeLounge.AOtomation.Messaging.Messages
         }
 
         #endregion
+
+        #region AoMember Properties
+
+        [AoMember(0)]
+        public PingMessageType PingMessageType { get; set; }
+
+        [AoMember(1)]
+        public int Unk1 { get; set; }
+
+        [AoMember(2)]
+        public uint ServerTime { get; set; }
+
+        [AoMember(3)]
+        public uint UpTime1 { get; set; }
+
+        [AoMember(4)]
+        public uint UpTime2 { get; set; }
+
+        [AoMember(5)]
+        public uint Unk2 { get; set; }
+
+        #endregion
     }
 }
