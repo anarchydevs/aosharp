@@ -25,7 +25,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 updateMessage.Tower = new DummyTower
                 {
                     Identity = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
-                    CharIdentity = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
+                    TowerCharId = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
                     Position = new Vector3(streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle()),
                     MeshId = streamReader.ReadInt32(),
                     Side = (Side)streamReader.ReadInt32(),

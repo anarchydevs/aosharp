@@ -26,7 +26,7 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
         public Identity Identity { get; set; }
 
         [AoMember(1)]
-        public Identity CharIdentity { get; set; }
+        public Identity TowerCharId { get; set; }
 
         [AoMember(2)]
         public Vector3 Position { get; set; }
