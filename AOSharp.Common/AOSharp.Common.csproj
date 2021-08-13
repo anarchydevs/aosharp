@@ -90,7 +90,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Exceptions\ContractIdCollisionException.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\Appearance.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\BankSlot.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\DummyTower.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\CharacterActionType.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\CharacterInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\ChatMessage.cs" />

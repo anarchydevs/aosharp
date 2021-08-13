@@ -35,7 +35,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         #region AoMember Properties
 
         [AoMember(0, SerializeSize = ArraySizeType.X3F1)]
-        public DummyTower[] Towers { get; set; }
+        public TowerInfo[] TowerInfo { get; set; }
 
         #endregion
     }

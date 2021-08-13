@@ -40,7 +40,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public PlayfieldUpdateClientType UpdateType { get; set; }
 
         [AoMember(2, SerializeSize = ArraySizeType.X3F1)]
-        public DummyTower Tower { get; set; }
+        public TowerInfo Tower { get; set; }
 
         #endregion
     }

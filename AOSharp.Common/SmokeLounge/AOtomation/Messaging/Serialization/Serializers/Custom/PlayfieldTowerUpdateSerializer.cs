@@ -22,9 +22,9 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
 
             if (updateMessage.UpdateType == PlayfieldUpdateClientType.Planted)
             {
-                updateMessage.Tower = new DummyTower
+                updateMessage.Tower = new TowerInfo
                 {
-                    Identity = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
+                    PlaceholderId = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
                     TowerCharId = new Identity((IdentityType)streamReader.ReadInt32(), streamReader.ReadInt32()),
                     Position = new Vector3(streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle()),
                     MeshId = streamReader.ReadInt32(),
