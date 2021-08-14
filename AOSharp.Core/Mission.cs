@@ -7,6 +7,7 @@ using AOSharp.Common.Helpers;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System.Linq;
 using AOSharp.Common.Unmanaged.Interfaces;
+using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Core
 {
@@ -49,6 +50,12 @@ namespace AOSharp.Core
                 return null;
 
             return localPlayer.GetMissionList();
+        }
+
+        public void UploadToMap()
+        {
+            Identity identity = Identity;
+            GUIUnk.UploadMissionToMap(ref identity);
         }
 
         public void Delete()

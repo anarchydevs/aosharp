@@ -344,6 +344,7 @@ namespace TestPlugin
                     }
                     */
 
+                    /*
                     Chat.WriteLine($"Number Of Free Inventory Slots: {Inventory.NumFreeSlots}");
 
                     if (Inventory.Find(281267, out Item item1))
@@ -362,6 +363,10 @@ namespace TestPlugin
                     {
                         Chat.WriteLine(perk.MeetsUseReqs());
                     }
+                    */
+
+                    if(Mission.Find("Mission Assignment 7429-323-...", out Mission mission))
+                        mission.UploadToMap(); 
 
                     /*
                     foreach(Pet pet in DynelManager.LocalPlayer.Pets)
