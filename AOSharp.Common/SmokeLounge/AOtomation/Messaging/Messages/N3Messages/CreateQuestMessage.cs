@@ -34,10 +34,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         #region AoMember Properties
 
         [AoMember(0)]
-        public byte Unk { get; set; }
-
-        [AoMember(1)]
-        public Identity Terminal { get; set; }
+        public Identity MissionId { get; set; }
 
         #endregion
     }
