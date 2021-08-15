@@ -54,8 +54,7 @@ namespace AOSharp.Core
 
         public void UploadToMap()
         {
-            Identity identity = Identity;
-            GUIUnk.UploadMissionToMap(ref identity);
+            UploadToMap(Identity);
         }
 
         public void Delete()
@@ -103,6 +102,11 @@ namespace AOSharp.Core
             }
 
             return actions;
+        }
+
+        public static void UploadToMap(Identity missionId)
+        {
+            GUIUnk.UploadMissionToMap(ref missionId);
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0, Size = 0x100)]
