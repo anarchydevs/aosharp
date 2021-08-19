@@ -17,7 +17,7 @@ namespace AOSharp.Common.Unmanaged.DbObjects
 
         public static RDBPlayfield Get(int playfieldId)
         {
-            Identity identity = new Identity(IdentityType.RDBPlayfield, playfieldId);
+            DBIdentity identity = new DBIdentity(DBIdentityType.RDBPlayfield, playfieldId);
             return ResourceDatabase.GetDbObject<RDBPlayfield>(identity);
         }
     }

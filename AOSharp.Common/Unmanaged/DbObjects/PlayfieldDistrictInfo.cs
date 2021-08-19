@@ -17,7 +17,7 @@ namespace AOSharp.Common.Unmanaged.DbObjects
         
         public static PlayfieldDistrictInfo Get(int instance)
         {
-            Identity identity = new Identity(IdentityType.PlayfieldDistrictInfo, instance);
+            DBIdentity identity = new DBIdentity(DBIdentityType.PlayfieldDistrictInfo, instance);
             return ResourceDatabase.GetDbObject<PlayfieldDistrictInfo>(identity);
         }
 

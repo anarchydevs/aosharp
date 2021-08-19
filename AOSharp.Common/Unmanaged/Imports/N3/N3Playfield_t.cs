@@ -33,6 +33,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("N3.dll", EntryPoint = "?GetModelID@n3Playfield_t@@QBEABVIdentity_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern unsafe Identity* GetModelID(IntPtr pThis);
 
+        [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetTilemap@n3Playfield_t@@QBEPBVn3Tilemap_t@@XZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetTilemap(IntPtr pThis);
+
         [DllImport("N3.dll", CharSet = CharSet.Ansi, EntryPoint = "?GetSurface@n3Playfield_t@@QBEPBVSurface_i@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetSurface(IntPtr pThis);
 

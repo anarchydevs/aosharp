@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\Matrix4x4.cs" />
     <Compile Include="GameData\TowerClass.cs" />
     <Compile Include="SharedEventArgs\AttemptingSpellCastEventArgs.cs" />
     <Compile Include="GameData\ChatColor.cs" />
@@ -69,8 +70,7 @@
     <Compile Include="GameData\Fatness.cs" />
     <Compile Include="GameData\Gender.cs" />
     <Compile Include="GameData\Identity.cs" />
-    <Compile Include="GameData\IdentityType.cs" />
-    <Compile Include="GameData\Mesh3D.cs" />
+    <Compile Include="GameData\Mesh.cs" />
     <Compile Include="GameData\MissionEnums.cs" />
     <Compile Include="GameData\MovementAction.cs" />
     <Compile Include="GameData\MoveState.cs" />
@@ -192,7 +192,6 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamMemberMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TemplateActionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAction.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TradeAction.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TradeMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\WeaponItemFullUpdateMessage.cs" />
@@ -285,6 +284,8 @@
     <Compile Include="Unmanaged\DbObjects\DistrictData.cs" />
     <Compile Include="Unmanaged\DbObjects\LandControlMap.cs" />
     <Compile Include="Unmanaged\DbObjects\PlayfieldDistrictInfo.cs" />
+    <Compile Include="Unmanaged\DbObjects\RDBTilemap.cs" />
+    <Compile Include="Unmanaged\DbObjects\SurfaceResource.cs" />
     <Compile Include="Unmanaged\DbObjects\RDBPlayfield.cs" />
     <Compile Include="Unmanaged\Imports\AFCM\DynamicID_t.cs" />
     <Compile Include="Unmanaged\Imports\Connection\Connection_t.cs" />

@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.DbObjects;
 
 namespace AOSharp.Core
 {
@@ -54,6 +55,16 @@ namespace AOSharp.Core
         ///Get rooms for playfield if in a dungeon.
         ///</summary>
         public static List<Room> Rooms => GetRooms();
+
+        ///<summary>
+        ///Get Tilemap for playfield
+        ///</summary>
+        public static IntPtr TileMapPtr => GetTilemap();
+
+        ///<summary>
+        ///Get RDBTilemap for playfield
+        ///</summary>
+        public static RDBTilemap RDBTilemap => GetRDBTilemap();
 
         public static IEnumerable<Door> Doors => DynelManager.Doors;
 
@@ -191,6 +202,21 @@ namespace AOSharp.Core
             return N3Playfield_t.GetSurface(pPlayfield);
         }
 
+        internal static IntPtr GetTilemap()
+        {
+            IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
+
+            if (pPlayfield == IntPtr.Zero)
+                return IntPtr.Zero;
+
+            return N3Playfield_t.GetTilemap(pPlayfield);
+        }
+
+        internal static RDBTilemap GetRDBTilemap()
+        {
+            return RDBTilemap.FromPointer(((Tilemap_MemStruct*)TileMapPtr)->RDBTilemapPtr);
+        }
+
         internal static bool IsDoorOpenBetweenRooms(short roomInst1, short roomInst2)
         {
             IntPtr pPlayfield = N3EngineClient_t.GetPlayfield();
@@ -202,6 +228,13 @@ namespace AOSharp.Core
         {
             [FieldOffset(0x30)]
             public StdObjVector Dynels;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        private struct Tilemap_MemStruct
+        {
+            [FieldOffset(0x0C)]
+            public IntPtr RDBTilemapPtr;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace AOSharp.Core.UI
     public class View
     {
         public readonly string Name;
-        public readonly int Handle;
+        public unsafe int Handle => *(int*)(_pointer + 0x44);
         public object Tag;
 
         protected readonly IntPtr _pointer;
@@ -22,10 +22,9 @@ namespace AOSharp.Core.UI
             }
         }
 
-        internal unsafe View(IntPtr pointer, bool register = true)
+        internal View(IntPtr pointer, bool register = true)
         {
             _pointer = pointer;
-            Handle = *(int*)(_pointer + 0x44);
             Name = "idk";
             //Name = StdString.FromPointer(*(IntPtr*)(_pointer + 0x20)).ToString();
 

@@ -21,7 +21,7 @@ namespace AOSharp.Common.Unmanaged.DbObjects
 
         public static LandControlMap Get(int playfieldId)
         {
-            Identity identity = new Identity(IdentityType.LandControlMap, playfieldId);
+            DBIdentity identity = new DBIdentity(DBIdentityType.LandControlMap, playfieldId);
             return ResourceDatabase.GetDbObject<LandControlMap>(identity);
         }
         

@@ -12,7 +12,7 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 {
     public class ResourceDatabase
     {
-        public static IntPtr GetDbObject(Identity identity)
+        public static IntPtr GetDbObject(DBIdentity identity)
         {
             IntPtr pDatabaseHandler = N3DatabaseHandler_t.Get();
             IntPtr pResourceDatabase = N3DatabaseHandler_t.GetResourceDatabase(pDatabaseHandler);
@@ -20,17 +20,13 @@ namespace AOSharp.Common.Unmanaged.Interfaces
             return ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity);
         }
 
-        public static T GetDbObject<T>(Identity identity) where T : DbObject
+        public static T GetDbObject<T>(DBIdentity identity) where T : DbObject
         {
             IntPtr pDatabaseHandler = N3DatabaseHandler_t.Get();
             IntPtr pResourceDatabase = N3DatabaseHandler_t.GetResourceDatabase(pDatabaseHandler);
 
-
             if (typeof(T) == typeof(PlayfieldDistrictInfo))
-            {
                 return (T)(object) new PlayfieldDistrictInfo(GetDbObject(identity));
-            }
-                return (T)(object) new PlayfieldDistrictInfo(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
 
             if (typeof(T) == typeof(LandControlMap))
                 return (T) (object) new LandControlMap(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
@@ -38,10 +34,16 @@ namespace AOSharp.Common.Unmanaged.Interfaces
             if (typeof(T) == typeof(RDBPlayfield))
                 return (T) (object) new RDBPlayfield(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
 
+            if (typeof(T) == typeof(SurfaceResource))
+                return (T)(object)new SurfaceResource(GetDbObject(identity));
+
+            if (typeof(T) == typeof(RDBTilemap))
+                return (T)(object)new RDBTilemap(GetDbObject(identity));
+
             throw new ArgumentException();
         }
 
-        public static void PutDbBlob(Identity identity, byte[] blobData)
+        public static void PutDbBlob(DBIdentity identity, byte[] blobData)
         {
             IntPtr pDatabaseHandler = N3DatabaseHandler_t.Get();
             IntPtr pResourceDatabase = N3DatabaseHandler_t.GetResourceDatabase(pDatabaseHandler);
