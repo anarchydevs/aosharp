@@ -80,7 +80,7 @@
     <Compile Include="GameData\Rect.cs" />
     <Compile Include="GameData\CanFlags.cs" />
     <Compile Include="GameData\Stat.cs" />
-    <Compile Include="GameData\TradeAction.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TradeAction.cs" />
     <Compile Include="GameData\Vector2.cs" />
     <Compile Include="GameData\Vector3.cs" />
     <Compile Include="Helpers\BitFlag.cs" />

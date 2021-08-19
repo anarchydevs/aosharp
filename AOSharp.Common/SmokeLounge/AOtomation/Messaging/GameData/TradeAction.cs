@@ -1,4 +1,4 @@
-﻿namespace AOSharp.Common.GameData
+﻿namespace SmokeLounge.AOtomation.Messaging.GameData
 {
     public enum TradeAction
     {
