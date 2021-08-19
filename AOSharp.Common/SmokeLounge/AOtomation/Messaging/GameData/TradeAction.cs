@@ -1,6 +1,6 @@
 ﻿namespace SmokeLounge.AOtomation.Messaging.GameData
 {
-    public enum TradeAction
+    public enum TradeAction : byte
     {
         None = 0,
         Accept = 1,
