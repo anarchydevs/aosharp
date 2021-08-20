@@ -22,6 +22,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?AppendView@ViewSelector_c@@QAEXPAVView@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void AppendView(IntPtr pThis, IntPtr pView);
 
+        [DllImport("GUI.dll", EntryPoint = "?SetValue@ViewSelector_c@@UAEXABVVariant@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SetValue(IntPtr pThis, IntPtr pVar, bool unk);
+
         public static unsafe IntPtr Create(Rect rect, string name, int unk1, int unk2, int unk3)
         {
             StdString nameStr = StdString.Create(name);

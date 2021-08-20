@@ -76,6 +76,11 @@ namespace AOSharp.Core.UI
             View_c.RemoveChild(_pointer, view.Pointer);
         }
 
+        public void DeleteAllChildren()
+        {
+            View_c.DeleteAllChildren(_pointer);
+        }
+
         public bool FindChild<T>(string name, out T view, bool recursive = true) where T : View
         {
             view = null;

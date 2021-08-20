@@ -1,5 +1,6 @@
 ﻿using System;
 using AOSharp.Common.GameData;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Core.UI
@@ -28,6 +29,11 @@ namespace AOSharp.Core.UI
         public override void Dispose()
         {
             ViewSelector_c.Deconstructor(_pointer);
+        }
+
+        public void SetView(View view)
+        {
+            ViewSelector_c.SetValue(Pointer, Variant.Create(view.Handle).Pointer, true);
         }
 
         public void SetListView(ListViewBase listViewBase)

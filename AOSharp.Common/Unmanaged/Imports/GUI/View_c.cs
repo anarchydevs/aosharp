@@ -20,6 +20,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?RemoveChild@View@@QAEXPAV1@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void RemoveChild(IntPtr pThis, IntPtr pView);
 
+        [DllImport("GUI.dll", EntryPoint = "?DeleteAllChildren@View@@QAEXXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void DeleteAllChildren(IntPtr pThis);
+
         [DllImport("GUI.dll", EntryPoint = "?FindChild@View@@QAEPAV1@PBD_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr FindChild(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string name, bool unk);
 
