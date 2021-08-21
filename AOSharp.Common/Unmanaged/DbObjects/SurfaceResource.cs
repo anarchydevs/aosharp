@@ -61,7 +61,11 @@ namespace AOSharp.Common.Unmanaged.DbObjects
                     }
                 }
 
-                meshes.Add(new Mesh(vertices.ToArray(), triangles.ToArray()));
+                meshes.Add(new Mesh
+                {
+                    Vertices = vertices,
+                    Triangles = triangles
+                });
             }
 
             return meshes;

@@ -67,5 +67,33 @@ namespace AOSharp.Core
         {
             return pets.Select(x => x.Identity).Contains(identity);
         }
+
+        public static void Draw(this Mesh mesh, float maxDrawDist)
+        {
+            for (int j = 0; j < mesh.Triangles.Count / 3; j++)
+            {
+                int tri = j * 3;
+                for (int k = 0; k < 3; k++)
+                {
+                    int tri1 = mesh.Triangles[tri];
+                    int tri2 = mesh.Triangles[tri + 1];
+                    int tri3 = mesh.Triangles[tri + 2];
+
+                    Vector3[] verts = new Vector3[3]
+                    {
+                        mesh.LocalToWorldMatrix.MultiplyPoint3x4(mesh.Vertices[tri1]),
+                        mesh.LocalToWorldMatrix.MultiplyPoint3x4(mesh.Vertices[tri2]),
+                        mesh.LocalToWorldMatrix.MultiplyPoint3x4(mesh.Vertices[tri3])
+                    };
+
+                    if (verts.Any(x => Vector3.Distance(x, DynelManager.LocalPlayer.Position) > maxDrawDist))
+                        continue;
+
+                    Debug.DrawLine(verts[0], verts[1], DebuggingColor.Green);
+                    Debug.DrawLine(verts[1], verts[2], DebuggingColor.Green);
+                    Debug.DrawLine(verts[2], verts[0], DebuggingColor.Green);
+                }
+            }
+        }
     }
 }

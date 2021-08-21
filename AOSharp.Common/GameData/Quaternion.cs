@@ -24,7 +24,7 @@ namespace AOSharp.Common.GameData
 
         public Vector3 Forward => this * Vector3.Forward;
 
-        public static Quaternion Identity => new Quaternion(0, 0, 0, 0);
+        public static Quaternion Identity => new Quaternion(0, 0, 0, 1f);
 
         #region Constructor
 

@@ -22,25 +22,12 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
         public static T GetDbObject<T>(DBIdentity identity) where T : DbObject
         {
-            IntPtr pDatabaseHandler = N3DatabaseHandler_t.Get();
-            IntPtr pResourceDatabase = N3DatabaseHandler_t.GetResourceDatabase(pDatabaseHandler);
+            IntPtr pDbObj = GetDbObject(identity);
 
-            if (typeof(T) == typeof(PlayfieldDistrictInfo))
-                return (T)(object) new PlayfieldDistrictInfo(GetDbObject(identity));
+            if(pDbObj == IntPtr.Zero)
+                return null;
 
-            if (typeof(T) == typeof(LandControlMap))
-                return (T) (object) new LandControlMap(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
-
-            if (typeof(T) == typeof(RDBPlayfield))
-                return (T) (object) new RDBPlayfield(ResourceDatabase_t.GetDbObject(pResourceDatabase, ref identity));
-
-            if (typeof(T) == typeof(SurfaceResource))
-                return (T)(object)new SurfaceResource(GetDbObject(identity));
-
-            if (typeof(T) == typeof(RDBTilemap))
-                return (T)(object)new RDBTilemap(GetDbObject(identity));
-
-            throw new ArgumentException();
+            return (T)Activator.CreateInstance(typeof(T), pDbObj);
         }
 
         public static void PutDbBlob(DBIdentity identity, byte[] blobData)

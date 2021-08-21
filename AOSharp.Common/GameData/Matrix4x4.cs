@@ -19,6 +19,16 @@
         public float m23;
         public float m33;
 
+        public Vector3 MultiplyPoint3x4(Vector3 point)
+        {
+            return new Vector3
+            {
+                X = this.m00 * point.X + this.m01 * point.Y + this.m02 * point.Z + this.m03,
+                Y = this.m10 * point.X + this.m11 * point.Y + this.m12 * point.Z + this.m13,
+                Z = this.m20 * point.X + this.m21 * point.Y + this.m22 * point.Z + this.m23,
+            };
+        }
+
         public Vector3 MultiplyPoint(Vector3 point)
         {
             Vector3 res = Vector3.Zero;
