@@ -62,7 +62,6 @@ namespace AOSharp.Recast
                         task.Run();
                         tiles.Add(task.Result);
                         maxPolys = Math.Max(maxPolys, task.Result.PolyCount);
-                        Chat.WriteLine($"BuildTaskCreated ({x}, {z})");
                     });
                 });
 
