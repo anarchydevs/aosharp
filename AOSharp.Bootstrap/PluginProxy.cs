@@ -55,6 +55,8 @@ namespace AOSharp.Bootstrap
         public ContainerOpenedDelegate ContainerOpened;
         public delegate void ButtonPressedDelegate(IntPtr pButton);
         public ButtonPressedDelegate ButtonPressed;
+        public delegate void CheckBoxToggledDelegate(IntPtr pCheckBox, bool enabled);
+        public CheckBoxToggledDelegate CheckBoxToggled;
     }
 
     public class PluginProxy : MarshalByRefObject
@@ -97,6 +99,8 @@ namespace AOSharp.Bootstrap
         public void ContainerOpened(int type, int id) => _coreDelegates?.ContainerOpened?.Invoke(new Identity((IdentityType)type, id));
 
         public void ButtonPressed(IntPtr pButton) => _coreDelegates?.ButtonPressed?.Invoke(pButton);
+
+        public void CheckBoxToggled(IntPtr pCheckBox, bool enabled) => _coreDelegates?.CheckBoxToggled?.Invoke(pCheckBox, enabled);
 
         public unsafe bool AttemptingSpellCast(int targetType, int targetId, int spellType, int spellId)
         {
@@ -162,7 +166,8 @@ namespace AOSharp.Bootstrap
                 UnknownChatCommand = CreateDelegate<CoreDelegates.UnknownCommandDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnUnknownCommand"),
                 HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage"),
                 ContainerOpened = CreateDelegate<CoreDelegates.ContainerOpenedDelegate>(assembly, "AOSharp.Core.Inventory.Inventory", "OnContainerOpened"),
-                ButtonPressed = CreateDelegate<CoreDelegates.ButtonPressedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnButtonPressed")
+                ButtonPressed = CreateDelegate<CoreDelegates.ButtonPressedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnButtonPressed"),
+                CheckBoxToggled = CreateDelegate<CoreDelegates.CheckBoxToggledDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnCheckBoxToggled")
             };
 
             _coreDelegates.Init();

@@ -183,6 +183,10 @@ namespace AOSharp.Bootstrap
                         "?SetValue@ButtonBase_c@@UAEXABVVariant@@_N@Z",
                         new ButtonBase_c.DSetValue(ButtonBase_SetValue_Hook));
 
+            CreateHook("GUI.dll",
+                        "?SlotButtonToggled@CheckBox_c@@AAEX_N@Z",
+                        new CheckBox_c.DSlotButtonToggled(CheckBox_SlotButtonToggled_Hook));
+
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
@@ -234,6 +238,13 @@ namespace AOSharp.Bootstrap
             }
 
             return bytesRead;
+        }
+
+        public void CheckBox_SlotButtonToggled_Hook(IntPtr pThis, bool enabled)
+        {
+            _pluginProxy?.CheckBoxToggled(pThis, enabled);
+
+            CheckBox_c.SlotButtonToggled(pThis, enabled);
         }
 
         public void ButtonBase_SetValue_Hook(IntPtr pThis, IntPtr pVariant, bool unk)

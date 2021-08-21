@@ -20,9 +20,9 @@ namespace AOSharp.Core.UI.Options
         {
             Checkbox checkbox = Checkbox.Create(Name, DisplayName, Value, true);
 
-            checkbox.CheckChanged += (sender, e) =>
+            checkbox.Toggled += (sender, enabled) =>
             {
-                Value = e.Checked;
+                Value = enabled;
             };
 
             return checkbox;

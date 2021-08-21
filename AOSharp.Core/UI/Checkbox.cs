@@ -9,13 +9,10 @@ namespace AOSharp.Core.UI
     {
         public bool IsChecked => GetIsChecked();
 
-        public event EventHandler<CheckChangedEventArgs> CheckChanged;
-
-        private bool _prevValue;
+        public EventHandler<bool> Toggled;
 
         internal Checkbox(IntPtr pointer, bool track = false) : base(pointer, track)
         {
-            _prevValue = IsChecked;
         }
 
         public static Checkbox Create(string name, string text, bool defaultValue, bool horizontalSpacer = false)
@@ -38,17 +35,6 @@ namespace AOSharp.Core.UI
             CheckBox_c.SetValue(Pointer, Variant.Create(value).Pointer, value);
         }
 
-        public override void Update()
-        {
-            bool currentValue = IsChecked;
-
-            if (currentValue != _prevValue)
-            {
-                CheckChanged?.Invoke(this, new CheckChangedEventArgs(currentValue));
-                _prevValue = currentValue;
-            }
-        }
-
         private unsafe bool GetIsChecked()
         {
             Variant pOutput = Variant.Create(false);
@@ -57,16 +43,6 @@ namespace AOSharp.Core.UI
             pOutput.Dispose();
 
             return result;
-        }
-
-        public class CheckChangedEventArgs : EventArgs
-        {
-            public readonly bool Checked;
-
-            public CheckChangedEventArgs(bool _checked)
-            {
-                Checked = _checked;
-            }
         }
     }
 }

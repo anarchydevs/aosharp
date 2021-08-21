@@ -6,6 +6,12 @@ namespace AOSharp.Core.UI
 {
     public class SliderView : View
     {
+        public float Value
+        {
+            get => GetValue();
+            set => SetValue(value);
+        }
+
         protected SliderView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }

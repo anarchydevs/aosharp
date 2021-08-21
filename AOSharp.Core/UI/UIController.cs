@@ -63,6 +63,16 @@ namespace AOSharp.Core.UI
                 window.Close();
         }
 
+        private static void OnCheckBoxToggled(IntPtr pCheckBox, bool enabled)
+        {
+            Checkbox checkBox = _trackedViews.Values.FirstOrDefault(x => x is Checkbox && x.Pointer == pCheckBox) as Checkbox;
+
+            if (checkBox == null)
+                return;
+
+            checkBox.Toggled?.Invoke(checkBox, enabled);
+        }
+
         private static void OnButtonPressed(IntPtr pButton)
         {
             ButtonBase button = _trackedViews.Values.FirstOrDefault(x => x is ButtonBase && x.Pointer == pButton) as ButtonBase;

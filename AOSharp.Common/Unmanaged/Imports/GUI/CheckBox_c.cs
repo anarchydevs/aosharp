@@ -20,6 +20,11 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?SetValue@CheckBox_c@@UAEXABVVariant@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetValue(IntPtr pThis, IntPtr pVariant, bool unk);
 
+        [DllImport("GUI.dll", EntryPoint = "?SlotButtonToggled@CheckBox_c@@AAEX_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void SlotButtonToggled(IntPtr pThis, bool enabled);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        public delegate void DSlotButtonToggled(IntPtr pThis, bool enabled);
+
         public static IntPtr Create(string name, string text, bool defaultValue, bool horizontalSpacer)
         {
             IntPtr pNew = MSVCR100.New(0x158);
