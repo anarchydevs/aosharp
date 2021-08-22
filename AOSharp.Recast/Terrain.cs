@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.DbObjects;
 using AOSharp.Core;
+using AOSharp.Core.UI;
 
 namespace AOSharp.Recast
 {
@@ -133,7 +134,7 @@ namespace AOSharp.Recast
             int numVertices = hCount * vCount;
 
             Vector3[] vertices = new Vector3[numVertices];
-            int[] indices = new int[numTriangles];
+            List<int> indices = new List<int>();
 
             Vector3 anchorOffset = new Vector3(1, 0, 1);
             anchorOffset.X += (room.Center.X - (float)numWidthTiles / 2) * tilemap.TileSize;
@@ -144,7 +145,7 @@ namespace AOSharp.Recast
             {
                 for (int x = 0; x < hCount; x++)
                 {
-                    byte height = tilemap.DungeonHeightmap[x + (int)room.LocalRect.MinX - 1, z + (int)room.LocalRect.MinY - 1];
+                    byte height = tilemap.Heightmap[x + (int)room.LocalRect.MinX - 1, z + (int)room.LocalRect.MinY - 1];
 
                     Vector3 vertex = new Vector3
                     {
@@ -160,30 +161,54 @@ namespace AOSharp.Recast
             }
 
             idx = 0;
-            for (int y = 0; y < numHeightTiles; y++)
+            for (int z = 0; z < numHeightTiles; z++)
             {
                 for (int x = 0; x < numWidthTiles; x++)
                 {
-                    //uint pixelArgb = (uint)mask.GetPixel(x + room.TileX1, y + room.TileY1).ToArgb();
+                    byte tileCollisionData = tilemap.CollisionData[x + (int)room.LocalRect.MinX, z + (int)room.LocalRect.MinY];
 
-                    //if (pixelArgb > 0xFF000000 && pixelArgb != 0xFF808080)
-                    //{
-                    indices[idx] = (y * hCount) + x;
-                    indices[idx + 1] = ((y + 1) * hCount) + x;
-                    indices[idx + 2] = (y * hCount) + x + 1;
+                    if (tileCollisionData > 0 && tileCollisionData != 0x80)
+                    {
+                        indices.Add((z * hCount) + x);
+                        indices.Add(((z + 1) * hCount) + x);
+                        indices.Add((z * hCount) + x + 1);
 
-                    indices[idx + 3] = ((y + 1) * hCount) + x;
-                    indices[idx + 4] = ((y + 1) * hCount) + x + 1;
-                    indices[idx + 5] = (y * hCount) + x + 1;
-                    //}
+                        indices.Add(((z + 1) * hCount) + x);
+                        indices.Add(((z + 1) * hCount) + x + 1);
+                        indices.Add((z * hCount) + x + 1);
+                    }
                     idx += 6;
+                }
+            }
+
+
+            List<Vector3> optimizedVerts = vertices.ToList();
+            List<int> optimizedIndices = indices;
+
+            int testVertex = 0;
+
+            while (testVertex < optimizedVerts.Count)
+            {
+                if (optimizedIndices.Contains(testVertex))
+                {
+                    testVertex++;
+                }
+                else
+                {
+                    optimizedVerts.RemoveAt(testVertex);
+
+                    for (int i = 0; i < optimizedIndices.Count; i++)
+                    {
+                        if (optimizedIndices[i] > testVertex)
+                            optimizedIndices[i]--;
+                    }
                 }
             }
 
             return new Mesh
             {
-                Triangles = indices.ToList(),
-                Vertices = vertices.ToList(),
+                Triangles = optimizedIndices,
+                Vertices = optimizedVerts,
                 Position = room.Position - new Vector3(0, room.YOffset, 0),
                 Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, room.Rotation * (Math.PI / 180)),
                 Scale = new Vector3(1, 1, 1)

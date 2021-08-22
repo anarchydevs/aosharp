@@ -28,7 +28,7 @@ namespace AOSharp.Recast
                                                     Terrain.CreateFromCurrentPlayfield();
                 
                 List<SurfaceResource> surfaces = Playfield.IsDungeon ? 
-                                                    Playfield.Rooms.Where(x => x.Floor == 0).Select(x => x.SurfaceResource).ToList() : 
+                                                    Playfield.Rooms.Select(x => x.SurfaceResource).ToList() : 
                                                     Playfield.Zones.Select(x => SurfaceResource.Get(Playfield.ModelIdentity.Instance << 16 | x.Instance)).ToList();
 
                 TriangleMesh triMesh = CreateTriangleMesh(terrainChunks, surfaces);
@@ -52,7 +52,7 @@ namespace AOSharp.Recast
                 {
                     Parallel.For(0, tdef.Depth, z =>
                     {
-                        IncrementalBuilder builder = IncrementalBuilder.Create(x, z, NMGenAssetFlag.PolyMesh | NMGenAssetFlag.DetailMesh, tdef, ProcessorSet.CreateStandard(ProcessorSet.StandardOptions));
+                        IncrementalBuilder builder = IncrementalBuilder.Create(x, z, NMGenAssetFlag.PolyMesh /*| NMGenAssetFlag.DetailMesh*/, tdef, ProcessorSet.CreateStandard(ProcessorSet.StandardOptions));
                         builder.BuildAll();
 
                         switch (builder.State)
@@ -65,7 +65,7 @@ namespace AOSharp.Recast
                         }
 
                         NMGenAssets assets = builder.Result;
-                        TileBuildTask task = TileBuildTask.Create(x, z, assets.PolyMesh.GetData(false), assets.DetailMesh.GetData(false), ConnectionSet.CreateEmpty(), false, false, 0);
+                        TileBuildTask task = TileBuildTask.Create(x, z, assets.PolyMesh.GetData(false), null/*assets.DetailMesh.GetData(false)*/, ConnectionSet.CreateEmpty(), false, false, 0);
                         task.Run();
                         tiles.Add(task.Result);
                         maxPolys = Math.Max(maxPolys, task.Result.PolyCount);

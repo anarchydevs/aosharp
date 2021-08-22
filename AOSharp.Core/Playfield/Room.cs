@@ -18,6 +18,7 @@ namespace AOSharp.Core
         public unsafe Vector3 Center => *N3Room_t.GetCenter(Pointer);
         public unsafe Vector3 TemplatePos => (*(MemStruct*)Pointer).TemplatePos;
         public float Rotation => N3Room_t.GetRot(Pointer);
+        public unsafe float TemplateRotation => (*(MemStruct*)Pointer).TemplateRot * 90f;
         public unsafe float YOffset => (*(MemStruct*)Pointer).YOffset;
         public int NumDoors => N3Room_t.GetNumDoors(Pointer);
         public int Floor => N3Room_t.GetFloor(Pointer);
@@ -47,7 +48,7 @@ namespace AOSharp.Core
             {
                 mesh.Vertices = mesh.Vertices.Select(x => new Vector3(TemplatePos.X - x.X, x.Y - TemplatePos.Y, TemplatePos.Z - x.Z)).ToList();
                 mesh.Position = Position;
-                mesh.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (Rotation - 180f) * (Math.PI / 180));
+                mesh.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (Rotation - TemplateRotation + 180f) * (Math.PI / 180));
             }
 
             return surface;
@@ -58,6 +59,9 @@ namespace AOSharp.Core
         {
             [FieldOffset(0x38)]
             public float YOffset;
+
+            [FieldOffset(0x44)]
+            public byte TemplateRot;
 
             [FieldOffset(0x48)]
             public short TileX1;

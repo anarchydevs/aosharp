@@ -92,5 +92,11 @@ namespace AOSharp.Core
                 Debug.DrawLine(verts[2], verts[0], DebuggingColor.Green);
             }
         }
+
+        public static void DrawVertices(this Mesh mesh, float maxDrawDist)
+        {
+            foreach(Vector3 vert in mesh.Vertices)
+                Debug.DrawSphere(mesh.LocalToWorldMatrix.MultiplyPoint3x4(vert), 0.1f, DebuggingColor.Red);
+        }
     }
 }

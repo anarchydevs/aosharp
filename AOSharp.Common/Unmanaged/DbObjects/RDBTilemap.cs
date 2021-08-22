@@ -15,7 +15,9 @@ namespace AOSharp.Common.Unmanaged.DbObjects
     public class DungeonRDBTilemap : RDBTilemap
     {
         public unsafe IntPtr DungeonHeightmapPtr => ((RDBTilemapMemStruct*)Pointer)->DungeonHeightmapPtr;
-        public byte[,] DungeonHeightmap;
+        public unsafe IntPtr CollisionDataPtr => ((RDBTilemapMemStruct*)Pointer)->CollisionDataPtr;
+        public byte[,] Heightmap;
+        public byte[,] CollisionData;
 
         internal unsafe DungeonRDBTilemap(IntPtr pointer) : base(pointer)
         {
@@ -39,11 +41,23 @@ namespace AOSharp.Common.Unmanaged.DbObjects
             {
                 using (BinaryReader reader = new BinaryReader(unmanagedMemStream))
                 {
-                    DungeonHeightmap = new byte[Width, Height];
+                    Heightmap = new byte[Width, Height];
 
                     for (int y = 0; y < Height; y++)
                         for (int x = 0; x < Width; x++)
-                            DungeonHeightmap[x, y] = reader.ReadByte();
+                            Heightmap[x, y] = reader.ReadByte();
+                }
+            }
+
+            using (UnmanagedMemoryStream unmanagedMemStream = new UnmanagedMemoryStream((byte*)CollisionDataPtr.ToPointer(), Width * Height))
+            {
+                using (BinaryReader reader = new BinaryReader(unmanagedMemStream))
+                {
+                    CollisionData = new byte[Width, Height];
+
+                    for (int y = 0; y < Height; y++)
+                        for (int x = 0; x < Width; x++)
+                            CollisionData[x, y] = reader.ReadByte();
                 }
             }
         }
@@ -232,6 +246,9 @@ namespace AOSharp.Common.Unmanaged.DbObjects
 
             [FieldOffset(0x1C)]
             public float HeightmapScale;
+
+            [FieldOffset(0x20)]
+            public IntPtr CollisionDataPtr;
 
             [FieldOffset(0x228)]
             public IntPtr DungeonHeightmapPtr;

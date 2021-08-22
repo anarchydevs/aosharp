@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewNavmeshMovementController.cs" />
     <Compile Include="NavMeshMovementController.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Pathfinder.cs" />
