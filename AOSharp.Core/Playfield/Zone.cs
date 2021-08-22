@@ -1,4 +1,5 @@
-﻿using AOSharp.Common.Unmanaged.Imports;
+﻿using AOSharp.Common.Unmanaged.DbObjects;
+using AOSharp.Common.Unmanaged.Imports;
 using System;
 
 namespace AOSharp.Core
@@ -6,6 +7,7 @@ namespace AOSharp.Core
     public class Zone : IEquatable<Zone>
     {
         public int Instance => N3Zone_t.GetInstance(Pointer);
+        public virtual SurfaceResource SurfaceResource => SurfaceResource.FromPointer(N3Zone_t.GetSurface(Pointer));
 
         public readonly IntPtr Pointer;
 

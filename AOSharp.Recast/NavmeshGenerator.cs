@@ -23,8 +23,13 @@ namespace AOSharp.Recast
         {
             return await Task.Run(() =>
             {
-                List<Mesh> terrainChunks = Terrain.CreateFromTilemap(Playfield.RDBTilemap);
-                List<SurfaceResource> surfaces = Playfield.Zones.Select(x => SurfaceResource.Get(Playfield.ModelIdentity.Instance << 16 | x.Instance)).ToList();
+                List<Mesh> terrainChunks = Playfield.IsDungeon ?
+                                                    DungeonTerrain.CreateFromCurrentPlayfield() : 
+                                                    Terrain.CreateFromCurrentPlayfield();
+                
+                List<SurfaceResource> surfaces = Playfield.IsDungeon ? 
+                                                    Playfield.Rooms.Where(x => x.Floor == 0).Select(x => x.SurfaceResource).ToList() : 
+                                                    Playfield.Zones.Select(x => SurfaceResource.Get(Playfield.ModelIdentity.Instance << 16 | x.Instance)).ToList();
 
                 TriangleMesh triMesh = CreateTriangleMesh(terrainChunks, surfaces);
 
@@ -55,6 +60,8 @@ namespace AOSharp.Recast
                             case NMGenState.Aborted:
                                 //Is this fatal??
                                 throw new Exception($"MultiTile Creation aborted");
+                            case NMGenState.NoResult:
+                                return;
                         }
 
                         NMGenAssets assets = builder.Result;
@@ -115,7 +122,7 @@ namespace AOSharp.Recast
 
                     foreach (var vert in mesh.Vertices)
                     {
-                        verts.Add(vert.ToCAIVector3());
+                        verts.Add(mesh.LocalToWorldMatrix.MultiplyPoint3x4(vert).ToCAIVector3());
                         numVerts++;
                     }
                 }

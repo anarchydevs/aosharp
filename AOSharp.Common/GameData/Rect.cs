@@ -33,5 +33,10 @@ namespace AOSharp.Common.GameData
         {
             return Pos.X > MinX && Pos.X < MaxX && Pos.Z > MinY && Pos.Z < MaxY;
         }
+
+        public override string ToString()
+        {
+            return $"({MinX}, {MinY}, {MaxX}, {MaxY})";
+        }
     }
 }

@@ -10,21 +10,9 @@ namespace AOSharp.Common.GameData
         public Vector3 Position;
         public Vector3 Scale;
 
-        public Quaternion ParentRotation;
-        public Vector3 ParentPosition;
-
-        public Matrix4x4 ParentMatrix
+        public Mesh()
         {
-            get
-            {
-                var translation = Matrix4x4.Translate(ParentPosition);
-                var rotation = Matrix4x4.Rotate(ParentRotation);
-                var scale = Matrix4x4.Scale(Scale);
-
-                var finalMat = rotation * scale * translation;
-
-                return finalMat;
-            }
+            Scale = new Vector3(1, 1, 1);
         }
 
         public Matrix4x4 LocalToWorldMatrix
@@ -33,11 +21,9 @@ namespace AOSharp.Common.GameData
             {
                 var translation = Matrix4x4.Translate(Position);
                 var rotation = Matrix4x4.Rotate(Rotation);
+                var scale = Matrix4x4.Scale(Scale);
 
-
-                var finalMat = rotation * translation;
-
-                return finalMat * ParentMatrix;
+                return translation * rotation * scale;
             }
         }
     }

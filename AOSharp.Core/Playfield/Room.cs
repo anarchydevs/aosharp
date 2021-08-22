@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using AOSharp.Common.Helpers;
 using AOSharp.Common.GameData;
+using AOSharp.Common.Unmanaged.DbObjects;
 
 namespace AOSharp.Core
 {
@@ -24,6 +25,9 @@ namespace AOSharp.Core
         public unsafe Rect LocalRect => new Rect((*(MemStruct*)Pointer).TileX1, (*(MemStruct*)Pointer).TileY1, (*(MemStruct*)Pointer).TileX2, (*(MemStruct*)Pointer).TileY2);
         public IEnumerable<Door> Doors => Playfield.Doors.Where(x => x.RoomLink1 == this || x.RoomLink2 == this);
 
+        public override SurfaceResource SurfaceResource => GetSurfaceResource();
+
+
         public Room(IntPtr pointer) : base(pointer)
         {
         }
@@ -33,6 +37,20 @@ namespace AOSharp.Core
             Rect rect;
             N3Room_t.GetRoomRect(Pointer, out rect.MinX, out rect.MaxX, out rect.MinY, out rect.MaxY);
             return rect;
+        }
+
+        private SurfaceResource GetSurfaceResource()
+        {
+            SurfaceResource surface = base.SurfaceResource;
+
+            foreach (Mesh mesh in surface.Meshes) 
+            {
+                mesh.Vertices = mesh.Vertices.Select(x => new Vector3(TemplatePos.X - x.X, x.Y - TemplatePos.Y, TemplatePos.Z - x.Z)).ToList();
+                mesh.Position = Position;
+                mesh.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (Rotation - 180f) * (Math.PI / 180));
+            }
+
+            return surface;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]

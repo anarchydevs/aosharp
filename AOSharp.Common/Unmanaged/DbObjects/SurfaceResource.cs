@@ -14,22 +14,32 @@ namespace AOSharp.Common.Unmanaged.DbObjects
     {
         public readonly List<Mesh> Meshes;
 
-        public SurfaceResource(IntPtr pointer) : base(pointer)
+        private SurfaceResource(IntPtr pointer) : base(pointer)
         {
-            Meshes = GetMeshes(pointer);
+            Meshes = GetMeshes();
         }
 
-        public static SurfaceResource Get(int id)
+        public static SurfaceResource FromPointer(IntPtr pointer)
+        {
+            return new SurfaceResource(pointer);
+        }
+
+        public unsafe static SurfaceResource Get(int id)
         {
             DBIdentity identity = new DBIdentity(DBIdentityType.SurfaceResource, id);
-            return ResourceDatabase.GetDbObject<SurfaceResource>(identity);
+            IntPtr surfaceResourcePtr = ResourceDatabase.GetDbObject(identity);
+
+            if (surfaceResourcePtr == IntPtr.Zero)
+                return null;
+
+            return new SurfaceResource(surfaceResourcePtr + 0x18);
         }
 
-        private unsafe List<Mesh> GetMeshes(IntPtr pDBObject)
+        private unsafe List<Mesh> GetMeshes()
         {
             List<Mesh> meshes = new List<Mesh>();
 
-            Surface surface = *(Surface*)(pDBObject + 0x18);
+            Surface surface = *(Surface*)Pointer;
 
             foreach (SurfaceMeshData surfaceMeshData in surface.Meshes.ToList<SurfaceMeshData>())
             {
