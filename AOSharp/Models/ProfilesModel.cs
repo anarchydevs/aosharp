@@ -35,18 +35,18 @@ namespace AOSharp.Models
 
             foreach (Process aoClient in aoClients)
             {
-                string[] splitTitle = aoClient.MainWindowTitle.Split('-', ' ');
+                string[] splitTitle = aoClient.MainWindowTitle.Split(new char[] { '-' }, 2);
 
-                if (splitTitle.Length != 5)
+                if (splitTitle.Length < 2)
                     continue;
 
-                Profile profile = Profiles.FirstOrDefault(x => x.Name == splitTitle[4]);
+                Profile profile = Profiles.FirstOrDefault(x => x.Name == splitTitle[1]);
 
                 if(profile == null)
                 {
                     profile = new Profile()
                     {
-                        Name = splitTitle[4]
+                        Name = splitTitle[1]
                     };
 
                     Profiles.Add(profile);
