@@ -39,6 +39,9 @@ namespace AOSharp.Core.Combat
 
         internal void Update(float deltaTime)
         {
+            if (!DynelManager.LocalPlayer.IsAlive)
+                return;
+
             //try
             //{
                 OnUpdate(deltaTime);
@@ -118,7 +121,7 @@ namespace AOSharp.Core.Combat
                 }
             }
 
-            if (!Spell.HasPendingCast)
+            if (!Spell.HasPendingCast && DynelManager.LocalPlayer.MovementStatePermitsCasting)
             {
                 foreach (var spellRule in _spellRules.OrderBy(s => (int)s.Priority))
                 {
