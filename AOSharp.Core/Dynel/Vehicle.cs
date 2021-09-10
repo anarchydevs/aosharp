@@ -12,6 +12,9 @@ namespace AOSharp.Core
         [FieldOffset(0x4C)]
         public float Radius;
 
+        [FieldOffset(0x52)]
+        public bool IsFalling;
+
         [FieldOffset(0x58)]
         public Vector3 Position;
 

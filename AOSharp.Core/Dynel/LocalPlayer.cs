@@ -30,7 +30,7 @@ namespace AOSharp.Core
 
         public bool IsAttackPending => Time.NormalTime < _nextAttack;
 
-        public bool MovementStatePermitsCasting => !IsMoving && (MovementState == MovementState.Walk || MovementState == MovementState.Run || MovementState == MovementState.Rooted);
+        public bool MovementStatePermitsCasting => !IsMoving && !IsFalling && (MovementState == MovementState.Walk || MovementState == MovementState.Run || MovementState == MovementState.Rooted);
 
         private static double _nextAttack;
 
