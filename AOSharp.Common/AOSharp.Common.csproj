@@ -189,6 +189,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SpellListMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\StatMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamMemberInfoMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ToggleCloakMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TeamMemberMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\TemplateActionMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAction.cs" />
