@@ -75,6 +75,7 @@
         ServerPathPosDebugInfo = 0x3D746C70,
         Skill = 0x3E205660,
         LeaveBattle = 0x3F3A1914,
+        ToggleCloak = 0x3F5E4B46,
         AppearanceUpdate = 0x41624F0D,
         N3Teleport = 0x43197D22,
         PerkUpdate = 0x435F7023,
