@@ -49,6 +49,25 @@ namespace AOSharp.Pathfinding
                 Chat.WriteLine($"Found origin at {origin.point}");
         }
 
+        public bool GetDistance(Vector3 destination, out float distance)
+        {
+            distance = 0;
+
+            try
+            {
+                List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, destination);
+
+                for(int i = 0; i < path.Count - 1; i++)
+                    distance += Vector3.Distance(path[i], path[i+1]);
+
+                return true;
+            }
+            catch (PointNotOnNavMeshException e)
+            {
+                return false;
+            }
+        }
+
         public void SetNavMeshDestination(Vector3 destination)
         {
             SetNavMeshDestination(destination, out _);

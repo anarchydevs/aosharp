@@ -39,6 +39,27 @@ namespace AOSharp.Core
             });
         }
 
+        public static void FinishTrade(Identity target, int amount)
+        {
+            Network.Send(new KnuBotFinishTradeMessage()
+            {
+                Unknown1 = 2,
+                Target = target,
+                Decline = 2,
+                Amount = amount
+            });
+        }
+        public static void OpenTrade(Identity target, int slots)
+        {
+            Network.Send(new KnuBotStartTradeMessage()
+            {
+                Unknown1 = 2,
+                Target = target,
+                NumberOfItemSlotsInTradeWindow = slots,
+                Message = ""
+            });
+        }
+
         internal static void OnKnubotAnswerList(N3Message n3Msg)
         {
             KnuBotAnswerListMessage knubotMsg = (KnuBotAnswerListMessage)n3Msg;

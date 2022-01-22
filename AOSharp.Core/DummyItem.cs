@@ -101,6 +101,9 @@ namespace AOSharp.Core
                 });
             }
 
+            //foreach(var req in criteria)
+            //    Chat.WriteLine($"Param1: {req.Param1}, Param2: {req.Param2}, Op: {req.Operator}");
+
             ReqChecker reqChecker = new ReqChecker(criteria);
 
             return reqChecker.MeetsReqs(target, ignoreTargetReqs);

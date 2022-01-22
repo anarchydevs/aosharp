@@ -57,6 +57,7 @@ namespace AOSharp.Common.GameData
     public enum DBIdentityType : int
     {
         RDBPlayfield = 1000001,
+        Texture = 1010004,
         LandControlMap = 1000008,
         RDBTilemap = 1000009,
         SurfaceResource = 1000013,

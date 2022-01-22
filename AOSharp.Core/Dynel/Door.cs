@@ -14,8 +14,8 @@ namespace AOSharp.Core
     {
         public bool IsOpen => Playfield.IsDoorOpenBetweenRooms(Link1, Link2);
 
-        public unsafe Room RoomLink1 => Playfield.IsDungeon && Link1 >= 0 ? Playfield.Rooms[Link1] : null;
-        public unsafe Room RoomLink2 => Playfield.IsDungeon && Link2 >= 0 ? Playfield.Rooms[Link2] : null;
+        public Room RoomLink1 => Playfield.IsDungeon && Link1 >= 0 ? Playfield.Rooms[Link1] : null;
+        public Room RoomLink2 => Playfield.IsDungeon && Link2 >= 0 ? Playfield.Rooms[Link2] : null;
 
         public unsafe DoorState State => (*(MemStruct*)Pointer).State;
 
@@ -28,6 +28,14 @@ namespace AOSharp.Core
         
         public Door(Dynel dynel) : base(dynel.Pointer)
         {
+        }
+
+        public Room GetDestinationRoom(Room originRoom)
+        {
+            if(originRoom == RoomLink1)
+                return RoomLink2;
+            else
+                return RoomLink1;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
