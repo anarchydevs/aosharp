@@ -18,6 +18,7 @@ namespace AOSharp.Core.Combat
         private int MAX_CONCURRENT_PERKS = 3;
         protected Queue<CombatActionQueueItem> _actionQueue = new Queue<CombatActionQueueItem>();
         private List<ItemRule> _itemRules = new List<ItemRule>();
+        private List<ScalingItemRule> _scalingItemRules = new List<ScalingItemRule>();
         private List<PerkRule> _perkRules = new List<PerkRule>();
         private List<SpellRule> _spellRules = new List<SpellRule>();
 
@@ -58,7 +59,37 @@ namespace AOSharp.Core.Combat
 
             if (fightingTarget != null)
                 SpecialAttacks(fightingTarget);
-  
+
+            foreach (var scalingItemRule in _scalingItemRules.OrderBy(p => (int)p.Priority))
+            {
+                //Find highest usable ql of the item
+                Item item;
+                if ((item = Inventory.Inventory.FindAll(scalingItemRule.Ids)
+                    .OrderByDescending(x => x.QualityLevel)
+                    .FirstOrDefault(x => x.MeetsSelfUseReqs())) == null)
+                    continue;
+
+                //Ignore the item if it's already queued
+                if (_actionQueue.Any(x => x.CombatAction is Item action && action == item))
+                    continue;
+
+                (SimpleChar Target, bool ShouldSetTarget) actionTarget = (fightingTarget, false);
+
+                if (scalingItemRule.ItemConditionProcessor != null && scalingItemRule.ItemConditionProcessor.Invoke(item, fightingTarget, ref actionTarget))
+                {
+                    if (!item.MeetsUseReqs(actionTarget.Target))
+                        continue;
+
+                    if (actionTarget.Target != null && !item.IsInRange(actionTarget.Target))
+                        continue;
+
+                    //Chat.WriteLine($"Queueing item {item.Name} -- actionQ.Count = {_actionQueue.Count}");
+                    float queueOffset = _actionQueue.Where(x => x.CombatAction is PerkAction).Sum(x => ((PerkAction)x.CombatAction).AttackDelay);
+                    double timeoutOffset = item.AttackDelay + ACTION_TIMEOUT + queueOffset;
+                    _actionQueue.Enqueue(new CombatActionQueueItem(item, actionTarget.Target, actionTarget.ShouldSetTarget, timeoutOffset));
+                }
+            }
+
             foreach (var itemRule in _itemRules.OrderBy(p => (int)p.Priority))
             {
                 //Find highest usable ql of the item
@@ -236,6 +267,11 @@ namespace AOSharp.Core.Combat
             _itemRules.Add(new ItemRule(lowId, highId, conditionProcessor, priority));
         }
 
+        protected void RegisterItemProcessor(IEnumerable<int> ids, ItemConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
+        {
+            _scalingItemRules.Add(new ScalingItemRule(ids, conditionProcessor, priority));
+        }
+
         protected void RegisterPerkProcessor(PerkHash perkHash, PerkConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
             _perkRules.Add(new PerkRule(perkHash, conditionProcessor, priority));
@@ -367,6 +403,22 @@ namespace AOSharp.Core.Combat
             {
                 LowId = lowId;
                 HighId = highId;
+                ItemConditionProcessor = itemConditionProcessor;
+                Priority = combatActionPriority;
+            }
+        }
+
+        protected readonly struct ScalingItemRule
+        {
+            public IEnumerable<int> Ids { get; }
+
+            public ItemConditionProcessor ItemConditionProcessor { get; }
+            public CombatActionPriority Priority { get; }
+
+            public ScalingItemRule(IEnumerable<int> ids, ItemConditionProcessor itemConditionProcessor,
+                CombatActionPriority combatActionPriority)
+            {
+                Ids = ids;
                 ItemConditionProcessor = itemConditionProcessor;
                 Priority = combatActionPriority;
             }
