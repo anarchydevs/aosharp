@@ -26,6 +26,7 @@
         SpecialAvailable = 0x000000A4,
         SpecialUsed = 0x000000AA,
         Search = 0x00000066,
+        DisableXP = 0x000000A5,
         ChangeVisualFlag = 0x000000A6,
         ChangeAnimationAndStance = 0x000000A7,
         ShipInvite = 0x000000BA,

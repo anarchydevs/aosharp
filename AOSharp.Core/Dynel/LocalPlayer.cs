@@ -7,6 +7,8 @@ using AOSharp.Core.GameData;
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Common.Unmanaged.Interfaces;
+using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using SmokeLounge.AOtomation.Messaging.GameData;
 
 namespace AOSharp.Core
 {
@@ -74,6 +76,15 @@ namespace AOSharp.Core
 
             if (Pets.Length > 0)
                 Pets.Follow();
+        }
+
+        public void DisableXpGain(bool enabled)
+        {
+            Network.Send(new CharacterActionMessage
+            {
+                Action = CharacterActionType.DisableXP,
+                Parameter2 = enabled ? 0x15 : 0x05
+            });
         }
 
         public unsafe int GetSkillMax(Stat stat)
