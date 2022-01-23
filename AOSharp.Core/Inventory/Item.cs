@@ -107,6 +107,23 @@ namespace AOSharp.Core.Inventory
             });
         }
 
+        public void CombineWith(Identity target)
+        {
+            Network.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.UseItemOnItem,
+
+                Target = Slot,
+                Parameter1 = (int)target.Type,
+                Parameter2 = target.Instance
+            });
+        }
+
+        public void CombineWith(Item target)
+        {
+            CombineWith(target.Slot);
+        }
+
         public void Drop(Vector3 position)
         {
             Network.Send(new DropTemplateMessage()

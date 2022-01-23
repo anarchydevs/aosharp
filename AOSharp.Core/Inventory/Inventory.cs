@@ -48,6 +48,11 @@ namespace AOSharp.Core.Inventory
             return Items.Where(x => x.LowId == lowId && x.HighId == highId).ToList();
         }
 
+        public static List<Item> FindAll(string name)
+        {
+            return Items.Where(x => x.Name == name).ToList();
+        }
+
         public static bool FindContainer(string name, out Backpack backpack)
         {
             return (backpack = Backpacks.FirstOrDefault(x => x.Name == name)) != null;
