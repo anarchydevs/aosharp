@@ -135,6 +135,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommand.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommandMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAlternativeMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\NewLevelMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\StopFightMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\BankMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AttackMessage.cs" />
