@@ -26,7 +26,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.ChatMessages
         {
             get
             {
-                return ChatMessageType.PrivateMessage;
+                return ChatMessageType.VicinityMessage;
             }
         }
 
