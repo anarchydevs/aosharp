@@ -20,8 +20,16 @@ namespace AOSharp.Common.GameData
         Wear = 14
     }
 
+    public enum SpellModifierTarget
+    {
+        Self = 1,
+        User = 2,
+        Target = 3
+    }
+
     public enum SpellFunction
     {
+        Hit = 53002,
         Modify = 53045,
     }
 

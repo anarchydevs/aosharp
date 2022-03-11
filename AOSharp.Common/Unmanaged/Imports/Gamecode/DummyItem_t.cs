@@ -31,7 +31,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         {
             public IntPtr SpellListPointer;
             public int Unk;
-            public int NumSpells;
+            public int Idx;
         }
     }
 }

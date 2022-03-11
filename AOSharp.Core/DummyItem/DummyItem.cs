@@ -22,6 +22,8 @@ namespace AOSharp.Core
         public virtual float AttackRange => GetStat(Stat.AttackRange);
         public virtual CanFlags CanFlags => (CanFlags)GetStat(Stat.Can);
 
+        public List<SpellData> UseModifiers => GetSpellList(SpellListType.Use);
+        public List<SpellData> WearModifiers => GetSpellList(SpellListType.Wear);
 
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
@@ -119,7 +121,7 @@ namespace AOSharp.Core
             return DynelManager.LocalPlayer.GetLogicalRangeToTarget(target) < AttackRange;
         }
 
-        public unsafe List<SpellData> GetSpellList(SpellListType spellListType)
+        private unsafe List<SpellData> GetSpellList(SpellListType spellListType)
         {
             List<SpellData> spellList = new List<SpellData>();
 
@@ -136,18 +138,14 @@ namespace AOSharp.Core
             DummyItem_t.GetSpellDataUnkStruct spellDataUnkStruct = new DummyItem_t.GetSpellDataUnkStruct();
             DummyItem_t.GetSpellDataUnk(pSpellList, ref spellDataUnkStruct);
 
-            IntPtr pSpellDataArray = *(IntPtr*)DummyItem_t.GetSpellData(ref spellDataUnkStruct);
-
             for(int i = 0; i < numSpells; i++)
             {
-                IntPtr pSpellData = *(IntPtr*)(pSpellDataArray + (i * 0x3C) + 0x20);
-                SpellDataMemStruct spellData = *(SpellDataMemStruct*)(pSpellData);
+                spellDataUnkStruct.Idx = i;
+                IntPtr pSpellDataContainer = *(IntPtr*)DummyItem_t.GetSpellData(ref spellDataUnkStruct);
+                
+                SpellDataMemStruct spellData = **(SpellDataMemStruct**)(pSpellDataContainer + 0x20);
 
-                spellList.Add(new SpellData
-                {
-                    Function = spellData.Function,
-                    Properties = spellData.Properties.ToList<SpellProperty>()
-                });
+                spellList.Add(SpellData.New(spellData.Function, spellData.Properties.ToList<SpellProperty>().ToDictionary(x => x.Operator, x => x.Value)));
             }
 
             return spellList;
@@ -182,17 +180,5 @@ namespace AOSharp.Core
             Self,
             User
         }
-    }
-
-    public struct SpellData
-    {
-        public SpellFunction Function;
-        public List<SpellProperty> Properties;
-    }
-
-    public struct SpellProperty
-    {
-        public SpellPropertyOperator Operator;
-        public int Value;
     }
 }

@@ -68,6 +68,11 @@ namespace AOSharp.Core
             return pets.Select(x => x.Identity).Contains(identity);
         }
 
+        public static IEnumerable<SpellData> FindAll(this List<SpellData> spellDataList, SpellFunction func)
+        {
+            return spellDataList.Where(b => b.Function == func);
+        }
+
         public static void Draw(this Mesh mesh, float maxDrawDist)
         {
             for (int j = 0; j < mesh.Triangles.Count / 3; j++)

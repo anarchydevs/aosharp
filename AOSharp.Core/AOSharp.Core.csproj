@@ -55,6 +55,7 @@
     <Compile Include="Battlestation.cs" />
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
+    <Compile Include="DummyItem\SpellData.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="ReqChecker.cs" />
     <Compile Include="Dynel\Door.cs" />
@@ -71,17 +72,17 @@
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Movement\MovementController.cs" />
     <Compile Include="NpcDialog.cs" />
-    <Compile Include="DummyItem.cs" />
-    <Compile Include="Buff.cs" />
+    <Compile Include="DummyItem\DummyItem.cs" />
+    <Compile Include="DummyItem\Buff.cs" />
     <Compile Include="ChatPacketFactory.cs" />
-    <Compile Include="Perk.cs" />
+    <Compile Include="DummyItem\Perk.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="Playfield\Room.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TeamMember.cs" />
-    <Compile Include="Spell.cs" />
+    <Compile Include="DummyItem\Spell.cs" />
     <Compile Include="Playfield\Zone.cs" />
-    <Compile Include="PerkAction.cs" />
+    <Compile Include="DummyItem\PerkAction.cs" />
     <Compile Include="DevExtras.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Targeting.cs" />
@@ -157,5 +158,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
