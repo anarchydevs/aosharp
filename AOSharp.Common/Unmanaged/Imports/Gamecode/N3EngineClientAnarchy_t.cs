@@ -12,6 +12,10 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetQuestWorldPos@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@AAV2@AAVVector3_t@@2@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool GetQuestWorldPos(IntPtr pThis, ref Identity mission, ref Identity playfield, ref Vector3 universePos, ref Vector3 ZonePos);
 
+        //DebugSpellListToChat
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_DebugSpellListToChat@n3EngineClientAnarchy_t@@QBEXHABVIdentity_t@@W4SpellList_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void DebugSpellListToChat(IntPtr pThis, int unk, ref Identity identity, int spellList);
+
         //SecondarySpecialAttack
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_SecondarySpecialAttack@n3EngineClientAnarchy_t@@QBE_NABVIdentity_t@@W4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]

@@ -119,6 +119,40 @@ namespace AOSharp.Core
             return DynelManager.LocalPlayer.GetLogicalRangeToTarget(target) < AttackRange;
         }
 
+        public unsafe List<SpellData> GetSpellList(SpellListType spellListType)
+        {
+            List<SpellData> spellList = new List<SpellData>();
+
+            IntPtr pSpellList = DummyItem_t.GetSpellList(Pointer, spellListType);
+
+            if (pSpellList == IntPtr.Zero)
+                return spellList;
+
+            int numSpells = *(int*)(pSpellList + 0x10);
+
+            if (numSpells == 0)
+                return spellList;
+
+            DummyItem_t.GetSpellDataUnkStruct spellDataUnkStruct = new DummyItem_t.GetSpellDataUnkStruct();
+            DummyItem_t.GetSpellDataUnk(pSpellList, ref spellDataUnkStruct);
+
+            IntPtr pSpellDataArray = *(IntPtr*)DummyItem_t.GetSpellData(ref spellDataUnkStruct);
+
+            for(int i = 0; i < numSpells; i++)
+            {
+                IntPtr pSpellData = *(IntPtr*)(pSpellDataArray + (i * 0x3C) + 0x20);
+                SpellDataMemStruct spellData = *(SpellDataMemStruct*)(pSpellData);
+
+                spellList.Add(new SpellData
+                {
+                    Function = spellData.Function,
+                    Properties = spellData.Properties.ToList<SpellProperty>()
+                });
+            }
+
+            return spellList;
+        }
+
         internal IntPtr GetItemActionInfo(ItemActionInfo itemActionInfo) => N3EngineClientAnarchy_t.GetItemActionInfo(Pointer, itemActionInfo);
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -131,6 +165,16 @@ namespace AOSharp.Core
             public IntPtr Name;
         }
 
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        private struct SpellDataMemStruct
+        {
+            [FieldOffset(0xC)]
+            public SpellFunction Function;
+
+            [FieldOffset(0x18)]
+            public StdStructVector Properties;
+        }
+
         private enum CriteriaSource
         {
             FightingTarget,
@@ -138,5 +182,17 @@ namespace AOSharp.Core
             Self,
             User
         }
+    }
+
+    public struct SpellData
+    {
+        public SpellFunction Function;
+        public List<SpellProperty> Properties;
+    }
+
+    public struct SpellProperty
+    {
+        public SpellPropertyOperator Operator;
+        public int Value;
     }
 }

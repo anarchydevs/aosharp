@@ -31,6 +31,9 @@ namespace AOSharp.Core
 
         private static unsafe void Init()
         {
+            DummyItem_t.GetSpellList = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetSpellListDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 41 24 8B 4D 08 8B 04 88 5D C2 04 00"));
+            DummyItem_t.GetSpellDataUnk = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetSpellDataUnkDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC FF 75 08 E8 ? ? ? ? 8B 45 08 5D C2 04 00"));
+            DummyItem_t.GetSpellData = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetSpellDataDelegate>(Utils.FindPattern("Gamecode.dll", "8B 01 85 C0 75 04 33 D2 EB 02 8B 10 8B 41 08 8B C8 56 8B 72 08 D1 E9 83 E0 01 3B F1 77 02 2B CE 8B 52 04 8B 0C 8A 8D 04 C1 5E C3"));
             DummyItem_t.GetStat = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetStatDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 83 C1 34 8B 01 5D FF 60 04"));
             N3EngineClientAnarchy_t.GetItemActionInfo = Marshal.GetDelegateForFunctionPointer<N3EngineClientAnarchy_t.GetItemActionInfoDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 49 6C 8D 45 08 50 E8 ? ? ? ? 8B 00 5D C2 04 00"));
             N3EngineClientAnarchy_t.GetMissionList = Marshal.GetDelegateForFunctionPointer<N3EngineClientAnarchy_t.GetMissionListDelegate>(Utils.FindPattern("Gamecode.dll", "B8 ? ? ? ? E8 ? ? ? ? 51 56 8B F1 83 BE ? ? ? ? ? 75 25 6A 18 E8 ? ? ? ? 59 8B C8 89 4D F0 83 65 FC 00 85 C9 74 08 56 E8 ? ? ? ? EB 02"));

@@ -7,6 +7,16 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 {
     public class N3EngineClientAnarchy
     {
+        public static void DebugSpellListToChat(Identity identity, int unk, int spellList)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine == IntPtr.Zero)
+                return;
+
+            N3EngineClientAnarchy_t.DebugSpellListToChat(pEngine, unk, ref identity, spellList);
+        }
+
         public static string GetName(Identity identity)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();

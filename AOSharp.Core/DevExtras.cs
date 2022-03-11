@@ -41,5 +41,13 @@ namespace AOSharp.Core
         {
             return StdString.FromPointer(N3InfoItemRemote_t.KeyToString(key)).ToString();
         }
+
+        public static string SpellOperatorToString(int op)
+        {
+            if(DummyItem_t.GetOpName == null)
+                DummyItem_t.GetOpName = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetOpNameDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 51 56 8D 45 08 50 8D 45 FC BE ? ? ? ? 50 8B CE E8 ? ? ? ? 8B 00 3B 05 ? ? ? ? 74 15 8D 45 08 50 8B CE E8 ? ? ? ? 83 78 14 10 72 1D 8B 00 EB 19"));
+
+            return Marshal.PtrToStringAnsi(DummyItem_t.GetOpName(op));
+        }
     }
 }
