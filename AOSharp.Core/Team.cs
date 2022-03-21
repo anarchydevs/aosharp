@@ -15,8 +15,7 @@ namespace AOSharp.Core
         public static bool IsInTeam => GetIsInTeam();
         public static bool IsLeader => GetIsTeamLeader();
         public static bool IsRaid => GetIsRaid();
-        public static bool IsInCombat => GetIsInCombat();
-        
+
         public static List<TeamMember> Members => GetMemberList();
 
         public static EventHandler<TeamRequestEventArgs> TeamRequest;
@@ -90,7 +89,7 @@ namespace AOSharp.Core
             });
         }
 
-        private static bool GetIsInCombat(bool ignoreOutOfRangeTeamMembers = true)
+        public static bool IsInCombat(bool ignoreOutOfRangeTeamMembers = true)
         {
             // Optional fail true if we can't verify teammate status
             if (!ignoreOutOfRangeTeamMembers && Members.Any(x => x.Character == null))

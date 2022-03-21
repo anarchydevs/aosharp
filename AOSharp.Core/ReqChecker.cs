@@ -197,7 +197,7 @@ namespace AOSharp.Core
                     case UseCriteriaOperator.AlliesNotInCombat:
                         if (Team.IsInTeam && Team.Members.Contains(_criteriaSource.Char.Identity))
                         {
-                            metReq = !Team.IsInCombat;
+                            metReq = !Team.IsInCombat();
                         }
                         else
                         {
