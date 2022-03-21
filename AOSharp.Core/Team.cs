@@ -90,8 +90,12 @@ namespace AOSharp.Core
             });
         }
 
-        private static bool GetIsInCombat()
+        private static bool GetIsInCombat(bool ignoreOutOfRangeTeamMembers = true)
         {
+            // Optional fail true if we can't verify teammate status
+            if (!ignoreOutOfRangeTeamMembers && Members.Any(x => x.Character == null))
+                return true;
+
             // someone in the team is attacking something
             if (Members.Any(x => x.Character != null && x.Character.IsAttacking))
                 return true;
