@@ -172,13 +172,16 @@ namespace AOSharp.Core
                 case CharacterActionType.QueuePerk:
                     PerkAction.OnPerkQueued();
                     break;
+                case CharacterActionType.DuelUpdate:
+                    Duel.OnDuelUpdate(charActionMessage.Target, (DuelUpdate)charActionMessage.Parameter1);
+                    break;
                 //case CharacterActionType.TeamKick:
                 //    Team.OnMemberLeft(charActionMessage.Target);
                 //    break;
 
-                //default:
-                //    Chat.WriteLine($"UnhandledCharAction::{charActionMessage.Action}");
-                //    break;
+                default:
+                    //Chat.WriteLine($"UnhandledCharAction::{charActionMessage.Action} - {charActionMessage.Target} - {charActionMessage.Parameter1} - {charActionMessage.Parameter2} - {charActionMessage.Unknown1} - {charActionMessage.Unknown2}");
+                    break;
             }
         }
 

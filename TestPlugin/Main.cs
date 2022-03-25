@@ -25,6 +25,9 @@ using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using AOSharp.Common.SharedEventArgs;
+using SmokeLounge.AOtomation.Messaging.GameData;
+using AOSharp.Common.Unmanaged.Interfaces;
+using AOSharp.Common.Helpers;
 
 namespace TestPlugin
 {
@@ -113,7 +116,7 @@ namespace TestPlugin
                     //Chat.WriteLine($"\t{perk.Identity}\t{perk.Hash}\t{perk.Name}\t{perk.MeetsSelfUseReqs()}\t{perk.GetStat(Stat.AttackDelay)}");
                     Chat.WriteLine($"{perkAction.Name} = 0x{((uint)perkAction.Hash).ToString("X4")},");
                 }
-                
+
 
                 /*
                 Chat.WriteLine("Buffs:");
@@ -229,6 +232,62 @@ namespace TestPlugin
                 //_menu.AddItem(new MenuTest("CrashTime", "Inb4 Crash"));
                 OptionPanel.AddMenu(_menu);
 
+                Chat.RegisterCommand("modlist", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    if (DummyItem.CreateDummyItemID(302724, 302724, 300, out Identity item))
+                    {
+                        N3EngineClientAnarchy.DebugSpellListToChat(item, 1, 0xE);
+                        Chat.WriteLine(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 41 24 8B 4D 08 8B 04 88 5D C2 04 00").ToString("X"));
+                    }
+                });
+
+                Chat.RegisterCommand("modlistspell", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    if (Spell.Find("Mongo Bash!", out Spell item))
+                    {
+
+                        Chat.WriteLine("SpellList:");
+                        foreach (SpellData spell in item.UseModifiers)
+                        {
+                            Chat.WriteLine($"\t{spell.Function} - {spell.GetType()}");
+
+                            foreach (var prop in spell.Properties)
+                                Chat.WriteLine($"\t\t{prop.Key}: {prop.Value}");
+                        }
+                    }
+                });
+
+                Chat.RegisterCommand("healing", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    if (Inventory.Find("Health and Nano Stim", out Item item))
+                    {
+                        int targetHealing = item.UseModifiers.Where(x => x is SpellData.Healing hx && hx.ApplyOn == SpellModifierTarget.Target).Cast<SpellData.Healing>().Sum(x => x.Average);
+                        Chat.WriteLine($"{item.Name} @ {item.QualityLevel} heals targets for {targetHealing}");
+                    }
+                });
+
+                Chat.RegisterCommand("dumpops", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    for (int i = 0; i < 300; i++)
+                    {
+                        string str = DevExtras.SpellOperatorToString(i);
+
+                        if (str == string.Empty || str.Contains("Missing SpellData"))
+                            continue;
+
+                        Chat.WriteLine($"{str} = {i},");
+                    }
+                });
+
+
+                Chat.RegisterCommand("dueltarget", (string command, string[] param, ChatWindow chatWindow) =>
+                {
+                    if (Targeting.TargetChar == null)
+                        return;
+
+                    Duel.Challenge(Targeting.Target.Identity);
+                });
+
                 Chat.RegisterCommand("split", (string command, string[] param, ChatWindow chatWindow) =>
                 {
                     if (param.Length < 2)
@@ -318,6 +377,20 @@ namespace TestPlugin
 
                 Chat.RegisterCommand("test", (string command, string[] param, ChatWindow chatWindow) =>
                 {
+                    //foreach(Item aggroTool in Inventory.Items.Where(x => x.Name == "Aggression Enhancer"))
+                    //    Chat.WriteLine($"QL {aggroTool.QualityLevel} - Low: {aggroTool.LowId} / High: {aggroTool.HighId}");
+
+                    if(Inventory.Find("Premium Health and Nano Recharger", out Item sitKit))
+                    {
+                        Chat.WriteLine($"I can use sit kit == {sitKit.MeetsSelfUseReqs()}");
+                    }
+
+                    if (Spell.Find("Superior Fleeting Immunity", out Spell sorbs))
+                    {
+                        Chat.WriteLine($"I can use sorbs == {sorbs.MeetsSelfUseReqs()}");
+                    }
+
+
                     //Settings["DrawStuff"] = true;
 
                     //DynelManager.LocalPlayer.Position += Vector3.Rotate(Vector3.Zero, DynelManager.LocalPlayer.Rotation.Forward, 90);
@@ -365,7 +438,7 @@ namespace TestPlugin
                     }
                     */
 
-                    if(Mission.Find("Mission Assignment 7429-323-...", out Mission mission))
+                    if (Mission.Find("Mission Assignment 7429-323-...", out Mission mission))
                         mission.UploadToMap(); 
 
                     /*
@@ -433,10 +506,10 @@ namespace TestPlugin
                 Game.TeleportEnded += Game_OnTeleportEnded;
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
-                MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
+                //MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
                 //Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
-                Network.PacketReceived += Network_PacketReceived;
+                //Network.PacketReceived += Network_PacketReceived;
                 //Network.PacketSent += Network_PacketSent;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
@@ -444,6 +517,8 @@ namespace TestPlugin
                 Item.ItemUsed += Item_ItemUsed;
                 NpcDialog.AnswerListChanged += NpcDialog_AnswerListChanged;
                 Inventory.ContainerOpened += OnContainerOpened;
+                Duel.Challenged = DuelChallenged;
+                Duel.StatusChanged = DuelStatusChanged;
                 //DynelManager.DynelSpawned += DynelSpawned;
                 //DynelManager.CharInPlay += CharInPlay;
             }
@@ -451,6 +526,18 @@ namespace TestPlugin
             {
                 Chat.WriteLine(e.Message);
             }
+        }
+
+        private void DuelChallenged(object sender, DuelRequestEventArgs e)
+        {
+            Chat.WriteLine($"{e.Challenger} challenged us to a duel!");
+
+            e.Accept();
+        }
+
+        private void DuelStatusChanged(object sender, DuelStatusChangedEventArgs e)
+        {
+            Chat.WriteLine($"Duel Status changed to {e.Status} ({e.Opponent})");
         }
 
         private void OnTestButtonClicked(object s, ButtonBase button)
@@ -699,7 +786,7 @@ namespace TestPlugin
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
             //Chat.WriteLine($"{msgType}");
 
-            if (msgType == N3MessageType.GridDestinationSelect)
+            if (msgType == N3MessageType.SimpleItemFullUpdate)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)

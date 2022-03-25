@@ -55,6 +55,7 @@
     <Compile Include="Battlestation.cs" />
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
+    <Compile Include="Duel.cs" />
     <Compile Include="DummyItem\SpellData.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="ReqChecker.cs" />
