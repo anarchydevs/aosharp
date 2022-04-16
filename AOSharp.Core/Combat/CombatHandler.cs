@@ -386,9 +386,14 @@ namespace AOSharp.Core.Combat
 
         protected enum CombatActionPriority
         {
-            High = 10,
-            Medium = 20,
-            Low = 30
+            Over9000 = 100,
+            VeryHigh = 200,
+            High = 300,
+            Medium = 400,
+            Low = 500,
+            VeryLow = 600,
+            ExtremelyLow = 700,
+            FuncomDevelopment = 800
         }
 
         protected readonly struct ItemRule
