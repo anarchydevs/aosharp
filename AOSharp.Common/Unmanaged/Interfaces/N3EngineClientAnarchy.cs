@@ -1,12 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Helpers;
+using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 
 namespace AOSharp.Common.Unmanaged.Interfaces
 {
     public class N3EngineClientAnarchy
     {
+        public static string GetPerkName(int perkId, bool unk = false)
+        {
+            StdString retStr = StdString.Create();
+
+            IntPtr pStr = N3EngineClientAnarchy_t.GetPerkName(retStr.Pointer, perkId, unk);
+
+            if (pStr == IntPtr.Zero)
+                return string.Empty;
+
+            return retStr.ToString();
+        }
+
+        public static List<uint> GetCompletedPersonalResearchGoals()
+        {
+            StdStructVector vector = new StdStructVector();
+            N3InterfaceModule_t.GetCompletedPersonalResearchGoals(N3InterfaceModule_t.GetInstance(), ref vector);
+            return vector.ToList<uint>();
+        }
+
+        public static List<ResearchGoal> GetPersonalResearchGoals()
+        {
+            StdStructVector vector = new StdStructVector();
+            N3InterfaceModule_t.GetPersonalResearchGoals(N3InterfaceModule_t.GetInstance(), ref vector);
+            return vector.ToList<ResearchGoal>();
+        }
+
         public static void DebugSpellListToChat(Identity identity, int unk, int spellList)
         {
             IntPtr pEngine = N3Engine_t.GetInstance();

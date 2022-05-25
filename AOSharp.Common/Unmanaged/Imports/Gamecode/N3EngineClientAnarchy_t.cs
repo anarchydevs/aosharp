@@ -42,10 +42,18 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetSkillMax@n3EngineClientAnarchy_t@@QAEHW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern int GetSkillMax(IntPtr pThis, Stat stat);
 
+        //PersonalResearchGoals
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_PersonalResearchGoals@n3EngineClientAnarchy_t@@QAEXAAV?$vector@U?$pair@I_N@std@@V?$allocator@U?$pair@I_N@std@@@2@@std@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr PersonalResearchGoals(IntPtr pThis, IntPtr pVector);
+
         //IsSecondarySpecialAttackAvailable
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsSecondarySpecialAttackAvailable@n3EngineClientAnarchy_t@@QBE_NW4Stat_e@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool IsSecondarySpecialAttackAvailable(IntPtr pThis, Stat stat);
+
+        [return: MarshalAs(UnmanagedType.U1)]
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_IsResearch@n3EngineClientAnarchy_t@@QBE_NI@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern bool IsResearch(IntPtr pThis, int id);
 
         //GetAttackRange
         [DllImport("Gamecode.dll", EntryPoint = "?GetAttackRange@n3EngineClientAnarchy_t@@QBEMXZ", CallingConvention = CallingConvention.ThisCall)]
@@ -74,8 +82,8 @@ namespace AOSharp.Common.Unmanaged.Imports
         public static extern IntPtr GetName(IntPtr pThis, ref Identity identity, ref Identity identityUnk);
 
         //GetPerkName
-        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetPerkName@n3EngineClientAnarchy_t@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I_N@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetPerkName(IntPtr pThis, int perkId, bool unk);
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetPerkName@n3EngineClientAnarchy_t@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I_N@Z", CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr GetPerkName(IntPtr retStr, int perkId, bool unk);
 
         //IsFormulaReady
         [return: MarshalAs(UnmanagedType.U1)]

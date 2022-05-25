@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\ResearchGoal.cs" />
     <Compile Include="GameData\DuelUpdate.cs" />
     <Compile Include="GameData\Matrix4x4.cs" />
     <Compile Include="GameData\TowerClass.cs" />

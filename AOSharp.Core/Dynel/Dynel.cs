@@ -46,6 +46,8 @@ namespace AOSharp.Core
 
         public virtual unsafe bool IsMoving => (*(MemStruct*)Pointer).Vehicle->Velocity > 0f;
 
+        public unsafe float Velocity => (*(MemStruct*)Pointer).Vehicle->Velocity;
+
         protected unsafe bool IsPathing => (*(MemStruct*)Pointer).Vehicle->PathingDestination != Vector3.Zero;
         protected unsafe Vector3 PathingDestination => (*(MemStruct*)Pointer).Vehicle->PathingDestination;
 

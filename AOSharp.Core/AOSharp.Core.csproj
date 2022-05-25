@@ -33,6 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -79,6 +81,7 @@
     <Compile Include="DummyItem\Perk.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="Playfield\Room.cs" />
+    <Compile Include="Research.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="DummyItem\Spell.cs" />

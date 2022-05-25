@@ -9,6 +9,7 @@ namespace AOSharp.Common.Unmanaged.DataTypes
     {
         private IntPtr pFirst;
         private IntPtr pLast;
+        private IntPtr Unk;
 
         public List<IntPtr> ToList(int size)
         {
