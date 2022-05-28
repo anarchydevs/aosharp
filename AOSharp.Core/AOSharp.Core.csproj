@@ -106,6 +106,7 @@
     <Compile Include="SpecialAttack.cs" />
     <Compile Include="GameData\Cooldown.cs" />
     <Compile Include="GameData\SpecialAction.cs" />
+    <Compile Include="UI\AOSharpWindow.cs" />
     <Compile Include="UI\BitmapView.cs" />
     <Compile Include="UI\ComboBox.cs" />
     <Compile Include="UI\ButtonBase.cs" />

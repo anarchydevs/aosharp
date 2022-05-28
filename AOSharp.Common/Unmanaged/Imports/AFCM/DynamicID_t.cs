@@ -11,5 +11,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("AFCM.dll", EntryPoint = "?GetID@DynamicID_t@@QAEHPBD_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern int GetID(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string name, bool unk);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
+        public delegate int DGetID(IntPtr pThis, [MarshalAs(UnmanagedType.LPStr)] string name, bool unk);
     }
 }

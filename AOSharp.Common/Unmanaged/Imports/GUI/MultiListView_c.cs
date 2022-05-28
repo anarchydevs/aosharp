@@ -14,7 +14,6 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "??1MultiListView_c@@UAE@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern int Deconstructor(IntPtr pThis);
 
-
         [DllImport("GUI.dll", EntryPoint = "?AddColumn@MultiListView_c@@QAEXHABVString@@MI@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void AddColumn(IntPtr pThis, int idx, IntPtr pStr, float width, int unk);
 
@@ -43,9 +42,16 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?GetSelectedItem@MultiListView_c@@QBEPAVMultiListViewItem_c@@XZ", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr GetSelectedItem(IntPtr pThis);
 
+        [DllImport("GUI.dll", EntryPoint = "?InvalidateItem@MultiListView_c@@QAEXPAVMultiListViewItem_c@@@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void InvalidateItem(IntPtr pThis, IntPtr pListViewItem);
 
         [DllImport("GUI.dll", EntryPoint = "?RemoveItem@MultiListView_c@@QAEXPAVMultiListViewItem_c@@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void RemoveItem(IntPtr pThis, IntPtr pListViewItem);
+
+        [DllImport("GUI.dll", EntryPoint = "?ItemSelectionStateChanged@MultiListView_c@@AAEXPAVMultiListViewItem_c@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void ItemSelectionStateChanged(IntPtr pThis, IntPtr pItem, byte selected);
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
+        public delegate void DItemSelectionStateChanged(IntPtr pThis, IntPtr pItem, byte selected);
 
         public static IntPtr Create(Rect rect, int flags, int unk1, int unk2)
         {

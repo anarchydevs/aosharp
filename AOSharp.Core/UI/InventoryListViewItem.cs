@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.Imports;
 using AOSharp.Core.GameData;
@@ -23,6 +24,28 @@ namespace AOSharp.Core.UI
                 return null;
 
             return new InventoryListViewItem(pView);
+        }
+
+        public unsafe void SetColor(uint color) => ((MemStruct*)Pointer)->Color = color;
+
+        public unsafe void SetIcon(int iconId)
+        {
+            ((MemStruct*)Pointer)->HasIcon = true;
+            ((MemStruct*)Pointer)->IconId = iconId;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        protected unsafe struct MemStruct
+        {
+            [FieldOffset(0x68)]
+            public uint Color;
+
+            [MarshalAs(UnmanagedType.U1)]
+            [FieldOffset(0x6C)]
+            public bool HasIcon;
+
+            [FieldOffset(0x70)]
+            public int IconId;
         }
     }
 }

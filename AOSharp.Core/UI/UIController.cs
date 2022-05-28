@@ -1,4 +1,5 @@
 ﻿using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,6 +105,24 @@ namespace AOSharp.Core.UI
             WindowDeleted?.Invoke(null, window);
             window.IsValid = false;
             _windows.Remove(window);
+        }
+
+        private static void OnMultiListViewItemStateChanged(IntPtr pItem, bool selected)
+        {
+            MultiListView listView = MultiListViewItem.GetListViewForPointer(pItem);
+
+            if(listView == null)
+                return;
+
+            listView.OnItemSelectionStateChanged(pItem, selected);
+        }
+
+        private static int OnDynamicIDResolve(string name)
+        {
+            if (DynamicID.DynamicIDOverrides.TryGetValue(name, out int id))
+                return id;
+
+            return 0;
         }
     }
 }

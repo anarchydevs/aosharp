@@ -346,6 +346,7 @@
     <Compile Include="Unmanaged\Imports\GUI\InventoryGUIModule_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\WindowController_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Window_c.cs" />
+    <Compile Include="Unmanaged\Imports\Interfaces\GuiResourceManager_t.cs" />
     <Compile Include="Unmanaged\Imports\Interfaces\Client_t.cs" />
     <Compile Include="Unmanaged\Imports\Interfaces\N3InterfaceModule_t.cs" />
     <Compile Include="Unmanaged\Imports\LDB\LDBFace.cs" />
@@ -371,6 +372,7 @@
     <Compile Include="Unmanaged\Imports\Utils\DistributedValue_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\Variant_c.cs" />
     <Compile Include="Unmanaged\Imports\Utils\XMLObject_c.cs" />
+    <Compile Include="Unmanaged\Interfaces\GuiResourceManager.cs" />
     <Compile Include="Unmanaged\Interfaces\InventoryGUIModule.cs" />
     <Compile Include="Unmanaged\Interfaces\PlayfieldAnarchy.cs" />
     <Compile Include="Unmanaged\Interfaces\DynamicID.cs" />

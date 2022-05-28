@@ -187,6 +187,15 @@ namespace AOSharp.Bootstrap
                         "?SlotButtonToggled@CheckBox_c@@AAEX_N@Z",
                         new CheckBox_c.DSlotButtonToggled(CheckBox_SlotButtonToggled_Hook));
 
+            //Will revisit this when it's needed.
+            CreateHook("AFCM.dll",
+                        "?GetID@DynamicID_t@@QAEHPBD_N@Z",
+                        new DynamicID_t.DGetID(DynamicID_GetID_Hook));
+
+            CreateHook("GUI.dll",
+                        "?Select@MultiListViewItem_c@@QAEX_N0@Z",
+                        new MultiListViewItem_c.DSelect(MultiListViewItem_Select_Hook));
+
             CreateHook("Connection.dll",
                         "?Send@Connection_t@@QAEHIIPBX@Z",
                         new Connection_t.DSend(Send_Hook));
@@ -238,6 +247,19 @@ namespace AOSharp.Bootstrap
             }
 
             return bytesRead;
+        }
+
+        public int DynamicID_GetID_Hook(IntPtr pThis, string name, bool unk)
+        {
+            int customId = (_pluginProxy?.GetDynamicIDOverride(name)).GetValueOrDefault(0);
+            return customId > 0 ? customId : DynamicID_t.GetID(pThis, name, unk);
+        }
+
+        public void MultiListViewItem_Select_Hook(IntPtr pThis, bool selected, bool unk)
+        {
+            MultiListViewItem_c.Select(pThis, selected, unk);
+
+            _pluginProxy?.MultiListViewItemSelectionChanged(pThis, selected);
         }
 
         public void CheckBox_SlotButtonToggled_Hook(IntPtr pThis, bool enabled)

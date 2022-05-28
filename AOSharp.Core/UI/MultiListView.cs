@@ -14,6 +14,11 @@ namespace AOSharp.Core.UI
 {
     public class MultiListView : View
     {
+        //TODO: Instantiate with current list
+        public List<MultiListViewItem> Items = new List<MultiListViewItem>();
+
+        public EventHandler<bool> ItemSelectionStateChanged;
+
         protected MultiListView(IntPtr pointer, bool track = false) : base(pointer, track)
         {
         }
@@ -70,12 +75,27 @@ namespace AOSharp.Core.UI
 
         public bool AddItem(Vector2 slot, MultiListViewItem listViewItem, bool unk)
         {
+            Items.Add(listViewItem);
             return MultiListView_c.AddItem(_pointer, ref slot, listViewItem.Pointer, unk);
+        }
+
+        public MultiListViewItem AddItem(Vector2 slot, Variant value)
+        {
+            MultiListViewItem newItem = MultiListViewItem.Create(value);
+            MultiListView_c.AddItem(_pointer, ref slot, newItem.Pointer, true);
+
+            return newItem;
         }
 
         public void RemoveItem(MultiListViewItem listViewItem)
         {
+            Items.Remove(listViewItem);
             MultiListView_c.RemoveItem(_pointer, listViewItem.Pointer);
+        }
+
+        public void InvalidateItem(MultiListViewItem listViewItem)
+        {
+            MultiListView_c.InvalidateItem(_pointer, listViewItem.Pointer);
         }
 
         public Vector2 GetFirstFreePos()
@@ -96,6 +116,22 @@ namespace AOSharp.Core.UI
             listViewItem = (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pSelectedItem }, null);
 
             return true;
+        }
+
+        internal void OnItemSelectionStateChanged(IntPtr pItem, bool selected)
+        {
+            MultiListViewItem item = Items.FirstOrDefault(x => x.Pointer == pItem);
+
+            if (item == null)
+                return;
+
+            ItemSelectionStateChanged?.Invoke(item, selected);
+
+            foreach (MultiListViewItem otherItem in Items.Where(x => x.Pointer != pItem))
+            {
+                otherItem.Select(false);
+                ItemSelectionStateChanged?.Invoke(otherItem, false);
+            }
         }
     }
 }

@@ -57,12 +57,18 @@ namespace AOSharp.Bootstrap
         public ButtonPressedDelegate ButtonPressed;
         public delegate void CheckBoxToggledDelegate(IntPtr pCheckBox, bool enabled);
         public CheckBoxToggledDelegate CheckBoxToggled;
+        public delegate void MultiListViewItemSelectionChangedDelegate(IntPtr pItem, bool selected);
+        public MultiListViewItemSelectionChangedDelegate MultiListViewItemSelectionChanged;
+        public delegate int GetDynamicIDOverrideDelegate(string name);
+        public GetDynamicIDOverrideDelegate GetDynamicIDOverride;
     }
 
     public class PluginProxy : MarshalByRefObject
     {
         private static CoreDelegates _coreDelegates;
         private List<Plugin> _plugins = new List<Plugin>();
+
+        public int GetDynamicIDOverride(string name) => (_coreDelegates?.GetDynamicIDOverride?.Invoke(name)).GetValueOrDefault(0);
 
         public void UnknownChatCommand(IntPtr pWindow, string command) => _coreDelegates?.UnknownChatCommand?.Invoke(pWindow, command);
 
@@ -101,6 +107,8 @@ namespace AOSharp.Bootstrap
         public void ButtonPressed(IntPtr pButton) => _coreDelegates?.ButtonPressed?.Invoke(pButton);
 
         public void CheckBoxToggled(IntPtr pCheckBox, bool enabled) => _coreDelegates?.CheckBoxToggled?.Invoke(pCheckBox, enabled);
+
+        public void MultiListViewItemSelectionChanged(IntPtr pItem, bool selected) => _coreDelegates?.MultiListViewItemSelectionChanged?.Invoke(pItem, selected);
 
         public unsafe bool AttemptingSpellCast(int targetType, int targetId, int spellType, int spellId)
         {
@@ -167,7 +175,9 @@ namespace AOSharp.Bootstrap
                 HandleGroupMessage = CreateDelegate<CoreDelegates.HandleGroupMessageDelegate>(assembly, "AOSharp.Core.UI.Chat", "OnGroupMessage"),
                 ContainerOpened = CreateDelegate<CoreDelegates.ContainerOpenedDelegate>(assembly, "AOSharp.Core.Inventory.Inventory", "OnContainerOpened"),
                 ButtonPressed = CreateDelegate<CoreDelegates.ButtonPressedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnButtonPressed"),
-                CheckBoxToggled = CreateDelegate<CoreDelegates.CheckBoxToggledDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnCheckBoxToggled")
+                CheckBoxToggled = CreateDelegate<CoreDelegates.CheckBoxToggledDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnCheckBoxToggled"),
+                MultiListViewItemSelectionChanged = CreateDelegate<CoreDelegates.MultiListViewItemSelectionChangedDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnMultiListViewItemStateChanged"),
+                GetDynamicIDOverride = CreateDelegate<CoreDelegates.GetDynamicIDOverrideDelegate>(assembly, "AOSharp.Core.UI.UIController", "OnDynamicIDResolve")
             };
 
             _coreDelegates.Init();
