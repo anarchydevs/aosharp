@@ -141,6 +141,21 @@ namespace AOSharp.Core.UI
             View_c.SetLayoutNode(_pointer, layoutNode.Pointer);
         }
 
+        public void SetLocalColor(uint value)
+        {
+            View_c.SetLocalColor(_pointer, value);
+        }
+
+        public void SetColor(uint value)
+        {
+            View_c.SetColor(_pointer, value);
+        }
+
+        public void SetLocalAlpha(float value)
+        {
+            View_c.SetLocalAlpha(_pointer, value);
+        }
+
         public void SetAlpha(float value)
         {
             View_c.SetAlpha(_pointer, value);
