@@ -121,6 +121,11 @@ namespace AOSharp.Core.UI
             View_c.ResizeTo(_pointer, ref size);
         }
 
+        public void ScaleTo(Vector2 scale)
+        {
+            View_c.ScaleTo(Pointer, ref scale);
+        }
+
         public void LimitMaxSize(Vector2 size)
         {
             View_c.LimitMaxSize(_pointer, ref size);
