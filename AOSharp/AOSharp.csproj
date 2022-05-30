@@ -52,12 +52,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AOSharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AOSharpSDK.1.0.2\lib\net48\AOSharp.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="AOSharp.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AOSharpSDK.1.0.2\lib\net48\AOSharp.Core.dll</HintPath>
-    </Reference>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
@@ -182,6 +176,14 @@
     <ProjectReference Include="..\AOSharp.Bootstrap\AOSharp.Bootstrap.csproj">
       <Project>{56164cdc-83a1-4d13-91cf-3b1aa3f289b1}</Project>
       <Name>AOSharp.Bootstrap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AOSharp.Common\AOSharp.Common.csproj">
+      <Project>{2f48116b-5d7e-449c-a05a-7d82ea7169a3}</Project>
+      <Name>AOSharp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AOSharp.Core\AOSharp.Core.csproj">
+      <Project>{77516561-fa9c-47cd-8c2d-fc8a8b67876b}</Project>
+      <Name>AOSharp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
