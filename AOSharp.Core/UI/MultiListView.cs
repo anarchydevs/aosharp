@@ -62,6 +62,10 @@ namespace AOSharp.Core.UI
         {
             MultiListView_c.SetGridIconSpacing(_pointer, ref spacing);
         }
+        public void SetGridIconSize(int mode)
+        {
+            MultiListView_c.SetGridIconSize(_pointer, mode);
+        }
 
         public void SetGridLabelsOnTop(bool value)
         {

@@ -3,7 +3,7 @@ using AOSharp.Common.Helpers;
 
 namespace AOSharp.Common.GameData
 {
-    public enum MissionScope
+    public enum MissionScope : byte
     {
         Solo = 1,
         Team = 2,

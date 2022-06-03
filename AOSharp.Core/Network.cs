@@ -35,7 +35,8 @@ namespace AOSharp.Core
             { N3MessageType.TemplateAction, OnTemplateAction },
             { N3MessageType.GenericCmd, OnGenericCmd },
             { N3MessageType.CharInPlay, OnCharInPlay },
-            { N3MessageType.Trade, OnTrade }
+            { N3MessageType.QuestAlternative, OnQuestAlternative }
+
         };
 
         public static void Send(MessageBody message)
@@ -146,11 +147,6 @@ namespace AOSharp.Core
             DynelManager.OnCharInPlay(n3Msg.Identity);
         }
 
-        private static void OnTrade(N3Message n3Msg)
-        {
-            Trade.OnTradeMessage((TradeMessage)n3Msg);
-        }
-
         private static void OnGenericCmd(N3Message n3Msg)
         {
             GenericCmdMessage genericCmdMessage = (GenericCmdMessage)n3Msg;
@@ -204,6 +200,13 @@ namespace AOSharp.Core
                     PerkAction.OnPerkFinished(templateActionMessage.ItemLowId, templateActionMessage.ItemHighId, templateActionMessage.Quality, templateActionMessage.Identity);
                     break;
             }
+        }
+
+        private static void OnQuestAlternative(N3Message n3Msg)
+        {
+            QuestAlternativeMessage qMsg = (QuestAlternativeMessage)n3Msg;
+
+            Mission.OnRollListChanged(qMsg.MissionSliders, qMsg.MissionDetails);
         }
     }
 }
