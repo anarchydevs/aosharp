@@ -126,10 +126,10 @@ namespace AOSharp.Core
                             metReq = target.IsNpc;
                         break;
                     case UseCriteriaOperator.HasRunningNano:
-                        metReq = _criteriaSource.Char.Buffs.Any(x => x.Identity.Instance == criterion.Param2);
+                        metReq = _criteriaSource.Char.Buffs.Any(x => x.Id == criterion.Param2);
                         break;
                     case UseCriteriaOperator.HasNotRunningNano:
-                        metReq = _criteriaSource.Char.Buffs.All(x => x.Identity.Instance != criterion.Param2);
+                        metReq = _criteriaSource.Char.Buffs.All(x => x.Id != criterion.Param2);
                         break;
                     case UseCriteriaOperator.HasPerk:
                         metReq = N3EngineClientAnarchy_t.HasPerk(N3Engine_t.GetInstance(), criterion.Param2);
@@ -179,7 +179,7 @@ namespace AOSharp.Core
                         else
                         {
                             metReq = Inventory.Inventory.Items.Any(i =>
-                                (i.LowId == criterion.Param2 || i.HighId == criterion.Param2) &&
+                                (i.Id == criterion.Param2 || i.HighId == criterion.Param2) &&
                                 (i.Slot.Instance >= (int)EquipSlot.Weap_Hud1 &&
                                     i.Slot.Instance <= (int)EquipSlot.Imp_Feet));
                         }

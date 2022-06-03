@@ -64,7 +64,7 @@
     <Compile Include="GameData\PetType.cs" />
     <Compile Include="GameData\SpecialActionState.cs" />
     <Compile Include="GameData\Side.cs" />
-    <Compile Include="GameData\ACGItem.cs" />
+    <Compile Include="GameData\ACGItemQueryData.cs" />
     <Compile Include="GameData\PerkHash.cs" />
     <Compile Include="GameData\UI\UIEnums.cs" />
     <Compile Include="GameData\UseCriteriaOperator.cs" />

@@ -279,7 +279,7 @@ namespace AOSharp.Core.Combat
 
         protected void RegisterSpellProcessor(Spell spell, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
         {
-            RegisterSpellProcessor(new[] { spell.Identity.Instance }, conditionProcessor, priority);
+            RegisterSpellProcessor(new[] { spell.Id }, conditionProcessor, priority);
         }
 
         protected void RegisterSpellProcessor(IEnumerable<Spell> spellGroup, SpellConditionProcessor conditionProcessor, CombatActionPriority priority = CombatActionPriority.Medium)
@@ -303,7 +303,7 @@ namespace AOSharp.Core.Combat
         internal void OnItemUsed(int lowId, int highId, int ql)
         {
             //Drop the queued action
-            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Item action && action.LowId == lowId && action.HighId == highId && action.QualityLevel == ql)));
+            _actionQueue = new Queue<CombatActionQueueItem>(_actionQueue.Where(x => !(x.CombatAction is Item action && action.Id == lowId && action.HighId == highId && action.QualityLevel == ql)));
         }
 
         internal void OnUsingItem(Item item, double timeout)
@@ -368,7 +368,7 @@ namespace AOSharp.Core.Combat
                     case Item item:
                         Item item1 = item;
                         Item item2 = (Item)other.CombatAction;
-                        return item.LowId == ((Item)other.CombatAction).LowId && item.HighId == ((Item)other.CombatAction).HighId && item.QualityLevel == ((Item)other.CombatAction).QualityLevel;
+                        return item.Id == ((Item)other.CombatAction).Id && item.HighId == ((Item)other.CombatAction).HighId && item.QualityLevel == ((Item)other.CombatAction).QualityLevel;
                     case Spell spell:
                         return spell == ((Spell)other.CombatAction);
                     default:

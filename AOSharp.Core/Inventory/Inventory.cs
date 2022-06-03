@@ -30,27 +30,27 @@ namespace AOSharp.Core.Inventory
 
         public static bool Find(int id, out Item item)
         {
-            return (item = Items.FirstOrDefault(x => x.LowId == id || x.HighId == id)) != null;
+            return (item = Items.FirstOrDefault(x => x.Id == id || x.HighId == id)) != null;
         }
 
         public static bool Find(int lowId, int highId, out Item item)
         {
-            return (item = Items.FirstOrDefault(x => x.LowId == lowId && x.HighId == highId)) != null;
+            return (item = Items.FirstOrDefault(x => x.Id == lowId && x.HighId == highId)) != null;
         }
 
         public static List<Item> FindAll(int id)
         {
-            return Items.Where(x => x.LowId == id || x.HighId == id).ToList();
+            return Items.Where(x => x.Id == id || x.HighId == id).ToList();
         }
 
         public static List<Item> FindAll(IEnumerable<int> ids)
         {
-            return Items.Where(x => ids.Contains(x.LowId)).ToList();
+            return Items.Where(x => ids.Contains(x.Id)).ToList();
         }
 
         public static List<Item> FindAll(int lowId, int highId)
         {
-            return Items.Where(x => x.LowId == lowId && x.HighId == highId).ToList();
+            return Items.Where(x => x.Id == lowId && x.HighId == highId).ToList();
         }
 
         public static List<Item> FindAll(string name)

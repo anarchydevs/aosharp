@@ -40,10 +40,17 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public TradeAction Action { get; set; }
 
         [AoMember(2)]
-        public Identity Target { get; set; }
+        public int Param1 { get; set; }
 
         [AoMember(3)]
-        public Identity Container { get; set; }
+        public int Param2 { get; set; }
+
+        [AoMember(4)]
+        public int Param3 { get; set; }
+
+        [AoMember(5)]
+        public int Param4 { get; set; }
+
 
         #endregion
     }
