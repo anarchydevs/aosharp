@@ -21,6 +21,9 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?AddItem@MultiListView_c@@QAE_NABVIPoint@@PAVMultiListViewItem_c@@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern bool AddItem(IntPtr pThis, ref Vector2 slot, IntPtr listViewItem, bool unk);
 
+        [DllImport("GUI.dll", CallingConvention = CallingConvention.ThisCall, EntryPoint = "?SetGridIconSize@MultiListView_c@@QAEXW4IconSize_e@1@@Z")]
+        public static extern void SetGridIconSize(IntPtr pThis, int num);
+
         [DllImport("GUI.dll", EntryPoint = "?SetLayoutMode@MultiListView_c@@QAEXW4LayoutMode_e@1@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void SetLayoutMode(IntPtr pThis, int mode);
 

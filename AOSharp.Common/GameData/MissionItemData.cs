@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestAlternativeMessage.cs" company="SmokeLounge">
+// <copyright file="TowerInfo.cs" company="SmokeLounge">
 //   Copyright © 2013 SmokeLounge.
 //   This program is free software. It comes without any warranty, to
 //   the extent permitted by applicable law. You can redistribute it
@@ -8,41 +8,28 @@
 //   http://www.wtfpl.net/ for more details.
 // </copyright>
 // <summary>
-//   Defines the QuestAlternativeMessage type.
+//   Defines the TowerInfo type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using AOSharp.Common.GameData;
-
-namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
+namespace SmokeLounge.AOtomation.Messaging.GameData
 {
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using AOSharp.Common.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
-    [AoContract((int)N3MessageType.QuestAlternative)]
-    public class QuestAlternativeMessage : N3Message
+    public class MissionItemData
     {
-        #region Constructors and Destructors
-
-        public QuestAlternativeMessage()
-        {
-            this.N3MessageType = N3MessageType.QuestAlternative;
-        }
-
-        #endregion
-
         #region AoMember Properties
 
-
         [AoMember(0)]
-        public MissionSliders MissionSliders { get; set; }
+        public int LowId { get; set; }
 
         [AoMember(1)]
-        public Identity Terminal { get; set; }
+        public int HighId { get; set; }
 
-        [AoMember(2, SerializeSize = ArraySizeType.Byte)]
-        public MissionInfo[] MissionDetails { get; set; }
+        [AoMember(2)]
+        public int Ql { get; set; }
 
         #endregion
     }

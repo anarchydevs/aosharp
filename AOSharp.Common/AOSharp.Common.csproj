@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\MissionInfo.cs" />
+    <Compile Include="GameData\MissionItemData.cs" />
+    <Compile Include="GameData\MissionSliders.cs" />
     <Compile Include="GameData\ResearchGoal.cs" />
     <Compile Include="GameData\DuelUpdate.cs" />
     <Compile Include="GameData\Matrix4x4.cs" />
@@ -259,6 +262,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldTowerUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\GenericCmdSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldVendorInfoSerializer.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\QuestAlternativeSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\SimpleCharFullUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\DiagnosticSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ChatHeaderSerializer.cs" />

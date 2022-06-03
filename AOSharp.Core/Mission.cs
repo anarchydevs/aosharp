@@ -8,11 +8,13 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 using System.Linq;
 using AOSharp.Common.Unmanaged.Interfaces;
 using AOSharp.Common.Unmanaged.Imports;
-
+using SmokeLounge.AOtomation.Messaging.GameData;
 namespace AOSharp.Core
 {
     public unsafe class Mission
     {
+        public static EventHandler<RollListChangedArgs> RollListChanged;
+
         public Identity Identity => (*(MissionMemStruct*)Pointer).Identity;
 
         public string DisplayName => GetDisplayName();
@@ -75,7 +77,7 @@ namespace AOSharp.Core
         {
             List<MissionAction> actions = new List<MissionAction>();
 
-            foreach(IntPtr pAction in (*(MissionMemStruct*)Pointer).ActionList.ToList())
+            foreach (IntPtr pAction in (*(MissionMemStruct*)Pointer).ActionList.ToList())
             {
                 IntPtr pObjective = *(IntPtr*)(pAction + 0x8);
 
@@ -84,7 +86,7 @@ namespace AOSharp.Core
 
                 MissionActionMemStruct action = *(MissionActionMemStruct*)pObjective;
 
-                switch(action.Type)
+                switch (action.Type)
                 {
                     case MissionActionType.FindPerson:
                         actions.Add(new FindPersonAction(action.Type, action.CharIdentity1));
@@ -102,6 +104,10 @@ namespace AOSharp.Core
             }
 
             return actions;
+        }
+        internal static void OnRollListChanged(MissionSliders missionSliders, MissionInfo[] missionInfo)
+        {
+            RollListChanged?.Invoke(null, new RollListChangedArgs(missionSliders, missionInfo));
         }
 
         public static void UploadToMap(Identity missionId)
@@ -157,7 +163,7 @@ namespace AOSharp.Core
         public readonly Vector3 UniversePos;
         public readonly Vector3 Pos;
 
-        internal MissionLocation (Identity playfield, Vector3 uniPos, Vector3 pos)
+        internal MissionLocation(Identity playfield, Vector3 uniPos, Vector3 pos)
         {
             Playfield = playfield;
             UniversePos = uniPos;
@@ -210,10 +216,23 @@ namespace AOSharp.Core
     public class KillPersonAction : MissionAction
     {
         public Identity Target;
-
         public KillPersonAction(MissionActionType type, Identity target) : base(type)
         {
             Target = target;
+        }
+    }
+
+    public class RollListChangedArgs : EventArgs
+    {
+        public MissionSliders MissionSliders { get; }
+        public MissionInfo[] MissionDetails { get; }
+        public Identity Identity { get; }
+
+        public RollListChangedArgs(MissionSliders missionSliders, MissionInfo[] missionDetails)
+        {
+            MissionSliders = missionSliders;
+            MissionDetails = missionDetails;
+            Identity = Identity;
         }
     }
 }
