@@ -187,7 +187,7 @@ namespace AOSharp.Common.Unmanaged.Imports
         //CreateDummyItemID
         [return: MarshalAs(UnmanagedType.U1)]
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_CreateDummyItemID@n3EngineClientAnarchy_t@@QBE_NAAVIdentity_t@@ABVACGItem_t@GameData@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern bool CreateDummyItemID(IntPtr pThis, ref Identity template, ref ACGItem acgItem);
+        public static extern bool CreateDummyItemID(IntPtr pThis, ref Identity template, ref ACGItemQueryData acgItem);
 
         //TextCommand
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TextCommand@n3EngineClientAnarchy_t@@QAE_NHPBDABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]

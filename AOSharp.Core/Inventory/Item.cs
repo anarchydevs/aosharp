@@ -13,13 +13,10 @@ using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core.Inventory
 {
-    public class Item : DummyItem, ICombatAction, IEquatable<Item>
+    public class Item : ACGItem, ICombatAction, IEquatable<Item>
     {
         private const float USE_TIMEOUT = 1;
 
-        public readonly int LowId;
-        public readonly int HighId;
-        public readonly int QualityLevel;
         public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
         public List<EquipSlot> EquipSlots => GetEquipSlots();
@@ -31,18 +28,12 @@ namespace AOSharp.Core.Inventory
 
         internal Item(int lowId, int highId, int ql) : base(lowId, highId, ql)
         {
-            LowId = lowId;
-            HighId = highId;
-            QualityLevel = ql;
             UniqueIdentity = Identity.None;
             Slot = Identity.None;
         }
 
-        internal Item(int lowId, int highId, int ql, Identity uniqueIdentity, Identity slot) : base(slot)
+        internal Item(int lowId, int highId, int ql, Identity uniqueIdentity, Identity slot) : base(lowId, highId, ql)
         {
-            LowId = lowId;
-            HighId = highId;
-            QualityLevel = ql;
             UniqueIdentity = uniqueIdentity;
             Slot = slot;
         }
@@ -212,12 +203,11 @@ namespace AOSharp.Core.Inventory
             });
 
             if (owner != DynelManager.LocalPlayer.Identity)
-                return;
+                    return;
 
             _pendingUse = (Identity.None, 0);
 
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnItemUsed(lowId, highId, ql);
+            CombatHandler.Instance?.OnItemUsed(lowId, highId, ql);
         }
 
         public static void MoveItemToInventory(Identity source, int slot)
@@ -277,13 +267,13 @@ namespace AOSharp.Core.Inventory
             if (object.ReferenceEquals(other, null))
                 return false;
 
-            return LowId == other.LowId && HighId == other.HighId && QualityLevel == other.QualityLevel && Slot == other.Slot;
+            return Id == other.Id && HighId == other.HighId && QualityLevel == other.QualityLevel && Slot == other.Slot;
         }
 
         public override int GetHashCode()
         {
             int hashCode = 1039555169;
-            hashCode = hashCode * -1521134295 + LowId.GetHashCode();
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
             hashCode = hashCode * -1521134295 + HighId.GetHashCode();
             hashCode = hashCode * -1521134295 + QualityLevel.GetHashCode();
             hashCode = hashCode * -1521134295 + Slot.GetHashCode();

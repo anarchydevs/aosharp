@@ -21,27 +21,27 @@ namespace AOSharp.Core.Inventory
 
         public bool Find(int id, out Item item)
         {
-            return (item = Items.FirstOrDefault(x => x.LowId == id || x.HighId == id)) != null;
+            return (item = Items.FirstOrDefault(x => x.Id == id || x.HighId == id)) != null;
         }
 
         public bool Find(int lowId, int highId, out Item item)
         {
-            return (item = Items.FirstOrDefault(x => x.LowId == lowId && x.HighId == highId)) != null;
+            return (item = Items.FirstOrDefault(x => x.Id == lowId && x.HighId == highId)) != null;
         }
 
         public bool Find(int lowId, int highId, int ql, out Item item)
         {
-            return (item = Items.FirstOrDefault(x => x.LowId == lowId && x.HighId == highId && x.QualityLevel == ql)) != null;
+            return (item = Items.FirstOrDefault(x => x.Id == lowId && x.HighId == highId && x.QualityLevel == ql)) != null;
         }
 
         public List<Item> FindAll(int id)
         {
-            return Items.Where(x => x.LowId == id || x.HighId == id).ToList();
+            return Items.Where(x => x.Id == id || x.HighId == id).ToList();
         }
 
         public List<Item> FindAll(int lowId, int highId)
         {
-            return Items.Where(x => x.LowId == lowId && x.HighId == highId).ToList();
+            return Items.Where(x => x.Id == lowId && x.HighId == highId).ToList();
         }
     }
 }

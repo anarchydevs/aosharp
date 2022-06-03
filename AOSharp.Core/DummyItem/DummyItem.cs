@@ -8,14 +8,15 @@ using System.Runtime.InteropServices;
 using AOSharp.Core.Inventory;
 using AOSharp.Core.UI;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace AOSharp.Core
 {
     public class DummyItem
     {
         public readonly string Name;
-        private readonly Identity Identity;
-        private readonly IntPtr Pointer;
+        public int Id;
+        public readonly IntPtr Pointer;
 
         public float AttackDelay => GetStat(Stat.AttackDelay) / 100;
 
@@ -25,6 +26,7 @@ namespace AOSharp.Core
         public List<SpellData> UseModifiers => GetSpellList(SpellListType.Use);
         public List<SpellData> WearModifiers => GetSpellList(SpellListType.Wear);
 
+        /*
         internal unsafe DummyItem(int lowId, int highId, int ql)
         {
             Identity none = Identity.None;
@@ -42,24 +44,55 @@ namespace AOSharp.Core
             Identity = (*(MemStruct*)pItem).Identity;
             Name = Utils.UnsafePointerToString((*(MemStruct*)pItem).Name);
         }
+        */
 
-        internal unsafe DummyItem(Identity identity)
+        /*
+        internal unsafe DummyItem(Identity identity) : this
         {
-            Identity none = Identity.None;
-            IntPtr pEngine = N3Engine_t.GetInstance();
-            IntPtr pItem = N3EngineClientAnarchy_t.GetItemByTemplate(pEngine, identity, ref none);
+            Pointer = pItem;
+            Identity = identity;
+            Name = Utils.UnsafePointerToString((*(MemStruct*)pItem).Name);
+        }*/
+
+        internal unsafe DummyItem(IntPtr pointer)
+        {
+            if (pointer == IntPtr.Zero)
+                throw new Exception($"DummyItem::DummyItem - Unable to load DummyItem");
+
+            Pointer = pointer;
+            Id = GetStat(Stat.StaticInstance);
+            Name = Utils.UnsafePointerToString((*(MemStruct*)pointer).Name);
+        }
+
+        public static bool TryGet<T>(Identity identity, out T dummyItem) where T : DummyItem
+        {
+            dummyItem = null;
+
+            IntPtr pItem = GetPtr(identity);
 
             if (pItem == IntPtr.Zero)
-                throw new Exception($"DummyItem::DummyItem - Unable to locate item {identity}");
+                return false;
 
-            Pointer = pItem;
-            Identity = (*(MemStruct*)pItem).Identity;
-            Name = Utils.UnsafePointerToString((*(MemStruct*)pItem).Name);
+            dummyItem = Activator.CreateInstance(typeof(T), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { pItem }, null) as T;
+            return dummyItem != null;
+        }
+
+        public static bool TryGet(int lowId, int highId, int ql, out ACGItem dummyItem)
+        {
+            dummyItem = null;
+
+            IntPtr pItem = GetPtr(lowId, highId, ql);
+
+            if (pItem == IntPtr.Zero)
+                return false;
+
+            dummyItem = new ACGItem(pItem);
+            return true;
         }
 
         public static bool CreateDummyItemID(int lowId, int highId, int ql, out Identity dummyItemId)
         {
-            ACGItem itemInfo = new ACGItem
+            ACGItemQueryData queryData = new ACGItemQueryData
             {
                 LowId = lowId,
                 HighId = highId,
@@ -69,9 +102,23 @@ namespace AOSharp.Core
             IntPtr pEngine = N3Engine_t.GetInstance();
 
             Identity templateId = Identity.None;
-            bool result =  N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, ref templateId, ref itemInfo);
+            bool result =  N3EngineClientAnarchy_t.CreateDummyItemID(pEngine, ref templateId, ref queryData);
             dummyItemId = templateId;
             return result;
+        }
+
+        protected static IntPtr GetPtr(Identity identity)
+        {
+            Identity none = Identity.None;
+            return N3EngineClientAnarchy_t.GetItemByTemplate(N3Engine_t.GetInstance(), identity, ref none);
+        }
+
+        protected static IntPtr GetPtr(int lowId, int highId, int ql)
+        {
+            if (!CreateDummyItemID(lowId, highId, ql, out Identity dummyItemId))
+                return IntPtr.Zero;
+
+            return GetPtr(dummyItemId);
         }
 
         public bool MeetsSelfUseReqs()

@@ -13,17 +13,9 @@ using AOSharp.Core.UI;
 
 namespace AOSharp.Core
 {
-    public class Spell : DummyItem, ICombatAction
+    public class Spell : NanoItem, ICombatAction
     {
         private const float CAST_TIMEOUT = 0.5f;
-
-        public readonly Identity Identity;
-        public NanoLine Nanoline => (NanoLine)GetStat(Stat.NanoStrain);
-        public int NCU => GetStat(Stat.Level);
-        public int StackingOrder => GetStat(Stat.StackingOrder);
-        public NanoSchool NanoSchool => (NanoSchool)GetStat(Stat.School);
-
-        public int Cost => GetCost();
 
         public override float AttackRange => Math.Min(base.AttackRange * (1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f), 40f);
         public bool IsReady => GetIsReady();
@@ -34,12 +26,11 @@ namespace AOSharp.Core
 
         internal Spell(Identity identity) : base(identity)
         {
-            Identity = identity;
         }
 
         public static bool Find(int id, out Spell spell)
         {
-            return (spell = List.FirstOrDefault(x => x.Identity.Instance == id)) != null;
+            return (spell = List.FirstOrDefault(x => x.Id == id)) != null;
         }
 
         public static bool Find(string name, out Spell spell)
@@ -63,8 +54,8 @@ namespace AOSharp.Core
             {
                 Action = CharacterActionType.CastNano,
                 Target = target.Identity,
-                Parameter1 = (int)Identity.Type,
-                Parameter2 = Identity.Instance
+                Parameter1 = (int)IdentityType.NanoProgram,
+                Parameter2 = Id
             });
 
             _pendingCast = (this, Time.NormalTime + CAST_TIMEOUT);
@@ -77,7 +68,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return false;
 
-            Identity identity = Identity;
+            Identity identity = new Identity(IdentityType.NanoProgram, Id);
             return N3EngineClientAnarchy_t.IsFormulaReady(pEngine, ref identity);
         }
 
@@ -109,29 +100,6 @@ namespace AOSharp.Core
             return N3EngineClientAnarchy_t.GetNanoSpellList(pEngine)->ToList().Select(x => new Spell(new Identity(IdentityType.NanoProgram, (*(MemStruct*)x).Id))).ToArray();
         }
 
-        private int GetCost()
-        {
-            int costModifier = DynelManager.LocalPlayer.GetStat(Stat.NPCostModifier);
-            int baseCost = GetStat(Stat.NanoPoints);
-
-            switch (DynelManager.LocalPlayer.Breed)
-            {
-                case Breed.Nanomage:
-                    costModifier = costModifier < 45 ? 45 : costModifier;
-                    break;
-                case Breed.Atrox:
-                    costModifier = costModifier < 55 ? 55 : costModifier;
-                    break;
-                case Breed.Solitus:
-                case Breed.Opifex:
-                default:
-                    costModifier = costModifier < 50 ? 50 : costModifier;
-                    break;
-            }
-
-            return (int)(baseCost * ((double)costModifier / 100));
-        }
-
         public override bool Equals(object obj)
         {
             return Equals(obj as Spell);
@@ -142,12 +110,12 @@ namespace AOSharp.Core
             if (object.ReferenceEquals(other, null))
                 return false;
 
-            return Identity == other.Identity;
+            return Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            return 91194611 + Identity.GetHashCode();
+            return 91194611 + Id.GetHashCode();
         }
 
         public static bool operator ==(Spell a, Spell b)

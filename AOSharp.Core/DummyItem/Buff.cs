@@ -13,17 +13,15 @@ namespace AOSharp.Core
     public class Buff : DummyItem
     {
         public readonly Identity Owner;
-        public readonly Identity Identity;
         public readonly NanoLine Nanoline;
         public readonly int NCU;
         public readonly int StackingOrder;
         public float RemainingTime => GetCurrentTime();
         public float TotalTime => GetTotalTime();
 
-        internal Buff(Identity owner, Identity identity) : base(identity)
+        internal Buff(Identity owner, Identity identity) : base(GetPtr(identity))
         {
             Owner = owner;
-            Identity = identity;
             Nanoline = (NanoLine)GetStat(Stat.NanoStrain);
             StackingOrder = GetStat(Stat.StackingOrder);
             NCU = GetStat(Stat.Level);
@@ -36,7 +34,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            Identity identity = Identity;
+            Identity identity = new Identity(IdentityType.NanoProgram, Id);
             Identity owner = Owner;
             return N3EngineClientAnarchy_t.GetBuffCurrentTime(pEngine, ref identity, ref owner) / 100;
         }
@@ -48,7 +46,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return 0;
 
-            Identity identity = Identity;
+            Identity identity = new Identity(IdentityType.NanoProgram, Id);
             Identity owner = Owner;
             return N3EngineClientAnarchy_t.GetBuffTotalTime(pEngine, ref identity, ref owner) / 100f;
         }
@@ -60,7 +58,7 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return false;
 
-            Identity identity = Identity;
+            Identity identity = new Identity(IdentityType.NanoProgram, Id);
             return N3EngineClientAnarchy_t.RemoveBuff(pEngine, ref identity);
         }
     }

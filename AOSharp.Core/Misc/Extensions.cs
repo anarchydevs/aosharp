@@ -1,4 +1,5 @@
 ﻿using AOSharp.Common.GameData;
+using AOSharp.Common.Unmanaged.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,12 @@ namespace AOSharp.Core
 
         public static bool Find(this Buff[] buffs, Spell spell, out Buff buff)
         {
-            return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == spell.Identity.Instance)) != null;
+            return (buff = buffs.FirstOrDefault(x => x.Id == spell.Id)) != null;
         }
 
         public static bool Find(this Buff[] buffs, int id, out Buff buff)
         {
-            return (buff = buffs.FirstOrDefault(x => x.Identity.Instance == id)) != null;
+            return (buff = buffs.FirstOrDefault(x => x.Id == id)) != null;
         }
 
         public static bool Find(this Buff[] buffs, NanoLine nanoline, out Buff buff)
@@ -30,7 +31,7 @@ namespace AOSharp.Core
 
         public static bool Find(this Buff[] buffs, int[] ids, out Buff buff)
         {
-            return (buff = buffs.FirstOrDefault(b => ids.Contains(b.Identity.Instance))) != null;
+            return (buff = buffs.FirstOrDefault(b => ids.Contains(b.Id))) != null;
         }
 
         public static bool Contains(this Buff[] buffs, int id)
@@ -40,7 +41,7 @@ namespace AOSharp.Core
 
         public static bool Contains(this Buff[] buffs, int[] ids)
         {
-            return buffs.Any(b => ids.Contains(b.Identity.Instance));
+            return buffs.Any(b => ids.Contains(b.Id));
         }
 
         public static bool Contains(this Buff[] buffs, NanoLine nanoline)
@@ -55,7 +56,7 @@ namespace AOSharp.Core
 
         public static int[] GetIds(this IEnumerable<Spell> spells)
         {
-            return spells.Select(x => x.Identity.Instance).ToArray();
+            return spells.Select(x => x.Id).ToArray();
         }
 
         public static bool Contains(this List<TeamMember> teamMembers, Identity identity)
@@ -102,6 +103,11 @@ namespace AOSharp.Core
         {
             foreach(Vector3 vert in mesh.Vertices)
                 Debug.DrawSphere(mesh.LocalToWorldMatrix.MultiplyPoint3x4(vert), 0.1f, DebuggingColor.Red);
+        }
+
+        public static string GetLineName(this ResearchGoal researchGoal)
+        {
+            return N3EngineClientAnarchy.GetPerkName(researchGoal.ResearchId);
         }
     }
 }

@@ -58,6 +58,8 @@
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
     <Compile Include="Duel.cs" />
+    <Compile Include="DummyItem\ACGItem.cs" />
+    <Compile Include="DummyItem\NanoItem.cs" />
     <Compile Include="DummyItem\SpellData.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="ReqChecker.cs" />
@@ -78,11 +80,12 @@
     <Compile Include="DummyItem\DummyItem.cs" />
     <Compile Include="DummyItem\Buff.cs" />
     <Compile Include="ChatPacketFactory.cs" />
-    <Compile Include="DummyItem\Perk.cs" />
+    <Compile Include="Perk.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="Playfield\Room.cs" />
     <Compile Include="Research.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Trade.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="DummyItem\Spell.cs" />
     <Compile Include="Playfield\Zone.cs" />

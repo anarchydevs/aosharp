@@ -34,7 +34,8 @@ namespace AOSharp.Core
             { N3MessageType.CharacterAction, OnCharacterAction },
             { N3MessageType.TemplateAction, OnTemplateAction },
             { N3MessageType.GenericCmd, OnGenericCmd },
-            { N3MessageType.CharInPlay, OnCharInPlay }
+            { N3MessageType.CharInPlay, OnCharInPlay },
+            { N3MessageType.Trade, OnTrade }
         };
 
         public static void Send(MessageBody message)
@@ -143,6 +144,11 @@ namespace AOSharp.Core
         private static void OnCharInPlay(N3Message n3Msg)
         {
             DynelManager.OnCharInPlay(n3Msg.Identity);
+        }
+
+        private static void OnTrade(N3Message n3Msg)
+        {
+            Trade.OnTradeMessage((TradeMessage)n3Msg);
         }
 
         private static void OnGenericCmd(N3Message n3Msg)

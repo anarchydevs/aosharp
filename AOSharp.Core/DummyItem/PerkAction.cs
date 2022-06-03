@@ -20,19 +20,17 @@ namespace AOSharp.Core
 
         public unsafe bool IsAvailable => GetIsAvailable();
 
-        public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
-        public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Identity == Identity) != null;
-        public PerkLine PerkLine => Perk.GetByInstance(Identity.Instance).PerkLine;
-        public readonly Identity Identity;
+        public bool IsPending => _pendingQueue.FirstOrDefault(x => x.Id == Id) != null;
+        public bool IsExecuting => _executingQueue.FirstOrDefault(x => x.Id == Id) != null;
+        public PerkLine PerkLine => Perk.GetByInstance(Id).PerkLine;
         public readonly PerkHash Hash;
 
         public static List<PerkAction> List => GetPerkActions();
         private static Queue<QueueItem> _pendingQueue = new Queue<QueueItem>();
         private static Queue<QueueItem> _executingQueue = new Queue<QueueItem>();
 
-        private PerkAction(Identity identity, int hashInt) : base(identity)
+        private PerkAction(Identity identity, int hashInt) : base(GetPtr(identity))
         {
-            Identity = identity;
             Hash = (PerkHash)hashInt;
         }
 
@@ -55,7 +53,7 @@ namespace AOSharp.Core
                 {
                     Action = CharacterActionType.UsePerk,
                     Target = target.Identity,
-                    Parameter1 = Identity.Instance,
+                    Parameter1 = Id,
                     Parameter2 = (int)Hash
                 });
 
@@ -69,7 +67,7 @@ namespace AOSharp.Core
                 if (pEngine == IntPtr.Zero)
                     return false;
 
-                Identity identity = Identity;
+                Identity identity = new Identity(IdentityType.SpecialAction, Id);
                 return N3EngineClientAnarchy_t.PerformSpecialAction(pEngine, ref identity);
             }
         }
@@ -81,13 +79,13 @@ namespace AOSharp.Core
             if (pEngine == IntPtr.Zero)
                 return false;
 
-            Identity identity = Identity;
+            Identity identity = new Identity(IdentityType.SpecialAction, Id);
             return N3EngineClientAnarchy_t.GetSpecialActionState(pEngine, ref identity) == SpecialActionState.Ready;
         }
 
         public static bool Find(int id, out PerkAction perkAction)
         {
-            return (perkAction = List.FirstOrDefault(x => x.Identity.Instance == id)) != null;
+            return (perkAction = List.FirstOrDefault(x => x.Id == id)) != null;
         }
 
         public static bool Find(string name, out PerkAction perkAction)
@@ -104,7 +102,7 @@ namespace AOSharp.Core
         {
             _pendingQueue.Enqueue(new QueueItem
             {
-                Identity = perkAction.Identity,
+                Id = perkAction.Id,
                 AttackTime = perkAction.AttackDelay,
                 Timeout = Time.NormalTime + PERK_TIMEOUT
             });
@@ -128,7 +126,7 @@ namespace AOSharp.Core
                 perks.Add(new PerkAction(specialAction.TemplateIdentity, specialAction.Identity.Instance));
             }
 
-            return perks.OrderBy(perk => perk.Identity.Instance).ToList();
+            return perks.OrderBy(perk => perk.Id).ToList();
         }
 
         internal static void Update()
@@ -162,18 +160,16 @@ namespace AOSharp.Core
             if (owner != DynelManager.LocalPlayer.Identity)
                 return;
 
-            DummyItem perkDummyItem = new DummyItem(lowId, highId, ql);
-
             _executingQueue.Dequeue();
 
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnPerkExecuted(perkDummyItem);
+            if (TryGet(lowId, highId, ql, out ACGItem perkDummyItem))
+                CombatHandler.Instance?.OnPerkExecuted(perkDummyItem);
         }
 
         internal static void OnPerkQueued()
         {
             PerkAction perkAction;
-            if (_pendingQueue.Count == 0 || !Find(_pendingQueue.Dequeue().Identity.Instance, out perkAction))
+            if (_pendingQueue.Count == 0 || !Find(_pendingQueue.Dequeue().Id, out perkAction))
                 return;
 
             //Calc time offset of perks before this one in queue.
@@ -182,13 +178,12 @@ namespace AOSharp.Core
 
             _executingQueue.Enqueue(new QueueItem
             {
-                Identity = perkAction.Identity,
+                Id = perkAction.Id,
                 AttackTime = perkAction.AttackDelay,
                 Timeout = nextTimeout
             });
 
-            if (CombatHandler.Instance != null)
-                CombatHandler.Instance.OnPerkLanded(perkAction, nextTimeout);
+            CombatHandler.Instance?.OnPerkLanded(perkAction, nextTimeout);
         }
 
         private static void OnClientPerformedSpecialAction(Identity identity)
@@ -205,7 +200,7 @@ namespace AOSharp.Core
             if (object.ReferenceEquals(other, null))
                 return false;
 
-            return Identity == other.Identity;
+            return Id == other.Id;
         }
 
         public static bool operator ==(PerkAction a, PerkAction b)
@@ -233,7 +228,7 @@ namespace AOSharp.Core
 
         private class QueueItem
         {
-            public Identity Identity;
+            public int Id;
             public float AttackTime;
             public double Timeout;
         }
