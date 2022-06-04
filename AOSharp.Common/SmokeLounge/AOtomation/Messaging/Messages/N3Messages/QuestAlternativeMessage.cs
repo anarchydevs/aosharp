@@ -34,14 +34,22 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 
         #region AoMember Properties
 
-
         [AoMember(0)]
-        public MissionSliders MissionSliders { get; set; }
+        public byte Unknown1 { get; set; }
 
         [AoMember(1)]
+        public MissionSliders MissionSliders { get; set; }
+
+        [AoMember(2)]
+        public int Unknown2 { get; set; }
+
+        [AoMember(3)]
+        public MissionScope Scope { get; set; }
+
+        [AoMember(4)]
         public Identity Terminal { get; set; }
 
-        [AoMember(2, SerializeSize = ArraySizeType.Byte)]
+        [AoMember(5, SerializeSize = ArraySizeType.Byte)]
         public MissionInfo[] MissionDetails { get; set; }
 
         #endregion

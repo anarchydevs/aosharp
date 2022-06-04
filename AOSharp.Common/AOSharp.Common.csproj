@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameData\MissionInfo.cs" />
-    <Compile Include="GameData\MissionItemData.cs" />
-    <Compile Include="GameData\MissionSliders.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionInfo.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionItemData.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionSliders.cs" />
     <Compile Include="GameData\ResearchGoal.cs" />
     <Compile Include="GameData\DuelUpdate.cs" />
     <Compile Include="GameData\Matrix4x4.cs" />

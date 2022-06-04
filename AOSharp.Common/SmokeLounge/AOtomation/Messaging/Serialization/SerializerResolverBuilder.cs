@@ -66,7 +66,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             this.serializers.TryAdd(typeof(SimpleCharFullUpdateMessage), new SimpleCharFullUpdateSerializer());
             this.serializers.TryAdd(typeof(GenericCmdMessage), new GenericCmdSerializer());
             this.serializers.TryAdd(typeof(PlayfieldTowerUpdateClientMessage), new PlayfieldTowerUpdateClientSerializer());
-            this.serializers.TryAdd(typeof(QuestAlternativeMessage), new QuestAlternativeSerializer());
+            //this.serializers.TryAdd(typeof(QuestAlternativeMessage), new QuestAlternativeSerializer());
 
         }
 

@@ -59,6 +59,10 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers
             {
                 length = propertyMetaData.Options.FixedSizeLength;
             }
+            else if (propertyMetaData.Options.SerializeSize == ArraySizeType.NullTerminated)
+            {
+                return streamReader.ReadNullTerminatedString();
+            }
             else
             {
                 var arraySizeSerializer = new ArraySizeSerializer(propertyMetaData.Options.SerializeSize);

@@ -33,10 +33,9 @@ namespace AOSharp.Core
                     OpenHidden = openHidden,
                     PhysicalMystical = physicalMystical,
                     HeadonStealth = headonStealth,
-                    CreditsXp = creditsXp,
-                    Scope = scope,
+                    CreditsXp = creditsXp
                 },
-
+                Scope = scope,
                 Terminal = Identity,
             });
         }

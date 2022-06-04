@@ -118,6 +118,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             var littleEndian = this.reader.ReadUInt32() << 32;
             return (uint)(IPAddress.NetworkToHostOrder(littleEndian) >> 32);
         }
+
         public string ReadNullTerminatedString()
         {
             string str = "";
