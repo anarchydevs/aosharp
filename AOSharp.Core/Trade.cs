@@ -11,19 +11,8 @@ using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
 namespace AOSharp.Core
 {
-    public class Trade
+    public static class Trade
     {
-        public static event Action<Trade> TradeStateChanged;
-        public static Trade ActiveTrade;
-        public Identity Trader;
-        public TradeState State;
-
-        public Trade(Identity trader)
-        {
-            Trader = trader;
-            State = TradeState.Opened;
-        }
-
         public static void Open(Identity trader)
         {
             Network.Send(new TradeMessage
@@ -35,25 +24,20 @@ namespace AOSharp.Core
             });
         }
 
-        public void AddItem(Item item)
-        {
-            AddItem(item.Slot);
-        }
-
-        public void AddItem(Identity slot)
+        public static void AddItem(Identity trade, Identity slot)
         {
             Network.Send(new TradeMessage
             {
                 Unknown1 = 2,
                 Action = TradeAction.AddItem,
-                Param1 = (int)Trader.Type,
-                Param2 = Trader.Instance,
+                Param1 = (int)trade.Type,
+                Param2 = trade.Instance,
                 Param3 = (int)slot.Type,
                 Param4 = slot.Instance,
             });
         }
 
-        public void SetCredits(int credits)
+        public static void SetCredits(int credits)
         {
             Network.Send(new TradeMessage
             {
@@ -63,28 +47,30 @@ namespace AOSharp.Core
             });
         }
 
-        public void Accept()
+        public static void Accept(Identity trade)
         {
             Network.Send(new TradeMessage
             {
                 Unknown1 = 2,
                 Action = TradeAction.Accept,
-                Param1 = (int)Trader.Type,
-                Param2 = Trader.Instance,
+                Param1 = (int)trade.Type,
+                Param2 = trade.Instance,
             });
         }
 
-        public void Confirm()
+        public static void Confirm(Identity trade)
         {
             Network.Send(new TradeMessage
             {
                 Unknown1 = 2,
                 Action = TradeAction.Confirm,
-                Param1 = (int)Trader.Type,
-                Param2 = Trader.Instance,
+                Param1 = (int)trade.Type,
+                Param2 = trade.Instance,
             });
         }
 
+        //To be continued.  Maybe.. one day..
+        /*
         internal static void OnTradeMessage(TradeMessage tradeMsg)
         {
             switch(tradeMsg.Action)
@@ -102,14 +88,6 @@ namespace AOSharp.Core
                     }
                     break;
             }
-        }
-    }
-
-    public enum TradeState
-    {
-        Opened,
-        Closed,
-        Accepted,
-        NeedsConfirmation
+        }*/
     }
 }

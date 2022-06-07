@@ -6,9 +6,10 @@
         Accept = 1,
         Decline = 2,
         Confirm = 3,
-        Unknown = 4,
+        Complete = 4,
         AddItem = 5,
         RemoveItem = 6,
-        UpdateCredits = 7
+        UpdateCredits = 7,
+        OtherPlayerAddItem = 8
     }
 }

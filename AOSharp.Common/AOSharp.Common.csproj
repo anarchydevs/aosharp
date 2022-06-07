@@ -262,7 +262,6 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldTowerUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\GenericCmdSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\PlayfieldVendorInfoSerializer.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\QuestAlternativeSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\Custom\SimpleCharFullUpdateSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\DiagnosticSerializer.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Serialization\Serializers\ChatHeaderSerializer.cs" />

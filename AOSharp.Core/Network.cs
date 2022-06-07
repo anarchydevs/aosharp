@@ -36,7 +36,7 @@ namespace AOSharp.Core
             { N3MessageType.GenericCmd, OnGenericCmd },
             { N3MessageType.CharInPlay, OnCharInPlay },
             { N3MessageType.QuestAlternative, OnQuestAlternative },
-            { N3MessageType.Trade, OnTrade }
+            //{ N3MessageType.Trade, OnTrade }
 
         };
 
@@ -92,10 +92,12 @@ namespace AOSharp.Core
             }
         }
 
+        /*
         private static void OnTrade(N3Message n3Msg)
         {
             Trade.OnTradeMessage((TradeMessage)n3Msg);
         }
+        */
 
         private static void OnChatMessage(byte[] packet)
         {
