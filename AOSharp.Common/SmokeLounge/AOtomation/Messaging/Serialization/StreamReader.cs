@@ -128,6 +128,15 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             return str;
         }
 
+        public int PeekNullTermStringLength()
+        {
+            long origin = reader.BaseStream.Position;
+            while (reader.ReadByte() != 0);
+            long length = reader.BaseStream.Position - origin;
+            reader.BaseStream.Position = origin;
+            return (int)length;
+        }
+
         #endregion
     }
 }

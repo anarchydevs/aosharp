@@ -92,6 +92,12 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers
                 assignLengthExpression = Expression.Assign(
                     lengthExpression, Expression.Constant(propertyMetaData.Options.FixedSizeLength, typeof(int)));
             }
+            else if (propertyMetaData.Options.SerializeSize == ArraySizeType.NullTerminated)
+            {
+                var countCharsMethodInfo = ReflectionHelper.GetMethodInfo<StreamReader, Func<int>>(o => o.PeekNullTermStringLength);
+
+                assignLengthExpression = Expression.Assign(lengthExpression, Expression.Call(streamReaderExpression, countCharsMethodInfo));
+            }
             else
             {
                 assignLengthExpression =

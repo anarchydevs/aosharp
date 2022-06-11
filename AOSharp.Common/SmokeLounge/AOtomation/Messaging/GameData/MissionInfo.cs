@@ -28,10 +28,10 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
         [AoMember(1, FixedSizeLength = 16, IsFixedSize = true)]
         public byte[] UnkChunk1 { get; set; }
 
-        [AoMember(2, SerializeSize = ArraySizeType.NullTerminated)]
+        [AoMember(2, SerializeSize=ArraySizeType.NullTerminated)]
         public string Title { get; set; }
 
-        [AoMember(3)]
+        [AoMember(3, SerializeSize=ArraySizeType.Int32)]
         public string Description { get; set; }
 
         [AoMember(4)]
