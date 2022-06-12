@@ -52,7 +52,7 @@ namespace SmokeLounge.AOtomation.Messaging.GameData
         [AoMember(9, FixedSizeLength = 8, IsFixedSize = true)]
         public byte[] UnkChunk2 { get; set; }
 
-        [AoMember(10, SerializeSize = ArraySizeType.Byte)]
+        [AoMember(10, SerializeSize = ArraySizeType.X3F1)]
         public MissionItemData[] MissionItemData { get; set; }
 
         [AoMember(11, FixedSizeLength = 44, IsFixedSize = true)]

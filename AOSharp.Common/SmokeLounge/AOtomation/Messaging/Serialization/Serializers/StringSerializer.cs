@@ -153,7 +153,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers
             }
 
             var expressions = new List<Expression>();
-            if (propertyMetaData.Options.SerializeSize != ArraySizeType.NoSerialization)
+            if (propertyMetaData.Options.SerializeSize != ArraySizeType.NoSerialization && propertyMetaData.Options.SerializeSize != ArraySizeType.NullTerminated)
             {
                 var serializeSizeExp =
                     new ArraySizeSerializer(propertyMetaData.Options.SerializeSize).SerializerExpression(
