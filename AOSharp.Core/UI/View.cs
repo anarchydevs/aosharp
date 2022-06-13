@@ -8,7 +8,6 @@ namespace AOSharp.Core.UI
 {
     public class View
     {
-        public readonly string Name;
         public unsafe int Handle => *(int*)(_pointer + 0x44);
         public object Tag;
 
@@ -25,8 +24,6 @@ namespace AOSharp.Core.UI
         internal View(IntPtr pointer, bool register = true)
         {
             _pointer = pointer;
-            Name = "idk";
-            //Name = StdString.FromPointer(*(IntPtr*)(_pointer + 0x20)).ToString();
 
             if (register)
                 UIController.RegisterView(this);
