@@ -16,8 +16,15 @@ namespace SmokeLounge.AOtomation.Messaging.Messages
 {
     public enum ChatMessageType : short
     {
-        LookupMessage = 0x0015,
-        PrivateMessage = 0x001E,
-        VicinityMessage = 0x0022
+        ServerSalt = 0,
+        LoginRequest = 2,
+        SelectCharacter = 3,
+        LoginOK = 5,
+        LoginError = 6,
+        CharacterList = 7,
+        CharacterName = 20,
+        LookupMessage = 21,
+        PrivateMessage = 30,
+        VicinityMessage = 34
     }
 }

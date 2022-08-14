@@ -18,7 +18,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.ChatMessages
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
     [AoContract((int)ChatMessageType.PrivateMessage)]
-    public class PrivateMessage : ChatMessageBody
+    public class PrivateMsgMessage : ChatMessageBody
     {
         #region Public Properties
 

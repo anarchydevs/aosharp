@@ -117,8 +117,15 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\TowerInfoPacket.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MarketSendSlot.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\VendingMachineSlot.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatLoginOKMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatLoginErrorMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatCharacterListMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\CharacterNameMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatSelectCharacterMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatLoginRequestMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\ChatServerSaltMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\VicinityMessage.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMsgMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CreateQuestMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />

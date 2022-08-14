@@ -113,7 +113,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization
             serializer.Serialize(writer, serializationContext, message.Body);
             var length = writer.Position;
             writer.Position = 2;
-            writer.WriteInt16((short)length);
+            writer.WriteInt16((short)(length - 4));
         }
 
         #endregion
