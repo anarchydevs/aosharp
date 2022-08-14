@@ -380,16 +380,17 @@ namespace TestPlugin
                     //foreach(Item aggroTool in Inventory.Items.Where(x => x.Name == "Aggression Enhancer"))
                     //    Chat.WriteLine($"QL {aggroTool.QualityLevel} - Low: {aggroTool.LowId} / High: {aggroTool.HighId}");
 
-                    if(Inventory.Find("Premium Health and Nano Recharger", out Item sitKit))
+                    if (DummyItem.TryGet(new Identity(IdentityType.NanoProgram, 55751), out NanoItem buff))
+                        Chat.WriteLine($"Loaded buff: {buff.Name} -> {buff.Id} -> NCU: {buff.NCU} -> StackingOrder: {buff.StackingOrder} -> Nanoline{buff.Nanoline}");
+
+                    if(DynelManager.Find("Collected Essence", out SimpleChar boss))
                     {
-                        Chat.WriteLine($"I can use sit kit == {sitKit.MeetsSelfUseReqs()}");
+                        Chat.WriteLine($"Essence: {boss.Identity}");
+                        foreach (Buff bbuff in boss.Buffs)
+                            Chat.WriteLine(bbuff.Name);
                     }
 
-                    if (Spell.Find("Superior Fleeting Immunity", out Spell sorbs))
-                    {
-                        Chat.WriteLine($"I can use sorbs == {sorbs.MeetsSelfUseReqs()}");
-                    }
-
+                    
 
                     //Settings["DrawStuff"] = true;
 
@@ -507,10 +508,10 @@ namespace TestPlugin
                 Game.TeleportFailed += Game_OnTeleportFailed;
                 Game.PlayfieldInit += Game_PlayfieldInit;
                 //MiscClientEvents.AttemptingSpellCast += AttemptingSpellCast;
-                //Network.N3MessageReceived += Network_N3MessageReceived;
+                Network.N3MessageReceived += Network_N3MessageReceived;
                 //Network.N3MessageSent += Network_N3MessageSent;
-                //Network.PacketReceived += Network_PacketReceived;
-                //Network.PacketSent += Network_PacketSent;
+                Network.PacketReceived += Network_PacketReceived;
+                Network.PacketSent += Network_PacketSent;
                 Network.ChatMessageReceived += Network_ChatMessageReceived;
                 Team.TeamRequest += Team_TeamRequest;
                 Team.MemberLeft += Team_MemberLeft;
@@ -560,15 +561,17 @@ namespace TestPlugin
 
         private void Network_PacketSent(object s, byte[] packet)
         {
-            //if (msgType == N3MessageType.)
-            //    Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+            N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
+
+            if (msgType == N3MessageType.QuestAlternative)
+                Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
         }
 
         private void Network_ChatMessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.ChatMessageBody chatMessage)
         {
             if (chatMessage.PacketType == ChatMessageType.PrivateMessage)
             {
-                Chat.WriteLine($"Received {((PrivateMessage)chatMessage).Text}");
+                Chat.WriteLine($"Received {((PrivateMsgMessage)chatMessage).Text}");
             }
         }
 
@@ -579,14 +582,14 @@ namespace TestPlugin
 
          private void Network_N3MessageReceived(object s, SmokeLounge.AOtomation.Messaging.Messages.N3Message n3Msg)
         {
-            //Chat.WriteLine($"{n3Msg.N3MessageType}");
+            //Chat.WriteLine($"{n3Msg.N3MessageType} {n3Msg.Identity}");
 
-            
+            /*
             if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.PlayfieldAnarchyF)
             {
                 PlayfieldAnarchyFMessage ayy = (PlayfieldAnarchyFMessage)n3Msg;
                 //Chat.WriteLine($"GenericCmd: {ayy.Action.ToString()}\t{ayy.Count.ToString()}\t{ayy.Target.ToString()}\t{ayy.Temp1.ToString()}\t{ayy.Temp4.ToString()}\t{ayy.User.ToString()}\t{ayy.Identity.ToString()}");
-            }
+            }*/
 
             //if (n3Msg.N3MessageType == N3MessageType.CharDCMove)
             //    Chat.WriteLine($"MoveType: {((CharDCMoveMessage)n3Msg).MoveType}");
@@ -598,13 +601,29 @@ namespace TestPlugin
                 Chat.WriteLine($"TemplateAction: {ayy.Unknown1.ToString()}\t{ayy.Unknown2.ToString()}\t{ayy.Unknown3.ToString()}\t{ayy.Unknown4.ToString()}\t{ayy.ItemLowId.ToString()}\t{ayy.Placement.ToString()}\t{ayy.Identity.ToString()}");
             }
             */
+
+
+            if (n3Msg.N3MessageType == N3MessageType.SpellList)
+            {
+                SpellListMessage ayy = (SpellListMessage)n3Msg;
+                Chat.WriteLine($"SpellList for {ayy.Character}");
+
+                foreach(NanoEffect effect in ayy.NanoEffects)
+                    Chat.WriteLine($"{effect.Effect}");
+            }
+
+            if (n3Msg.N3MessageType == N3MessageType.Trade)
+            {
+                TradeMessage ayy = (TradeMessage)n3Msg;
+                Chat.WriteLine($"Trade: TradeAction: {ayy.Action}\tParam1: {ayy.Param1}\tParam2: {ayy.Param2}\tParam3: {ayy.Param3}\tParam4: {ayy.Param4}\t{ayy.Unknown1}");
+            }
             /*
             if (n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.Feedback)
             {
                 FeedbackMessage ayy = (FeedbackMessage)n3Msg;
                 Chat.WriteLine($"Feedback: {ayy.MessageId.ToString()}\t{ayy.CategoryId.ToString()}\t{ayy.Unknown1.ToString()}");
-            }
-
+            }*/
+            /*
             if(n3Msg.N3MessageType == SmokeLounge.AOtomation.Messaging.Messages.N3MessageType.CharacterAction)
             {
                 CharacterActionMessage charActionMessage = (CharacterActionMessage)n3Msg;
@@ -786,8 +805,16 @@ namespace TestPlugin
             N3MessageType msgType = (N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19]);
             //Chat.WriteLine($"{msgType}");
 
-            if (msgType == N3MessageType.SimpleItemFullUpdate)
+            if (msgType == N3MessageType.QuestAlternative)
                 Chat.WriteLine(BitConverter.ToString(packet).Replace("-", ""));
+
+            if (msgType == N3MessageType.SpellList)
+                Chat.WriteLine($"SpellList: {BitConverter.ToString(packet).Replace("-", "")}");
+
+            if (msgType == N3MessageType.QuestFullUpdate)
+                Chat.WriteLine($"QuestFullUpdate: {BitConverter.ToString(packet).Replace("-", "")}");
+
+            return;
 
             if (((N3MessageType)((packet[16] << 24) + (packet[17] << 16) + (packet[18] << 8) + packet[19])) == N3MessageType.PlayfieldAnarchyF)
             {
