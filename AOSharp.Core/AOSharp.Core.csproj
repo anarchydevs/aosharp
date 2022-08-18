@@ -61,6 +61,7 @@
     <Compile Include="DummyItem\ACGItem.cs" />
     <Compile Include="DummyItem\NanoItem.cs" />
     <Compile Include="DummyItem\SpellData.cs" />
+    <Compile Include="Dynel\Camera.cs" />
     <Compile Include="Dynel\MissionTerminal.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="ReqChecker.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="GameData\SpecialAction.cs" />
     <Compile Include="UI\AOSharpWindow.cs" />
     <Compile Include="UI\BitmapView.cs" />
+    <Compile Include="UI\DropdownMenu.cs" />
     <Compile Include="UI\ComboBox.cs" />
     <Compile Include="UI\ButtonBase.cs" />
     <Compile Include="UI\Chat.cs" />

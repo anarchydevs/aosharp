@@ -315,6 +315,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\DistrictData_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\LandControlMap_t.cs" />
+    <Compile Include="Unmanaged\Imports\GUI\DropdownMenu_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\BitmapView_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\Button_c.cs" />
     <Compile Include="Unmanaged\Imports\GUI\ButtonBase_c.cs" />
@@ -364,6 +365,7 @@
     <Compile Include="Unmanaged\Imports\N3\N3DatabaseHandler.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3Dynel_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3EngineClient_t .cs" />
+    <Compile Include="Unmanaged\Imports\N3\N3Camera_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3Engine_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3InfoItemRemote_t.cs" />
     <Compile Include="Unmanaged\Imports\N3\N3Playfield_t.cs" />
