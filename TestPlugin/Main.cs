@@ -67,6 +67,11 @@ namespace TestPlugin
                 Chat.WriteLine($"\tIsLeader: {Team.IsLeader}");
                 Chat.WriteLine($"\tIsRaid: {Team.IsRaid}");
 
+                Chat.WriteLine($"Camera:");
+                Chat.WriteLine($"IsFirstPerson: {Camera.IsFirstPerson}");
+                Chat.WriteLine($"Position: {Camera.Position}");
+                Chat.WriteLine($"Rot: {Camera.Rotation}");
+
                 mc = new MovementController(drawPath: true);
 
 
