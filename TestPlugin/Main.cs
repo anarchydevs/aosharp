@@ -107,7 +107,7 @@ namespace TestPlugin
                 Chat.WriteLine("Dynels:");
                 foreach (SimpleChar c in DynelManager.Characters)
                 {
-                    Chat.WriteLine($"\t{c.Name}\t{((int)c.Flags).ToString("X4")}");
+                    Chat.WriteLine($"\t{c.Name}\t{((int)c.Flags).ToString("X4")}\t{c.Profession}");
                 }
 
 

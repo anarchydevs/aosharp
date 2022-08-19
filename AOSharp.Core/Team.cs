@@ -51,7 +51,6 @@ namespace AOSharp.Core
                 Kick(member.Identity);
         }
 
-
         public static void Accept(Identity target)
         {
             //TODO: Actually call the game function to accept so that the client doesn't bug out.
