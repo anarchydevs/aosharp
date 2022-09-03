@@ -22,6 +22,8 @@ namespace AOSharp.Core
         public static bool IsZoning { get; private set; }
         public static int ClientInst => N3InterfaceModule_t.GetClientInst();
 
+        public static int ServerId => Client_t.GetServerID(Client_t.GetInstanceIfAny());
+
         public static EventHandler<float> OnEarlyUpdate;
         public static EventHandler<float> OnUpdate;
         public static EventHandler TeleportStarted;

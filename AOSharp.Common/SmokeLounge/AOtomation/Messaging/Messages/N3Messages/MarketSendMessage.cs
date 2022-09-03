@@ -37,7 +37,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Identity Sender { get; set; }
 
         [AoMember(1)]
-        public int Unknown2 { get; set; }
+        public int Credits { get; set; }
 
         [AoMember(2, SerializeSize = ArraySizeType.X3F1)]
         public MarketSendSlot[] Items { get; set; }

@@ -37,6 +37,9 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.45.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.45\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -57,6 +60,7 @@
     <Compile Include="Battlestation.cs" />
     <Compile Include="Combat\ICombatAction.cs" />
     <Compile Include="Combat\CombatHandler.cs" />
+    <Compile Include="GMI\GMI.cs" />
     <Compile Include="Duel.cs" />
     <Compile Include="DummyItem\ACGItem.cs" />
     <Compile Include="DummyItem\NanoItem.cs" />
