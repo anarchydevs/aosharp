@@ -83,11 +83,12 @@ namespace AOSharp.Core.GMI
                 HtmlNodeCollection inventoryItems = doc.DocumentNode.SelectNodes("//table[@id='inventoryTable']//tr[not(ancestor::thead)]");
                 HtmlNode inventoryCash = doc.DocumentNode.SelectSingleNode("//p[@id='inventoryCash']");
 
-                List<MarketInventoryItem> items = inventoryItems.Where(x => x.Attributes.Contains("cluster_id")).Select(x => new MarketInventoryItem
+                List<MyMarketInventoryItem> items = inventoryItems.Where(x => x.Attributes.Contains("cluster_id")).Select(x => new MyMarketInventoryItem
                 {
                     ClusterId = int.Parse(x.Attributes["cluster_id"].Value),
+                    TemplateQL = int.Parse(x.Attributes["template_ql"].Value),
                     Count = int.Parse(x.SelectSingleNode(".//td[@id='item_count']").InnerText),
-                    TemplateQL = int.Parse(x.Attributes["template_ql"].Value)
+                    Slot = int.Parse(x.Attributes["slot_num"].Value)
                 }).ToList();
 
                 List<MarketClusterItem> itemsMissingVisuals = items.Where(x => !_itemVisualsCache.ContainsKey(x.ClusterId) || !_itemVisualsCache[x.ClusterId].ContainsKey(x.TemplateQL)).Cast<MarketClusterItem>().ToList();
@@ -180,6 +181,99 @@ namespace AOSharp.Core.GMI
             }
         }
 
+        public async static Task<JsonActionOutputDTOBase> ModifySellOrder(int orderId, long price)
+        {
+            ModifyOrderDTO dto = new ModifyOrderDTO
+            {
+                OrderId = orderId,
+                Price = price
+            };
+
+            return await JsonAction("do_modify_sell", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> ModifyBuyOrder(int orderId, long price)
+        {
+            ModifyOrderDTO dto = new ModifyOrderDTO
+            {
+                OrderId = orderId,
+                Price = price
+            };
+
+            return await JsonAction("do_modify_buy", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> Withdraw(int slot, int count)
+        {
+            WithdrawItemDTO dto = new WithdrawItemDTO
+            {
+                Slot = slot,
+                Count = count
+            };
+
+            return await JsonAction($"withdraw_item", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> CancelSellOrder(int orderId)
+        {
+            CancelOrderDTO dto = new CancelOrderDTO
+            {
+                OrderId = orderId
+            };
+
+            return await JsonAction($"do_cancel_sell", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> CancelBuyOrder(int orderId)
+        {
+            CancelOrderDTO dto = new CancelOrderDTO
+            {
+                OrderId = orderId
+            };
+
+            return await JsonAction($"do_cancel_buy", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> CreateBuyOrder(int clusterID, long unit_price, int count, int minQl, int maxQl, MarketOrderDuration duration)
+        {
+            CreateBuyOrderDTO dto = new CreateBuyOrderDTO
+            {
+                ClusterId = clusterID,
+                Price = unit_price,
+                Count = count,
+                MinQl = minQl,
+                MaxQl = maxQl,
+                Duration = (int)duration
+            };
+
+            return await JsonAction("do_create_buy_order", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> CreateSellOrder(int clusterID, long unit_price, int count, int ql, MarketOrderDuration duration)
+        {
+            CreateSellOrderDTO dto = new CreateSellOrderDTO
+            {
+                ClusterId = clusterID,
+                Price = unit_price,
+                Count = count,
+                Ql = ql,
+                Duration = (int)duration
+            };
+
+            return await JsonAction("do_create_sell_order", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> JsonAction(string action, JsonActionInputDTOBase dto)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await HttpClient.PostAsync($"{BASE_URL}/marketLIVE/{action}", content);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return JsonConvert.DeserializeObject<JsonActionOutputDTOBase>(await response.Content.ReadAsStringAsync());
+        }
+
         public async static Task<Dictionary<int, Dictionary<int, MarketItemVisuals>>> GetItemVisualsBatch(List<MarketClusterItem> items)
         {
             GetItemVisualsBatchInputDTO req = new GetItemVisualsBatchInputDTO
@@ -210,7 +304,27 @@ namespace AOSharp.Core.GMI
     public class MarketInventory
     {
         public long Credits;
-        public List<MarketInventoryItem> Items;
+        public List<MyMarketInventoryItem> Items;
+
+        public bool Find(string name, out MyMarketInventoryItem item)
+        {
+            return (item = Items.FirstOrDefault(x => x.Name == name)) != null;
+        }
+    }
+
+    public class MyMarketInventoryItem : MarketInventoryItem
+    {
+        public int Slot;
+
+        public async Task<JsonActionOutputDTOBase> ListForSale(long price, int count, MarketOrderDuration duration)
+        {
+            return await GMI.CreateSellOrder(ClusterId, price, count, TemplateQL, duration);
+        }
+
+        public async Task<JsonActionOutputDTOBase> Withdraw(int count)
+        {
+            return await GMI.Withdraw(Slot, count);
+        }
     }
 
     public class MarketInventoryItem : MarketClusterItem
@@ -234,12 +348,28 @@ namespace AOSharp.Core.GMI
 
     public class MyMarketBuyOrder: MarketBuyOrder
     {
+        public async Task<JsonActionOutputDTOBase> Cancel()
+        {
+            return await GMI.CancelBuyOrder(Id);
+        }
 
+        public async Task<JsonActionOutputDTOBase> ModifyPrice(long price)
+        {
+            return await GMI.ModifyBuyOrder(Id, price);
+        }
     }
 
     public class MyMarketSellOrder : MarketSellOrder
     {
+        public async Task<JsonActionOutputDTOBase> Cancel()
+        {
+            return await GMI.CancelSellOrder(Id);
+        }
 
+        public async Task<JsonActionOutputDTOBase> ModifyPrice(long price)
+        {
+            return await GMI.ModifySellOrder(Id, price);
+        }
     }
 
     public class MarketBuyOrder : MarketOrder
@@ -277,6 +407,73 @@ namespace AOSharp.Core.GMI
         public List<MarketClusterItem> Items;
     }
 
+    public class ModifyOrderDTO : JsonActionInputDTOBase
+    {
+        [JsonProperty("order_id")]
+        public int OrderId;
+
+        [JsonProperty("unit_price")]
+        public long Price;
+    }
+
+    public class CancelOrderDTO : JsonActionInputDTOBase
+    {
+        [JsonProperty("order_id")]
+        public int OrderId;
+    }
+
+    public class CreateSellOrderDTO : CreateOrderDTO
+    {
+        [JsonProperty("template_ql")]
+        public int Ql;
+    }
+
+    public class CreateBuyOrderDTO : CreateOrderDTO
+    {
+        [JsonProperty("ql_low")]
+        public int MinQl;
+
+        [JsonProperty("ql_high")]
+        public int MaxQl;
+    }
+
+    public class CreateOrderDTO : JsonActionInputDTOBase
+    {
+        [JsonProperty("cluster_id")]
+        public int ClusterId;
+
+        [JsonProperty("unit_price")]
+        public long Price;
+
+        [JsonProperty("item_count")]
+        public int Count;
+
+        [JsonProperty("order_duration")]
+        public int Duration;
+    }
+
+    public class WithdrawItemDTO : JsonActionInputDTOBase
+    {
+        [JsonProperty("item_count")]
+        public int Count;
+
+        [JsonProperty("slot_num")]
+        public int Slot;
+    }
+
+    public class JsonActionInputDTOBase
+    {
+    }
+
+    public class JsonActionOutputDTOBase
+    {
+        [JsonProperty("status")]
+        public bool Succeeded;
+
+        [JsonProperty("message")]
+        public string Message;
+    }
+
     public class MarketItemVisuals
     {
         [JsonProperty("icon")]
@@ -284,5 +481,13 @@ namespace AOSharp.Core.GMI
 
         [JsonProperty("name")]
         public string Name;
+    }
+
+    public enum MarketOrderDuration
+    {
+        Days14 = 1209600,
+        Days28 = Days14 * 2,
+        Days42 = Days14 * 3,
+        Days56 = Days14 * 4,
     }
 }
