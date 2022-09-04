@@ -76,8 +76,8 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         [AoMember(13, SerializeSize = ArraySizeType.X3F1)]
         public GameTuple<byte, short>[] Stats4 { get; set; }
 
-        [AoMember(14)]
-        public int Unknown9 { get; set; }
+        [AoMember(14, SerializeSize = ArraySizeType.Int32)]
+        public GameTuple<int, int>[] AbsorbStats { get; set; }
 
         [AoMember(15)]
         public int Unknown10 { get; set; }
