@@ -203,7 +203,7 @@ namespace AOSharp.Core.GMI
             return await JsonAction("do_modify_buy", dto);
         }
 
-        public async static Task<JsonActionOutputDTOBase> Withdraw(int slot, int count)
+        public async static Task<JsonActionOutputDTOBase> WithdrawItem(int slot, int count)
         {
             WithdrawItemDTO dto = new WithdrawItemDTO
             {
@@ -212,6 +212,16 @@ namespace AOSharp.Core.GMI
             };
 
             return await JsonAction($"withdraw_item", dto);
+        }
+
+        public async static Task<JsonActionOutputDTOBase> WithdrawCash(long amount)
+        {
+            WithdrawCashDTO dto = new WithdrawCashDTO
+            {
+                Amount = amount
+            };
+
+            return await JsonAction($"withdraw_cash", dto);
         }
 
         public async static Task<JsonActionOutputDTOBase> CancelSellOrder(int orderId)
@@ -310,6 +320,11 @@ namespace AOSharp.Core.GMI
         {
             return (item = Items.FirstOrDefault(x => x.Name == name)) != null;
         }
+
+        public async Task<JsonActionOutputDTOBase> WithdrawCash(long amount)
+        {
+            return await GMI.WithdrawCash(amount);
+        }
     }
 
     public class MyMarketInventoryItem : MarketInventoryItem
@@ -323,7 +338,7 @@ namespace AOSharp.Core.GMI
 
         public async Task<JsonActionOutputDTOBase> Withdraw(int count)
         {
-            return await GMI.Withdraw(Slot, count);
+            return await GMI.WithdrawItem(Slot, count);
         }
     }
 
@@ -459,6 +474,12 @@ namespace AOSharp.Core.GMI
 
         [JsonProperty("slot_num")]
         public int Slot;
+    }
+
+    public class WithdrawCashDTO : JsonActionInputDTOBase
+    {
+        [JsonProperty("amount")]
+        public long Amount;
     }
 
     public class JsonActionInputDTOBase
