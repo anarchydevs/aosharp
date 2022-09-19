@@ -126,7 +126,7 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         //GetContainerInventoryList
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetContainerInventoryList@n3EngineClientAnarchy_t@@QBEPBV?$list@VInventoryEntry_t@@V?$allocator@VInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]
-        public static extern unsafe IntPtr GetContainerInventoryList(IntPtr pThis, Identity* identity);
+        public static extern IntPtr GetContainerInventoryList(IntPtr pThis, ref Identity identity);
 
         //GetInventoryVec
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_GetInventoryVec@n3EngineClientAnarchy_t@@QAEPBV?$vector@PAVNewInventoryEntry_t@@V?$allocator@PAVNewInventoryEntry_t@@@std@@@std@@ABVIdentity_t@@@Z", CallingConvention = CallingConvention.ThisCall)]

@@ -271,7 +271,7 @@ namespace AOSharp.Bootstrap
 
         public void ButtonBase_SetValue_Hook(IntPtr pThis, IntPtr pVariant, bool unk)
         {
-            if(!Variant_c.AsBool(pVariant))
+            if (!Variant_c.AsBool(pVariant))
                 _pluginProxy?.ButtonPressed(pThis);
 
             ButtonBase_c.SetValue(pThis, pVariant, unk);

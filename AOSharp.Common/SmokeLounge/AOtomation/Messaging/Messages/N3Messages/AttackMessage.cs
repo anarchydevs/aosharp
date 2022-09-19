@@ -36,6 +36,9 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         [AoMember(0)]
         public Identity Target { get; set; }
 
+        [AoMember(1)]
+        public byte Unknown1 { get; set; }
+
         #endregion
     }
 }

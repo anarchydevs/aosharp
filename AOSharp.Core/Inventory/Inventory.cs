@@ -114,12 +114,13 @@ namespace AOSharp.Core.Inventory
 
                 if (pActualItem != IntPtr.Zero)
                 {
-                    try {
-                    int lowId = (*(ItemMemStruct*)pActualItem).LowId;
-                    int highId = (*(ItemMemStruct*)pActualItem).HighId;
-                    int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
-                    Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
-                    items.Add(new Item(lowId, highId, ql, unqiueIdentity, new Identity(slotType, i)));
+                    try 
+                    {
+                        int lowId = (*(ItemMemStruct*)pActualItem).LowId;
+                        int highId = (*(ItemMemStruct*)pActualItem).HighId;
+                        int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
+                        Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
+                        items.Add(new Item(lowId, highId, ql, unqiueIdentity, new Identity(slotType, i)));
                     } catch { }
                 }
 
@@ -138,7 +139,7 @@ namespace AOSharp.Core.Inventory
             if (pEngine == IntPtr.Zero)
                 return items;
 
-            IntPtr pInvList = N3EngineClientAnarchy_t.GetContainerInventoryList(pEngine, &identity);
+            IntPtr pInvList = N3EngineClientAnarchy_t.GetContainerInventoryList(pEngine, ref identity);
 
             if (pInvList == IntPtr.Zero)
                 return items;

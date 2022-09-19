@@ -142,6 +142,16 @@ namespace AOSharp.Core
             return weapons;
         }
 
+        public WeaponItem GetWeapon(int slot)
+        {
+            IntPtr weap = WeaponHolder_t.GetWeapon(pWeaponHolder, (EquipSlot)slot, 0);
+
+            if (weap == IntPtr.Zero)
+                return null;
+
+            return new WeaponItem(*(IntPtr*)(weap + 0x14) + Offsets.RTTIDynamicCast.SimpleItem_t.n3Dynel_t, pWeaponHolder, weap);
+        }
+
         private HashSet<SpecialAttack> GetSpecialAttacks()
         {
             HashSet<SpecialAttack> specials = new HashSet<SpecialAttack>();
