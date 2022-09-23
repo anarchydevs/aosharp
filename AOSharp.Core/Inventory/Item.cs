@@ -19,6 +19,7 @@ namespace AOSharp.Core.Inventory
 
         public readonly Identity UniqueIdentity;
         public readonly Identity Slot;
+        public readonly int Charges;
         public List<EquipSlot> EquipSlots => GetEquipSlots();
 
         public static EventHandler<ItemUsedEventArgs> ItemUsed;
@@ -32,10 +33,11 @@ namespace AOSharp.Core.Inventory
             Slot = Identity.None;
         }
 
-        internal Item(int lowId, int highId, int ql, Identity uniqueIdentity, Identity slot) : base(lowId, highId, ql)
+        internal Item(int lowId, int highId, int ql, int charges, Identity uniqueIdentity, Identity slot) : base(lowId, highId, ql)
         {
             UniqueIdentity = uniqueIdentity;
             Slot = slot;
+            Charges = charges;
         }
 
         public void Equip(EquipSlot equipSlot)
@@ -210,7 +212,7 @@ namespace AOSharp.Core.Inventory
             CombatHandler.Instance?.OnItemUsed(lowId, highId, ql);
         }
 
-        public static void MoveItemToInventory(Identity source, int slot)
+        public static void MoveItemToInventory(Identity source, int slot = 0x6F)
         {
             Network.Send(new ClientMoveItemToInventory()
             {

@@ -68,6 +68,19 @@ namespace AOSharp.Core
             return (simpleChar = Characters.FirstOrDefault(x => x.Name == name)) != null;
         }
 
+        public static bool Find<T>(string name, out T dynel) where T : Dynel
+        {
+            Dynel foundDynel;
+            if ((foundDynel = AllDynels.FirstOrDefault(x => x.Name == name)) != null)
+            {
+                dynel = foundDynel.Cast<T>();
+                return true;
+            }
+
+            dynel = null;
+            return false;
+        }
+
         public static bool Exists(string name, bool includePets = false)
         {
             if(includePets)

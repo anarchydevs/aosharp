@@ -13,6 +13,8 @@ namespace AOSharp.Core.Inventory
     {
         public static List<Item> Items => GetItems(DynelManager.LocalPlayer.Identity);
 
+        public static readonly Bank Bank = new Bank();
+
         public static List<Backpack> Backpacks => Items.Where(x => x.UniqueIdentity.Type == IdentityType.Container).Select(x => new Backpack(x.UniqueIdentity, x.Slot)).ToList();
 
         public static int NumFreeSlots => N3EngineClientAnarchy.GetNumberOfFreeInventorySlots();
@@ -116,11 +118,12 @@ namespace AOSharp.Core.Inventory
                 {
                     try 
                     {
+                        int charges = (*(ItemMemStruct*)pActualItem).Charges;
                         int lowId = (*(ItemMemStruct*)pActualItem).LowId;
                         int highId = (*(ItemMemStruct*)pActualItem).HighId;
                         int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
                         Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
-                        items.Add(new Item(lowId, highId, ql, unqiueIdentity, new Identity(slotType, i)));
+                        items.Add(new Item(lowId, highId, ql, charges, unqiueIdentity, new Identity(slotType, i)));
                     } catch { }
                 }
 
@@ -160,16 +163,56 @@ namespace AOSharp.Core.Inventory
                 {
                     try
                     {
+                        int charges = (*(ItemMemStruct*)pActualItem).Charges;
                         int lowId = (*(ItemMemStruct*)pActualItem).LowId;
                         int highId = (*(ItemMemStruct*)pActualItem).HighId;
                         int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
                         Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
                         Identity slot = *((Identity*)(containerInvList[i] + 0x8));
-                        items.Add(new Item(lowId, highId, ql, unqiueIdentity, slot));
+                        items.Add(new Item(lowId, highId, ql, charges,unqiueIdentity, slot));
                     } catch {}
                     i++;
                 }
             }
+
+            return items;
+        }
+
+        internal static unsafe IntPtr GetBankInventoryEntry()
+        {
+            IntPtr inventoryHolderUnk = *(IntPtr*)(DynelManager.LocalPlayer.Pointer + 0x1B8);
+
+            return *(IntPtr*)(inventoryHolderUnk + 0x17C);
+        }
+
+        internal static unsafe List<Item> GetBankItems()
+        {
+            List<Item> items = new List<Item>();
+
+            IntPtr bankInventoryEntry = GetBankInventoryEntry();
+
+            int i = 0;
+            foreach (IntPtr pItem in (*(StdStructVector*)(bankInventoryEntry + 0xC)).ToList(sizeof(IntPtr)))
+            {
+                IntPtr pActualItem = *(IntPtr*)pItem;
+
+                if (pActualItem != IntPtr.Zero)
+                {
+                    try
+                    {
+                        int charges = (*(ItemMemStruct*)pActualItem).Charges;
+                        int lowId = (*(ItemMemStruct*)pActualItem).LowId;
+                        int highId = (*(ItemMemStruct*)pActualItem).HighId;
+                        int ql = (*(ItemMemStruct*)pActualItem).QualityLevel;
+                        Identity unqiueIdentity = (*(ItemMemStruct*)pActualItem).UniqueIdentity;
+                        Identity slot = new Identity(IdentityType.BankByRef, i);
+                        items.Add(new Item(lowId, highId, ql, charges, unqiueIdentity, slot));
+                    }
+                    catch { }
+                    i++;
+                }
+            }
+
             return items;
         }
 
@@ -177,7 +220,10 @@ namespace AOSharp.Core.Inventory
         private struct ItemMemStruct
         {
             [FieldOffset(0x0)]
-            public int Unk1; //Flags?
+            public short Unk1; //Flags?
+
+            [FieldOffset(0x2)]
+            public ushort Charges;
 
             [FieldOffset(0x04)]
             public Identity UniqueIdentity;

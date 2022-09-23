@@ -69,6 +69,16 @@ namespace AOSharp.Core
             });
         }
 
+        public static void Decline()
+        {
+            Network.Send(new TradeMessage
+            {
+                Unknown1 = 2,
+                Action = TradeAction.Decline,
+                Param2 = 1,
+            });
+        }
+
         //To be continued.  Maybe.. one day..
         /*
         internal static void OnTradeMessage(TradeMessage tradeMsg)

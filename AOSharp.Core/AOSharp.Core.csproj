@@ -67,6 +67,7 @@
     <Compile Include="DummyItem\SpellData.cs" />
     <Compile Include="Dynel\Camera.cs" />
     <Compile Include="Dynel\MissionTerminal.cs" />
+    <Compile Include="Inventory\Bank.cs" />
     <Compile Include="Misc\Interval.cs" />
     <Compile Include="ReqChecker.cs" />
     <Compile Include="Dynel\Door.cs" />
