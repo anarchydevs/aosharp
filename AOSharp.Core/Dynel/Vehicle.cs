@@ -7,6 +7,9 @@ namespace AOSharp.Core
     public unsafe struct Vehicle
     {
         [FieldOffset(0x38)]
+        public float Accel;
+
+        [FieldOffset(0x3C)]
         public float Runspeed;
 
         [FieldOffset(0x4C)]

@@ -40,6 +40,12 @@ namespace AOSharp.Core
             set => (*(MemStruct*)Pointer).Vehicle->Runspeed = value;
         }
 
+        public unsafe float Accel
+        {
+            get => (*(MemStruct*)Pointer).Vehicle->Accel;
+            set => (*(MemStruct*)Pointer).Vehicle->Accel = value;
+        }
+
         public unsafe float Radius => (*(MemStruct*)Pointer).Vehicle->Radius;
 
         public unsafe bool IsFalling => (*(MemStruct*)Pointer).Vehicle->IsFalling;
