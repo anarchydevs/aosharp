@@ -578,6 +578,7 @@
         NPCSpellRet = 0x27F,
         CityInstance = 0x280,
         DistanceToSpawnpoint = 0x281,
+        HasUnreadMail = 0x289,
         AdvantageHash1 = 0x28B,
         AdvantageHash2 = 0x28C,
         AdvantageHash3 = 0x28D,

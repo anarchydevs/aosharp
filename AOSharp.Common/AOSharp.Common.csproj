@@ -137,6 +137,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MailMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldTowerUpdateClient.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldAllTowersMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\DropTemplateMessage.cs" />
