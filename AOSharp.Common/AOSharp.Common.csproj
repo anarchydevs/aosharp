@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameData\HitType.cs" />
+    <Compile Include="GameData\ItemEnums.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionInfo.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionItemData.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\GameData\MissionSliders.cs" />
@@ -62,7 +64,6 @@
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\FightMode.cs" />
     <Compile Include="GameData\GroupMessage.cs" />
-    <Compile Include="GameData\ItemEnums.cs" />
     <Compile Include="GameData\PerkLine.cs" />
     <Compile Include="GameData\PetType.cs" />
     <Compile Include="GameData\SpecialActionState.cs" />
@@ -127,6 +128,8 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\VicinityMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatMessages\PrivateMsgMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\ChatHeader.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AbsorbMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AttackInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\CreateQuestMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\Header.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\InitiateCompressionMessage.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Message.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AddTemplateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AppearanceUpdateMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\HealthDamageMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\MailMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldTowerUpdateClient.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PlayfieldAllTowersMessage.cs" />
@@ -149,6 +153,10 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\PetCommandMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\QuestAlternativeMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\NewLevelMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ReflectDamageMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ShieldAttackMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SkillMessage.cs" />
+    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SpecialAttackInfoMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\StopFightMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\BankMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\AttackMessage.cs" />
@@ -196,7 +204,6 @@
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\ShopUpdateMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SimpleCharFullUpdateFlags.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SimpleCharFullUpdateMessage.cs" />
-    <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SkillMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SocialAction.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SocialActionCmdMessage.cs" />
     <Compile Include="SmokeLounge\AOtomation\Messaging\Messages\N3Messages\SpecialAttackWeaponMessage.cs" />
