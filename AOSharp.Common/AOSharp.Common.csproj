@@ -59,7 +59,6 @@
     <Compile Include="GameData\Breed.cs" />
     <Compile Include="GameData\CharacterStatus.cs" />
     <Compile Include="GameData\ChatMessageType.cs" />
-    <Compile Include="GameData\DoorState.cs" />
     <Compile Include="GameData\CharacterFlags.cs" />
     <Compile Include="GameData\EquipSlot.cs" />
     <Compile Include="GameData\FightMode.cs" />
@@ -319,6 +318,7 @@
     <Compile Include="Unmanaged\Imports\Gamecode\N3EngineClientAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\PlayfieldAnarchy_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\TeleportTrier_t.cs" />
+    <Compile Include="Unmanaged\Imports\Gamecode\VtblDelegates.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\WeaponHolder_t.cs" />
     <Compile Include="Unmanaged\Imports\Gamecode\_EffectHandler_t.cs" />
     <Compile Include="Unmanaged\Imports\GameData\DistrictData_t.cs" />

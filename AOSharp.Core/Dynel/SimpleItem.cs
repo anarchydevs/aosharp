@@ -8,6 +8,7 @@ namespace AOSharp.Core
 {
     public unsafe class SimpleItem : Dynel
     {
+        public SimpleItemFlags ItemFlags => (*(MemStruct*)(Pointer - 0xB0)).Flags;
 
         public SimpleItem(IntPtr pointer) : base(pointer)
         {
@@ -25,6 +26,13 @@ namespace AOSharp.Core
                 User = DynelManager.LocalPlayer.Identity,
                 Target = Identity
             });
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        protected new unsafe struct MemStruct
+        {
+            [FieldOffset(0x4C)]
+            public SimpleItemFlags Flags;
         }
     }
 }

@@ -253,6 +253,7 @@
         PvPLevelsKilled = 0xFF,
         MissionBits1 = 0x100,
         MissionBits2 = 0x101,
+        DoorFlags = 0x103,
         ClanHierarchy = 0x104,
         QuestStat = 0x105,
         ClientActivated = 0x106,

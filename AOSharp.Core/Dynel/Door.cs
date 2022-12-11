@@ -6,18 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using AOSharp.Common.GameData;
 using AOSharp.Common.Unmanaged.Imports;
+using AOSharp.Common.Unmanaged.Imports.Gamecode;
 using AOSharp.Common.Unmanaged.Interfaces;
 
 namespace AOSharp.Core
 {
-    public class Door : Dynel
+    public class Door : LockableItem
     {
-        public bool IsOpen => Playfield.IsDoorOpenBetweenRooms(Link1, Link2);
+        //public bool IsOpen => Playfield.IsDoorOpenBetweenRooms(Link1, Link2);
 
         public Room RoomLink1 => Playfield.IsDungeon && Link1 >= 0 ? Playfield.Rooms[Link1] : null;
         public Room RoomLink2 => Playfield.IsDungeon && Link2 >= 0 ? Playfield.Rooms[Link2] : null;
-
-        public unsafe DoorState State => (*(MemStruct*)Pointer).State;
 
         private unsafe short Link1 => (*(MemStruct*)Pointer).RoomLink1;
         private unsafe short Link2 => (*(MemStruct*)Pointer).RoomLink2;
@@ -30,6 +29,15 @@ namespace AOSharp.Core
         {
         }
 
+        /*
+        private bool GetIsLocked()
+        {
+            var isLocked = Game.GetVtbl<GamecodeVtblDelegates.IsLockedDelegate>(BasePointer, 63);
+
+            return isLocked(BasePointer);
+        }
+        */
+
         public Room GetDestinationRoom(Room originRoom)
         {
             if(originRoom == RoomLink1)
@@ -41,9 +49,6 @@ namespace AOSharp.Core
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         protected new unsafe struct MemStruct
         {
-            [FieldOffset(0x64)]
-            public DoorState State;
-
             [FieldOffset(0x120)]
             public short RoomLink1;
 

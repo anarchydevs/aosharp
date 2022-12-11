@@ -31,6 +31,8 @@ namespace AOSharp.Core
         public static EventHandler TeleportFailed; 
         public static EventHandler<uint> PlayfieldInit;
 
+        private static Dictionary<IntPtr, Delegate> _vtblCache = new Dictionary<IntPtr, Delegate>();
+
         private static unsafe void Init()
         {
             DummyItem_t.GetSpellList = Marshal.GetDelegateForFunctionPointer<DummyItem_t.GetSpellListDelegate>(Utils.FindPattern("Gamecode.dll", "55 8B EC 8B 41 24 8B 4D 08 8B 04 88 5D C2 04 00"));
@@ -62,6 +64,25 @@ namespace AOSharp.Core
             OptionPanelModule_c.GetOptionWindow = Marshal.GetDelegateForFunctionPointer<OptionPanelModule_c.GetOptionWindowDelegate>(new IntPtr((int)pGetOptionWindowOffset + sizeof(int) + *pGetOptionWindowOffset));
 
             MovementController.Instance = new MovementController();
+        }
+
+        public unsafe static T GetVtbl<T>(IntPtr objPtr, int idx) where T : Delegate
+        {
+            IntPtr pVtbl = *((IntPtr*)objPtr);
+            IntPtr vtblMethodAddr = *((IntPtr*)pVtbl + idx * 4);
+
+            Delegate vtblMethod;
+            if (_vtblCache.TryGetValue(vtblMethodAddr, out vtblMethod))
+            {
+                return (T)vtblMethod;
+            }
+            else
+            {
+                vtblMethod = Marshal.GetDelegateForFunctionPointer<T>(vtblMethodAddr);
+                _vtblCache.Add(vtblMethodAddr, vtblMethod);
+
+                return (T)vtblMethod;
+            }
         }
 
         private static void Teardown()

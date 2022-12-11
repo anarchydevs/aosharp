@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace AOSharp.Common.GameData
 {
+    [Flags]
+    public enum SimpleItemFlags
+    {
+        Locked = 0x40,
+        Open = 0x80
+    }
+
     public enum ItemClass
     {
         None = 0,
