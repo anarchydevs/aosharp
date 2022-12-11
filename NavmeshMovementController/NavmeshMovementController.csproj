@@ -58,6 +58,7 @@
     <Compile Include="NewNavmeshMovementController.cs" />
     <Compile Include="NavMeshMovementController.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="NewPathfinder.cs" />
     <Compile Include="Pathfinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector3Extensions.cs" />
