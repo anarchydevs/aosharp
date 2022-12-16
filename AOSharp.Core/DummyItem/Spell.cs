@@ -17,7 +17,6 @@ namespace AOSharp.Core
     {
         private const float CAST_TIMEOUT = 0.5f;
 
-        public override float AttackRange => Math.Min(base.AttackRange * (1 + DynelManager.LocalPlayer.GetStat(Stat.NanoRange) / 100f), 40f);
         public bool IsReady => GetIsReady();
 
         public static IEnumerable<Spell> List => GetSpellList();
