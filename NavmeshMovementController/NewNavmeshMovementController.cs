@@ -19,7 +19,7 @@ namespace AOSharp.Pathfinding
     {
         private const float PathUpdateInterval = 1f;
 
-        private Pathfinder _pathfinder = null;
+        public NewPathfinder Pathfinder = null;
         protected readonly string _navMeshFolderPath;
         private double _nextPathUpdate = 0;
 
@@ -32,7 +32,7 @@ namespace AOSharp.Pathfinding
 
         public override void Update()
         {
-            if (IsNavigating && _paths.Peek() is NavMeshPath path && path.Initialized && Time.NormalTime > _nextPathUpdate)
+            if (IsNavigating && _paths.Peek() is NewNavMeshPath path && path.Initialized && Time.NormalTime > _nextPathUpdate)
             {
                 path.UpdatePath();
                 _nextPathUpdate = Time.NormalTime + PathUpdateInterval;
@@ -43,7 +43,7 @@ namespace AOSharp.Pathfinding
 
         public void Test()
         {
-            if (NavUtil.Failed(_pathfinder.GetNavMeshPoint(new Vector3(149.2292, 0.4225993, 206.8754), new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
+            if (NavUtil.Failed(Pathfinder.GetNavMeshPoint(new Vector3(149.2292, 0.4225993, 206.8754), new oVector3(0.3f, 2, 0.3f), out NavmeshPoint origin)) || origin.point == new oVector3())
                 Chat.WriteLine("Failed to find origin");
             else
                 Chat.WriteLine($"Found origin at {origin.point}");
@@ -55,7 +55,7 @@ namespace AOSharp.Pathfinding
 
             try
             {
-                List<Vector3> path = _pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, destination);
+                List<Vector3> path = Pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, destination);
 
                 for(int i = 0; i < path.Count - 1; i++)
                     distance += Vector3.Distance(path[i], path[i+1]);
@@ -78,20 +78,20 @@ namespace AOSharp.Pathfinding
             AppendNavMeshDestination(destination, out _);
         }
 
-        public bool SetNavMeshDestination(Vector3 destination, out NavMeshPath path)
+        public bool SetNavMeshDestination(Vector3 destination, out NewNavMeshPath path)
         {
             _paths.Clear();
             return AppendNavMeshDestination(destination, out path);
         }
 
-        public bool AppendNavMeshDestination(Vector3 destination, out NavMeshPath path)
+        public bool AppendNavMeshDestination(Vector3 destination, out NewNavMeshPath path)
         {
-            path = new NavMeshPath(_pathfinder, destination);
+            path = new NewNavMeshPath(Pathfinder, destination);
 
-            if (_pathfinder == null)
+            if (Pathfinder == null)
                 return false;
 
-            if (IsNavigating && _paths.Peek() is NavMeshPath navPath && navPath.Destination == destination)
+            if (IsNavigating && _paths.Peek() is NewNavMeshPath navPath && navPath.Destination == destination)
                 return false;
 
             base.AppendPath(path);
@@ -103,7 +103,7 @@ namespace AOSharp.Pathfinding
             if (navmesh == null)
                 return;
 
-            _pathfinder = new Pathfinder(navmesh);
+            Pathfinder = new NewPathfinder(navmesh);
         }
 
         public bool LoadNavmesh(string filePath)
@@ -119,7 +119,7 @@ namespace AOSharp.Pathfinding
             {
                 stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 if(Navmesh.Create((byte[])formatter.Deserialize(stream), out navmesh) == NavStatus.Sucess)
-                    _pathfinder = new Pathfinder(navmesh);
+                    Pathfinder = new NewPathfinder(navmesh);
             }
             finally
             {
@@ -130,17 +130,17 @@ namespace AOSharp.Pathfinding
             if (navmesh == null)
                 return false;
 
-            _pathfinder = new Pathfinder(navmesh);
+            Pathfinder = new NewPathfinder(navmesh);
             return true;
         }
     }
 
-    public class NavmeshPath : Path
+    public class NewNavMeshPath : Path
     {
-        private Pathfinder _pathfinder;
+        private NewPathfinder _pathfinder;
         public readonly Vector3 Destination;
 
-        public NavmeshPath(Pathfinder pathfinder, Vector3 dstPos) : base(new List<Vector3>())
+        public NewNavMeshPath(NewPathfinder pathfinder, Vector3 dstPos) : base(new List<Vector3>())
         {
             _pathfinder = pathfinder;
             Destination = dstPos;
