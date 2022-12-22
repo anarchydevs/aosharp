@@ -244,6 +244,8 @@ namespace AOSharp.Core
 
                 if (criterion.Operator == UseCriteriaOperator.EqualTo)
                     return (stat == criterion.Param2);
+                if (criterion.Operator == UseCriteriaOperator.Unequal)
+                    return (stat != criterion.Param2);
                 if (criterion.Operator == UseCriteriaOperator.LessThan)
                     return (stat < criterion.Param2);
                 if (criterion.Operator == UseCriteriaOperator.GreaterThan)
