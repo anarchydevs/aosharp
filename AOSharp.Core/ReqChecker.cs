@@ -109,6 +109,7 @@ namespace AOSharp.Core
                 switch (criterion.Operator)
                 {
                     case UseCriteriaOperator.EqualTo:
+                    case UseCriteriaOperator.Unequal:
                     case UseCriteriaOperator.LessThan:
                     case UseCriteriaOperator.GreaterThan:
                     case UseCriteriaOperator.BitAnd:
