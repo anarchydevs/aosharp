@@ -135,6 +135,9 @@ namespace AOSharp.Core
                     case UseCriteriaOperator.HasPerk:
                         metReq = N3EngineClientAnarchy_t.HasPerk(N3Engine_t.GetInstance(), criterion.Param2);
                         break;
+                    case UseCriteriaOperator.HasNotPerk:
+                        metReq = !N3EngineClientAnarchy_t.HasPerk(N3Engine_t.GetInstance(), criterion.Param2);
+                        break;
                     case UseCriteriaOperator.IsPerkUnlocked:
                         metReq = true;
                         break;
