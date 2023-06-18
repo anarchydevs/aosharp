@@ -248,15 +248,16 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 }
             }
 
-            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown2))
-            {
-                scfu.ScfuUnk3 = streamReader.ReadSingle();
-            }
+            //Commenting these out until we need them.
+            //if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown2))
+            //{
+            //    scfu.ScfuUnk3 = streamReader.ReadSingle();
+            //}
 
-            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown1))
-            {
-                scfu.ScfuUnk4 = streamReader.ReadByte();
-            }
+            //if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown1))
+            //{
+            //    scfu.ScfuUnk4 = streamReader.ReadByte();
+            //}
 
             return scfu;
         }
