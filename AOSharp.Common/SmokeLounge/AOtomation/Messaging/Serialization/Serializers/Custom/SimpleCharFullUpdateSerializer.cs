@@ -228,8 +228,7 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
             scfu.Flags2 = (ScfuFlags2)streamReader.ReadInt32();
             scfu.ScfuUnk2 = streamReader.ReadByte();
 
-            // We don't know which flag this belongs too. So we match what we know
-            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown3) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown4) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown5) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown6) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown7) || scfu.Flags2.HasFlag(ScfuFlags2.Unknown8))
+            if (scfu.Flags2.HasFlag(ScfuFlags2.Unknown3))
             {
                 var count = streamReader.ReadByte();
                 scfu.SpecialAttacks = new SimpleCharInfo.SpecialAttackData[count];
