@@ -186,6 +186,18 @@ namespace SmokeLounge.AOtomation.Messaging.Serialization.Serializers.Custom
                 };
             }
 
+            if (scfu.Flags.HasFlag(SimpleCharFullUpdateFlags.HasWaypoints))
+            {
+                streamReader.ReadUInt32();//Type
+                streamReader.ReadUInt32();//Id
+
+                scfu.Waypoints = new List<Vector3>();
+
+                int waypointCount = streamReader.ReadInt32();
+                for (var i = 0; i < waypointCount; i++)
+                    scfu.Waypoints.Add(new Vector3(streamReader.ReadSingle(), streamReader.ReadSingle(), streamReader.ReadSingle()));
+            }
+
             int texturesCount = (streamReader.ReadInt32() / 0x3F1) - 1;
             var texes = new List<Texture>();
             for (var i = 0; i < texturesCount; i++)
