@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeaponItemFullUpdateMessage.cs" company="SmokeLounge">
+// <copyright file="TeamInviteMessage.cs" company="SmokeLounge">
 //   Copyright © 2013 SmokeLounge.
 //   This program is free software. It comes without any warranty, to
 //   the extent permitted by applicable law. You can redistribute it
@@ -8,26 +8,24 @@
 //   http://www.wtfpl.net/ for more details.
 // </copyright>
 // <summary>
-//   Defines the WeaponItemFullUpdateMessage type.
+//   Defines the TeamInviteMessage type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using AOSharp.Common.GameData;
-
 namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 {
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using AOSharp.Common.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
-    [AoContract((int)N3MessageType.WeaponItemFullUpdate)]
-    public class WeaponItemFullUpdateMessage : N3Message
+    [AoContract((int)N3MessageType.TeamInvite)]
+    public class TeamInviteMessage : N3Message
     {
         #region Constructors and Destructors
 
-        public WeaponItemFullUpdateMessage()
+        public TeamInviteMessage()
         {
-            this.N3MessageType = N3MessageType.WeaponItemFullUpdate;
+            this.N3MessageType = N3MessageType.TeamInvite;
         }
 
         #endregion
@@ -35,25 +33,13 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         #region AoMember Properties
 
         [AoMember(0)]
-        public int Unknown1 { get; set; }
+        public Identity Text { get; set; }
 
         [AoMember(1)]
-        public Identity Owner { get; set; }
+        public byte Unknown1 { get; set; }
 
-        [AoMember(2)]
-        public int PlayfieldId { get; set; }
-
-        [AoMember(3)]
-        public Identity StateMachine { get; set; }
-
-        [AoMember(4)]
-        public short Unknown2 { get; set; }
-
-        [AoMember(5, SerializeSize = ArraySizeType.X3F1)]
-        public GameTuple<Stat, int>[] Stats { get; set; }
-
-        [AoMember(6)]
-        public int Unknown3 { get; set; }
+        [AoMember(2, SerializeSize = ArraySizeType.Int16)]
+        public string Name { get; set; }
 
         #endregion
     }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeaponItemFullUpdateMessage.cs" company="SmokeLounge">
+// <copyright file="ChestFullUpdateMessage.cs" company="SmokeLounge">
 //   Copyright © 2013 SmokeLounge.
 //   This program is free software. It comes without any warranty, to
 //   the extent permitted by applicable law. You can redistribute it
@@ -8,31 +8,26 @@
 //   http://www.wtfpl.net/ for more details.
 // </copyright>
 // <summary>
-//   Defines the WeaponItemFullUpdateMessage type.
+//   Defines the ChestFullUpdateMessage type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using AOSharp.Common.GameData;
-
 namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
 {
+    using AOSharp.Common.GameData;
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
 
-    [AoContract((int)N3MessageType.WeaponItemFullUpdate)]
-    public class WeaponItemFullUpdateMessage : N3Message
+    [AoContract((int)N3MessageType.ChestFullUpdate)]
+    public class ChestFullUpdateMessage : N3Message
     {
         #region Constructors and Destructors
 
-        public WeaponItemFullUpdateMessage()
+        public ChestFullUpdateMessage()
         {
-            this.N3MessageType = N3MessageType.WeaponItemFullUpdate;
+            this.N3MessageType = N3MessageType.ChestFullUpdate;
         }
-
-        #endregion
-
-        #region AoMember Properties
 
         [AoMember(0)]
         public int Unknown1 { get; set; }
@@ -47,13 +42,22 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         public Identity StateMachine { get; set; }
 
         [AoMember(4)]
-        public short Unknown2 { get; set; }
+        public short Unknown5 { get; set; }
 
         [AoMember(5, SerializeSize = ArraySizeType.X3F1)]
-        public GameTuple<Stat, int>[] Stats { get; set; }
+        public GameTuple<Stat,int>[] Stats { get; set; }
 
         [AoMember(6)]
-        public int Unknown3 { get; set; }
+        public int Unknown6 { get; set; }
+
+        [AoMember(7)]
+        public int Unknown7 { get; set; }
+
+        [AoMember(8)]
+        public int Unknown8 { get; set; }
+       
+        [AoMember(9, SerializeSize = ArraySizeType.X3F1)]
+        public int[] UnknownArray { get; set; }
 
         #endregion
     }
