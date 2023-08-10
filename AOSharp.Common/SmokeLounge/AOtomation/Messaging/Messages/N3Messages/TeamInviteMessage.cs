@@ -33,7 +33,7 @@ namespace SmokeLounge.AOtomation.Messaging.Messages.N3Messages
         #region AoMember Properties
 
         [AoMember(0)]
-        public Identity Text { get; set; }
+        public Identity Requestor { get; set; }
 
         [AoMember(1)]
         public byte Unknown1 { get; set; }
