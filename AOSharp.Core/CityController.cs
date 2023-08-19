@@ -16,7 +16,7 @@ namespace AOSharp.Core
         public static string OrgName { internal set; get; }
         public static int CreditUpkeep { internal set; get; }
         public static int NextUpkeep { internal set; get; }
-
+        public static float Charge { internal set; get; }
         private static DateTime _cloakStartTime;
         private static int? _cloakTimer;
         private static AOSignalAction _lastSignalAction;
@@ -59,6 +59,9 @@ namespace AOSharp.Core
                     break;
                 case AOSignalAction.CityInfo:
                     OrgName = ((CityInfo)transporgMsg.TransportSignalMessage).OrgName;
+                    break;
+                case AOSignalAction.ChargeInfo:
+                    Charge = ((CityCharge)transporgMsg.TransportSignalMessage).CityControllerCharge;
                     break;
             }
         }
