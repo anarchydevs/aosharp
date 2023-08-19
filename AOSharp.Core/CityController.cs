@@ -36,7 +36,7 @@ namespace AOSharp.Core
             if (_lastSignalAction == AOSignalAction.Close)
                 return;
 
-            if (_cloakTimer > 0)
+            if (!CanToggleCloak())
                 return;
 
             Network.Send(new ToggleCloakMessage { Unknown1 = 49152 });
