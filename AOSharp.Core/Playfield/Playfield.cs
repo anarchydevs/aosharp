@@ -24,7 +24,7 @@ namespace AOSharp.Core
         ///</summary>
         public static Identity ModelIdentity => GetModelIdentity();
 
-        public static PlayfieldId ModelId = (PlayfieldId)ModelIdentity.Instance;
+        public static PlayfieldId ModelId => (PlayfieldId)ModelIdentity.Instance;
 
         ///<summary>
         ///Are mechs allowed on the playfield
