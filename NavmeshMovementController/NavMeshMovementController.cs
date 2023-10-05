@@ -16,6 +16,9 @@ namespace AOSharp.Pathfinding
 {
     public class NavMeshMovementController : MovementController
     {
+        public static bool IsPlayerOffNavMesh { get; internal set; }
+        public static bool IsDestinationOffNavMesh { get; internal set; }
+
         private const float PathUpdateInterval = 1f;
 
         private Pathfinder _pathfinder = null;
@@ -160,17 +163,18 @@ namespace AOSharp.Pathfinding
             try
             {
                 base.SetWaypoints(_pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, Destination));
+                NavMeshMovementController.IsPlayerOffNavMesh = false;
+                NavMeshMovementController.IsDestinationOffNavMesh = false;
             }
             catch (StartPositionNotOnNavMeshException e)
             {
                 Chat.WriteLine(e.Message);
-                // Handle the case where the player's position is not on the navmesh
-                // For example, move the player to the closest point on the navmesh
+                NavMeshMovementController.IsPlayerOffNavMesh = true;
             }
             catch (DestinationNotOnNavMeshException e)
             {
                 Chat.WriteLine(e.Message);
-                // Handle the case where the destination is not on the navmesh
+                NavMeshMovementController.IsDestinationOffNavMesh = true;
             }
             catch (Exception e)
             {
