@@ -230,6 +230,8 @@ namespace AOSharp.Bootstrap
                     if (constructor == null)
                         continue;
 
+                    MethodInfo initMethod = type.GetMethod("Init", BindingFlags.Public | BindingFlags.Instance);
+
                     _coreDelegates.OnPluginLoaded(assembly);
 
                     object instance = constructor.Invoke(null);
@@ -237,11 +239,13 @@ namespace AOSharp.Bootstrap
                     if (instance == null) //Is this even possible?
                         continue;
 
-                    _plugins.Add(new Plugin(instance, runMethod, teardownMethod, Path.GetDirectoryName(assemblyPath)));
+                    //_plugins.Add(new Plugin(instance, runMethod, teardownMethod, Path.GetDirectoryName(assemblyPath)));
+                    _plugins.Add(new Plugin(instance, runMethod, teardownMethod, initMethod, Path.GetDirectoryName(assemblyPath), assembly.GetName().Name));
                 }
             }
             catch (Exception ex)
             {
+
             }
         }
 
@@ -272,7 +276,9 @@ namespace AOSharp.Bootstrap
         private object _instance;
         private MethodInfo _runMethod;
         private MethodInfo _teardownMethod;
+        private MethodInfo _initMethod;
         private string _assemblyDir;
+        private string _assemblyName;
 
         public Plugin(object instance, MethodInfo runMethod, MethodInfo teardownMethod, string assemblyDir)
         {
@@ -282,14 +288,29 @@ namespace AOSharp.Bootstrap
             _teardownMethod = teardownMethod;
             _assemblyDir = assemblyDir;
         }
-
+        
+        public Plugin(object instance, MethodInfo runMethod, MethodInfo teardownMethod, MethodInfo initMethod, string assemblyDir, string assemblyName)
+        {
+            Initialized = false;
+            _instance = instance;
+            _runMethod = runMethod;
+            _teardownMethod = teardownMethod;
+            _initMethod = initMethod;
+            _assemblyDir = assemblyDir;
+            _assemblyName = assemblyName;
+        }
+        
         public void Initialize()
         {
             try
             {
+                _initMethod?.Invoke(_instance, new object[] { _assemblyName });
                 _runMethod.Invoke(_instance, new object[] { _assemblyDir });
             }
-            catch { }
+            catch (Exception ex)
+            {
+            
+            }
 
             Initialized = true;
         }
