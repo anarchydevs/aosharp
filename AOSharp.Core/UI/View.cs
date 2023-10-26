@@ -2,7 +2,9 @@
 using AOSharp.Common.Unmanaged.DataTypes;
 using AOSharp.Common.Unmanaged.Imports;
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace AOSharp.Core.UI
 {
@@ -12,6 +14,16 @@ namespace AOSharp.Core.UI
         public object Tag;
 
         public bool Enabled => View_c.IsEnabled(_pointer);
+
+        public IEnumerable<View> Children { 
+            get
+            {
+                for (int i = 0; i < GetChildCount(); i++)
+                {
+                    yield return GetChildAt(i);
+                }
+            } 
+        }
 
         protected readonly IntPtr _pointer;
 
@@ -73,6 +85,28 @@ namespace AOSharp.Core.UI
         public void AddChild(View view, bool assignTabOrder)
         {
             View_c.AddChild(_pointer, view.Pointer, assignTabOrder);
+        }
+
+        public int GetChildCount()
+        {
+            return View_c.GetChildCount(Pointer);
+        }
+
+        public View GetChildAt(int index)
+        {
+            View view;
+            IntPtr pView = View_c.GetChildAt(Pointer, index);
+
+            if (pView == IntPtr.Zero)
+                throw new IndexOutOfRangeException();
+
+            if (UIController.FindViewByPointer(pView, out view))
+                return view;
+
+            view = new View(pView, false);
+
+            return view;
+
         }
 
         public void RemoveChild(View view)

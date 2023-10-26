@@ -17,6 +17,12 @@ namespace AOSharp.Common.Unmanaged.Imports
         [DllImport("GUI.dll", EntryPoint = "?AddChild@View@@UAEXPAV1@_N@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void AddChild(IntPtr pThis, IntPtr pView, bool assignTabOrder);
 
+        [DllImport("GUI.dll", EntryPoint = "?GetChildCount@View@@QBEHXZ", CallingConvention = CallingConvention.ThisCall)]
+        public static extern int GetChildCount(IntPtr pThis);
+
+        [DllImport("GUI.dll", EntryPoint = "?GetChildAt@View@@QAEPAV1@H@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern IntPtr GetChildAt(IntPtr pThis, int index);
+
         [DllImport("GUI.dll", EntryPoint = "?RemoveChild@View@@QAEXPAV1@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern void RemoveChild(IntPtr pThis, IntPtr pView);
 
