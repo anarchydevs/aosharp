@@ -16,6 +16,13 @@ namespace AOSharp.Pathfinding
 {
     public class NavMeshMovementController : MovementController
     {
+        public bool LocalPlayerOnNavmesh => IsPosOnNavmesh(DynelManager.LocalPlayer.Position);
+
+        public bool IsPosOnNavmesh(Vector3 pos)
+        {
+            return !NavUtil.Failed(_pathfinder.GetNavMeshPoint(pos, new oVector3(0.5f, 2, 0.5f), out NavmeshPoint _));
+        }
+
         private const float PathUpdateInterval = 1f;
 
         private Pathfinder _pathfinder = null;
@@ -130,25 +137,19 @@ namespace AOSharp.Pathfinding
 
         internal void UpdatePath()
         {
-            /*
-            List<Vector3> waypoints = new List<Vector3>();
-            _pathCorridor.MovePosition(DynelManager.LocalPlayer.Position.ToCAIVector3());
-
-            if (_pathCorridor == null || _pathCorridor.Corners.cornerCount == 0)
-            {
-                base.SetWaypoints(new List<Vector3>());
-                return;
-            }
-
-            foreach (oVector3 wp in _pathCorridor.Corners.verts.Take(_pathCorridor.Corners.cornerCount))
-                waypoints.Add(new Vector3(wp.x, wp.y, wp.z));
-            */
-
             try
             {
                 base.SetWaypoints(_pathfinder.GeneratePath(DynelManager.LocalPlayer.Position, Destination));
             }
-            catch(PointNotOnNavMeshException e)
+            catch (StartPositionNotOnNavMeshException e)
+            {
+                Chat.WriteLine(e.Message);
+            }
+            catch (DestinationNotOnNavMeshException e)
+            {
+                Chat.WriteLine(e.Message);
+            }
+            catch (Exception e)
             {
                 Chat.WriteLine(e.Message);
                 base.SetWaypoints(new List<Vector3>());
