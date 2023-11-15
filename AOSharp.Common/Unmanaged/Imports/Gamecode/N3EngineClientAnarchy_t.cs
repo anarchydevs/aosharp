@@ -247,5 +247,14 @@ namespace AOSharp.Common.Unmanaged.Imports
 
         [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_TemplateIDToDynelID@n3EngineClientAnarchy_t@@QBE?AVIdentity_t@@ABV2@@Z", CallingConvention = CallingConvention.ThisCall)]
         public static extern IntPtr TemplateIDToDynelID(IntPtr pThis, out Identity dynelId, ref Identity templateId);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_NPCChatAddTradeItem@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@00@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void NPCChatAddTradeItem(IntPtr pEngine, ref Identity self, ref Identity npc, ref Identity slot);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_NPCChatStartTrade@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void NPCChatStartTrade(IntPtr pEngine, ref Identity self, ref Identity npc);
+
+        [DllImport("Gamecode.dll", EntryPoint = "?N3Msg_NPCChatEndTrade@n3EngineClientAnarchy_t@@QAEXABVIdentity_t@@0H_N@Z", CallingConvention = CallingConvention.ThisCall)]
+        public static extern void NPCChatEndTrade(IntPtr pEngine, ref Identity self, ref Identity npc, int credits, bool decline);
     }
 }

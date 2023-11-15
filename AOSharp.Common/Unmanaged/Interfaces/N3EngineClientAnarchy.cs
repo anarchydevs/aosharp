@@ -28,18 +28,46 @@ namespace AOSharp.Common.Unmanaged.Interfaces
             return retStr.ToString();
         }
 
+        public static float GetPerkProgress(uint perkId)
+        {
+            IntPtr pInterfaceModule = N3InterfaceModule_t.GetInstance();
+
+            if (pInterfaceModule == IntPtr.Zero)
+            {
+                return 0.0f;
+            }
+
+            return N3InterfaceModule_t.GetPerkProgress(pInterfaceModule, perkId);
+        }
+
         public static List<uint> GetCompletedPersonalResearchGoals()
         {
-            StdStructVector vector = new StdStructVector();
-            N3InterfaceModule_t.GetCompletedPersonalResearchGoals(N3InterfaceModule_t.GetInstance(), ref vector);
-            return vector.ToList<uint>();
+            List<uint> completedGoals = new List<uint>();
+            IntPtr pInterfaceModule = N3InterfaceModule_t.GetInstance();
+
+            if (pInterfaceModule != IntPtr.Zero)
+            {
+                StdStructVector vector = new StdStructVector();
+                N3InterfaceModule_t.GetCompletedPersonalResearchGoals(pInterfaceModule, ref vector);
+                completedGoals = vector.ToList<uint>();
+            }
+
+            return completedGoals;
         }
 
         public static List<ResearchGoal> GetPersonalResearchGoals()
         {
-            StdStructVector vector = new StdStructVector();
-            N3InterfaceModule_t.GetPersonalResearchGoals(N3InterfaceModule_t.GetInstance(), ref vector);
-            return vector.ToList<ResearchGoal>();
+            List<ResearchGoal> goals = new List<ResearchGoal>();
+            IntPtr pInterfaceModule = N3InterfaceModule_t.GetInstance();
+
+            if (pInterfaceModule != IntPtr.Zero)
+            {
+                StdStructVector vector = new StdStructVector();
+                N3InterfaceModule_t.GetPersonalResearchGoals(pInterfaceModule, ref vector);
+                goals = vector.ToList<ResearchGoal>();
+            }
+
+            return goals;
         }
 
         public static void DebugSpellListToChat(Identity identity, int unk, int spellList)
@@ -140,6 +168,36 @@ namespace AOSharp.Common.Unmanaged.Interfaces
 
             if (pEngine != IntPtr.Zero)
                 N3EngineClientAnarchy_t.SetStat(pEngine, value, stat);
+        }
+
+        public static void NPCChatStartTrade(Identity self, Identity npc)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.NPCChatStartTrade(pEngine, ref self, ref npc);
+            }
+        }
+
+        public static void NPCChatAddTradeItem(Identity self, Identity npc, Identity item)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.NPCChatAddTradeItem(pEngine, ref self, ref npc, ref item);
+            }
+        }
+
+        public static void NPCChatEndTrade(Identity self, Identity npc, int credits = 0, bool accept = true)
+        {
+            IntPtr pEngine = N3Engine_t.GetInstance();
+
+            if (pEngine != IntPtr.Zero)
+            {
+                N3EngineClientAnarchy_t.NPCChatEndTrade(pEngine, ref self, ref npc, credits, accept);
+            }
         }
     }
 }
